@@ -233,7 +233,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
       // Check if all party pets are dead
       const hasAlivePet = updatedPartyHp.some((p) => p.currentHp > 0);
       if (!hasAlivePet) {
-        logMessage('所有洛克宠物均已失去战斗力！战斗失败...');
+        logMessage('所有随行幻灵均已失去战斗力！战斗失败...');
         await new Promise((r) => setTimeout(r, 1200));
         onBattleEnd({
           won: false,
@@ -251,7 +251,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
     return false;
   };
 
-  // Throw Gulu Ball capture attempt
+  // Throw Spirit Crystal capture attempt
   const handleThrowBall = async (ballId: string) => {
     if (!isWild || isProcessingTurn) return;
     const item = ITEMS_DATA[ballId];
@@ -260,7 +260,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
     // Deduct ball from inventory
     const slot = inventory.find((i) => i.itemId === ballId);
     if (!slot || slot.count <= 0) {
-      logMessage('咕噜球数量不足！');
+      logMessage('灵契晶石数量不足！');
       return;
     }
 
@@ -273,13 +273,13 @@ export const BattleView: React.FC<BattleViewProps> = ({
     setBattleMenu('ACTIONS');
 
     sound.playBallThrow();
-    logMessage(`投掷了【${item.name}】！`);
+    logMessage(`祭出了【${item.name}】！`);
 
     setCatchingState({
       active: true,
       ballId,
       shakeCount: 0,
-      message: '咕噜球飞向了目标...',
+      message: '灵契晶石化作流光飞向目标...',
     });
 
     const { success, shakes } = calculateCatchRate(enemy, item.catchMultiplier || 1, item.isGuaranteed);
@@ -288,15 +288,15 @@ export const BattleView: React.FC<BattleViewProps> = ({
     for (let s = 1; s <= shakes; s++) {
       await new Promise((r) => setTimeout(r, 700));
       sound.playBallShake();
-      setCatchingState((prev) => (prev ? { ...prev, shakeCount: s, message: `咕噜球剧烈晃动... (${s}/3)` } : null));
+      setCatchingState((prev) => (prev ? { ...prev, shakeCount: s, message: `灵晶神光剧烈共鸣... (${s}/3)` } : null));
     }
 
     await new Promise((r) => setTimeout(r, 600));
 
     if (success) {
       sound.playCatchSuccess();
-      setCatchingState((prev) => (prev ? { ...prev, message: `★ 捕捉成功！成功获得了【${enemySpecies.name}】！` } : null));
-      logMessage(`太棒了！成功捕获了野生 ${enemySpecies.name}！`);
+      setCatchingState((prev) => (prev ? { ...prev, message: `★ 契约成功！成功收服了【${enemySpecies.name}】！` } : null));
+      logMessage(`太棒了！成功收服了野生 ${enemySpecies.name}！`);
 
       await new Promise((r) => setTimeout(r, 1200));
       setCatchingState(null);
@@ -317,8 +317,8 @@ export const BattleView: React.FC<BattleViewProps> = ({
       });
     } else {
       sound.playClick();
-      setCatchingState((prev) => (prev ? { ...prev, message: `哎呀！野生 ${enemySpecies.name} 挣脱了咕噜球！` } : null));
-      logMessage(`捕捉失败！野生 ${enemySpecies.name} 挣脱了！`);
+      setCatchingState((prev) => (prev ? { ...prev, message: `哎呀！野生 ${enemySpecies.name} 挣脱了灵契晶石！` } : null));
+      logMessage(`契约失败！野生 ${enemySpecies.name} 震碎了灵光！`);
 
       await new Promise((r) => setTimeout(r, 900));
       setCatchingState(null);
@@ -731,7 +731,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
                 className="flex flex-col items-center justify-center p-3 rounded-xl bg-gradient-to-b from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white shadow-lg transition-all active:scale-95 disabled:opacity-50 cursor-pointer border border-amber-400/30"
               >
                 <CircleDot className="w-5 h-5 mb-1" />
-                <span className="text-sm font-bold">咕噜球捕获</span>
+                <span className="text-sm font-bold">灵晶契约</span>
               </button>
 
               <button
@@ -755,7 +755,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
                 className="flex flex-col items-center justify-center p-3 rounded-xl bg-gradient-to-b from-cyan-600 to-cyan-700 hover:from-cyan-500 hover:to-cyan-600 text-white shadow-lg transition-all active:scale-95 disabled:opacity-50 cursor-pointer border border-cyan-400/30"
               >
                 <ArrowRightLeft className="w-5 h-5 mb-1" />
-                <span className="text-sm font-bold">更换宠物</span>
+                <span className="text-sm font-bold">更换幻灵</span>
               </button>
 
               {isWild && (
@@ -776,7 +776,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
           {battleMenu === 'MOVES' && (
             <div className="space-y-2">
               <div className="flex items-center justify-between pb-1">
-                <span className="text-xs font-semibold text-slate-300">选择要释放的魔法技能:</span>
+                <span className="text-xs font-semibold text-slate-300">选择要释放的灵术技能:</span>
                 <button
                   onClick={() => setBattleMenu('ACTIONS')}
                   className="text-xs text-slate-400 hover:text-white cursor-pointer"
@@ -815,11 +815,11 @@ export const BattleView: React.FC<BattleViewProps> = ({
             </div>
           )}
 
-          {/* Gulu Balls Capture Selection */}
+          {/* Spirit Crystal Capture Selection */}
           {battleMenu === 'BALLS' && (
             <div className="space-y-2">
               <div className="flex items-center justify-between pb-1">
-                <span className="text-xs font-semibold text-amber-300">选择咕噜球捕获野生宠物:</span>
+                <span className="text-xs font-semibold text-amber-300">选择灵契晶石收服野生幻灵:</span>
                 <button
                   onClick={() => setBattleMenu('ACTIONS')}
                   className="text-xs text-slate-400 hover:text-white cursor-pointer"
@@ -851,7 +851,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
                   })}
               </div>
               {inventory.filter((i) => ITEMS_DATA[i.itemId]?.category === 'BALL').length === 0 && (
-                <div className="text-xs text-slate-400 text-center py-4">背包里没有咕噜球了，请前往道具店购买！</div>
+                <div className="text-xs text-slate-400 text-center py-4">背包里没有灵契晶石了，请前往万象宝阁购买！</div>
               )}
             </div>
           )}
@@ -898,7 +898,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
           {battleMenu === 'SWITCH' && (
             <div className="space-y-2">
               <div className="flex items-center justify-between pb-1">
-                <span className="text-xs font-semibold text-cyan-300">选择要换上场的洛克宠物:</span>
+                <span className="text-xs font-semibold text-cyan-300">选择要换上场的随行幻灵:</span>
                 {activePet.currentHp > 0 && (
                   <button
                     onClick={() => setBattleMenu('ACTIONS')}
@@ -958,7 +958,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
             <div>
               <h2 className="text-2xl font-black text-amber-300">战斗大获全胜！</h2>
               <p className="text-slate-300 text-sm mt-1">
-                恭喜小洛克！你与宠物伙伴的默契提升了！
+                恭喜灵契师！你与幻灵伙伴的心念合一提升了！
               </p>
             </div>
 
@@ -968,8 +968,8 @@ export const BattleView: React.FC<BattleViewProps> = ({
                 <p className="text-xl font-bold text-cyan-300 font-mono">+{victoryData.expEarned} EXP</p>
               </div>
               <div className="text-right">
-                <span className="text-xs text-slate-400">获得洛克贝</span>
-                <p className="text-xl font-bold text-amber-300 font-mono">+{victoryData.coinsEarned} 贝</p>
+                <span className="text-xs text-slate-400">获得灵石</span>
+                <p className="text-xl font-bold text-amber-300 font-mono">+{victoryData.coinsEarned} 灵石</p>
               </div>
             </div>
 

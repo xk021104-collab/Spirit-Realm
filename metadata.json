@@ -1,6 +1,6 @@
 {
-  "name": "洛克王国：魔法启程",
-  "description": "经典页游洛克王国魔法世界！探索魔法学院与维苏威火山，收集培养御三家火花、水蓝蓝与喵喵，使用咕噜球捕捉百种宠物，体验原汁原味的回合制宠物对战。",
+  "name": "幻灵秘境",
+  "description": "踏入神秘的幻灵大陆，契约培养御三家赤焰雀、碧水灵、青木鹿，使用灵契晶石探索收服百种天地幻灵，体验纯正回合制冒险与形态蜕变。",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

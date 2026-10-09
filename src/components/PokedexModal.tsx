@@ -93,10 +93,10 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
             </div>
             <div>
               <h2 className="text-xl font-black text-amber-300 tracking-wide flex items-center gap-2">
-                洛克宠物图鉴 <span className="text-xs text-slate-400 font-normal">Pokedex</span>
+                幻灵天地图鉴 <span className="text-xs text-slate-400 font-normal">Spirit Codex</span>
               </h2>
               <p className="text-xs text-slate-400">
-                记录洛克王国全部精灵神兽 · 当前已解锁 {unlockedCount} / {totalCount} 只 ({completionPercentage}%)
+                记录幻灵秘境全部天地幻灵 · 当前已解锁 {unlockedCount} / {totalCount} 尊 ({completionPercentage}%)
               </p>
             </div>
           </div>
@@ -137,7 +137,7 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
                           ? 'bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold border-amber-300 animate-pulse cursor-pointer shadow-md'
                           : 'bg-slate-800/40 border-slate-800 text-slate-400 opacity-60'
                       }`}
-                      title={canClaim ? `点击领取: ${m.coins} 贝 + 咕噜球` : `需收集 ${m.target} 只宠物`}
+                      title={canClaim ? `点击领取: ${m.coins} 灵石 + 灵契宝晶` : `需契约收服 ${m.target} 尊幻灵`}
                     >
                       <Gift className="w-3 h-3" />
                       <span>{m.label}</span>
@@ -174,12 +174,12 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
                   : el === 'WATER'
                   ? '水'
                   : el === 'GRASS'
-                  ? '草'
+                  ? '木'
                   : el === 'ELECTRIC'
-                  ? '电'
+                  ? '雷'
                   : el === 'ICE'
                   ? '冰'
-                  : '石';
+                  : '岩';
               const isActive = filterType === el;
               return (
                 <button
@@ -203,17 +203,17 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
           {/* Rarity & Search */}
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1">
-              <span className="text-slate-400 mr-1">稀有度:</span>
+              <span className="text-slate-400 mr-1">品阶:</span>
               {['ALL', 'COMMON', 'RARE', 'EPIC', 'LEGENDARY'].map((r) => {
                 const label =
                   r === 'ALL'
                     ? '全部'
                     : r === 'COMMON'
-                    ? '普通'
+                    ? '凡品'
                     : r === 'RARE'
-                    ? '稀有'
+                    ? '灵珍'
                     : r === 'EPIC'
-                    ? '史诗'
+                    ? '地煞'
                     : '传世';
                 return (
                   <button
@@ -241,7 +241,7 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="搜索已收服宠物..."
+                placeholder="搜索已收服幻灵..."
                 className="pl-8 pr-3 py-1 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 w-36 md:w-44"
               />
             </div>
@@ -502,9 +502,9 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
                   <Lock className="w-10 h-10" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-slate-400">尚未收服该宠物</h3>
+                  <h3 className="text-xl font-bold text-slate-400">尚未收服该幻灵</h3>
                   <p className="text-xs text-slate-500 max-w-sm mt-1">
-                    该宠物的详细档案与技能信息处于封印状态。探索索米亚草原、维苏威火山或人鱼湾，使用咕噜球捕获它即可解锁永久档案！
+                    该幻灵的详细档案与神技信息处于封印状态。探索云梦古原、苍炎熔渊或星辰碧海，使用灵契晶石缔约捕获即可解锁永久档案！
                   </p>
                 </div>
                 <div className="text-xs font-mono text-amber-400/80 bg-amber-500/10 px-3 py-1.5 rounded-lg border border-amber-400/20">

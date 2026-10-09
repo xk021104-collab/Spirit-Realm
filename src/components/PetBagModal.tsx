@@ -25,15 +25,15 @@ export const PetBagModal: React.FC<PetBagModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-3 md:p-6 animate-in fade-in duration-200">
-      <div className="bg-slate-900 border border-slate-700/80 rounded-2xl w-full max-w-4xl h-[86vh] max-h-[740px] flex flex-col shadow-2xl overflow-hidden text-slate-100">
+      <div className="flash-frame rounded-3xl w-full max-w-4xl h-[86vh] max-h-[740px] flex flex-col shadow-2xl overflow-hidden text-slate-100">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 bg-slate-950/80 border-b border-slate-800">
+        <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border-b-2 border-amber-500/80">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-300">
-              <Backpack className="w-5 h-5" />
+            <div className="w-11 h-11 rounded-2xl bg-cyan-500/20 border-2 border-cyan-400/50 flex items-center justify-center text-cyan-300 shadow-md">
+              <Backpack className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="text-xl font-black text-cyan-300 tracking-wide flex items-center gap-2">
+              <h2 className="text-xl font-black text-amber-300 tracking-wide flex items-center gap-2 game-title-font">
                 随行幻灵背包 <span className="text-xs text-slate-400 font-normal">Spirit Party</span>
               </h2>
               <p className="text-xs text-slate-400">管理你的随行战队 · 当前随行伙伴 ({party.length} / 6)</p>
@@ -45,7 +45,7 @@ export const PetBagModal: React.FC<PetBagModalProps> = ({
               sound.playClick();
               onClose();
             }}
-            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors cursor-pointer"
+            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer border border-slate-700"
           >
             <X className="w-5 h-5" />
           </button>

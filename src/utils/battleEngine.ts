@@ -180,3 +180,18 @@ export function calculateCatchRate(
     return { success: false, shakes };
   }
 }
+
+export function checkEvolution(
+  speciesId: string,
+  level: number
+): { newSpeciesId: string; newSpeciesName: string } | null {
+  const species = PET_SPECIES[speciesId];
+  if (!species || !species.evolutionLevel || !species.evolvesTo) return null;
+  if (level >= species.evolutionLevel) {
+    const nextSpecies = PET_SPECIES[species.evolvesTo];
+    if (nextSpecies) {
+      return { newSpeciesId: nextSpecies.id, newSpeciesName: nextSpecies.name };
+    }
+  }
+  return null;
+}

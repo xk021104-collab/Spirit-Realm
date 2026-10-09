@@ -77,4 +77,20 @@ export const ITEMS_DATA: Record<string, Item> = {
     healHp: 100,
     description: '唤醒陷入濒死脱力的幻灵，并恢复其半数生命值。',
   },
+
+  // EXP & Evolution Treasures (洛克王国严父果 / 赛尔号升级经验果 / 奥奇传说经验果)
+  exp_pill_small: {
+    id: 'exp_pill_small',
+    name: '玄灵凝魄果',
+    category: 'POTION',
+    price: 150,
+    description: '蕴含充沛灵蕴的奇异果实，幻灵食用后立刻获得 200 点历练经验！',
+  },
+  exp_pill_large: {
+    id: 'exp_pill_large',
+    name: '九转通天仙果',
+    category: 'POTION',
+    price: 600,
+    description: '千年一熟的天地仙果，幻灵吞服后立刻暴涨 1000 点历练经验，极速觉醒！',
+  },
 };

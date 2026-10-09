@@ -14,8 +14,11 @@ import { QuestTracker } from './components/QuestTracker';
 import { PetBagModal } from './components/PetBagModal';
 import { ShopModal } from './components/ShopModal';
 import { PrologueIntroModal } from './components/PrologueIntroModal';
+import { DailyEventsModal } from './components/DailyEventsModal';
+import { DatabaseArchitectureModal } from './components/DatabaseArchitectureModal';
+import { PetTrainModal } from './components/PetTrainModal';
 
-import { Sparkles, Compass, BookOpen, Backpack, ShoppingBag, ScrollText, Volume2, VolumeX } from 'lucide-react';
+import { Sparkles, Compass, BookOpen, Backpack, ShoppingBag, ScrollText, Volume2, VolumeX, Gift, Database, Zap } from 'lucide-react';
 
 const STORAGE_KEY = 'huanling_mijing_save_v1';
 
@@ -59,6 +62,9 @@ export default function App() {
   const [isPokedexOpen, setIsPokedexOpen] = useState<boolean>(false);
   const [isPetBagOpen, setIsPetBagOpen] = useState<boolean>(false);
   const [isShopOpen, setIsShopOpen] = useState<boolean>(false);
+  const [isDailyEventsOpen, setIsDailyEventsOpen] = useState<boolean>(false);
+  const [isDatabaseModalOpen, setIsDatabaseModalOpen] = useState<boolean>(false);
+  const [isPetTrainOpen, setIsPetTrainOpen] = useState<boolean>(false);
 
   // Audio Toggle
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
@@ -341,6 +347,44 @@ export default function App() {
     setClaimedMilestones((prev) => [...prev, milestoneTarget]);
   };
 
+  // 9. Economy & Inventory helpers for Daily Events & Training
+  const handleAddCoins = (amt: number) => {
+    setPlayerCoins((prev) => prev + amt);
+  };
+
+  const handleAddItem = (itemId: string, count: number) => {
+    setInventory((prev) => {
+      const existing = prev.find((i) => i.itemId === itemId);
+      if (existing) {
+        return prev.map((i) => (i.itemId === itemId ? { ...i, count: i.count + count } : i));
+      }
+      return [...prev, { itemId, count }];
+    });
+  };
+
+  const handleDeductItem = (itemId: string, count: number) => {
+    setInventory((prev) =>
+      prev
+        .map((i) => (i.itemId === itemId ? { ...i, count: i.count - count } : i))
+        .filter((i) => i.count > 0)
+    );
+  };
+
+  const handleUpdatePartyPet = (updatedPet: PetInstance) => {
+    setParty((prev) => prev.map((p) => (p.uid === updatedPet.uid ? updatedPet : p)));
+    if (!unlockedSpeciesIds.includes(updatedPet.speciesId)) {
+      setUnlockedSpeciesIds((prev) => [...prev, updatedPet.speciesId]);
+    }
+  };
+
+  const handleStartBossBattle = (bossPet: PetInstance) => {
+    setActiveBattle({
+      inBattle: true,
+      enemyPet: bossPet,
+      isWild: false,
+    });
+  };
+
   const currentScene = SCENES_DATA[currentSceneId] || SCENES_DATA.ACADEMY;
 
   return (
@@ -360,7 +404,7 @@ export default function App() {
         </button>
 
         {/* Zone 2: 4-5 concise single-line text navigation links */}
-        <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-300">
+        <nav className="hidden md:flex items-center gap-5 text-sm font-medium text-slate-300">
           <button
             onClick={() => {
               sound.playClick();
@@ -393,6 +437,26 @@ export default function App() {
           <button
             onClick={() => {
               sound.playClick();
+              setIsPetTrainOpen(true);
+            }}
+            className="hover:text-purple-300 transition-colors whitespace-nowrap shrink-0 cursor-pointer flex items-center gap-1.5"
+          >
+            <Zap className="w-4 h-4 text-purple-400" />
+            <span>幻灵修炼</span>
+          </button>
+          <button
+            onClick={() => {
+              sound.playClick();
+              setIsDailyEventsOpen(true);
+            }}
+            className="hover:text-rose-300 transition-colors whitespace-nowrap shrink-0 cursor-pointer flex items-center gap-1.5"
+          >
+            <Gift className="w-4 h-4 text-rose-400" />
+            <span>狂欢盛典</span>
+          </button>
+          <button
+            onClick={() => {
+              sound.playClick();
               setIsShopOpen(true);
             }}
             className="hover:text-emerald-300 transition-colors whitespace-nowrap shrink-0 cursor-pointer flex items-center gap-1.5"
@@ -404,6 +468,17 @@ export default function App() {
 
         {/* Zone 3: 1 primary action */}
         <div className="flex items-center gap-3 shrink-0">
+          <button
+            onClick={() => {
+              sound.playClick();
+              setIsDatabaseModalOpen(true);
+            }}
+            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-850 text-indigo-300 hover:text-indigo-200 border border-indigo-500/40 text-xs font-bold cursor-pointer transition-colors shadow-sm"
+          >
+            <Database className="w-3.5 h-3.5 text-indigo-400" />
+            <span>数据库/SQL</span>
+          </button>
+
           <QuestTracker
             quests={quests}
             onClaimReward={handleClaimQuestReward}
@@ -434,12 +509,16 @@ export default function App() {
             playerCoins={playerCoins}
             playerBadges={playerBadges}
             openedChestIds={openedChestIds}
+            playerName={playerName}
             onOpenChest={handleOpenChest}
             onEnterBattle={handleStartBattle}
             onTeleportToScene={(scId) => setCurrentSceneId(scId)}
             onOpenPetBag={() => setIsPetBagOpen(true)}
             onOpenPokedex={() => setIsPokedexOpen(true)}
             onOpenShop={() => setIsShopOpen(true)}
+            onOpenDailyEvents={() => setIsDailyEventsOpen(true)}
+            onOpenDatabaseModal={() => setIsDatabaseModalOpen(true)}
+            onOpenPetTrain={() => setIsPetTrainOpen(true)}
             onHealParty={handleHealParty}
             soundEnabled={soundEnabled}
             onToggleSound={handleToggleSound}
@@ -479,6 +558,35 @@ export default function App() {
           inventory={inventory}
           onBuyItem={handleBuyItem}
           onClose={() => setIsShopOpen(false)}
+        />
+      )}
+
+      {/* Daily Events (7-Day Signin, Wheel, Boss Trial) Modal */}
+      {isDailyEventsOpen && (
+        <DailyEventsModal
+          playerCoins={playerCoins}
+          onAddCoins={handleAddCoins}
+          onAddItem={handleAddItem}
+          onStartBossBattle={handleStartBossBattle}
+          onClose={() => setIsDailyEventsOpen(false)}
+        />
+      )}
+
+      {/* Database & Architecture (PostgreSQL + Redis + RabbitMQ) Modal */}
+      {isDatabaseModalOpen && (
+        <DatabaseArchitectureModal
+          onClose={() => setIsDatabaseModalOpen(false)}
+        />
+      )}
+
+      {/* Pet Cultivation, Feed EXP & Evolution Modal */}
+      {isPetTrainOpen && (
+        <PetTrainModal
+          party={party}
+          inventory={inventory}
+          onUpdatePartyPet={handleUpdatePartyPet}
+          onDeductItem={handleDeductItem}
+          onClose={() => setIsPetTrainOpen(false)}
         />
       )}
     </div>

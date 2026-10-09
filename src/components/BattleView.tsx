@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { PetInstance, Move, Item, InventorySlot, SceneId } from '../types/game';
 import { MOVES_DATA } from '../data/moves';
 import { PET_SPECIES } from '../data/species';
@@ -6,7 +6,21 @@ import { ITEMS_DATA } from '../data/items';
 import { calculateDamage, calculateCatchRate, calculateStats, calculateMaxExp } from '../utils/battleEngine';
 import { sound } from '../utils/audio';
 import { PetAvatar, ELEMENT_COLORS } from './PetAvatar';
-import { Swords, Backpack, CircleDot, ArrowRightLeft, Sparkles, Heart, Zap, ShieldAlert, Award } from 'lucide-react';
+import {
+  Swords,
+  Backpack,
+  CircleDot,
+  ArrowRightLeft,
+  Sparkles,
+  Heart,
+  Zap,
+  Shield,
+  Award,
+  ChevronRight,
+  Flame,
+  Droplets,
+  Trees,
+} from 'lucide-react';
 
 interface BattleViewProps {
   playerParty: PetInstance[];
@@ -33,7 +47,6 @@ export const BattleView: React.FC<BattleViewProps> = ({
   inventory: initialInventory,
   onBattleEnd,
 }) => {
-  // Party state
   const [party, setParty] = useState<PetInstance[]>(initialParty);
   const [activePetIndex, setActivePetIndex] = useState<number>(() => {
     const firstAlive = initialParty.findIndex((p) => p.currentHp > 0);
@@ -42,22 +55,33 @@ export const BattleView: React.FC<BattleViewProps> = ({
   const [enemy, setEnemy] = useState<PetInstance>(initialEnemy);
   const [inventory, setInventory] = useState<InventorySlot[]>(initialInventory);
 
-  // Battle menu mode
   const [battleMenu, setBattleMenu] = useState<'ACTIONS' | 'MOVES' | 'BALLS' | 'POTIONS' | 'SWITCH'>('ACTIONS');
 
-  // Animation & Log states
-  const [battleLog, setBattleLog] = useState<string[]>(['战斗开始！全神贯注！']);
+  const [battleLog, setBattleLog] = useState<string[]>(['★ 战斗开始！双方幻灵已就位！']);
   const [isProcessingTurn, setIsProcessingTurn] = useState<boolean>(false);
   const [playerAttacking, setPlayerAttacking] = useState<boolean>(false);
   const [enemyAttacking, setEnemyAttacking] = useState<boolean>(false);
   const [playerHit, setPlayerHit] = useState<boolean>(false);
   const [enemyHit, setEnemyHit] = useState<boolean>(false);
-  const [damagePopup, setDamagePopup] = useState<{ target: 'player' | 'enemy'; text: string; isCrit?: boolean } | null>(null);
+  const [screenShaking, setScreenShaking] = useState<boolean>(false);
 
-  // Catch sequence state
-  const [catchingState, setCatchingState] = useState<{ active: boolean; ballId: string; shakeCount: number; message: string } | null>(null);
+  // Floating damage text
+  const [damagePopup, setDamagePopup] = useState<{
+    target: 'player' | 'enemy';
+    text: string;
+    isCrit?: boolean;
+    isEffective?: boolean;
+  } | null>(null);
 
-  // Victory modal state
+  // Capture sequence
+  const [catchingState, setCatchingState] = useState<{
+    active: boolean;
+    ballId: string;
+    shakeCount: number;
+    message: string;
+  } | null>(null);
+
+  // Victory Rewards Modal
   const [victoryData, setVictoryData] = useState<{
     show: boolean;
     expEarned: number;
@@ -75,8 +99,8 @@ export const BattleView: React.FC<BattleViewProps> = ({
     setBattleLog((prev) => [msg, ...prev.slice(0, 5)]);
   };
 
-  // Helper for background scene styling
-  const getSceneBackgroundClass = () => {
+  // Scene Arena Backgrounds
+  const getArenaGradients = () => {
     switch (sceneId) {
       case 'VOLCANO':
         return 'from-rose-950 via-stone-900 to-amber-950';
@@ -86,24 +110,20 @@ export const BattleView: React.FC<BattleViewProps> = ({
         return 'from-emerald-950 via-slate-900 to-teal-950';
       case 'ARENA':
         return 'from-purple-950 via-slate-900 to-indigo-950';
-      case 'HOSPITAL':
-      case 'SHOP':
-      case 'ACADEMY':
       default:
         return 'from-indigo-950 via-slate-900 to-blue-950';
     }
   };
 
-  // Turn resolution: Player picks a move
+  // Trigger attack
   const handleSelectMove = async (moveId: string) => {
     if (isProcessingTurn || activePet.currentHp <= 0) return;
     const move = MOVES_DATA[moveId];
     if (!move) return;
 
-    // Check PP
     const moveSlot = activePet.moves.find((m) => m.id === moveId);
     if (!moveSlot || moveSlot.pp <= 0) {
-      logMessage('此技能 PP 已耗尽，请选择其他招式！');
+      logMessage('此招式灵力 (PP) 已耗尽，请使用其他灵术！');
       return;
     }
 
@@ -116,27 +136,23 @@ export const BattleView: React.FC<BattleViewProps> = ({
     const updatedPartyWithPp = party.map((p, idx) => (idx === activePetIndex ? petWithPpDeducted : p));
     setParty(updatedPartyWithPp);
 
-    // Determine Turn Order based on Speed
+    // Speed comparison
     const playerSpeed = activePet.stats.speed;
     const enemySpeed = enemy.stats.speed;
     const playerGoesFirst = playerSpeed >= enemySpeed;
 
     if (playerGoesFirst) {
-      // 1. Player attacks
       const enemyDied = await executePlayerAttack(petWithPpDeducted, move);
       if (enemyDied) {
         handleBattleWin();
         return;
       }
-      // 2. Enemy attacks back if alive
-      await new Promise((r) => setTimeout(r, 600));
+      await new Promise((r) => setTimeout(r, 650));
       await executeEnemyAttack(petWithPpDeducted);
     } else {
-      // 1. Enemy attacks first
       const playerDied = await executeEnemyAttack(petWithPpDeducted);
       if (!playerDied) {
-        // 2. Player attacks back if still alive
-        await new Promise((r) => setTimeout(r, 600));
+        await new Promise((r) => setTimeout(r, 650));
         const enemyDied = await executePlayerAttack(petWithPpDeducted, move);
         if (enemyDied) {
           handleBattleWin();
@@ -149,63 +165,59 @@ export const BattleView: React.FC<BattleViewProps> = ({
   };
 
   const executePlayerAttack = async (attacker: PetInstance, move: Move): Promise<boolean> => {
-    logMessage(`${attacker.nickname} 使用了【${move.name}】！`);
+    logMessage(`【我方】${attacker.nickname} 运转灵力施展【${move.name}】！`);
     setPlayerAttacking(true);
-    await new Promise((r) => setTimeout(r, 200));
+    await new Promise((r) => setTimeout(r, 220));
     setPlayerAttacking(false);
 
     if (move.category === 'STATUS') {
       sound.playClick();
-      logMessage(`技能生效了！`);
+      logMessage(`状态灵术生效了！`);
       return false;
     }
 
     const { damage, multiplier, isCritical } = calculateDamage(attacker, enemy, move);
     sound.playAttackHit(isCritical);
-    if (multiplier > 1.2) {
-      sound.playSuperEffective();
-    }
+    if (multiplier > 1.2) sound.playSuperEffective();
 
     setEnemyHit(true);
+    setScreenShaking(true);
     setDamagePopup({
       target: 'enemy',
-      text: `-${damage}${multiplier > 1.2 ? ' 拔群!' : multiplier < 0.8 ? ' 不佳' : ''}`,
+      text: `-${damage}`,
       isCrit: isCritical,
+      isEffective: multiplier > 1.2,
     });
-    await new Promise((r) => setTimeout(r, 300));
+
+    await new Promise((r) => setTimeout(r, 320));
     setEnemyHit(false);
+    setScreenShaking(false);
 
     const newEnemyHp = Math.max(0, enemy.currentHp - damage);
     setEnemy((prev) => ({ ...prev, currentHp: newEnemyHp }));
 
-    if (multiplier > 1.2) {
-      logMessage('效果拔群！造成了显著伤害！');
-    } else if (multiplier < 0.8) {
-      logMessage('效果不是太好...');
-    }
-    if (isCritical) {
-      logMessage('击中要害！会心一击！');
-    }
+    if (multiplier > 1.2) logMessage('⚡ 属性克制！造成双倍致命重创！');
+    else if (multiplier < 0.8) logMessage('属性被克制，伤害受到削弱...');
+    if (isCritical) logMessage('💥 会心一击！暴击命中要害！');
 
     await new Promise((r) => setTimeout(r, 300));
     setDamagePopup(null);
 
     if (newEnemyHp <= 0) {
-      logMessage(`野生 ${enemySpecies.name} 倒下了！`);
+      logMessage(`对方 ${enemySpecies.name} 耗尽气血倒下了！`);
       return true;
     }
     return false;
   };
 
   const executeEnemyAttack = async (currentActivePet: PetInstance): Promise<boolean> => {
-    // Pick random available move from enemy
-    const enemyAvailableMoves = enemy.moves.length > 0 ? enemy.moves : [{ id: 'scratch', pp: 35, maxPp: 35 }];
+    const enemyAvailableMoves = enemy.moves.length > 0 ? enemy.moves : [{ id: 'shadow_claw', pp: 35, maxPp: 35 }];
     const chosenSlot = enemyAvailableMoves[Math.floor(Math.random() * enemyAvailableMoves.length)];
-    const enemyMove = MOVES_DATA[chosenSlot.id] || MOVES_DATA.scratch;
+    const enemyMove = MOVES_DATA[chosenSlot.id] || MOVES_DATA.shadow_claw;
 
-    logMessage(`对方 ${enemySpecies.name} 使用了【${enemyMove.name}】！`);
+    logMessage(`【敌方】${enemySpecies.name} 咆哮发动了【${enemyMove.name}】！`);
     setEnemyAttacking(true);
-    await new Promise((r) => setTimeout(r, 200));
+    await new Promise((r) => setTimeout(r, 220));
     setEnemyAttacking(false);
 
     const { damage, multiplier, isCritical } = calculateDamage(enemy, currentActivePet, enemyMove);
@@ -213,13 +225,17 @@ export const BattleView: React.FC<BattleViewProps> = ({
     if (multiplier > 1.2) sound.playSuperEffective();
 
     setPlayerHit(true);
+    setScreenShaking(true);
     setDamagePopup({
       target: 'player',
       text: `-${damage}`,
       isCrit: isCritical,
+      isEffective: multiplier > 1.2,
     });
-    await new Promise((r) => setTimeout(r, 300));
+
+    await new Promise((r) => setTimeout(r, 320));
     setPlayerHit(false);
+    setScreenShaking(false);
 
     const newPlayerHp = Math.max(0, currentActivePet.currentHp - damage);
     const updatedPartyHp = party.map((p, idx) => (idx === activePetIndex ? { ...p, currentHp: newPlayerHp } : p));
@@ -229,11 +245,10 @@ export const BattleView: React.FC<BattleViewProps> = ({
     setDamagePopup(null);
 
     if (newPlayerHp <= 0) {
-      logMessage(`${currentActivePet.nickname} 倒下了！`);
-      // Check if all party pets are dead
+      logMessage(`${currentActivePet.nickname} 耗尽气血倒下了！`);
       const hasAlivePet = updatedPartyHp.some((p) => p.currentHp > 0);
       if (!hasAlivePet) {
-        logMessage('所有随行幻灵均已失去战斗力！战斗失败...');
+        logMessage('所有随行幻灵均已脱力！本次试炼失败...');
         await new Promise((r) => setTimeout(r, 1200));
         onBattleEnd({
           won: false,
@@ -243,7 +258,6 @@ export const BattleView: React.FC<BattleViewProps> = ({
           expEarned: 0,
         });
       } else {
-        // Prompt pet switch
         setBattleMenu('SWITCH');
       }
       return true;
@@ -257,7 +271,6 @@ export const BattleView: React.FC<BattleViewProps> = ({
     const item = ITEMS_DATA[ballId];
     if (!item) return;
 
-    // Deduct ball from inventory
     const slot = inventory.find((i) => i.itemId === ballId);
     if (!slot || slot.count <= 0) {
       logMessage('灵契晶石数量不足！');
@@ -273,35 +286,33 @@ export const BattleView: React.FC<BattleViewProps> = ({
     setBattleMenu('ACTIONS');
 
     sound.playBallThrow();
-    logMessage(`祭出了【${item.name}】！`);
+    logMessage(`祭出【${item.name}】，划破长空飞向目标！`);
 
     setCatchingState({
       active: true,
       ballId,
       shakeCount: 0,
-      message: '灵契晶石化作流光飞向目标...',
+      message: '灵契晶石化作宝光笼罩目标...',
     });
 
     const { success, shakes } = calculateCatchRate(enemy, item.catchMultiplier || 1, item.isGuaranteed);
 
-    // Simulate 1, 2, 3 shakes
     for (let s = 1; s <= shakes; s++) {
       await new Promise((r) => setTimeout(r, 700));
       sound.playBallShake();
-      setCatchingState((prev) => (prev ? { ...prev, shakeCount: s, message: `灵晶神光剧烈共鸣... (${s}/3)` } : null));
+      setCatchingState((prev) => (prev ? { ...prev, shakeCount: s, message: `晶石共鸣晃动... (${s}/3)` } : null));
     }
 
     await new Promise((r) => setTimeout(r, 600));
 
     if (success) {
       sound.playCatchSuccess();
-      setCatchingState((prev) => (prev ? { ...prev, message: `★ 契约成功！成功收服了【${enemySpecies.name}】！` } : null));
-      logMessage(`太棒了！成功收服了野生 ${enemySpecies.name}！`);
+      setCatchingState((prev) => (prev ? { ...prev, message: `★ 契约达成！成功收服【${enemySpecies.name}】！` } : null));
+      logMessage(`太棒了！成功与野生 ${enemySpecies.name} 缔结契约！`);
 
       await new Promise((r) => setTimeout(r, 1200));
       setCatchingState(null);
 
-      // Finish battle with captured pet
       const capturedInstance: PetInstance = {
         ...enemy,
         uid: `pet_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
@@ -309,38 +320,37 @@ export const BattleView: React.FC<BattleViewProps> = ({
 
       setVictoryData({
         show: true,
-        expEarned: 100,
-        coinsEarned: 200,
+        expEarned: 120,
+        coinsEarned: 250,
         levelUps: [],
         evolutions: [],
         captured: capturedInstance,
       });
     } else {
       sound.playClick();
-      setCatchingState((prev) => (prev ? { ...prev, message: `哎呀！野生 ${enemySpecies.name} 挣脱了灵契晶石！` } : null));
-      logMessage(`契约失败！野生 ${enemySpecies.name} 震碎了灵光！`);
+      setCatchingState((prev) => (prev ? { ...prev, message: `哎呀！野生 ${enemySpecies.name} 震碎了灵契宝光！` } : null));
+      logMessage(`契约失败！野生 ${enemySpecies.name} 挣脱了束缚！`);
 
       await new Promise((r) => setTimeout(r, 900));
       setCatchingState(null);
 
-      // Enemy counter attacks
       await executeEnemyAttack(activePet);
       setIsProcessingTurn(false);
     }
   };
 
-  // Use Medicine in battle
+  // Use Medicine
   const handleUsePotion = (potionId: string) => {
     if (isProcessingTurn) return;
     const potion = ITEMS_DATA[potionId];
     if (!potion) return;
 
     if (potion.isRevive && activePet.currentHp > 0) {
-      logMessage('该宠物尚未濒死，无需使用复活药剂！');
+      logMessage('该幻灵尚未脱力，无需使用复生灵草！');
       return;
     }
     if (!potion.isRevive && activePet.currentHp <= 0) {
-      logMessage('濒死宠物只能使用复活药剂！');
+      logMessage('脱力幻灵需使用返魂定魄草！');
       return;
     }
 
@@ -355,21 +365,20 @@ export const BattleView: React.FC<BattleViewProps> = ({
       const restored = Math.min(activePet.stats.hp, activePet.currentHp + potion.healHp);
       updatedPet.currentHp = restored;
       sound.playHeal();
-      logMessage(`${activePet.nickname} 恢复了生命值！`);
+      logMessage(`${activePet.nickname} 服用灵药，恢复了气血！`);
     } else if (potion.healPp) {
       updatedPet.moves = activePet.moves.map((m) => ({
         ...m,
         pp: Math.min(m.maxPp, m.pp + (potion.healPp || 10)),
       }));
       sound.playHeal();
-      logMessage(`${activePet.nickname} 的技能 PP 恢复了！`);
+      logMessage(`${activePet.nickname} 招式灵力 (PP) 恢复了！`);
     }
 
     const updatedParty = party.map((p, idx) => (idx === activePetIndex ? updatedPet : p));
     setParty(updatedParty);
     setBattleMenu('ACTIONS');
 
-    // Enemy attacks turn
     setIsProcessingTurn(true);
     setTimeout(async () => {
       await executeEnemyAttack(updatedPet);
@@ -381,11 +390,10 @@ export const BattleView: React.FC<BattleViewProps> = ({
   const handleSwitchPet = (index: number) => {
     if (index === activePetIndex || party[index].currentHp <= 0 || isProcessingTurn) return;
     sound.playClick();
-    logMessage(`回来吧，${activePet.nickname}！上吧，${party[index].nickname}！`);
+    logMessage(`召回 ${activePet.nickname}，唤出出战幻灵 ${party[index].nickname}！`);
     setActivePetIndex(index);
     setBattleMenu('ACTIONS');
 
-    // If switched voluntarily during active fight, enemy gets a turn
     if (activePet.currentHp > 0) {
       setIsProcessingTurn(true);
       setTimeout(async () => {
@@ -395,14 +403,14 @@ export const BattleView: React.FC<BattleViewProps> = ({
     }
   };
 
-  // Flee battle
+  // Flee
   const handleFlee = () => {
     if (!isWild) {
-      logMessage('正规训练师与擂台对决中无法逃跑！');
+      logMessage('凌霄试炼与正规对决中不可避战逃跑！');
       return;
     }
     sound.playClick();
-    logMessage('成功安全逃跑！');
+    logMessage('成功脱离战斗！');
     setTimeout(() => {
       onBattleEnd({
         won: false,
@@ -415,16 +423,15 @@ export const BattleView: React.FC<BattleViewProps> = ({
     }, 500);
   };
 
-  // Battle win resolution: Exp calculation, level-up & evolution checks
+  // Battle win resolution
   const handleBattleWin = async () => {
     sound.playVictory();
-    const expGain = Math.floor(enemy.level * 45 + Math.random() * 20);
-    const coinsGain = Math.floor(enemy.level * 35 + 50);
+    const expGain = Math.floor(enemy.level * 50 + Math.random() * 25);
+    const coinsGain = Math.floor(enemy.level * 40 + 60);
 
     const levelUps: { petName: string; oldLevel: number; newLevel: number }[] = [];
     const evolutions: { petName: string; newSpeciesName: string; newSpeciesId: string }[] = [];
 
-    // Award EXP to active pet (or all alive party)
     const updatedParty = party.map((pet, idx) => {
       if (idx !== activePetIndex || pet.currentHp <= 0) return pet;
 
@@ -446,7 +453,6 @@ export const BattleView: React.FC<BattleViewProps> = ({
         sound.playLevelUp();
       }
 
-      // Check evolution
       const species = PET_SPECIES[currentSpeciesId];
       if (species.evolutionLevel && newLevel >= species.evolutionLevel && species.evolvesTo) {
         const nextSpecies = PET_SPECIES[species.evolvesTo];
@@ -499,53 +505,68 @@ export const BattleView: React.FC<BattleViewProps> = ({
   };
 
   return (
-    <div className={`relative w-full max-w-5xl mx-auto rounded-2xl overflow-hidden border border-slate-700/60 shadow-2xl bg-gradient-to-b ${getSceneBackgroundClass()} text-slate-100 flex flex-col min-h-[580px]`}>
-      {/* Top Banner / Location & Status */}
-      <div className="flex items-center justify-between px-6 py-3 bg-black/40 border-b border-white/10 backdrop-blur-sm z-10">
+    <div
+      className={`relative w-full max-w-5xl mx-auto flash-frame rounded-2xl overflow-hidden shadow-2xl bg-gradient-to-b ${getArenaGradients()} text-slate-100 flex flex-col min-h-[600px] ${
+        screenShaking ? 'animate-screen-shake' : ''
+      }`}
+    >
+      {/* Top Arena Header Bar */}
+      <div className="flex items-center justify-between px-6 py-2.5 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border-b-2 border-amber-500/80 z-20 shadow-md">
         <div className="flex items-center gap-3">
-          <span className="font-bold text-amber-300 text-sm tracking-wide">
-            {isWild ? '野生遭遇' : '竞技决斗'} · {enemySpecies.name}
-          </span>
-          <span className="text-xs text-slate-400">回合制对决</span>
+          <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-500/20 border border-amber-400/40 text-amber-300 font-bold text-xs game-title-font">
+            <Swords className="w-3.5 h-3.5 text-amber-400" />
+            <span>{isWild ? '野外奇遇遭遇战' : '凌霄试炼天骄对决'}</span>
+          </div>
+          <span className="text-xs text-slate-400">回合制灵术对决</span>
         </div>
-        <div className="flex items-center gap-4 text-xs text-slate-300">
-          <span>我方出战: {activePet.nickname}</span>
-          <span className="text-slate-500">|</span>
-          <span>等级: Lv.{activePet.level}</span>
+
+        <div className="flex items-center gap-4 text-xs font-mono text-slate-300">
+          <span className="text-amber-300 font-bold">我方出战: {activePet.nickname} (Lv.{activePet.level})</span>
+          <span className="text-slate-600">|</span>
+          <span className="text-cyan-300">敌方: {enemySpecies.name} (Lv.{enemy.level})</span>
         </div>
       </div>
 
-      {/* Battle Field Arena */}
+      {/* Main Battle Stage Arena (Authentic Dual Elemental Platforms) */}
       <div className="relative flex-1 p-6 md:p-8 flex flex-col justify-between overflow-hidden">
-        {/* Subtle magical circle ground lines */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-15 pointer-events-none">
-          <div className="w-[500px] h-[500px] rounded-full border-4 border-amber-400 border-dashed animate-[spin_60s_linear_infinite]" />
+        {/* Subtle Arcane Arena Floor Rings */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-25 pointer-events-none">
+          <div className="w-[520px] h-[520px] rounded-full border-4 border-amber-400 border-dashed animate-[spin_50s_linear_infinite]" />
         </div>
 
-        {/* Damage Popup Overlay */}
+        {/* Floating Damage Text Popup */}
         {damagePopup && (
           <div
-            className={`absolute z-30 font-extrabold text-2xl tracking-wider animate-bounce ${
-              damagePopup.target === 'enemy' ? 'top-20 right-32' : 'bottom-32 left-32'
-            } ${damagePopup.isCrit ? 'text-amber-300 text-3xl' : 'text-rose-400'}`}
+            className={`absolute z-40 font-black text-3xl tracking-wider select-none animate-bounce game-title-font ${
+              damagePopup.target === 'enemy' ? 'top-20 right-36' : 'bottom-36 left-36'
+            } ${
+              damagePopup.isCrit
+                ? 'text-yellow-300 drop-shadow-[0_0_12px_rgba(250,204,21,0.8)] scale-125'
+                : damagePopup.isEffective
+                ? 'text-rose-400 drop-shadow-[0_0_12px_rgba(244,63,94,0.8)]'
+                : 'text-amber-200'
+            }`}
           >
+            {damagePopup.isCrit && '★ 暴击! '}
             {damagePopup.text}
+            {damagePopup.isEffective && ' 拔群!'}
           </div>
         )}
 
-        {/* 1. Enemy Pet Zone (Top-Right) */}
+        {/* 1. Enemy Pet Zone (Top-Right Platform) */}
         <div className="flex items-center justify-end gap-6 relative z-10">
-          {/* Enemy Info Card */}
-          <div className="bg-slate-900/80 border border-slate-700/80 rounded-xl p-4 shadow-xl backdrop-blur-md min-w-[240px]">
+          {/* Enemy HUD Card (High-Gloss Beveled Flash Card) */}
+          <div className="flash-panel rounded-2xl p-4 shadow-2xl min-w-[260px] border-2 border-amber-500/70">
             <div className="flex items-center justify-between gap-3 mb-1.5">
-              <span className="font-bold text-white text-base">{enemySpecies.name}</span>
-              <span className="text-xs font-mono px-2 py-0.5 rounded bg-slate-800 text-amber-300 border border-amber-400/20">
+              <span className="font-black text-white text-base game-title-font">{enemySpecies.name}</span>
+              <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-slate-950 text-amber-300 border border-amber-400/50 shadow-inner">
                 Lv.{enemy.level}
               </span>
             </div>
+
             <div className="flex items-center gap-2 mb-2">
               <span
-                className={`text-[11px] px-2 py-0.5 rounded-md font-medium ${
+                className={`text-[11px] px-2 py-0.5 rounded-md font-bold ${
                   ELEMENT_COLORS[enemySpecies.type].bg
                 } ${ELEMENT_COLORS[enemySpecies.type].text} ${ELEMENT_COLORS[enemySpecies.type].border} border`}
               >
@@ -553,22 +574,23 @@ export const BattleView: React.FC<BattleViewProps> = ({
               </span>
               <span className="text-xs text-slate-400 truncate">{enemySpecies.title}</span>
             </div>
-            {/* Enemy HP Bar */}
+
+            {/* Enemy HP Meter */}
             <div className="space-y-1">
               <div className="flex justify-between text-xs text-slate-300 font-mono">
-                <span>生命值</span>
-                <span>
+                <span>气血 (HP)</span>
+                <span className="font-bold">
                   {enemy.currentHp} / {enemy.stats.hp}
                 </span>
               </div>
-              <div className="w-full bg-slate-800 rounded-full h-3 overflow-hidden p-0.5 border border-slate-700">
+              <div className="w-full bg-slate-950 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-700 shadow-inner">
                 <div
                   className={`h-full rounded-full transition-all duration-300 ${
                     enemy.currentHp / enemy.stats.hp > 0.5
-                      ? 'bg-emerald-500'
+                      ? 'bg-gradient-to-r from-emerald-500 to-green-400'
                       : enemy.currentHp / enemy.stats.hp > 0.2
-                      ? 'bg-amber-500'
-                      : 'bg-rose-500'
+                      ? 'bg-gradient-to-r from-amber-500 to-yellow-400'
+                      : 'bg-gradient-to-r from-rose-600 to-red-500'
                   }`}
                   style={{ width: `${Math.max(0, (enemy.currentHp / enemy.stats.hp) * 100)}%` }}
                 />
@@ -576,27 +598,27 @@ export const BattleView: React.FC<BattleViewProps> = ({
             </div>
           </div>
 
-          {/* Enemy Pet Avatar with Stage Shadow */}
+          {/* Enemy Pet Avatar on Floating Arcane Pod */}
           <div className="relative flex flex-col items-center">
-            {/* Catching Animation Ball */}
             {catchingState?.active ? (
-              <div className="w-24 h-24 flex flex-col items-center justify-center animate-pulse">
+              <div className="w-28 h-28 flex flex-col items-center justify-center animate-pulse">
+                {/* 3D-styled Catching Crystal */}
                 <div
-                  className={`w-14 h-14 rounded-full border-2 border-slate-900 shadow-2xl flex items-center justify-center transition-transform ${
-                    catchingState.shakeCount % 2 === 1 ? 'rotate-12' : '-rotate-12'
+                  className={`w-14 h-14 rounded-2xl rotate-45 border-2 border-white shadow-[0_0_25px_rgba(250,204,21,0.8)] flex items-center justify-center transition-transform ${
+                    catchingState.shakeCount % 2 === 1 ? 'rotate-12 scale-110' : '-rotate-12 scale-95'
                   } ${
                     catchingState.ballId === 'gulu_king'
-                      ? 'bg-gradient-to-b from-amber-400 via-purple-600 to-amber-400'
+                      ? 'bg-gradient-to-br from-amber-300 via-purple-600 to-amber-500'
                       : catchingState.ballId === 'gulu_high'
-                      ? 'bg-gradient-to-b from-purple-500 to-slate-800'
+                      ? 'bg-gradient-to-br from-purple-400 to-indigo-700'
                       : catchingState.ballId === 'gulu_mid'
-                      ? 'bg-gradient-to-b from-blue-500 to-slate-800'
-                      : 'bg-gradient-to-b from-rose-500 to-slate-200'
+                      ? 'bg-gradient-to-br from-blue-400 to-cyan-700'
+                      : 'bg-gradient-to-br from-rose-400 to-red-600'
                   }`}
                 >
-                  <div className="w-4 h-4 rounded-full bg-white border-2 border-slate-900" />
+                  <Sparkles className="w-6 h-6 text-white" />
                 </div>
-                <span className="text-xs text-amber-300 font-bold mt-2 whitespace-nowrap bg-black/60 px-2 py-0.5 rounded">
+                <span className="text-xs text-amber-300 font-bold mt-3 whitespace-nowrap bg-black/80 px-2.5 py-0.5 rounded-full border border-amber-400">
                   {catchingState.message}
                 </span>
               </div>
@@ -604,43 +626,46 @@ export const BattleView: React.FC<BattleViewProps> = ({
               <>
                 <PetAvatar
                   speciesId={enemy.speciesId}
-                  size={120}
+                  size={125}
                   isAttacking={enemyAttacking}
                   isHit={enemyHit}
-                  className="transition-transform duration-300"
+                  className="transition-transform duration-200"
                 />
-                <div className="w-24 h-4 bg-black/40 rounded-full blur-xs mt-1" />
+                {/* Arcane Platform Shadow */}
+                <div className="w-28 h-5 rounded-full border border-amber-400/40 bg-black/50 blur-xs mt-1" />
               </>
             )}
           </div>
         </div>
 
-        {/* 2. Player Pet Zone (Bottom-Left) */}
+        {/* 2. Player Pet Zone (Bottom-Left Platform) */}
         <div className="flex items-center justify-start gap-6 relative z-10 mt-6">
-          {/* Player Pet Avatar with Stage Shadow */}
+          {/* Player Pet Avatar on Stage Pod */}
           <div className="relative flex flex-col items-center">
             <PetAvatar
               speciesId={activePet.speciesId}
-              size={135}
+              size={140}
               isFlipped={true}
               isAttacking={playerAttacking}
               isHit={playerHit}
-              className="transition-transform duration-300"
+              className="transition-transform duration-200"
             />
-            <div className="w-28 h-5 bg-black/40 rounded-full blur-xs mt-1" />
+            {/* Elemental Battle Ring Floor */}
+            <div className="w-32 h-6 rounded-full border-2 border-cyan-400/50 bg-black/50 blur-xs mt-1" />
           </div>
 
-          {/* Player Info Card */}
-          <div className="bg-slate-900/80 border border-slate-700/80 rounded-xl p-4 shadow-xl backdrop-blur-md min-w-[260px]">
+          {/* Player HUD Card (High-Gloss Beveled Flash Card) */}
+          <div className="flash-panel rounded-2xl p-4 shadow-2xl min-w-[280px] border-2 border-amber-500/70">
             <div className="flex items-center justify-between gap-3 mb-1.5">
-              <span className="font-bold text-white text-base">{activePet.nickname}</span>
-              <span className="text-xs font-mono px-2 py-0.5 rounded bg-slate-800 text-cyan-300 border border-cyan-400/20">
+              <span className="font-black text-white text-base game-title-font">{activePet.nickname}</span>
+              <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-slate-950 text-cyan-300 border border-cyan-400/50 shadow-inner">
                 Lv.{activePet.level}
               </span>
             </div>
+
             <div className="flex items-center gap-2 mb-2">
               <span
-                className={`text-[11px] px-2 py-0.5 rounded-md font-medium ${
+                className={`text-[11px] px-2 py-0.5 rounded-md font-bold ${
                   ELEMENT_COLORS[activeSpecies.type].bg
                 } ${ELEMENT_COLORS[activeSpecies.type].text} ${ELEMENT_COLORS[activeSpecies.type].border} border`}
               >
@@ -648,38 +673,40 @@ export const BattleView: React.FC<BattleViewProps> = ({
               </span>
               <span className="text-xs text-slate-400">{activePet.nature}</span>
             </div>
-            {/* Player HP Bar */}
+
+            {/* Player HP Meter */}
             <div className="space-y-1">
               <div className="flex justify-between text-xs text-slate-300 font-mono">
-                <span>生命值</span>
-                <span className="font-semibold">
+                <span>气血 (HP)</span>
+                <span className="font-bold text-white">
                   {activePet.currentHp} / {activePet.stats.hp}
                 </span>
               </div>
-              <div className="w-full bg-slate-800 rounded-full h-3 overflow-hidden p-0.5 border border-slate-700">
+              <div className="w-full bg-slate-950 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-700 shadow-inner">
                 <div
                   className={`h-full rounded-full transition-all duration-300 ${
                     activePet.currentHp / activePet.stats.hp > 0.5
-                      ? 'bg-emerald-500'
+                      ? 'bg-gradient-to-r from-emerald-500 to-green-400'
                       : activePet.currentHp / activePet.stats.hp > 0.2
-                      ? 'bg-amber-500'
-                      : 'bg-rose-500'
+                      ? 'bg-gradient-to-r from-amber-500 to-yellow-400'
+                      : 'bg-gradient-to-r from-rose-600 to-red-500'
                   }`}
                   style={{ width: `${Math.max(0, (activePet.currentHp / activePet.stats.hp) * 100)}%` }}
                 />
               </div>
             </div>
+
             {/* EXP Bar */}
             <div className="mt-2 space-y-0.5">
-              <div className="flex justify-between text-[11px] text-slate-400 font-mono">
-                <span>经验值 (EXP)</span>
+              <div className="flex justify-between text-[10px] text-slate-400 font-mono">
+                <span>修为经验 (EXP)</span>
                 <span>
                   {activePet.exp} / {activePet.maxExp}
                 </span>
               </div>
-              <div className="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+              <div className="w-full bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-800">
                 <div
-                  className="h-full bg-cyan-400 rounded-full transition-all duration-300"
+                  className="h-full bg-gradient-to-r from-cyan-500 to-blue-400 rounded-full transition-all duration-300"
                   style={{ width: `${Math.min(100, (activePet.exp / activePet.maxExp) * 100)}%` }}
                 />
               </div>
@@ -688,17 +715,17 @@ export const BattleView: React.FC<BattleViewProps> = ({
         </div>
       </div>
 
-      {/* Bottom Command Center */}
-      <div className="bg-slate-950/95 border-t border-slate-800 p-4 md:p-6 grid grid-cols-1 md:grid-cols-12 gap-4 z-20">
-        {/* Left: Battle Log / Announcer Box */}
-        <div className="md:col-span-5 bg-slate-900/90 rounded-xl p-3 border border-slate-800 flex flex-col justify-between h-[128px]">
-          <div className="text-xs font-semibold text-amber-400/90 mb-1 flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>战斗日志播报</span>
+      {/* Bottom Command Console (The Signature 4-Box Flash Layout) */}
+      <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border-t-2 border-amber-500/80 p-4 md:p-5 grid grid-cols-1 md:grid-cols-12 gap-4 z-20 shadow-2xl">
+        {/* Left: Battle Announcer Text Log */}
+        <div className="md:col-span-5 flash-panel rounded-2xl p-3 flex flex-col justify-between h-[132px] border border-amber-500/50">
+          <div className="text-xs font-bold text-amber-300 mb-1 flex items-center gap-1.5 game-title-font">
+            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <span>战场即时战报</span>
           </div>
           <div className="flex-1 overflow-y-auto space-y-1 text-xs pr-1">
             {battleLog.map((log, idx) => (
-              <p key={idx} className={idx === 0 ? 'text-white font-medium' : 'text-slate-400'}>
+              <p key={idx} className={idx === 0 ? 'text-white font-bold' : 'text-slate-400'}>
                 {idx === 0 ? '▶ ' : '  '}
                 {log}
               </p>
@@ -709,53 +736,57 @@ export const BattleView: React.FC<BattleViewProps> = ({
         {/* Right: Interactive Command Panels */}
         <div className="md:col-span-7 flex flex-col justify-center">
           {battleMenu === 'ACTIONS' && (
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {/* 1. Attack */}
               <button
                 disabled={isProcessingTurn || activePet.currentHp <= 0}
                 onClick={() => {
                   sound.playClick();
                   setBattleMenu('MOVES');
                 }}
-                className="flex flex-col items-center justify-center p-3 rounded-xl bg-gradient-to-b from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-white shadow-lg transition-all active:scale-95 disabled:opacity-50 cursor-pointer border border-rose-400/30"
+                className="flash-red-btn p-3 rounded-2xl flex flex-col items-center justify-center cursor-pointer shadow-xl disabled:opacity-40"
               >
-                <Swords className="w-5 h-5 mb-1" />
-                <span className="text-sm font-bold">战斗技能</span>
+                <Swords className="w-6 h-6 mb-1" />
+                <span className="text-sm font-black game-title-font">灵术决斗</span>
               </button>
 
+              {/* 2. Catch */}
               <button
                 disabled={isProcessingTurn || !isWild}
                 onClick={() => {
                   sound.playClick();
                   setBattleMenu('BALLS');
                 }}
-                className="flex flex-col items-center justify-center p-3 rounded-xl bg-gradient-to-b from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white shadow-lg transition-all active:scale-95 disabled:opacity-50 cursor-pointer border border-amber-400/30"
+                className="flash-gold-btn p-3 rounded-2xl flex flex-col items-center justify-center cursor-pointer shadow-xl disabled:opacity-40"
               >
-                <CircleDot className="w-5 h-5 mb-1" />
-                <span className="text-sm font-bold">灵晶契约</span>
+                <CircleDot className="w-6 h-6 mb-1 text-slate-950" />
+                <span className="text-sm font-black game-title-font text-slate-950">灵晶契约</span>
               </button>
 
+              {/* 3. Potions */}
               <button
                 disabled={isProcessingTurn}
                 onClick={() => {
                   sound.playClick();
                   setBattleMenu('POTIONS');
                 }}
-                className="flex flex-col items-center justify-center p-3 rounded-xl bg-gradient-to-b from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white shadow-lg transition-all active:scale-95 disabled:opacity-50 cursor-pointer border border-emerald-400/30"
+                className="flash-green-btn p-3 rounded-2xl flex flex-col items-center justify-center cursor-pointer shadow-xl disabled:opacity-40"
               >
-                <Backpack className="w-5 h-5 mb-1" />
-                <span className="text-sm font-bold">药品道具</span>
+                <Backpack className="w-6 h-6 mb-1" />
+                <span className="text-sm font-black game-title-font">储物灵药</span>
               </button>
 
+              {/* 4. Switch */}
               <button
                 disabled={isProcessingTurn}
                 onClick={() => {
                   sound.playClick();
                   setBattleMenu('SWITCH');
                 }}
-                className="flex flex-col items-center justify-center p-3 rounded-xl bg-gradient-to-b from-cyan-600 to-cyan-700 hover:from-cyan-500 hover:to-cyan-600 text-white shadow-lg transition-all active:scale-95 disabled:opacity-50 cursor-pointer border border-cyan-400/30"
+                className="flash-blue-btn p-3 rounded-2xl flex flex-col items-center justify-center cursor-pointer shadow-xl disabled:opacity-40"
               >
-                <ArrowRightLeft className="w-5 h-5 mb-1" />
-                <span className="text-sm font-bold">更换幻灵</span>
+                <ArrowRightLeft className="w-6 h-6 mb-1" />
+                <span className="text-sm font-black game-title-font">唤回轮换</span>
               </button>
 
               {isWild && (
@@ -765,26 +796,26 @@ export const BattleView: React.FC<BattleViewProps> = ({
                     onClick={handleFlee}
                     className="text-xs text-slate-400 hover:text-white underline cursor-pointer transition-colors"
                   >
-                    逃跑 (脱离战斗)
+                    避战撤退 (逃离本场对决)
                   </button>
                 </div>
               )}
             </div>
           )}
 
-          {/* Moves Selection */}
+          {/* Moves Selection (4 Colorful Move Tiles) */}
           {battleMenu === 'MOVES' && (
             <div className="space-y-2">
               <div className="flex items-center justify-between pb-1">
-                <span className="text-xs font-semibold text-slate-300">选择要释放的灵术技能:</span>
+                <span className="text-xs font-bold text-amber-300 game-title-font">选择释放的灵术神技:</span>
                 <button
                   onClick={() => setBattleMenu('ACTIONS')}
-                  className="text-xs text-slate-400 hover:text-white cursor-pointer"
+                  className="text-xs text-slate-400 hover:text-white cursor-pointer underline"
                 >
-                  返回主菜单
+                  返回指令菜单
                 </button>
               </div>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-2.5">
                 {activePet.moves.map((m) => {
                   const moveData = MOVES_DATA[m.id];
                   if (!moveData) return null;
@@ -794,17 +825,17 @@ export const BattleView: React.FC<BattleViewProps> = ({
                       key={m.id}
                       disabled={isProcessingTurn || m.pp <= 0}
                       onClick={() => handleSelectMove(m.id)}
-                      className={`text-left p-2.5 rounded-xl border transition-all active:scale-95 cursor-pointer disabled:opacity-40 bg-slate-900 hover:bg-slate-800 ${elColor.border}`}
+                      className={`text-left p-3 rounded-2xl border-2 transition-all active:scale-95 cursor-pointer disabled:opacity-40 bg-slate-900/90 hover:bg-slate-800 shadow-md ${elColor.border}`}
                     >
                       <div className="flex items-center justify-between mb-1">
-                        <span className="font-bold text-sm text-white">{moveData.name}</span>
-                        <span className={`text-[10px] px-1.5 py-0.2 rounded font-medium ${elColor.bg} ${elColor.text}`}>
-                          {elColor.label}
+                        <span className="font-black text-sm text-white game-title-font">{moveData.name}</span>
+                        <span className={`text-[10px] px-1.5 py-0.2 rounded font-bold ${elColor.bg} ${elColor.text}`}>
+                          {elColor.label}系
                         </span>
                       </div>
                       <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono">
                         <span>威力 {moveData.power || '-'}</span>
-                        <span className={m.pp <= 3 ? 'text-rose-400 font-bold' : ''}>
+                        <span className={m.pp <= 3 ? 'text-rose-400 font-bold' : 'text-cyan-300 font-bold'}>
                           PP: {m.pp}/{m.maxPp}
                         </span>
                       </div>
@@ -815,19 +846,19 @@ export const BattleView: React.FC<BattleViewProps> = ({
             </div>
           )}
 
-          {/* Spirit Crystal Capture Selection */}
+          {/* Spirit Crystal Selection */}
           {battleMenu === 'BALLS' && (
             <div className="space-y-2">
               <div className="flex items-center justify-between pb-1">
-                <span className="text-xs font-semibold text-amber-300">选择灵契晶石收服野生幻灵:</span>
+                <span className="text-xs font-bold text-amber-300 game-title-font">选择祭出的灵契晶石:</span>
                 <button
                   onClick={() => setBattleMenu('ACTIONS')}
-                  className="text-xs text-slate-400 hover:text-white cursor-pointer"
+                  className="text-xs text-slate-400 hover:text-white cursor-pointer underline"
                 >
-                  返回主菜单
+                  返回指令菜单
                 </button>
               </div>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-2.5">
                 {inventory
                   .filter((i) => ITEMS_DATA[i.itemId]?.category === 'BALL')
                   .map((slot) => {
@@ -837,13 +868,13 @@ export const BattleView: React.FC<BattleViewProps> = ({
                         key={slot.itemId}
                         disabled={isProcessingTurn || slot.count <= 0}
                         onClick={() => handleThrowBall(slot.itemId)}
-                        className="text-left p-2.5 rounded-xl bg-slate-900 border border-amber-500/30 hover:border-amber-400 hover:bg-slate-800 transition-all cursor-pointer flex items-center justify-between"
+                        className="text-left p-3 rounded-2xl bg-slate-900/90 border-2 border-amber-500/40 hover:border-amber-400 hover:bg-slate-800 transition-all cursor-pointer flex items-center justify-between shadow-md"
                       >
                         <div>
-                          <div className="font-bold text-sm text-amber-200">{item.name}</div>
+                          <div className="font-bold text-sm text-amber-200 game-title-font">{item.name}</div>
                           <div className="text-[11px] text-slate-400">{item.description}</div>
                         </div>
-                        <span className="text-xs font-mono font-bold px-2 py-1 rounded bg-black/40 text-amber-300">
+                        <span className="text-xs font-mono font-bold px-2 py-1 rounded bg-black/60 text-amber-300 border border-amber-400/40">
                           x{slot.count}
                         </span>
                       </button>
@@ -851,7 +882,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
                   })}
               </div>
               {inventory.filter((i) => ITEMS_DATA[i.itemId]?.category === 'BALL').length === 0 && (
-                <div className="text-xs text-slate-400 text-center py-4">背包里没有灵契晶石了，请前往万象宝阁购买！</div>
+                <div className="text-xs text-slate-400 text-center py-4">储物袋中已无灵契晶石，请前往万象宝阁购买！</div>
               )}
             </div>
           )}
@@ -860,15 +891,15 @@ export const BattleView: React.FC<BattleViewProps> = ({
           {battleMenu === 'POTIONS' && (
             <div className="space-y-2">
               <div className="flex items-center justify-between pb-1">
-                <span className="text-xs font-semibold text-emerald-300">选择恢复药品:</span>
+                <span className="text-xs font-bold text-emerald-300 game-title-font">选择服用的回春丹药:</span>
                 <button
                   onClick={() => setBattleMenu('ACTIONS')}
-                  className="text-xs text-slate-400 hover:text-white cursor-pointer"
+                  className="text-xs text-slate-400 hover:text-white cursor-pointer underline"
                 >
-                  返回主菜单
+                  返回指令菜单
                 </button>
               </div>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-2.5">
                 {inventory
                   .filter((i) => ['POTION', 'PP', 'REVIVE'].includes(ITEMS_DATA[i.itemId]?.category))
                   .map((slot) => {
@@ -878,13 +909,13 @@ export const BattleView: React.FC<BattleViewProps> = ({
                         key={slot.itemId}
                         disabled={isProcessingTurn || slot.count <= 0}
                         onClick={() => handleUsePotion(slot.itemId)}
-                        className="text-left p-2.5 rounded-xl bg-slate-900 border border-emerald-500/30 hover:border-emerald-400 hover:bg-slate-800 transition-all cursor-pointer flex items-center justify-between"
+                        className="text-left p-3 rounded-2xl bg-slate-900/90 border-2 border-emerald-500/40 hover:border-emerald-400 hover:bg-slate-800 transition-all cursor-pointer flex items-center justify-between shadow-md"
                       >
                         <div>
-                          <div className="font-bold text-sm text-emerald-200">{item.name}</div>
+                          <div className="font-bold text-sm text-emerald-200 game-title-font">{item.name}</div>
                           <div className="text-[11px] text-slate-400 truncate max-w-[150px]">{item.description}</div>
                         </div>
-                        <span className="text-xs font-mono font-bold px-2 py-1 rounded bg-black/40 text-emerald-300">
+                        <span className="text-xs font-mono font-bold px-2 py-1 rounded bg-black/60 text-emerald-300 border border-emerald-400/40">
                           x{slot.count}
                         </span>
                       </button>
@@ -894,15 +925,15 @@ export const BattleView: React.FC<BattleViewProps> = ({
             </div>
           )}
 
-          {/* Pet Switch Selection */}
+          {/* Switch Pet Selection */}
           {battleMenu === 'SWITCH' && (
             <div className="space-y-2">
               <div className="flex items-center justify-between pb-1">
-                <span className="text-xs font-semibold text-cyan-300">选择要换上场的随行幻灵:</span>
+                <span className="text-xs font-bold text-cyan-300 game-title-font">选择换上场的随行幻灵:</span>
                 {activePet.currentHp > 0 && (
                   <button
                     onClick={() => setBattleMenu('ACTIONS')}
-                    className="text-xs text-slate-400 hover:text-white cursor-pointer"
+                    className="text-xs text-slate-400 hover:text-white cursor-pointer underline"
                   >
                     取消更换
                   </button>
@@ -910,7 +941,6 @@ export const BattleView: React.FC<BattleViewProps> = ({
               </div>
               <div className="grid grid-cols-3 gap-2">
                 {party.map((p, idx) => {
-                  const spec = PET_SPECIES[p.speciesId];
                   const isDead = p.currentHp <= 0;
                   const isCurrent = idx === activePetIndex;
                   return (
@@ -918,19 +948,19 @@ export const BattleView: React.FC<BattleViewProps> = ({
                       key={p.uid}
                       disabled={isDead || isCurrent}
                       onClick={() => handleSwitchPet(idx)}
-                      className={`p-2 rounded-xl text-left border transition-all cursor-pointer ${
+                      className={`p-2.5 rounded-2xl text-left border-2 transition-all cursor-pointer ${
                         isCurrent
-                          ? 'bg-cyan-950/60 border-cyan-400 text-cyan-300'
+                          ? 'bg-cyan-950/80 border-cyan-400 text-cyan-300 shadow-lg'
                           : isDead
                           ? 'bg-slate-900/40 border-slate-800 opacity-40 cursor-not-allowed'
-                          : 'bg-slate-900 border-slate-700 hover:border-cyan-500 hover:bg-slate-800'
+                          : 'bg-slate-900 border-slate-700 hover:border-cyan-400 hover:bg-slate-850'
                       }`}
                     >
                       <div className="flex items-center gap-2">
-                        <PetAvatar speciesId={p.speciesId} size={36} />
+                        <PetAvatar speciesId={p.speciesId} size={38} />
                         <div className="truncate">
-                          <div className="font-bold text-xs text-white truncate">{p.nickname}</div>
-                          <div className="text-[10px] text-slate-400">Lv.{p.level}</div>
+                          <div className="font-bold text-xs text-white truncate game-title-font">{p.nickname}</div>
+                          <div className="text-[10px] text-slate-400 font-mono">Lv.{p.level}</div>
                         </div>
                       </div>
                       <div className="text-[10px] text-slate-400 mt-1 font-mono">
@@ -945,65 +975,66 @@ export const BattleView: React.FC<BattleViewProps> = ({
         </div>
       </div>
 
-      {/* Victory / Rewards Modal */}
+      {/* Victory / Rewards Modal (Classic Flash Fanfare Pop-up) */}
       {victoryData?.show && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
-          <div className="bg-slate-900 border border-amber-500/40 rounded-2xl p-6 md:p-8 max-w-lg w-full text-center shadow-2xl space-y-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4">
+          <div className="flash-frame rounded-3xl p-6 md:p-8 max-w-lg w-full text-center shadow-2xl space-y-6">
             <div className="flex justify-center">
-              <div className="w-16 h-16 rounded-full bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-300">
-                <Award className="w-8 h-8" />
+              <div className="w-18 h-18 rounded-full bg-gradient-to-b from-amber-400 to-amber-600 border-4 border-yellow-200 flex items-center justify-center text-slate-950 shadow-2xl animate-bounce">
+                <Award className="w-10 h-10 text-slate-950" />
               </div>
             </div>
 
             <div>
-              <h2 className="text-2xl font-black text-amber-300">战斗大获全胜！</h2>
-              <p className="text-slate-300 text-sm mt-1">
-                恭喜灵契师！你与幻灵伙伴的心念合一提升了！
+              <h2 className="text-3xl font-black text-amber-300 game-title-font">对决大获全胜！</h2>
+              <p className="text-slate-300 text-xs mt-1">
+                恭喜灵契师！你与本命幻灵的心念默契更上一层楼！
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 bg-black/40 rounded-xl p-4 border border-slate-800">
+            <div className="grid grid-cols-2 gap-3 bg-slate-950/80 rounded-2xl p-4 border border-slate-800">
               <div className="text-left">
-                <span className="text-xs text-slate-400">获得经验值</span>
+                <span className="text-xs text-slate-400">获得修为经验</span>
                 <p className="text-xl font-bold text-cyan-300 font-mono">+{victoryData.expEarned} EXP</p>
               </div>
               <div className="text-right">
-                <span className="text-xs text-slate-400">获得灵石</span>
+                <span className="text-xs text-slate-400">获得天地灵石</span>
                 <p className="text-xl font-bold text-amber-300 font-mono">+{victoryData.coinsEarned} 灵石</p>
               </div>
             </div>
 
-            {/* Level Ups announcements */}
+            {/* Level Ups */}
             {victoryData.levelUps.map((lvl, i) => (
-              <div key={i} className="bg-emerald-950/60 border border-emerald-500/30 p-3 rounded-xl text-emerald-200 text-sm font-semibold">
-                🎉 【{lvl.petName}】 等级提升至 Lv.{lvl.newLevel}！全属性大幅增强！
+              <div key={i} className="bg-emerald-950/80 border-2 border-emerald-500/60 p-3 rounded-2xl text-emerald-200 text-sm font-bold flex items-center justify-center gap-2">
+                <Sparkles className="w-4 h-4 text-emerald-400" />
+                <span>【{lvl.petName}】 等级提升至 Lv.{lvl.newLevel}！全属性大幅突破！</span>
               </div>
             ))}
 
-            {/* Evolution announcements */}
+            {/* Evolutions */}
             {victoryData.evolutions.map((evo, i) => (
-              <div key={i} className="bg-gradient-to-r from-purple-950/80 to-indigo-950/80 border border-purple-500/40 p-4 rounded-xl text-purple-200 text-sm">
-                <p className="text-amber-300 font-bold text-base mb-1">✨ 华丽进化！</p>
-                【{evo.petName}】 领悟了更强大的自然魔法，成功进化为 【{evo.newSpeciesName}】！
+              <div key={i} className="bg-purple-950/80 border-2 border-purple-400 p-4 rounded-2xl text-purple-200 text-sm">
+                <p className="text-amber-300 font-black text-base mb-1 game-title-font">✨ 远古血脉觉醒 · 化形蜕变！</p>
+                【{evo.petName}】 领悟了天地本源灵脉，成功化形为 【{evo.newSpeciesName}】！
                 <div className="flex justify-center mt-3">
-                  <PetAvatar speciesId={evo.newSpeciesId} size={72} />
+                  <PetAvatar speciesId={evo.newSpeciesId} size={76} />
                 </div>
               </div>
             ))}
 
-            {/* Captured pet info */}
+            {/* Captured pet */}
             {victoryData.captured && (
-              <div className="bg-amber-950/50 border border-amber-500/30 p-3 rounded-xl text-amber-200 text-sm flex items-center justify-center gap-3">
-                <PetAvatar speciesId={victoryData.captured.speciesId} size={48} />
-                <span>成功收服了新伙伴 【{PET_SPECIES[victoryData.captured.speciesId].name}】！已加入宠物背包！</span>
+              <div className="bg-amber-950/70 border-2 border-amber-400/60 p-3 rounded-2xl text-amber-200 text-sm flex items-center justify-center gap-3">
+                <PetAvatar speciesId={victoryData.captured.speciesId} size={50} />
+                <span className="font-bold">成功缔约新伙伴 【{PET_SPECIES[victoryData.captured.speciesId].name}】！已加入战队！</span>
               </div>
             )}
 
             <button
               onClick={handleFinishVictoryModal}
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-base cursor-pointer shadow-lg transition-transform active:scale-95"
+              className="flash-gold-btn w-full py-3.5 rounded-2xl text-base cursor-pointer shadow-xl"
             >
-              继续探险
+              继续探索秘境
             </button>
           </div>
         </div>

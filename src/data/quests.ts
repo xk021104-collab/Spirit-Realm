@@ -1,0 +1,147 @@
+import { Quest } from '../types/game';
+
+export const INITIAL_QUESTS: Quest[] = [
+  {
+    id: 'quest_1',
+    order: 1,
+    chapter: '序章 · 灵契初缔',
+    title: '命定之选 · 缔结第一尊本命幻灵',
+    description:
+      '天地初开，五行化灵！幻灵圣殿的古老灵脉近日泛起异动，大长老玄冥在圣殿中心举行灵契加冕仪式。请前往拜见大长老，在桀骜炽热的【赤焰雀】、纯澈灵动的【碧水灵】与生生不息的【青木鹿】中挑选属于你的第一位本命守护幻灵！',
+    targetType: 'CHOOSE_STARTER',
+    targetCount: 1,
+    currentCount: 0,
+    status: 'ACTIVE',
+    targetLocationName: '幻灵圣殿',
+    targetLocationId: 'ACADEMY',
+    hint: '点击圣殿中央的【大长老 玄冥】，完成本命御三家幻灵的选择契约仪式。',
+    rewards: {
+      coins: 1000,
+      items: [{ itemId: 'gulu_normal', count: 5 }],
+    },
+  },
+  {
+    id: 'quest_2',
+    order: 2,
+    chapter: '第一章 · 云梦初试',
+    title: '初试锋芒 · 云梦古原灵术实战',
+    description:
+      '初掌灵力，需与幻灵于实战中熔铸心神默契！前往绿意盎然、灵木繁茂的【云梦古原】，在花海草丛中寻找游荡的野生【绒风兔】，运用五行属性相克之理，赢下 1 场实战对决！',
+    targetType: 'WIN_WILD_BATTLE',
+    targetCount: 1,
+    currentCount: 0,
+    status: 'LOCKED',
+    targetLocationName: '云梦古原',
+    targetLocationId: 'PRAIRIE',
+    hint: '打开【世界地图】前往【云梦古原】，走近跳跃的野生幻灵，点击进入回合制对决！',
+    rewards: {
+      coins: 800,
+      items: [
+        { itemId: 'gulu_mid', count: 3 },
+        { itemId: 'potion_small', count: 3 },
+      ],
+    },
+  },
+  {
+    id: 'quest_3',
+    order: 3,
+    chapter: '第二章 · 灵晶契约',
+    title: '万灵感应 · 灵契晶石收服新伙伴',
+    description:
+      '真正的大师绝不孤身迎敌，需组建五行相生相克的庞大幻灵战队！在野生遭遇中，将野生幻灵削弱至较低气血后，投掷【灵契晶石】将其缔结契约。收服成功后，其全部档案将永久收录于【幻灵图鉴】中！',
+    targetType: 'CATCH_PET',
+    targetCount: 1,
+    currentCount: 0,
+    status: 'LOCKED',
+    targetLocationName: '云梦古原 / 苍炎熔渊',
+    targetLocationId: 'PRAIRIE',
+    hint: '在战斗中打残野生幻灵，点击【灵晶契约】选择初阶或玄阶凝灵晶进行投掷！',
+    rewards: {
+      coins: 1200,
+      items: [
+        { itemId: 'potion_mid', count: 3 },
+        { itemId: 'elixir_pp', count: 2 },
+      ],
+    },
+  },
+  {
+    id: 'quest_4',
+    order: 4,
+    chapter: '第三章 · 灵泉归真',
+    title: '春风化雨 · 灵木医庐全面调息',
+    description:
+      '连番苦战必耗损幻灵气血与招式灵力（PP）。前往圣殿西侧药圃的【灵木医庐】，拜访医圣传人【云曦仙子】，体验神圣九转回春秘泉，免费使全队幻灵气血与招式灵力瞬间全满！',
+    targetType: 'HEAL_PET',
+    targetCount: 1,
+    currentCount: 0,
+    status: 'LOCKED',
+    targetLocationName: '灵木医庐',
+    targetLocationId: 'HOSPITAL',
+    hint: '前往【灵木医庐】，与【云曦仙子】对话，享受一键免费全队满血满状态调息！',
+    rewards: {
+      coins: 600,
+      items: [{ itemId: 'potion_full', count: 2 }],
+    },
+  },
+  {
+    id: 'quest_5',
+    order: 5,
+    chapter: '第四章 · 坊市整备',
+    title: '物阜民丰 · 万象珍宝阁采购备战',
+    description:
+      '涉足凶险的九天与地心熔渊，充足的补给乃保命之本！前往天墉坊市的【万象珍宝阁】，向商盟掌柜【葛乾】购买任意 1 件高阶灵契晶或灵丹，扩充你的储物宝囊！',
+    targetType: 'BUY_SHOP_ITEM',
+    targetCount: 1,
+    currentCount: 0,
+    status: 'LOCKED',
+    targetLocationName: '万象珍宝阁',
+    targetLocationId: 'SHOP',
+    hint: '在世界地图传送至【万象珍宝阁】，点击【葛乾】消耗灵石选购任意道具。',
+    rewards: {
+      coins: 1000,
+      items: [{ itemId: 'gulu_high', count: 2 }],
+    },
+  },
+  {
+    id: 'quest_6',
+    order: 6,
+    chapter: '第五章 · 涅槃蜕变',
+    title: '潜能苏醒 · 幻灵体能化形升阶',
+    description:
+      '幻灵体内封印着远古洪荒血脉！通过实战积累经验，将你的初始幻灵培养至 Lv.16（赤焰雀蜕变为灼羽鹰、碧水灵化形为渊潮兽、青木鹿觉醒为翡翠角鹿），领悟更强天地绝学！',
+    targetType: 'EVOLVE_PET',
+    targetCount: 1,
+    currentCount: 0,
+    status: 'LOCKED',
+    targetLocationName: '苍炎熔渊 / 星辰碧海',
+    targetLocationId: 'VOLCANO',
+    hint: '带初始伙伴多参与野外战斗积累经验，达到 Lv.16 将即刻触发华丽的化形蜕变！',
+    rewards: {
+      coins: 2500,
+      items: [
+        { itemId: 'revive_herb', count: 2 },
+        { itemId: 'gulu_high', count: 3 },
+      ],
+    },
+  },
+  {
+    id: 'quest_7',
+    order: 7,
+    chapter: '终章 · 凌霄加冕',
+    title: '天命试炼 · 战胜天罡战皇陆天衡',
+    description:
+      '你已具备纵横秘境的顶尖实力！前往悬浮于九霄之巅的【凌霄试炼台】，向镇守天门的【天罡战皇 陆天衡】发起挑战！挫败其高阶天雷灵兽，荣登灵圣之巅，赢得至高【天穹天命徽章】与混元圣皇晶！',
+    targetType: 'WIN_ARENA_CHALLENGE',
+    targetCount: 1,
+    currentCount: 0,
+    status: 'LOCKED',
+    targetLocationName: '凌霄试炼台',
+    targetLocationId: 'ARENA',
+    hint: '传送至【凌霄试炼台】，与战神【陆天衡】开启王者对决，策略轮换队伍赢取至高荣誉！',
+    rewards: {
+      coins: 5000,
+      items: [{ itemId: 'gulu_king', count: 1 }],
+      badge: '天穹天命徽章',
+    },
+  },
+];

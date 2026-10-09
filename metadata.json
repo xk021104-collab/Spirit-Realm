@@ -1,0 +1,6 @@
+{
+  "name": "洛克王国：魔法启程",
+  "description": "经典页游洛克王国魔法世界！探索魔法学院与维苏威火山，收集培养御三家火花、水蓝蓝与喵喵，使用咕噜球捕捉百种宠物，体验原汁原味的回合制宠物对战。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

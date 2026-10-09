@@ -20,61 +20,82 @@ export const PlayerAvatar: React.FC<PlayerAvatarProps> = ({
         direction === 'left' ? 'scale-x-[-1]' : ''
       } ${isMoving ? 'animate-bounce' : ''} ${className}`}
     >
-      <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-xl overflow-visible">
-        {/* Magic Aura Ring under player */}
-        <ellipse cx="50" cy="90" rx="32" ry="7" fill="#3b82f6" opacity="0.35" className="animate-pulse" />
+      <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-2xl overflow-visible">
+        <defs>
+          <radialGradient id="playerStarAura" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.6" />
+            <stop offset="60%" stopColor="#818cf8" stopOpacity="0.25" />
+            <stop offset="100%" stopColor="#0284c7" stopOpacity="0" />
+          </radialGradient>
+          <linearGradient id="celestialRobeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#1e1b4b" />
+            <stop offset="50%" stopColor="#0f172a" />
+            <stop offset="100%" stopColor="#0284c7" />
+          </linearGradient>
+          <linearGradient id="celestialSashGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#38bdf8" />
+            <stop offset="100%" stopColor="#818cf8" />
+          </linearGradient>
+        </defs>
 
-        {/* Dynamic Wizard Cape with Gold Trim */}
-        <path d="M 24 48 Q 10 70 16 86 Q 50 92 82 86 Q 88 70 76 48 Z" fill="#2563eb" />
-        <path d="M 28 50 Q 18 70 22 84 Q 50 88 78 84 Q 82 70 72 50 Z" fill="#1d4ed8" />
-        <path d="M 16 86 Q 50 92 82 86" stroke="#fbbf24" strokeWidth="2.5" fill="none" />
+        {/* Luminous Celestial Spirit Circle */}
+        <ellipse cx="50" cy="92" rx="36" ry="8" fill="url(#playerStarAura)" className="animate-pulse" />
+        <ellipse cx="50" cy="92" rx="24" ry="5" fill="none" stroke="#38bdf8" strokeWidth="1" strokeDasharray="4 3" opacity="0.8" />
 
-        {/* Wizard Robe Sleeves & Body */}
-        <path d="M 32 52 L 24 74 L 38 72 L 42 56 Z" fill="#3b82f6" />
-        <path d="M 68 52 L 78 68 L 66 70 L 60 56 Z" fill="#3b82f6" />
-        <rect x="36" y="52" width="28" height="30" rx="4" fill="#1e40af" />
-        {/* Belt with Spirit Gem */}
-        <rect x="35" y="66" width="30" height="5" fill="#ca8a04" />
-        <polygon points="50,65 53,68.5 50,72 47,68.5" fill="#38bdf8" />
+        {/* Floating Celestial Sashes / Windblown Silk Ribbons */}
+        <path d="M 18 52 Q 6 72 12 90 Q 22 84 20 62 Z" fill="#38bdf8" opacity="0.75" />
+        <path d="M 82 52 Q 94 72 88 90 Q 78 84 80 62 Z" fill="#38bdf8" opacity="0.75" />
 
-        {/* Wizard Hat Base & Pointy Brim */}
-        <ellipse cx="50" cy="38" rx="34" ry="11" fill="#6b21a8" stroke="#4c1d95" strokeWidth="2" />
-        <path d="M 24 38 Q 48 -8 76 38 Z" fill="#7c3aed" />
-        <path d="M 30 38 Q 48 2 70 38 Z" fill="#6b21a8" />
-        {/* Golden Hat Band & Mystic Star Brooch */}
-        <ellipse cx="50" cy="36" rx="22" ry="7" fill="#fbbf24" />
-        <polygon points="50,30 52.5,35 58,35 53.5,38 55.5,43 50,40 44.5,43 46.5,38 42,35 47.5,35" fill="#fef08a" />
+        {/* Elegant Immortal Robes (广袖流云袍) */}
+        <path d="M 24 50 Q 14 88 22 95 Q 50 98 78 95 Q 86 88 76 50 Z" fill="url(#celestialRobeGrad)" stroke="#38bdf8" strokeWidth="1.2" />
+        <path d="M 32 52 L 20 88 L 30 89 L 38 58 Z" fill="#0369a1" />
+        <path d="M 68 52 L 80 88 L 70 89 L 62 58 Z" fill="#0369a1" />
 
-        {/* Character Face & Hair */}
-        <circle cx="50" cy="48" r="16" fill="#fde68a" />
-        {/* Anime Hair Bangs */}
-        <path d="M 34 42 Q 50 50 66 42 Q 58 35 50 36 Q 42 35 34 42 Z" fill="#78350f" />
-        <path d="M 34 42 L 36 50 L 40 44 Z" fill="#78350f" />
-        <path d="M 66 42 L 64 50 L 60 44 Z" fill="#78350f" />
+        {/* Pure White Silk Lapel & Celestial Gem Belt */}
+        <polygon points="50,52 42,72 58,72" fill="#f8fafc" />
+        <rect x="36" y="66" width="28" height="5" rx="2" fill="url(#celestialSashGrad)" />
+        {/* Jade Astral Pendant */}
+        <polygon points="50,65 53.5,68.5 50,72 46.5,68.5" fill="#fde047" stroke="#ca8a04" strokeWidth="0.8" />
+        <circle cx="50" cy="68.5" r="1.5" fill="#38bdf8" />
 
-        {/* Big Bright Anime Eyes */}
-        <ellipse cx="44" cy="49" rx="3" ry="4.5" fill="#1e1b4b" />
-        <circle cx="45" cy="47.5" r="1.3" fill="#ffffff" />
-        <ellipse cx="56" cy="49" rx="3" ry="4.5" fill="#1e1b4b" />
-        <circle cx="57" cy="47.5" r="1.3" fill="#ffffff" />
+        {/* Celestial Star Diadem / Topknot Crown */}
+        <ellipse cx="50" cy="22" rx="10" ry="7" fill="#0f172a" />
+        {/* Jade Star Hairpin */}
+        <line x1="34" y1="20" x2="66" y2="20" stroke="#38bdf8" strokeWidth="2.5" strokeLinecap="round" />
+        <circle cx="34" cy="20" r="2.5" fill="#fde047" />
+        <circle cx="66" cy="20" r="2.5" fill="#fde047" />
 
-        {/* Cheerful Blush & Smile */}
-        <ellipse cx="39" cy="54" rx="2.5" ry="1.5" fill="#f87171" opacity="0.7" />
-        <ellipse cx="61" cy="54" rx="2.5" ry="1.5" fill="#f87171" opacity="0.7" />
-        <path d="M 47 53 Q 50 56 53 53" stroke="#92400e" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+        {/* Anime Hair: Flowing Silver-Blue Moonlit Locks */}
+        <path d="M 26 34 Q 50 14 74 34 Q 82 52 74 62 Q 70 42 66 38 Q 50 30 34 38 Q 30 42 26 62 Q 18 52 26 34 Z" fill="#1e293b" />
+        <path d="M 32 36 Q 50 24 68 36 Q 64 44 58 38 Q 50 36 42 38 Q 36 44 32 36 Z" fill="#334155" />
 
-        {/* Magic Arcane Wand in Right Hand with Celestial Star */}
-        <line x1="72" y1="62" x2="90" y2="40" stroke="#d97706" strokeWidth="3.5" strokeLinecap="round" />
-        <polygon points="90,40 92,34 97,36 94,40 97,45 92,43 89,47 88,42 83,40 88,38" fill="#fde047" stroke="#ca8a04" strokeWidth="1" />
-        <circle cx="90" cy="40" r="3" fill="#38bdf8" />
+        {/* Anime Face */}
+        <circle cx="50" cy="44" r="16" fill="#fef3c7" />
 
-        {/* Shiny Shoes */}
-        <ellipse cx="41" cy="85" rx="7" ry="4" fill="#581c87" />
-        <ellipse cx="59" cy="85" rx="7" ry="4" fill="#581c87" />
+        {/* Celestial Star Mark on Forehead */}
+        <polygon points="50,32 51.5,35 55,35 52,37 53,40 50,38 47,40 48,37 45,35 48.5,35" fill="#38bdf8" />
+
+        {/* Expressive Anime Eyes with Celestial Star Highlight */}
+        <ellipse cx="44" cy="44" rx="3.5" ry="4.5" fill="#0c4a6e" />
+        <circle cx="45" cy="42.5" r="1.4" fill="#ffffff" />
+        <ellipse cx="56" cy="44" rx="3.5" ry="4.5" fill="#0c4a6e" />
+        <circle cx="57" cy="42.5" r="1.4" fill="#ffffff" />
+
+        {/* Soft Cheerful Blush & Smile */}
+        <ellipse cx="38" cy="49" rx="2.5" ry="1.5" fill="#fb7185" opacity="0.6" />
+        <ellipse cx="62" cy="49" rx="2.5" ry="1.5" fill="#fb7185" opacity="0.6" />
+        <path d="M 47 49 Q 50 52 53 49" stroke="#92400e" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+
+        {/* Floating Spirit Pact Star Crystal Hovering at Palm */}
+        <g className="animate-spin" style={{ transformOrigin: '82px 48px', animationDuration: '6s' }}>
+          <polygon points="82,41 87,48 82,55 77,48" fill="#38bdf8" filter="drop-shadow(0 0 6px #38bdf8)" />
+          <polygon points="82,43 85.5,48 82,53 78.5,48" fill="#e0f2fe" />
+        </g>
       </svg>
     </div>
   );
 };
+
 
 export const NpcAvatar: React.FC<{ type: string; size?: number }> = ({ type, size = 64 }) => {
   return (
@@ -335,3 +356,30 @@ export const NpcAvatar: React.FC<{ type: string; size?: number }> = ({ type, siz
     </div>
   );
 };
+
+export interface FriendAvatarProps {
+  style: 'fairy' | 'swordsman' | 'scholar' | 'taoist' | 'wizard' | 'knight';
+  size?: number;
+  className?: string;
+}
+
+export const FriendAvatar: React.FC<FriendAvatarProps> = ({ style, size = 52, className = '' }) => {
+  return (
+    <div style={{ width: `${size}px`, height: `${size}px` }} className={`relative inline-flex items-center justify-center select-none ${className}`}>
+      {style === 'fairy' ? (
+        <NpcAvatar type="nurse" size={size} />
+      ) : style === 'swordsman' ? (
+        <NpcAvatar type="student" size={size} />
+      ) : style === 'scholar' ? (
+        <NpcAvatar type="sailor" size={size} />
+      ) : style === 'taoist' ? (
+        <NpcAvatar type="griffin" size={size} />
+      ) : style === 'wizard' ? (
+        <NpcAvatar type="merchant" size={size} />
+      ) : (
+        <NpcAvatar type="arena_champion" size={size} />
+      )}
+    </div>
+  );
+};
+

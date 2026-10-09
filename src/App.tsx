@@ -16,8 +16,11 @@ import { PrologueIntroModal } from './components/PrologueIntroModal';
 import { DailyEventsModal } from './components/DailyEventsModal';
 import { PetTrainModal } from './components/PetTrainModal';
 import { QuestTracker } from './components/QuestTracker';
+import { FriendsModal } from './components/FriendsModal';
+import { INITIAL_FRIENDS } from './data/friends';
+import { Friend } from './types/game';
 
-import { Sparkles, Compass, BookOpen, Backpack, ShoppingBag, ScrollText, Volume2, VolumeX, Gift, Zap } from 'lucide-react';
+import { Sparkles, Compass, BookOpen, Backpack, ShoppingBag, ScrollText, Volume2, VolumeX, Gift, Zap, Users } from 'lucide-react';
 
 const STORAGE_KEY = 'huanling_mijing_save_v1';
 
@@ -64,6 +67,11 @@ export default function App() {
   const [isDailyEventsOpen, setIsDailyEventsOpen] = useState<boolean>(false);
   const [isPetTrainOpen, setIsPetTrainOpen] = useState<boolean>(false);
   const [isQuestLogOpen, setIsQuestLogOpen] = useState<boolean>(false);
+  const [isFriendsOpen, setIsFriendsOpen] = useState<boolean>(false);
+
+  // Social Friends & Spirit Shards State
+  const [friends, setFriends] = useState<Friend[]>(INITIAL_FRIENDS);
+  const [spiritShards, setSpiritShards] = useState<number>(6);
 
   // Audio Toggle
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
@@ -93,6 +101,32 @@ export default function App() {
       } else {
         // First time launch -> trigger prologue ritual
         setIsPrologueOpen(true);
+      }
+
+      // Load Social Friends & Shards
+      const savedFriends = localStorage.getItem('huanling_friends_data');
+      const savedShards = localStorage.getItem('huanling_spirit_shards');
+      const lastGiftDate = localStorage.getItem('huanling_last_gift_date');
+      const todayDate = new Date().toISOString().split('T')[0];
+
+      if (savedShards) {
+        setSpiritShards(parseInt(savedShards, 10));
+      }
+
+      if (savedFriends) {
+        let parsedFriends = JSON.parse(savedFriends) as Friend[];
+        // Reset daily gifting flags on a new calendar day
+        if (lastGiftDate !== todayDate) {
+          parsedFriends = parsedFriends.map((f) => ({
+            ...f,
+            hasGiftedToday: false,
+            canClaimFromFriend: true,
+          }));
+          localStorage.setItem('huanling_last_gift_date', todayDate);
+        }
+        setFriends(parsedFriends);
+      } else {
+        localStorage.setItem('huanling_last_gift_date', todayDate);
       }
     } catch {
       setIsPrologueOpen(true);
@@ -384,59 +418,158 @@ export default function App() {
     });
   };
 
+  // 10. Social Friends & Spirit Shard Handlers
+  const saveFriends = (newFriends: Friend[]) => {
+    setFriends(newFriends);
+    try {
+      localStorage.setItem('huanling_friends_data', JSON.stringify(newFriends));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const updateShards = (newAmt: number) => {
+    setSpiritShards(newAmt);
+    try {
+      localStorage.setItem('huanling_spirit_shards', newAmt.toString());
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleGiftFriend = (friendId: string) => {
+    const updated = friends.map((f) =>
+      f.id === friendId ? { ...f, hasGiftedToday: true } : f
+    );
+    saveFriends(updated);
+    setPlayerCoins((prev) => prev + 50); // reward 50 spirit coins for gifting
+  };
+
+  const handleClaimFromFriend = (friendId: string) => {
+    const friend = friends.find((f) => f.id === friendId);
+    if (!friend || !friend.canClaimFromFriend) return;
+    const updated = friends.map((f) =>
+      f.id === friendId ? { ...f, canClaimFromFriend: false } : f
+    );
+    saveFriends(updated);
+    updateShards(spiritShards + 1);
+  };
+
+  const handleClaimAllAndGiftAll = () => {
+    let earnedShards = 0;
+    let earnedCoins = 0;
+    const updated = friends.map((f) => {
+      let canClaim = f.canClaimFromFriend;
+      let hasGifted = f.hasGiftedToday;
+      if (canClaim) {
+        earnedShards += 1;
+        canClaim = false;
+      }
+      if (!hasGifted) {
+        earnedCoins += 50;
+        hasGifted = true;
+      }
+      return { ...f, canClaimFromFriend: canClaim, hasGiftedToday: hasGifted };
+    });
+    saveFriends(updated);
+    if (earnedShards > 0) updateShards(spiritShards + earnedShards);
+    if (earnedCoins > 0) setPlayerCoins((prev) => prev + earnedCoins);
+  };
+
+  const handleToggleFollowInScene = (friendId: string) => {
+    const updated = friends.map((f) =>
+      f.id === friendId ? { ...f, isFollowingInScene: !f.isFollowingInScene } : f
+    );
+    saveFriends(updated);
+  };
+
+  const handleAddFriend = (newFriend: Friend) => {
+    const updated = [newFriend, ...friends];
+    saveFriends(updated);
+  };
+
+  const handleRemoveFriend = (friendId: string) => {
+    const updated = friends.filter((f) => f.id !== friendId);
+    saveFriends(updated);
+  };
+
+  const handleExchangeReward = (rewardId: string, cost: number) => {
+    if (spiritShards < cost) return;
+    updateShards(spiritShards - cost);
+
+    if (rewardId === 'coins_1500') {
+      setPlayerCoins((prev) => prev + 1500);
+    } else {
+      const isMulti = rewardId === 'gulu_high' || rewardId === 'exp_pill_large' || rewardId === 'potion_full' || rewardId === 'revive_herb';
+      handleAddItem(rewardId, isMulti ? 2 : 1);
+    }
+  };
+
   const currentScene = SCENES_DATA[currentSceneId] || SCENES_DATA.ACADEMY;
 
   return (
-    <div className="min-h-screen bg-[#020617] text-slate-100 flex flex-col items-center justify-between p-1 sm:p-3 select-none">
-      {/* 1. Classic Web Game Portal Top Bar (4399 / 淘米 / 腾讯页游风格官方顶栏) */}
-      <header className="w-full max-w-5xl bg-slate-900/90 border border-amber-500/40 rounded-t-xl px-4 py-2 flex flex-wrap items-center justify-between text-xs text-slate-300 shadow-md backdrop-blur-sm gap-2">
-        {/* Left: Game Title & Server Status */}
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center font-black text-slate-950 text-xs shadow-inner">
-              秘
-            </div>
-            <h1 className="font-black text-sm text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-500 game-title-font tracking-wide">
+    <div className="min-h-screen bg-[#020617] text-slate-100 flex flex-col items-center justify-start sm:justify-center p-1 sm:p-2 select-none overflow-x-hidden">
+      {/* 1. Celestial Fantasy RPG Game Header Bar */}
+      <header className="w-full max-w-5xl bg-slate-900/80 border border-cyan-500/20 rounded-t-2xl px-4 py-2 flex items-center justify-between text-xs text-slate-300 shadow-xl backdrop-blur-md gap-2">
+        {/* Left: Game Title & Subtitle */}
+        <div className="flex items-center gap-2.5">
+          <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-cyan-400 via-sky-500 to-indigo-600 flex items-center justify-center font-bold text-white text-xs shadow-md shadow-cyan-500/30">
+            ✦
+          </div>
+          <div>
+            <h1 className="font-extrabold text-sm sm:text-base text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-200 to-sky-400 tracking-wide">
               幻灵秘境
             </h1>
-          </div>
-          <span className="hidden sm:inline-block text-slate-600">|</span>
-          <div className="flex items-center gap-1.5 text-[11px] font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded-full">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span>电信一区 · 仙灵秘境 (12ms)</span>
-          </div>
-          <div className="hidden md:flex items-center gap-1 text-[11px] text-amber-300/80 font-mono">
-            <span>🔥 158,240 灵契使在线</span>
+            <span className="text-[10px] text-slate-400 block -mt-0.5 tracking-wider font-light">
+              SPIRIT REALM · CHRONICLES
+            </span>
           </div>
         </div>
 
-        {/* Right: Quick Portal Navigation & Sound / Fullscreen */}
+        {/* Center: Current Zone Indicator */}
+        <div className="hidden md:flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800/60 border border-cyan-500/20 text-[11px] text-cyan-200">
+          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+          <span>秘境探索中：{currentScene.name}</span>
+        </div>
+
+        {/* Right: Clean Navigation Shortcuts */}
         <div className="flex items-center gap-2 sm:gap-3">
           <button
-            onClick={() => setIsPrologueOpen(true)}
-            className="text-[11px] text-amber-300/90 hover:text-amber-200 underline cursor-pointer"
-            title="查看游戏序章与天地浩劫背景故事"
+            onClick={() => setIsFriendsOpen(true)}
+            className="px-2.5 py-1 rounded-lg text-xs text-teal-300 hover:text-white bg-teal-950/40 hover:bg-teal-900/50 border border-teal-500/30 transition-all cursor-pointer font-medium flex items-center gap-1"
+            title="查看同修仙友录与互赠灵力碎片"
           >
-            【天命剧情】
+            <Users className="w-3.5 h-3.5 text-teal-400" />
+            <span>仙友录</span>
+            {friends.some((f) => f.canClaimFromFriend) && (
+              <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse" />
+            )}
+          </button>
+          <button
+            onClick={() => setIsPrologueOpen(true)}
+            className="px-2.5 py-1 rounded-lg text-xs text-cyan-300 hover:text-white bg-cyan-950/40 hover:bg-cyan-900/50 border border-cyan-500/30 transition-all cursor-pointer font-medium"
+            title="回顾世界序章与创世神兽起源"
+          >
+            天命序章
           </button>
           <button
             onClick={() => setIsQuestLogOpen(true)}
-            className="text-[11px] text-slate-300 hover:text-amber-300 cursor-pointer"
-            title="查看主线任务进度"
+            className="px-2.5 py-1 rounded-lg text-xs text-slate-300 hover:text-white bg-slate-800/60 hover:bg-slate-750 border border-slate-700/60 transition-all cursor-pointer font-medium hidden sm:inline"
+            title="查看主线修道任务"
           >
-            历练指南
+            历练日志
           </button>
           <button
             onClick={handleToggleSound}
-            className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer border border-slate-700"
+            className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-750 text-slate-300 hover:text-white transition-colors cursor-pointer border border-slate-700/60"
             title={soundEnabled ? '音效开启' : '音效静音'}
           >
-            {soundEnabled ? <Volume2 className="w-3.5 h-3.5 text-amber-400" /> : <VolumeX className="w-3.5 h-3.5" />}
+            {soundEnabled ? <Volume2 className="w-3.5 h-3.5 text-cyan-400" /> : <VolumeX className="w-3.5 h-3.5" />}
           </button>
         </div>
       </header>
 
-      {/* 2. Main Game Flash Viewport Stage (100% Focused on the Web Game) */}
+      {/* 2. Main Game Viewport Stage */}
       <main className="w-full max-w-5xl flex flex-col items-center justify-center my-0 shadow-2xl">
         {activeBattle.inBattle && activeBattle.enemyPet ? (
           <BattleView
@@ -456,6 +589,12 @@ export default function App() {
             playerBadges={playerBadges}
             openedChestIds={openedChestIds}
             playerName={playerName}
+            friends={friends}
+            onOpenFriends={() => setIsFriendsOpen(true)}
+            onGiftFriend={handleGiftFriend}
+            onClaimFromFriend={handleClaimFromFriend}
+            onToggleFollowInScene={handleToggleFollowInScene}
+            claimableShardsCount={friends.filter((f) => f.canClaimFromFriend).length}
             onOpenChest={handleOpenChest}
             onEnterBattle={handleStartBattle}
             onTeleportToScene={(scId) => setCurrentSceneId(scId)}
@@ -472,15 +611,18 @@ export default function App() {
         )}
       </main>
 
-      {/* 3. Classic Flash Portal Bottom Anti-Addiction Compliance Footer */}
-      <footer className="w-full max-w-5xl bg-slate-900/80 border border-slate-800 rounded-b-xl px-4 py-1.5 flex flex-wrap items-center justify-between text-[11px] text-slate-400 mt-1">
+
+      {/* 3. Subtle RPG Footer */}
+      <footer className="w-full max-w-5xl bg-slate-900/60 border border-slate-800/80 rounded-b-2xl px-4 py-2 flex flex-wrap items-center justify-between text-[11px] text-slate-400 mt-1">
         <div className="flex items-center gap-2">
-          <span className="font-bold text-amber-400">🛡️ 适龄提示：8+</span>
-          <span>抵制不良游戏，拒绝盗版游戏。注意自我保护，谨防受骗上当。适度游戏益脑，沉迷游戏伤身。</span>
+          <span className="text-cyan-400 font-medium">✦ 幻灵大陆</span>
+          <span className="text-slate-500">·</span>
+          <span>纯正回合制幻灵契约与形态蜕变 RPG · 点击地面探索移动</span>
         </div>
         <div className="hidden sm:flex items-center gap-3 text-slate-400 font-mono text-[10px]">
-          <span>⚡ WebGL/Flash 双模渲染</span>
-          <span>© 2026 《幻灵秘境》运营团队</span>
+          <span>全图鉴收录 16 种天地神兽</span>
+          <span className="text-slate-600">|</span>
+          <span>五行相生相克法则</span>
         </div>
       </footer>
 
@@ -553,6 +695,23 @@ export default function App() {
           onClose={() => setIsPetTrainOpen(false)}
         />
       )}
+
+      {/* Social Friends & Spirit Companions Modal */}
+      {isFriendsOpen && (
+        <FriendsModal
+          friends={friends}
+          spiritShards={spiritShards}
+          onClose={() => setIsFriendsOpen(false)}
+          onGiftFriend={handleGiftFriend}
+          onClaimFromFriend={handleClaimFromFriend}
+          onClaimAllAndGiftAll={handleClaimAllAndGiftAll}
+          onToggleFollowInScene={handleToggleFollowInScene}
+          onAddFriend={handleAddFriend}
+          onRemoveFriend={handleRemoveFriend}
+          onExchangeReward={handleExchangeReward}
+        />
+      )}
     </div>
   );
 }
+

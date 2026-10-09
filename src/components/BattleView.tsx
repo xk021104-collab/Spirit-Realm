@@ -708,12 +708,12 @@ export const BattleView: React.FC<BattleViewProps> = ({
               {showWeatherTooltip && (
                 <div
                   onClick={(e) => e.stopPropagation()}
-                  className="absolute top-11 left-1/2 -translate-x-1/2 z-50 w-80 bg-slate-950/95 border-2 border-amber-400 rounded-2xl p-4 shadow-2xl backdrop-blur-md text-xs animate-in fade-in zoom-in-95 duration-150"
+                  className="absolute top-11 left-1/2 -translate-x-1/2 z-50 w-80 celestial-glass rounded-2xl p-4 shadow-2xl border border-cyan-500/30 text-xs animate-in fade-in zoom-in-95 duration-150"
                 >
-                  <div className="flex items-center justify-between border-b border-amber-500/30 pb-2 mb-2.5">
+                  <div className="flex items-center justify-between border-b border-cyan-500/20 pb-2 mb-2.5">
                     <div className="flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-amber-400" />
-                      <span className="font-black text-amber-300 text-sm game-title-font">
+                      <Sparkles className="w-4 h-4 text-cyan-400" />
+                      <span className="font-bold text-cyan-200 text-sm">
                         天象法则 · {cfg.name}
                       </span>
                     </div>
@@ -726,9 +726,9 @@ export const BattleView: React.FC<BattleViewProps> = ({
                     {cfg.description}
                   </p>
 
-                  <div className="bg-slate-900/90 rounded-xl p-2.5 border border-slate-800 space-y-1.5 mb-3">
-                    <span className="text-[10px] font-bold text-amber-400 block mb-1">
-                      ⚡ 当前天气属性修正：
+                  <div className="bg-slate-900/80 rounded-xl p-2.5 border border-slate-800 space-y-1.5 mb-3">
+                    <span className="text-[10px] font-bold text-cyan-400 block mb-1">
+                      ✦ 当前天气属性修正：
                     </span>
                     {cfg.buffs.map((buff, idx) => (
                       <div key={idx} className="text-[11px] text-slate-200 flex items-start gap-1">
@@ -740,8 +740,8 @@ export const BattleView: React.FC<BattleViewProps> = ({
 
                   {/* Manual Weather Summon Testing Panel */}
                   <div className="pt-2 border-t border-slate-800">
-                    <span className="text-[10px] text-slate-400 block mb-1.5 font-bold">
-                      🔮 灵契使引动天象测试：
+                    <span className="text-[10px] text-slate-400 block mb-1.5 font-medium">
+                      引动天象测试：
                     </span>
                     <div className="grid grid-cols-5 gap-1.5">
                       {(['SUNNY', 'RAIN', 'SANDSTORM', 'THUNDER', 'CLEAR'] as BattleWeather[]).map((wKey) => {
@@ -754,8 +754,8 @@ export const BattleView: React.FC<BattleViewProps> = ({
                             onClick={() => handleSetWeather(wKey)}
                             className={`p-1.5 rounded-lg border text-center transition-all cursor-pointer ${
                               isCurrent
-                                ? 'bg-amber-500 text-slate-950 border-amber-300 font-black'
-                                : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-700'
+                                ? 'bg-cyan-500 text-slate-950 border-cyan-300 font-bold'
+                                : 'bg-slate-900/80 hover:bg-slate-800 text-slate-300 border-slate-700'
                             }`}
                             title={`切换为【${wInfo.name}】`}
                           >
@@ -813,18 +813,18 @@ export const BattleView: React.FC<BattleViewProps> = ({
 
         {/* 1. Enemy Pet Zone (Top-Right Platform) */}
         <div className="flex items-center justify-end gap-6 relative z-10">
-          {/* Enemy HUD Card (High-Gloss Beveled Flash Card) */}
-          <div className="flash-panel rounded-2xl p-4 shadow-2xl min-w-[260px] border-2 border-amber-500/70">
+          {/* Enemy HUD Card */}
+          <div className="celestial-battle-card rounded-2xl p-4 shadow-2xl min-w-[260px] border border-cyan-500/30">
             <div className="flex items-center justify-between gap-3 mb-1.5">
-              <span className="font-black text-white text-base game-title-font">{enemySpecies.name}</span>
-              <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-slate-950 text-amber-300 border border-amber-400/50 shadow-inner">
+              <span className="font-bold text-white text-base tracking-wide">{enemySpecies.name}</span>
+              <span className="text-xs font-mono font-medium px-2.5 py-0.5 rounded-full bg-slate-950/80 text-cyan-300 border border-cyan-500/30 shadow-inner">
                 Lv.{enemy.level}
               </span>
             </div>
 
             <div className="flex items-center gap-2 mb-2">
               <span
-                className={`text-[11px] px-2 py-0.5 rounded-md font-bold ${
+                className={`text-[11px] px-2 py-0.5 rounded-md font-medium ${
                   ELEMENT_COLORS[enemySpecies.type].bg
                 } ${ELEMENT_COLORS[enemySpecies.type].text} ${ELEMENT_COLORS[enemySpecies.type].border} border`}
               >
@@ -837,15 +837,15 @@ export const BattleView: React.FC<BattleViewProps> = ({
             <div className="space-y-1">
               <div className="flex justify-between text-xs text-slate-300 font-mono">
                 <span>气血 (HP)</span>
-                <span className="font-bold">
+                <span className="font-medium">
                   {enemy.currentHp} / {enemy.stats.hp}
                 </span>
               </div>
-              <div className="w-full bg-slate-950 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-700 shadow-inner">
+              <div className="w-full bg-slate-950 rounded-full h-3 overflow-hidden p-0.5 border border-slate-800 shadow-inner">
                 <div
                   className={`h-full rounded-full transition-all duration-300 ${
                     enemy.currentHp / enemy.stats.hp > 0.5
-                      ? 'bg-gradient-to-r from-emerald-500 to-green-400'
+                      ? 'bg-gradient-to-r from-emerald-500 to-teal-400'
                       : enemy.currentHp / enemy.stats.hp > 0.2
                       ? 'bg-gradient-to-r from-amber-500 to-yellow-400'
                       : 'bg-gradient-to-r from-rose-600 to-red-500'
@@ -918,18 +918,18 @@ export const BattleView: React.FC<BattleViewProps> = ({
             </div>
           </div>
 
-          {/* Player HUD Card (High-Gloss Beveled Flash Card) */}
-          <div className="flash-panel rounded-2xl p-4 shadow-2xl min-w-[280px] border-2 border-amber-500/70">
+          {/* Player HUD Card */}
+          <div className="celestial-battle-card rounded-2xl p-4 shadow-2xl min-w-[280px] border border-cyan-500/30">
             <div className="flex items-center justify-between gap-3 mb-1.5">
-              <span className="font-black text-white text-base game-title-font">{activePet.nickname}</span>
-              <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-slate-950 text-cyan-300 border border-cyan-400/50 shadow-inner">
+              <span className="font-bold text-white text-base tracking-wide">{activePet.nickname}</span>
+              <span className="text-xs font-mono font-medium px-2.5 py-0.5 rounded-full bg-slate-950/80 text-cyan-300 border border-cyan-500/30 shadow-inner">
                 Lv.{activePet.level}
               </span>
             </div>
 
             <div className="flex items-center gap-2 mb-2">
               <span
-                className={`text-[11px] px-2 py-0.5 rounded-md font-bold ${
+                className={`text-[11px] px-2 py-0.5 rounded-md font-medium ${
                   ELEMENT_COLORS[activeSpecies.type].bg
                 } ${ELEMENT_COLORS[activeSpecies.type].text} ${ELEMENT_COLORS[activeSpecies.type].border} border`}
               >
@@ -942,15 +942,15 @@ export const BattleView: React.FC<BattleViewProps> = ({
             <div className="space-y-1">
               <div className="flex justify-between text-xs text-slate-300 font-mono">
                 <span>气血 (HP)</span>
-                <span className="font-bold text-white">
+                <span className="font-medium text-white">
                   {activePet.currentHp} / {activePet.stats.hp}
                 </span>
               </div>
-              <div className="w-full bg-slate-950 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-700 shadow-inner">
+              <div className="w-full bg-slate-950 rounded-full h-3 overflow-hidden p-0.5 border border-slate-800 shadow-inner">
                 <div
                   className={`h-full rounded-full transition-all duration-300 ${
                     activePet.currentHp / activePet.stats.hp > 0.5
-                      ? 'bg-gradient-to-r from-emerald-500 to-green-400'
+                      ? 'bg-gradient-to-r from-emerald-500 to-teal-400'
                       : activePet.currentHp / activePet.stats.hp > 0.2
                       ? 'bg-gradient-to-r from-amber-500 to-yellow-400'
                       : 'bg-gradient-to-r from-rose-600 to-red-500'
@@ -968,9 +968,9 @@ export const BattleView: React.FC<BattleViewProps> = ({
                   {activePet.exp} / {activePet.maxExp}
                 </span>
               </div>
-              <div className="w-full bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-800">
+              <div className="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden border border-slate-800">
                 <div
-                  className="h-full bg-gradient-to-r from-cyan-500 to-blue-400 rounded-full transition-all duration-300"
+                  className="h-full bg-gradient-to-r from-cyan-400 to-sky-500 rounded-full transition-all duration-300"
                   style={{ width: `${Math.min(100, (activePet.exp / activePet.maxExp) * 100)}%` }}
                 />
               </div>
@@ -979,17 +979,17 @@ export const BattleView: React.FC<BattleViewProps> = ({
         </div>
       </div>
 
-      {/* Bottom Command Console (The Signature 4-Box Flash Layout) */}
-      <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border-t-2 border-amber-500/80 p-4 md:p-5 grid grid-cols-1 md:grid-cols-12 gap-4 z-20 shadow-2xl">
+      {/* Bottom Command Console */}
+      <div className="bg-slate-950/90 backdrop-blur-xl border-t border-cyan-500/25 p-4 md:p-5 grid grid-cols-1 md:grid-cols-12 gap-4 z-20 shadow-2xl">
         {/* Left: Battle Announcer Text Log */}
-        <div className="md:col-span-5 flash-panel rounded-2xl p-3 flex flex-col justify-between h-[132px] border border-amber-500/50">
-          <div className="text-xs font-bold text-amber-300 mb-1 flex items-center gap-1.5 game-title-font">
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>战场即时战报</span>
+        <div className="md:col-span-5 celestial-glass rounded-2xl p-3 flex flex-col justify-between h-[132px] border border-cyan-500/20">
+          <div className="text-xs font-bold text-cyan-300 mb-1 flex items-center gap-1.5">
+            <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+            <span>战场即时法则播报</span>
           </div>
           <div className="flex-1 overflow-y-auto space-y-1 text-xs pr-1">
             {battleLog.map((log, idx) => (
-              <p key={idx} className={idx === 0 ? 'text-white font-bold' : 'text-slate-400'}>
+              <p key={idx} className={idx === 0 ? 'text-white font-medium' : 'text-slate-400'}>
                 {idx === 0 ? '▶ ' : '  '}
                 {log}
               </p>
@@ -1008,10 +1008,10 @@ export const BattleView: React.FC<BattleViewProps> = ({
                   sound.playClick();
                   setBattleMenu('MOVES');
                 }}
-                className="flash-red-btn p-3 rounded-2xl flex flex-col items-center justify-center cursor-pointer shadow-xl disabled:opacity-40"
+                className="p-3 rounded-2xl flex flex-col items-center justify-center cursor-pointer shadow-lg bg-gradient-to-br from-rose-500 to-red-600 hover:from-rose-400 hover:to-red-500 text-white font-bold transition-all disabled:opacity-40"
               >
-                <Swords className="w-6 h-6 mb-1" />
-                <span className="text-sm font-black game-title-font">灵术决斗</span>
+                <Swords className="w-5 h-5 mb-1" />
+                <span className="text-xs sm:text-sm font-bold">灵术决斗</span>
               </button>
 
               {/* 2. Catch */}
@@ -1021,10 +1021,10 @@ export const BattleView: React.FC<BattleViewProps> = ({
                   sound.playClick();
                   setBattleMenu('BALLS');
                 }}
-                className="flash-gold-btn p-3 rounded-2xl flex flex-col items-center justify-center cursor-pointer shadow-xl disabled:opacity-40"
+                className="p-3 rounded-2xl flex flex-col items-center justify-center cursor-pointer shadow-lg bg-gradient-to-br from-amber-400 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 font-bold transition-all disabled:opacity-40"
               >
-                <CircleDot className="w-6 h-6 mb-1 text-slate-950" />
-                <span className="text-sm font-black game-title-font text-slate-950">灵晶契约</span>
+                <CircleDot className="w-5 h-5 mb-1" />
+                <span className="text-xs sm:text-sm font-bold">灵契收服</span>
               </button>
 
               {/* 3. Potions */}
@@ -1034,10 +1034,10 @@ export const BattleView: React.FC<BattleViewProps> = ({
                   sound.playClick();
                   setBattleMenu('POTIONS');
                 }}
-                className="flash-green-btn p-3 rounded-2xl flex flex-col items-center justify-center cursor-pointer shadow-xl disabled:opacity-40"
+                className="p-3 rounded-2xl flex flex-col items-center justify-center cursor-pointer shadow-lg bg-gradient-to-br from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold transition-all disabled:opacity-40"
               >
-                <Backpack className="w-6 h-6 mb-1" />
-                <span className="text-sm font-black game-title-font">储物灵药</span>
+                <Backpack className="w-5 h-5 mb-1" />
+                <span className="text-xs sm:text-sm font-bold">储物灵药</span>
               </button>
 
               {/* 4. Switch */}
@@ -1047,10 +1047,10 @@ export const BattleView: React.FC<BattleViewProps> = ({
                   sound.playClick();
                   setBattleMenu('SWITCH');
                 }}
-                className="flash-blue-btn p-3 rounded-2xl flex flex-col items-center justify-center cursor-pointer shadow-xl disabled:opacity-40"
+                className="p-3 rounded-2xl flex flex-col items-center justify-center cursor-pointer shadow-lg bg-gradient-to-br from-cyan-600 to-blue-700 hover:from-cyan-500 hover:to-blue-600 text-white font-bold transition-all disabled:opacity-40"
               >
-                <ArrowRightLeft className="w-6 h-6 mb-1" />
-                <span className="text-sm font-black game-title-font">唤回轮换</span>
+                <ArrowRightLeft className="w-5 h-5 mb-1" />
+                <span className="text-xs sm:text-sm font-bold">唤回轮换</span>
               </button>
 
               {isWild && (

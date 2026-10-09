@@ -16,8 +16,8 @@ export const SCENES_DATA: Record<string, SceneConfig> = {
         id: 'npc_xuanming',
         name: '大长老 玄冥',
         role: '圣殿守护长',
-        x: 48,
-        y: 35,
+        x: 50,
+        y: 30,
         avatarSvg: 'griffin',
         dialogue: [
           '欢迎来到《幻灵秘境》，初出茅庐的年轻灵契师！',
@@ -30,8 +30,8 @@ export const SCENES_DATA: Record<string, SceneConfig> = {
         id: 'npc_senior_disciple',
         name: '师兄 楚风',
         role: '圣殿执事弟子',
-        x: 75,
-        y: 60,
+        x: 82,
+        y: 46,
         avatarSvg: 'student',
         dialogue: [
           '师弟好！五行相克乃是秘境至理：火克草、水克火、草克水，雷动波涛！',
@@ -40,7 +40,7 @@ export const SCENES_DATA: Record<string, SceneConfig> = {
       },
     ],
     chests: [
-      { id: 'chest_acad_1', x: 20, y: 70, coins: 300, itemId: 'gulu_normal', itemCount: 3 },
+      { id: 'chest_acad_1', x: 15, y: 72, coins: 300, itemId: 'gulu_normal', itemCount: 3 },
     ],
   },
 

@@ -4,6 +4,7 @@ import { PET_SPECIES, RARITY_BADGES } from '../data/species';
 import { ITEMS_DATA } from '../data/items';
 import { calculateStats, calculateMaxExp, checkEvolution } from '../utils/battleEngine';
 import { PetAvatar, ELEMENT_COLORS } from './PetAvatar';
+import { ArtGalleryModal } from './ArtGalleryModal';
 import { sound } from '../utils/audio';
 import { Zap, Sparkles, Heart, Shield, Swords, ArrowUp, X, Check, Award } from 'lucide-react';
 
@@ -24,6 +25,7 @@ export const PetTrainModal: React.FC<PetTrainModalProps> = ({
 }) => {
   const [selectedIdx, setSelectedIdx] = useState<number>(0);
   const [evolutionNotice, setEvolutionNotice] = useState<string | null>(null);
+  const [showGallerySpeciesId, setShowGallerySpeciesId] = useState<string | null>(null);
 
   const currentPet = party[selectedIdx];
   if (!currentPet) return null;
@@ -157,9 +159,17 @@ export const PetTrainModal: React.FC<PetTrainModalProps> = ({
               </div>
             )}
 
-            <div className="relative w-40 h-40 flex items-center justify-center mb-3">
+            <div
+              onClick={() => setShowGallerySpeciesId(currentPet.speciesId)}
+              className="relative w-40 h-40 flex items-center justify-center mb-3 cursor-pointer group transition-transform hover:scale-105"
+              title="点击展开全景高精立绘鉴赏"
+            >
               <div className="absolute inset-0 rounded-full border-2 border-dashed border-amber-400/40 animate-[spin_20s_linear_infinite]" />
               <PetAvatar speciesId={currentPet.speciesId} size={110} />
+              <div className="absolute -bottom-1 px-2 py-0.5 rounded-full bg-slate-900/95 border border-amber-500/40 text-[10px] text-amber-300 font-bold flex items-center gap-1 shadow-md group-hover:bg-amber-500/20 group-hover:border-amber-400 transition-all">
+                <Sparkles className="w-2.5 h-2.5 text-amber-400 animate-pulse" />
+                <span>立绘画卷</span>
+              </div>
             </div>
 
             <div className="flex items-center gap-2 mb-1">
@@ -291,6 +301,14 @@ export const PetTrainModal: React.FC<PetTrainModalProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Full HD Eastern Fantasy Illustration Gallery Popup */}
+      {showGallerySpeciesId && (
+        <ArtGalleryModal
+          initialSpeciesId={showGallerySpeciesId}
+          onClose={() => setShowGallerySpeciesId(null)}
+        />
+      )}
     </div>
   );
 };

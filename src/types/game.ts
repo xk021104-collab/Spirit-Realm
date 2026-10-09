@@ -183,3 +183,29 @@ export interface Quest {
     badge?: string;
   };
 }
+
+export interface FriendPetInfo {
+  speciesId: string;
+  nickname: string;
+  level: number;
+}
+
+export type FriendAvatarStyle = 'fairy' | 'swordsman' | 'scholar' | 'taoist' | 'wizard' | 'knight';
+
+export interface Friend {
+  id: string;
+  name: string;
+  title: string;
+  level: number;
+  avatarStyle: FriendAvatarStyle;
+  locationId: SceneId;
+  locationName: string;
+  signature: string;
+  greeting: string;
+  companionPet: FriendPetInfo;
+  hasGiftedToday: boolean;       // Have we sent shards to this friend today?
+  canClaimFromFriend: boolean;   // Has this friend sent shards to us today to claim?
+  isFollowingInScene: boolean;   // Whether this friend and pet are currently accompanying the player in the realm scene
+  x?: number;                    // Optional coordinate percentage in scene (20-80)
+  y?: number;
+}

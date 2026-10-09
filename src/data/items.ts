@@ -93,4 +93,11 @@ export const ITEMS_DATA: Record<string, Item> = {
     price: 600,
     description: '千年一熟的天地仙果，幻灵吞服后立刻暴涨 1000 点历练经验，极速觉醒！',
   },
+  spirit_shard: {
+    id: 'spirit_shard',
+    name: '灵力碎片',
+    category: 'POTION',
+    price: 100,
+    description: '仙友每日灵犀相通互赠的灵力碎片，集齐可在灵友仙阁兑换珍稀契约晶石与九转仙果。',
+  },
 };

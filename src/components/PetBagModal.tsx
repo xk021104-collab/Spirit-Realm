@@ -3,6 +3,7 @@ import { PetInstance } from '../types/game';
 import { PET_SPECIES, RARITY_BADGES } from '../data/species';
 import { MOVES_DATA } from '../data/moves';
 import { PetAvatar, ELEMENT_COLORS } from './PetAvatar';
+import { ArtGalleryModal } from './ArtGalleryModal';
 import { sound } from '../utils/audio';
 import { Backpack, Sparkles, Star, Heart, Zap, Sword, Shield, X, Check } from 'lucide-react';
 
@@ -20,6 +21,7 @@ export const PetBagModal: React.FC<PetBagModalProps> = ({
   onClose,
 }) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(activeLeaderIndex);
+  const [showGallerySpeciesId, setShowGallerySpeciesId] = useState<string | null>(null);
   const selectedPet = party[selectedIndex] || party[0];
   const species = selectedPet ? PET_SPECIES[selectedPet.speciesId] : null;
 
@@ -125,7 +127,17 @@ export const PetBagModal: React.FC<PetBagModalProps> = ({
                 {/* Pet Header */}
                 <div className="flex items-center justify-between p-4 rounded-2xl bg-slate-950/80 border border-slate-800">
                   <div className="flex items-center gap-4">
-                    <PetAvatar speciesId={selectedPet.speciesId} size={80} />
+                    <div
+                      onClick={() => setShowGallerySpeciesId(selectedPet.speciesId)}
+                      className="cursor-pointer group relative transition-transform hover:scale-105"
+                      title="点击展开全景高精立绘"
+                    >
+                      <PetAvatar speciesId={selectedPet.speciesId} size={80} />
+                      <div className="absolute -bottom-1 -right-1 px-1.5 py-0.2 rounded-md bg-amber-500/90 text-slate-950 text-[9px] font-black shadow-xs flex items-center gap-0.5">
+                        <Sparkles className="w-2.5 h-2.5" />
+                        <span>画卷</span>
+                      </div>
+                    </div>
                     <div>
                       <div className="flex items-center gap-2">
                         <h3 className="text-xl font-black text-white">{selectedPet.nickname}</h3>
@@ -265,6 +277,14 @@ export const PetBagModal: React.FC<PetBagModalProps> = ({
           )}
         </div>
       </div>
+
+      {/* Full HD Eastern Fantasy Illustration Gallery Popup */}
+      {showGallerySpeciesId && (
+        <ArtGalleryModal
+          initialSpeciesId={showGallerySpeciesId}
+          onClose={() => setShowGallerySpeciesId(null)}
+        />
+      )}
     </div>
   );
 };

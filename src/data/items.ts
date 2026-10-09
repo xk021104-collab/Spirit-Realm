@@ -78,7 +78,7 @@ export const ITEMS_DATA: Record<string, Item> = {
     description: '唤醒陷入濒死脱力的幻灵，并恢复其半数生命值。',
   },
 
-  // EXP & Evolution Treasures (洛克王国严父果 / 赛尔号升级经验果 / 奥奇传说经验果)
+  // EXP & Evolution Cultivation Treasures (天地灵果 / 历练仙果)
   exp_pill_small: {
     id: 'exp_pill_small',
     name: '玄灵凝魄果',

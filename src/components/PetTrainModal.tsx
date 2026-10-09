@@ -104,7 +104,7 @@ export const PetTrainModal: React.FC<PetTrainModalProps> = ({
                 幻灵修炼室 · 等级突破与形态蜕变
               </h2>
               <p className="text-[11px] text-amber-200/80">
-                洛克/奥奇/赛尔风格升级仓：吞服经验仙果，直升百级蜕变！
+                九天灵源造化阁：吐纳天地灵气、炼化经验仙果，直升百级蜕变！
               </p>
             </div>
           </div>

@@ -130,8 +130,21 @@ export function calculateDamage(
   const defenderSpecies = PET_SPECIES[defender.speciesId];
 
   const isSpecial = move.category === 'SPECIAL';
-  const attackStat = isSpecial ? attacker.stats.spAtk : attacker.stats.atk;
-  const defenseStat = isSpecial ? defender.stats.spDef : defender.stats.def;
+  let attackStat = isSpecial ? attacker.stats.spAtk : attacker.stats.atk;
+  let defenseStat = isSpecial ? defender.stats.spDef : defender.stats.def;
+
+  // Stat stage multipliers (-6 to +6)
+  const getStageMultiplier = (stage: number = 0) => {
+    const clamped = Math.max(-6, Math.min(6, stage));
+    if (clamped >= 0) return (2 + clamped) / 2;
+    return 2 / (2 - clamped);
+  };
+
+  const atkStage = isSpecial ? (attacker.statStages?.spAtk || 0) : (attacker.statStages?.atk || 0);
+  const defStage = isSpecial ? (defender.statStages?.spDef || 0) : (defender.statStages?.def || 0);
+
+  attackStat = Math.max(1, Math.floor(attackStat * getStageMultiplier(atkStage)));
+  defenseStat = Math.max(1, Math.floor(defenseStat * getStageMultiplier(defStage)));
 
   const multiplier = getTypeMultiplier(move.type, defenderSpecies.type);
 

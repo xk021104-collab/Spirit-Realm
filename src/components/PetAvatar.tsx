@@ -32,85 +32,191 @@ export const PetAvatar: React.FC<PetAvatarProps> = ({
 
   const renderPetSvg = () => {
     switch (speciesId) {
-      // 001 赤焰雀 (Chiyanque - Vermilion Finch Chick)
+      // 001 赤焰雀 (Chiyanque - Classic Roco Kingdom Style Adorable Fire Chick Starter)
       case 'chiyanque':
         return (
-          <svg viewBox="0 0 120 120" className="w-full h-full drop-shadow-[0_4px_12px_rgba(239,68,68,0.45)]">
+          <svg viewBox="0 0 120 120" className="w-full h-full drop-shadow-[0_6px_20px_rgba(249,115,22,0.55)] overflow-visible">
             <defs>
               <radialGradient id="cyqGlow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#fef08a" stopOpacity="0.8" />
-                <stop offset="40%" stopColor="#f97316" stopOpacity="0.4" />
-                <stop offset="100%" stopColor="#ef4444" stopOpacity="0" />
+                <stop offset="0%" stopColor="#fef08a" stopOpacity="0.85" />
+                <stop offset="50%" stopColor="#f97316" stopOpacity="0.4" />
+                <stop offset="100%" stopColor="#dc2626" stopOpacity="0" />
               </radialGradient>
-              <linearGradient id="cyqBody" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#f87171" />
-                <stop offset="45%" stopColor="#dc2626" />
-                <stop offset="100%" stopColor="#991b1b" />
+              <linearGradient id="cyqBodyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="#fb923c" />
+                <stop offset="45%" stopColor="#f97316" />
+                <stop offset="85%" stopColor="#ea580c" />
+                <stop offset="100%" stopColor="#dc2626" />
               </linearGradient>
-              <linearGradient id="cyqBelly" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#fef08a" />
-                <stop offset="60%" stopColor="#fed7aa" />
-                <stop offset="100%" stopColor="#f97316" />
+              <linearGradient id="cyqTummyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="#fffbeb" />
+                <stop offset="70%" stopColor="#fef08a" />
+                <stop offset="100%" stopColor="#fde047" />
               </linearGradient>
-              <linearGradient id="cyqWing" x1="0%" y1="0%" x2="100%" y2="80%">
-                <stop offset="0%" stopColor="#fbbf24" />
-                <stop offset="35%" stopColor="#ea580c" />
-                <stop offset="100%" stopColor="#7f1d1d" />
-              </linearGradient>
-              <linearGradient id="cyqFlamePlume" x1="0%" y1="100%" x2="0%" y2="0%">
+              <linearGradient id="cyqFlameGrad" x1="0%" y1="100%" x2="0%" y2="0%">
                 <stop offset="0%" stopColor="#ea580c" />
-                <stop offset="60%" stopColor="#fbbf24" />
+                <stop offset="40%" stopColor="#f97316" />
+                <stop offset="80%" stopColor="#fbbf24" />
                 <stop offset="100%" stopColor="#ffffff" />
+              </linearGradient>
+              <linearGradient id="cyqWingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#fdba74" />
+                <stop offset="60%" stopColor="#f97316" />
+                <stop offset="100%" stopColor="#dc2626" />
               </linearGradient>
             </defs>
 
-            {/* Fire Aura Ring */}
-            <circle cx="60" cy="62" r="50" fill="url(#cyqGlow)" opacity="0.6" />
-            <circle cx="60" cy="62" r="44" fill="none" stroke="#f59e0b" strokeWidth="1" strokeDasharray="4 4" opacity="0.4" className="animate-[spin_20s_linear_infinite]" />
+            {/* Soft Ambient Flame Aura */}
+            <circle cx="60" cy="62" r="50" fill="url(#cyqGlow)" />
 
-            {/* Tail Flame Feathers (Triple Plumes) */}
-            <path d="M 28 72 C 10 78 2 64 8 46 C 18 56 26 62 34 68 Z" fill="url(#cyqWing)" />
-            <path d="M 26 70 C 14 62 10 48 18 36 C 26 48 30 58 32 66 Z" fill="url(#cyqFlamePlume)" />
-            <path d="M 32 78 C 18 90 10 82 12 70 C 22 72 28 76 34 76 Z" fill="#b91c1c" />
+            {/* Ground Warmth Ring */}
+            <ellipse cx="60" cy="104" rx="32" ry="6" fill="#ea580c" opacity="0.25" filter="blur(2px)" />
 
-            {/* Main Chubby Bird Body */}
-            <ellipse cx="62" cy="70" rx="28" ry="24" fill="url(#cyqBody)" />
-            {/* Soft Warm Belly */}
-            <ellipse cx="68" cy="74" rx="19" ry="16" fill="url(#cyqBelly)" />
+            {/* Bouncy Fiery Tail Feathers (Triple Cute Flame Plumes) */}
+            <g transform="translate(18, 56)">
+              {/* Top tail plume */}
+              <path d="M 18 20 C 6 12 0 4 2 -6 C 8 -2 14 6 22 14 Z" fill="url(#cyqFlameGrad)" stroke="#c2410c" strokeWidth="1" />
+              {/* Middle tail plume */}
+              <path d="M 16 26 C 2 24 -6 18 -4 8 C 4 12 10 18 18 22 Z" fill="url(#cyqWingGrad)" stroke="#c2410c" strokeWidth="1" />
+              {/* Bottom tail plume */}
+              <path d="M 16 32 C 6 36 2 40 4 46 C 10 40 14 36 20 30 Z" fill="#fbbf24" stroke="#c2410c" strokeWidth="0.8" />
+            </g>
 
-            {/* Head */}
-            <circle cx="70" cy="45" r="22" fill="url(#cyqBody)" />
-            {/* White/Soft Brow Mask */}
-            <path d="M 64 36 Q 74 32 86 38 Q 78 48 64 42 Z" fill="#fff1f2" opacity="0.4" />
+            {/* Left Cute Little Wing (Folded/Flapping) */}
+            <g transform="translate(32, 60)">
+              <path
+                d="M 6 0 C -4 4 -10 14 -6 22 C -2 26 8 22 14 14 C 18 8 14 2 6 0 Z"
+                fill="url(#cyqWingGrad)"
+                stroke="#c2410c"
+                strokeWidth="1.2"
+              />
+              <path d="M 4 4 C -2 8 -4 16 0 20 C 4 18 8 12 10 6 Z" fill="#fef08a" opacity="0.75" />
+            </g>
 
-            {/* Phoenix Crest Feathers (3 Flaming Crown Tufts) */}
-            <path d="M 62 26 C 54 8 68 12 72 16 C 72 24 68 26 64 28 Z" fill="url(#cyqFlamePlume)" filter="drop-shadow(0 0 4px #fbbf24)" />
-            <path d="M 72 24 C 74 4 88 8 84 16 C 80 22 76 24 72 26 Z" fill="#ef4444" />
-            <path d="M 54 30 C 44 16 52 14 56 22 C 58 26 56 28 54 30 Z" fill="#f59e0b" />
-            {/* Golden Jewel at Crown Base */}
-            <polygon points="68,26 71,30 68,34 65,30" fill="#fef08a" stroke="#d97706" strokeWidth="0.8" />
+            {/* Cute Chubby Round Body */}
+            <ellipse
+              cx="63"
+              cy="68"
+              rx="28"
+              ry="29"
+              fill="url(#cyqBodyGrad)"
+              stroke="#c2410c"
+              strokeWidth="1.5"
+            />
 
-            {/* Glowing Amber Eyes */}
-            <ellipse cx="78" cy="43" rx="5" ry="7.5" fill="#450a0a" />
-            <ellipse cx="78.5" cy="44" rx="4" ry="6" fill="#b91c1c" />
-            <circle cx="79.5" cy="41" r="2.2" fill="#ffffff" />
-            <circle cx="77" cy="46" r="1.2" fill="#fed7aa" />
+            {/* Soft Creamy Chubby Belly */}
+            <ellipse
+              cx="68"
+              cy="74"
+              rx="18"
+              ry="19"
+              fill="url(#cyqTummyGrad)"
+              stroke="#f59e0b"
+              strokeWidth="1"
+            />
+            {/* Soft Downy Feather Fluff on Chest */}
+            <path d="M 60 62 Q 68 67 76 62" stroke="#f59e0b" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+            <path d="M 63 68 Q 68 73 74 68" stroke="#f59e0b" strokeWidth="1.2" fill="none" strokeLinecap="round" />
 
-            {/* Cute Golden Beak */}
-            <path d="M 88 47 Q 104 51 90 56 Q 86 53 88 47 Z" fill="#fbbf24" stroke="#b45309" strokeWidth="1" />
-            <path d="M 88 51 L 96 52" stroke="#d97706" strokeWidth="1" />
+            {/* Right Chubby Wing (Foreground, Cheerful Wave) */}
+            <g transform="translate(80, 58)">
+              <path
+                d="M 4 2 C 16 6 24 16 20 25 C 16 30 6 24 0 16 C -4 8 0 2 4 2 Z"
+                fill="url(#cyqWingGrad)"
+                stroke="#c2410c"
+                strokeWidth="1.2"
+              />
+              <path d="M 6 6 C 14 10 18 18 16 23 C 12 24 6 18 2 12 Z" fill="#fef08a" opacity="0.8" />
+            </g>
 
-            {/* Left Wing (Folded with layered feathers) */}
-            <path d="M 46 62 C 34 76 44 88 60 88 C 64 78 58 66 46 62 Z" fill="url(#cyqWing)" />
-            <path d="M 48 66 C 42 74 48 82 56 82 C 58 76 54 68 48 66 Z" fill="#fbbf24" opacity="0.8" />
+            {/* Cute Little Orange Bird Feet */}
+            <g transform="translate(50, 94)">
+              {/* Left foot */}
+              <ellipse cx="6" cy="4" rx="6" ry="3.5" fill="#f59e0b" stroke="#b45309" strokeWidth="1" />
+              <line x1="2" y1="5" x2="-1" y2="7" stroke="#b45309" strokeWidth="1.5" strokeLinecap="round" />
+              <line x1="6" y1="6" x2="6" y2="9" stroke="#b45309" strokeWidth="1.5" strokeLinecap="round" />
+              <line x1="10" y1="5" x2="13" y2="7" stroke="#b45309" strokeWidth="1.5" strokeLinecap="round" />
+              {/* Right foot */}
+              <ellipse cx="24" cy="4" rx="6" ry="3.5" fill="#f59e0b" stroke="#b45309" strokeWidth="1" />
+              <line x1="20" y1="5" x2="17" y2="7" stroke="#b45309" strokeWidth="1.5" strokeLinecap="round" />
+              <line x1="24" y1="6" x2="24" y2="9" stroke="#b45309" strokeWidth="1.5" strokeLinecap="round" />
+              <line x1="28" y1="5" x2="31" y2="7" stroke="#b45309" strokeWidth="1.5" strokeLinecap="round" />
+            </g>
 
-            {/* Golden Claws with Embers */}
-            <ellipse cx="54" cy="94" rx="6" ry="3.5" fill="#f59e0b" stroke="#78350f" strokeWidth="0.8" />
-            <ellipse cx="72" cy="94" rx="6" ry="3.5" fill="#f59e0b" stroke="#78350f" strokeWidth="0.8" />
+            {/* Head Silhouette with Fluffy Cheeks */}
+            <ellipse
+              cx="64"
+              cy="45"
+              rx="24"
+              ry="22"
+              fill="url(#cyqBodyGrad)"
+              stroke="#c2410c"
+              strokeWidth="1.5"
+            />
 
-            {/* Floating Spirit Embers */}
-            <circle cx="24" cy="42" r="1.5" fill="#fef08a" className="animate-ping" />
-            <circle cx="94" cy="32" r="2" fill="#f97316" className="animate-pulse" />
+            {/* Playful Flickering Crest Flame on Forehead (Roco Style Signature) */}
+            <g transform="translate(62, 10)">
+              {/* Back larger plume */}
+              <path
+                d="M 2 20 C -6 12 -8 0 0 -8 C 6 -4 8 6 12 14 C 18 6 22 2 24 -4 C 28 6 24 16 16 20 Z"
+                fill="url(#cyqFlameGrad)"
+                stroke="#c2410c"
+                strokeWidth="1.2"
+                filter="drop-shadow(0 0 5px #f97316)"
+              />
+              {/* Inner bright yellow plume */}
+              <path
+                d="M 4 18 C -1 12 -2 2 2 -4 C 6 -1 7 8 10 13 C 14 6 17 4 18 0 C 20 8 17 14 12 18 Z"
+                fill="#fef08a"
+              />
+              {/* Core white-hot spark */}
+              <circle cx="6" cy="6" r="3" fill="#ffffff" opacity="0.9" />
+            </g>
+
+            {/* Big Shiny Anime Eyes (Classic Roco Expressive Eyes) */}
+            {/* Left Eye */}
+            <ellipse cx="53" cy="45" rx="5.5" ry="7.5" fill="#431407" stroke="#c2410c" strokeWidth="1" />
+            <ellipse cx="53" cy="46" rx="4.5" ry="6" fill="#78350f" />
+            <ellipse cx="53" cy="48" rx="3.5" ry="4" fill="#ea580c" />
+            {/* Primary Catchlight */}
+            <circle cx="51.5" cy="42" r="2.5" fill="#ffffff" />
+            {/* Secondary Catchlight */}
+            <circle cx="54.5" cy="48" r="1.2" fill="#ffffff" />
+
+            {/* Right Eye */}
+            <ellipse cx="73" cy="45" rx="5.5" ry="7.5" fill="#431407" stroke="#c2410c" strokeWidth="1" />
+            <ellipse cx="73" cy="46" rx="4.5" ry="6" fill="#78350f" />
+            <ellipse cx="73" cy="48" rx="3.5" ry="4" fill="#ea580c" />
+            <circle cx="71.5" cy="42" r="2.5" fill="#ffffff" />
+            <circle cx="74.5" cy="48" r="1.2" fill="#ffffff" />
+
+            {/* Cute Rosy Blushing Cheeks */}
+            <ellipse cx="44" cy="51" rx="3.5" ry="2" fill="#ef4444" opacity="0.55" />
+            <ellipse cx="82" cy="51" rx="3.5" ry="2" fill="#ef4444" opacity="0.55" />
+
+            {/* Cheerful Golden Little Beak */}
+            <g transform="translate(63, 48)">
+              {/* Upper Beak */}
+              <path
+                d="M -5 0 Q 0 -4 5 0 Q 0 6 -5 0 Z"
+                fill="#fbbf24"
+                stroke="#b45309"
+                strokeWidth="1.2"
+              />
+              {/* Lower Beak with Happy Open Chirp */}
+              <path
+                d="M -3 1 Q 0 5 3 1"
+                fill="#ea580c"
+                stroke="#b45309"
+                strokeWidth="1"
+              />
+            </g>
+
+            {/* Floating Sparks & Warm Magical Stars */}
+            <circle cx="94" cy="28" r="2" fill="#fef08a" className="animate-ping" />
+            <circle cx="102" cy="48" r="1.5" fill="#f97316" />
+            <circle cx="28" cy="38" r="2" fill="#fef08a" className="animate-pulse" />
+            <circle cx="34" cy="20" r="1.5" fill="#fbbf24" />
           </svg>
         );
 
@@ -483,75 +589,121 @@ export const PetAvatar: React.FC<PetAvatarProps> = ({
           </svg>
         );
 
-      // 007 青木鹿 (Qingmulu - Verdant Wood Fawn)
+      // 007 青木鹿 / 主灵唯鹿 (Qingmulu - Ethereal Wood Spirit Fawn with glowing cyan antlers)
       case 'qingmulu':
         return (
-          <svg viewBox="0 0 120 120" className="w-full h-full drop-shadow-[0_4px_16px_rgba(34,197,94,0.45)]">
+          <svg viewBox="0 0 130 130" className="w-full h-full drop-shadow-[0_8px_24px_rgba(56,189,248,0.55)] overflow-visible">
             <defs>
-              <radialGradient id="qmlGlow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#dcfce7" stopOpacity="0.8" />
-                <stop offset="50%" stopColor="#4ade80" stopOpacity="0.4" />
-                <stop offset="100%" stopColor="#15803d" stopOpacity="0" />
+              <radialGradient id="fawnCyanAura" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="#e0f2fe" stopOpacity="0.85" />
+                <stop offset="45%" stopColor="#38bdf8" stopOpacity="0.4" />
+                <stop offset="85%" stopColor="#0284c7" stopOpacity="0.1" />
+                <stop offset="100%" stopColor="#082f49" stopOpacity="0" />
               </radialGradient>
-              <linearGradient id="qmlBody" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#4ade80" />
-                <stop offset="50%" stopColor="#22c55e" />
-                <stop offset="100%" stopColor="#15803d" />
+              <linearGradient id="fawnAntlerGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+                <stop offset="0%" stopColor="#0284c7" />
+                <stop offset="40%" stopColor="#38bdf8" />
+                <stop offset="80%" stopColor="#67e8f9" />
+                <stop offset="100%" stopColor="#ffffff" />
+              </linearGradient>
+              <linearGradient id="fawnFurGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#fed7aa" />
+                <stop offset="50%" stopColor="#f59e0b" />
+                <stop offset="100%" stopColor="#d97706" />
               </linearGradient>
             </defs>
 
-            {/* Verdant Flora Halo */}
-            <circle cx="60" cy="65" r="50" fill="url(#qmlGlow)" />
-            <circle cx="60" cy="65" r="44" fill="none" stroke="#4ade80" strokeWidth="1" strokeDasharray="5 5" opacity="0.5" className="animate-[spin_24s_linear_infinite]" />
+            {/* Glowing Ethereal Cyan Aura Ring & Ground Halo */}
+            <circle cx="65" cy="70" r="54" fill="url(#fawnCyanAura)" />
+            <ellipse cx="65" cy="116" rx="42" ry="8" fill="#38bdf8" opacity="0.35" filter="blur(3px)" />
 
-            {/* Sprout Antlers with Blooming Pink Spirit Buds */}
-            <path d="M 50 32 Q 34 14 26 18 Q 36 26 44 34 Z" fill="#15803d" stroke="#14532d" strokeWidth="1" />
-            <ellipse cx="24" cy="16" rx="5" ry="3.5" fill="#4ade80" />
-            <circle cx="22" cy="14" r="2.5" fill="#f472b6" filter="drop-shadow(0 0 4px #f472b6)" />
+            {/* Graceful Fawn Body (Image 1 side/front standing pose) */}
+            {/* Slender Back Legs */}
+            <path d="M 46 82 Q 40 98 42 116" stroke="#b45309" strokeWidth="6" strokeLinecap="round" />
+            <path d="M 54 82 Q 52 98 55 116" stroke="#b45309" strokeWidth="5.5" strokeLinecap="round" />
+            {/* Slender Front Legs */}
+            <path d="M 80 82 Q 82 98 84 116" stroke="#d97706" strokeWidth="5.5" strokeLinecap="round" />
+            <path d="M 88 82 Q 88 98 90 116" stroke="#d97706" strokeWidth="5" strokeLinecap="round" />
+            {/* Little Hooves */}
+            <ellipse cx="42" cy="116" rx="3.5" ry="2" fill="#451a03" />
+            <ellipse cx="55" cy="116" rx="3.5" ry="2" fill="#451a03" />
+            <ellipse cx="84" cy="116" rx="3.5" ry="2" fill="#451a03" />
+            <ellipse cx="90" cy="116" rx="3.5" ry="2" fill="#451a03" />
 
-            <path d="M 70 32 Q 86 14 94 18 Q 84 26 76 34 Z" fill="#15803d" stroke="#14532d" strokeWidth="1" />
-            <ellipse cx="96" cy="16" rx="5" ry="3.5" fill="#4ade80" />
-            <circle cx="98" cy="14" r="2.5" fill="#f472b6" filter="drop-shadow(0 0 4px #f472b6)" />
+            {/* Main Fawn Torso */}
+            <path
+              d="M 44 68 Q 62 60 84 66 Q 92 78 86 88 Q 65 92 48 86 Q 42 76 44 68 Z"
+              fill="url(#fawnFurGrad)"
+            />
+            {/* Pure White Soft Underbelly & Chest */}
+            <path
+              d="M 72 68 Q 86 70 88 86 Q 78 88 70 84 Z"
+              fill="#ffffff"
+              opacity="0.95"
+            />
+            <ellipse cx="58" cy="85" rx="14" ry="6" fill="#ffffff" opacity="0.9" />
 
-            {/* Gentle Fawn Body */}
-            <ellipse cx="60" cy="74" rx="28" ry="24" fill="url(#qmlBody)" />
-            {/* White Soft Belly */}
-            <ellipse cx="62" cy="76" rx="18" ry="16" fill="#f0fdf4" />
-            {/* Starlight Fur Spots */}
-            <circle cx="44" cy="70" r="2" fill="#ffffff" opacity="0.8" />
-            <circle cx="50" cy="76" r="2.5" fill="#ffffff" opacity="0.8" />
-            <circle cx="46" cy="82" r="1.8" fill="#ffffff" opacity="0.8" />
+            {/* Glowing Cyan Runic Swirl Markings along Flank (Iconic in Image 1) */}
+            <path
+              d="M 52 74 Q 60 68 68 73 Q 74 78 68 82 Q 62 82 60 76"
+              stroke="#38bdf8"
+              strokeWidth="2.8"
+              fill="none"
+              strokeLinecap="round"
+              filter="drop-shadow(0 0 4px #38bdf8)"
+            />
+            <circle cx="58" cy="74" r="1.5" fill="#ffffff" />
+            <circle cx="74" cy="74" r="1.5" fill="#38bdf8" />
+            <circle cx="48" cy="78" r="1.2" fill="#38bdf8" />
 
-            {/* Fawn Head */}
-            <circle cx="60" cy="46" r="22" fill="url(#qmlBody)" />
+            {/* Cute Upward Turned Fluffy Tail with Cyan Tip */}
+            <path d="M 44 68 Q 34 60 38 72 Q 42 74 44 70 Z" fill="#ffffff" stroke="#d97706" strokeWidth="1" />
+            <circle cx="36" cy="62" r="2.5" fill="#38bdf8" filter="drop-shadow(0 0 3px #38bdf8)" />
+
+            {/* Slender Graceful Neck & Cute Fawn Head */}
+            <path d="M 78 70 Q 86 54 84 46" stroke="url(#fawnFurGrad)" strokeWidth="14" strokeLinecap="round" />
+            <circle cx="85" cy="46" r="15" fill="url(#fawnFurGrad)" />
+            {/* White Muzzle */}
+            <ellipse cx="94" cy="50" rx="7" ry="5.5" fill="#ffffff" />
+            <circle cx="98" cy="49" r="1.8" fill="#1e293b" />
+
             {/* Cute Deer Ears */}
-            <path d="M 40 40 Q 24 34 28 26 Q 38 32 42 38 Z" fill="#22c55e" />
-            <ellipse cx="32" cy="32" rx="4" ry="2.5" fill="#dcfce7" />
-            <path d="M 80 40 Q 96 34 92 26 Q 82 32 78 38 Z" fill="#22c55e" />
-            <ellipse cx="88" cy="32" rx="4" ry="2.5" fill="#dcfce7" />
+            <path d="M 76 42 Q 62 36 68 28 Q 78 34 80 40 Z" fill="#f59e0b" />
+            <ellipse cx="72" cy="34" rx="4" ry="2" fill="#fed7aa" transform="rotate(-30 72 34)" />
+            <path d="M 88 40 Q 98 32 94 24 Q 86 32 86 38 Z" fill="#f59e0b" />
 
-            {/* Big Gentle Celestial Emerald Eyes */}
-            <ellipse cx="50" cy="44" rx="5.5" ry="7.5" fill="#052e16" />
-            <ellipse cx="50" cy="45" rx="4.5" ry="6" fill="#16a34a" />
-            <circle cx="52" cy="42" r="2.5" fill="#ffffff" />
-            <circle cx="48.5" cy="48" r="1.2" fill="#dcfce7" />
+            {/* Radiant Glowing Cyan Crystal Branching Antlers (Image 1) */}
+            {/* Left Antler */}
+            <path
+              d="M 80 34 Q 72 16 75 8 Q 80 18 82 32 Z"
+              fill="url(#fawnAntlerGrad)"
+              filter="drop-shadow(0 0 6px #38bdf8)"
+            />
+            <path d="M 78 22 Q 68 18 70 12 Q 76 16 78 22 Z" fill="#ffffff" />
+            <circle cx="75" cy="8" r="2" fill="#ffffff" filter="drop-shadow(0 0 3px #ffffff)" />
 
-            <ellipse cx="70" cy="44" rx="5.5" ry="7.5" fill="#052e16" />
-            <ellipse cx="70" cy="45" rx="4.5" ry="6" fill="#16a34a" />
-            <circle cx="72" cy="42" r="2.5" fill="#ffffff" />
-            <circle cx="68.5" cy="48" r="1.2" fill="#dcfce7" />
+            {/* Right Antler */}
+            <path
+              d="M 86 34 Q 92 14 90 6 Q 86 16 84 32 Z"
+              fill="url(#fawnAntlerGrad)"
+              filter="drop-shadow(0 0 6px #38bdf8)"
+            />
+            <path d="M 87 20 Q 98 16 96 10 Q 90 14 87 20 Z" fill="#ffffff" />
+            <circle cx="90" cy="6" r="2" fill="#ffffff" filter="drop-shadow(0 0 3px #ffffff)" />
 
-            {/* Sweet Nose & Blush */}
-            <ellipse cx="60" cy="52" rx="2.5" ry="1.5" fill="#14532d" />
-            <circle cx="42" cy="52" r="3.5" fill="#f472b6" opacity="0.4" />
-            <circle cx="78" cy="52" r="3.5" fill="#f472b6" opacity="0.4" />
+            {/* Large Gentle Luminous Anime Eyes */}
+            <ellipse cx="86" cy="45" rx="5" ry="6.5" fill="#082f49" />
+            <ellipse cx="86" cy="45.5" rx="4" ry="5" fill="#0284c7" />
+            <circle cx="85" cy="43" r="2" fill="#ffffff" />
+            <circle cx="88" cy="47" r="1" fill="#bae6fd" />
 
-            {/* Golden Hooves */}
-            <ellipse cx="48" cy="98" rx="6" ry="4" fill="#ca8a04" stroke="#713f12" strokeWidth="1" />
-            <ellipse cx="72" cy="98" rx="6" ry="4" fill="#ca8a04" stroke="#713f12" strokeWidth="1" />
+            {/* Soft Rosy Blush */}
+            <ellipse cx="82" cy="51" rx="3.5" ry="2" fill="#f43f5e" opacity="0.4" />
 
-            {/* Fluffy Little Tail */}
-            <circle cx="88" cy="74" r="6" fill="#f0fdf4" stroke="#22c55e" strokeWidth="1" />
+            {/* Floating Bioluminescent Cyan Light Motes */}
+            <circle cx="56" cy="48" r="2" fill="#67e8f9" className="animate-ping" />
+            <circle cx="106" cy="58" r="2.5" fill="#38bdf8" className="animate-pulse" />
+            <circle cx="68" cy="98" r="1.8" fill="#a5f3fc" className="animate-pulse" />
           </svg>
         );
 

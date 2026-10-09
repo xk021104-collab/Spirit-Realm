@@ -3,10 +3,10 @@ import { SceneConfig } from '../types/game';
 export const SCENES_DATA: Record<string, SceneConfig> = {
   ACADEMY: {
     id: 'ACADEMY',
-    name: '幻灵圣殿',
-    region: '大陆圣境核心',
-    description: '诸灵汇聚的崇高圣殿，九彩灵晶高悬虚空，大长老玄冥在此引领导引新一代灵契师。',
-    themeColor: '#4f46e5',
+    name: '万古仙门',
+    region: '九霄圣境',
+    description: '幻灵秘境培养御灵仙师的至高仙门，圣殿大长老玄冥与引道执事在此指引初入仙途者。',
+    themeColor: '#3b82f6',
     wildPets: [
       { speciesId: 'jiguangxuehu', minLevel: 3, maxLevel: 6, chance: 0.4 },
       { speciesId: 'rongfengtu', minLevel: 2, maxLevel: 5, chance: 0.6 },
@@ -15,27 +15,27 @@ export const SCENES_DATA: Record<string, SceneConfig> = {
       {
         id: 'npc_xuanming',
         name: '大长老 玄冥',
-        role: '圣殿守护长',
+        role: '仙门圣殿大长老',
         x: 50,
         y: 30,
         avatarSvg: 'griffin',
         dialogue: [
-          '欢迎来到《幻灵秘境》，初出茅庐的年轻灵契师！',
-          '天地万物皆有灵性，与你的幻灵心神合一，方能参悟至高的大道法则。',
-          '去云梦古原与苍炎熔渊历练吧，以灵契晶石缔结更多本命伙伴！',
+          '福生无量！欢迎踏入《幻灵秘境》，初悟大道的年轻御灵仙师！',
+          '天地百种幻灵乃乾坤灵气所化，与本命幻灵心意相通，方能感悟无上五行道法。',
+          '且往青翠灵谷与熔渊烈峰历练，以灵契晶石结识天地神秀、收服心仪灵宠！',
         ],
         actionType: 'STARTER_GIFT',
       },
       {
         id: 'npc_senior_disciple',
-        name: '师兄 楚风',
-        role: '圣殿执事弟子',
+        name: '引道执事 清羽',
+        role: '仙门道法传功长老',
         x: 82,
         y: 46,
         avatarSvg: 'student',
         dialogue: [
-          '师弟好！五行相克乃是秘境至理：火克草、水克火、草克水，雷动波涛！',
-          '幻灵负伤消耗灵力时，切记前往【灵木医庐】请云曦仙子施针救治。',
+          '师弟好！五行相克乃御灵对决之至理：炽火焚木、瀚水熄火、苍木汲水，九霄神雷克制沧溟水系！',
+          '斗法折损灵力时，切记前往【瑶池杏林医阁】寻云夕医仙，引瑶池灵泉涤荡灵体。',
         ],
       },
     ],
@@ -46,9 +46,9 @@ export const SCENES_DATA: Record<string, SceneConfig> = {
 
   PRAIRIE: {
     id: 'PRAIRIE',
-    name: '云梦古原',
-    region: '苍木灵域',
-    description: '灵木繁茂、云雾缭绕的万古原野，微风携着草木清香，绒风兔与青木鹿在花海间追逐。',
+    name: '青翠灵谷',
+    region: '碧木灵墟',
+    description: '仙风拂照的万木灵谷与百花胜境，苍木生息，青木鹿与温顺的木系灵宠在灵草花海间吐纳嬉戏。',
     themeColor: '#16a34a',
     wildPets: [
       { speciesId: 'rongfengtu', minLevel: 3, maxLevel: 8, chance: 0.6 },
@@ -57,14 +57,14 @@ export const SCENES_DATA: Record<string, SceneConfig> = {
     npcs: [
       {
         id: 'npc_wood_ranger',
-        name: '守林尊者 木岚',
-        role: '古原巡游者',
+        name: '巡山仙长 木岚',
+        role: '灵谷护道仙使',
         x: 65,
         y: 40,
         avatarSvg: 'ranger',
         dialogue: [
-          '云梦古原沉睡着太古苍木灵脉，生生不息。',
-          '将野生幻灵削弱至残血，投掷灵契晶石才更易成功契约！',
+          '灵谷草木承蒙天地滋养生生不息，乃御三家青木鹿与幼灵结缘的最佳洞天。',
+          '将野外幻灵削弱至残血，掷出灵契晶石方能稳固缔结仙契！',
         ],
       },
     ],
@@ -75,9 +75,9 @@ export const SCENES_DATA: Record<string, SceneConfig> = {
 
   VOLCANO: {
     id: 'VOLCANO',
-    name: '苍炎熔渊',
-    region: '炽焱绝境',
-    description: '地心熔火喷涌激荡的赤红险境，地炎灵晶与火属性幻灵在此栖居，空气炽热如焚。',
+    name: '熔渊烈峰',
+    region: '地心熔火',
+    description: '九幽地心熔岩炽烈翻涌的烈焰仙山，赤焰雀与火系灵兽在此吐纳真火，空气温热激荡。',
     themeColor: '#ea580c',
     wildPets: [
       { speciesId: 'jingjiaxuangui', minLevel: 6, maxLevel: 12, chance: 0.5 },
@@ -86,14 +86,14 @@ export const SCENES_DATA: Record<string, SceneConfig> = {
     npcs: [
       {
         id: 'npc_fire_smith',
-        name: '铸晶圣手 炎烈',
-        role: '地火炼器师',
+        name: '铸剑仙 炎烈',
+        role: '离火炼器宗师',
         x: 35,
         y: 45,
         avatarSvg: 'smith',
         dialogue: [
-          '常人难抵熔渊高温，但这里的赤焰雀若是觉醒为焚天凰，当有焚天灭地之能！',
-          '若用水系术法对付地心火兽，可事半功倍！',
+          '此峰所栖的赤焰雀若历经天劫进阶，将化作羽翼垂天、焚尽八荒的涅槃神凰！',
+          '以水系幻灵对战离火强敌，可借水克火之势打出双倍暴击克制之威！',
         ],
       },
     ],
@@ -104,9 +104,9 @@ export const SCENES_DATA: Record<string, SceneConfig> = {
 
   BAY: {
     id: 'BAY',
-    name: '星辰碧海',
-    region: '无垠瀚海',
-    description: '澄澈如琉璃的无垠碧海，海天相接之处泛着星辰光辉，碧水灵跃动于潮汐之上。',
+    name: '碧海灵汐湾',
+    region: '沧溟仙海',
+    description: '澄澈如万顷琉璃的浩瀚仙海湾，浅海泛着鲛珠明光，碧水灵跃动于灵潮浪花之上，通往远古归墟龙宫。',
     themeColor: '#0284c7',
     wildPets: [
       { speciesId: 'bishuiling', minLevel: 6, maxLevel: 12, chance: 0.7 },
@@ -115,14 +115,14 @@ export const SCENES_DATA: Record<string, SceneConfig> = {
     npcs: [
       {
         id: 'npc_sea_voyager',
-        name: '瀚海钓翁 莫离',
-        role: '避世隐士',
+        name: '渡海仙翁 莫离',
+        role: '沧溟领航引渡人',
         x: 25,
         y: 50,
         avatarSvg: 'sailor',
         dialogue: [
-          '海中藏着万千奥秘，碧水灵是性情最纯善的水之宠儿。',
-          '雷电之威最惧深海，雷克水也是颠扑不破的秘术法则。',
+          '碧海灵汐湾蕴藏无数上古海神传说，碧水灵性情至纯至善，乃御三家水系至宝。',
+          '草木灵诀可生克浩瀚水势，亦是克制水系幻灵的最佳法门。',
         ],
       },
     ],
@@ -133,22 +133,22 @@ export const SCENES_DATA: Record<string, SceneConfig> = {
 
   HOSPITAL: {
     id: 'HOSPITAL',
-    name: '灵木医庐',
-    region: '圣殿偏殿药圃',
-    description: '药香四溢的宁静庭院，医圣传人云曦仙子施展九转回春秘法，免费治愈随行所有幻灵！',
+    name: '瑶池杏林医阁',
+    region: '瑶池仙境',
+    description: '灵雾弥漫、药香四溢的疗愈仙居，妙手医仙云夕引瑶池圣泉，免费涤荡治愈全队幻灵的生命与仙道灵力（PP）！',
     themeColor: '#ec4899',
     wildPets: [],
     npcs: [
       {
         id: 'npc_nurse_yunxi',
-        name: '医圣仙子 云曦',
-        role: '万灵医官',
+        name: '妙手医仙 云夕',
+        role: '百草堂主治仙医',
         x: 50,
         y: 40,
         avatarSvg: 'nurse',
         dialogue: [
-          '小灵契师一路辛苦了。幻灵也是有知觉的生灵，疲累时要好好休养。',
-          '将幻灵伙伴交予我吧，圣水甘霖能使全队生命与招式灵力（PP）瞬间尽数恢复！',
+          '御灵仙师历经四方征战，一路辛苦了！幻灵乃通灵之伙伴，身心俱疲时当好生休养。',
+          '请将灵契法印交由妾身，引瑶池灵泉便可让全队幻灵气血充盈、道法技能灵力瞬间尽数回满！',
         ],
         actionType: 'HEAL',
       },
@@ -160,22 +160,22 @@ export const SCENES_DATA: Record<string, SceneConfig> = {
 
   SHOP: {
     id: 'SHOP',
-    name: '万象珍宝阁',
-    region: '天墉坊市中心',
-    description: '秘境中奇珍异宝汇聚之所，各阶灵契晶石、造化灵丹一应俱全。',
+    name: '太虚万宝阁',
+    region: '太虚仙市',
+    description: '幻灵大陆最为繁华喧闹的仙市宝坊，各阶灵契晶石、高阶回春仙丹与通玄奇珍应有尽有。',
     themeColor: '#d97706',
     wildPets: [],
     npcs: [
       {
         id: 'npc_merchant_geqian',
-        name: '阁主 葛乾',
-        role: '万象商盟掌柜',
+        name: '万宝掌柜 葛乾',
+        role: '太虚多宝楼楼主',
         x: 50,
         y: 42,
         avatarSvg: 'merchant',
         dialogue: [
-          '万象珍宝，童叟无欺！无论是天阶破界晶，还是起死回生的还魂草，本店应有尽有！',
-          '灵石换宝物，包你闯荡秘境无往不利！',
+          '太虚万宝阁，童叟无欺！玄阶凝灵晶、九转回魂丹、补天灵药无一不精！',
+          '以游历所得之灵石购置宝物，定保仙师畅游大千秘境、仙运亨通！',
         ],
         actionType: 'SHOP',
       },
@@ -185,9 +185,9 @@ export const SCENES_DATA: Record<string, SceneConfig> = {
 
   ARENA: {
     id: 'ARENA',
-    name: '凌霄试炼台',
-    region: '天穹之巅',
-    description: '悬浮于九重云海之上的远古雷霆战台，唯有真正的大师才能在此接受天穹试炼！',
+    name: '九霄战仙擂',
+    region: '雷霆之巅',
+    description: '悬浮于九重神霄万劫天雷之上的远古通天擂台，唯有道法通玄的大修士方能在此问鼎天梯封神试炼！',
     themeColor: '#7c3aed',
     wildPets: [
       { speciesId: 'leiwenhou', minLevel: 14, maxLevel: 20, chance: 0.55 },
@@ -196,14 +196,14 @@ export const SCENES_DATA: Record<string, SceneConfig> = {
     npcs: [
       {
         id: 'npc_champion_tianheng',
-        name: '天罡战皇 陆天衡',
-        role: '圣境天武战神',
+        name: '天梯擂主 陆天衡',
+        role: '九霄试炼战神',
         x: 50,
         y: 38,
         avatarSvg: 'knight',
         dialogue: [
-          '战道漫漫，唯力破之！',
-          '击败我的本命雷兽与冰狐战阵，你将登顶凌霄，斩获至高【天穹天命徽章】与混元圣皇晶！',
+          '九天雷动，战意滔天！唯有身经百战的御灵真仙，方能承受九霄劫雷的轰鸣！',
+          '若能击败本尊的本命雷兽，你将获赐秘境至高【九天战仙勋印】与混元圣皇晶！',
         ],
         actionType: 'ARENA_CHALLENGE',
       },

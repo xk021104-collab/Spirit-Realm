@@ -4,6 +4,7 @@ import { PET_SPECIES, RARITY_BADGES } from '../data/species';
 import { MOVES_DATA } from '../data/moves';
 import { PetAvatar, ELEMENT_COLORS } from './PetAvatar';
 import { ArtGalleryModal } from './ArtGalleryModal';
+import { PokedexBackground, CelestialAtmosphereMode } from './PokedexBackground';
 import { sound } from '../utils/audio';
 import {
   BookOpen,
@@ -27,6 +28,7 @@ import {
   Wind,
   CheckCircle2,
   Filter,
+  Cloud,
 } from 'lucide-react';
 
 interface PokedexModalProps {
@@ -168,6 +170,7 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
   const [collectionFilter, setCollectionFilter] = useState<'ALL' | 'UNLOCKED' | 'LOCKED'>('ALL');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [showGallerySpeciesId, setShowGallerySpeciesId] = useState<string | null>(null);
+  const [atmosphereMode, setAtmosphereMode] = useState<CelestialAtmosphereMode>('PURPLE_MIST');
 
   const totalCount = allSpeciesList.length;
   const unlockedCount = unlockedSpeciesIds.length;
@@ -240,25 +243,28 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-2 sm:p-4 select-none animate-in fade-in duration-200">
       {/* Outer Celestial Grimoire Modal Box */}
-      <div className="bg-[#070b14] border border-cyan-500/30 rounded-2xl w-full max-w-6xl h-[94vh] max-h-[820px] flex flex-col shadow-[0_0_60px_rgba(6,182,212,0.15)] overflow-hidden text-slate-100 relative">
-        {/* 1. Header Bar: Title, Collection Progress, Milestones & Close */}
-        <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 bg-slate-900/90 border-b border-cyan-500/20 z-10 shadow-md">
+      <div className="bg-[#070b18]/95 border-2 border-indigo-500/40 rounded-3xl w-full max-w-6xl h-[94vh] max-h-[820px] flex flex-col shadow-[0_0_80px_rgba(79,70,229,0.3)] overflow-hidden text-slate-100 relative">
+        {/* Dynamic Eastern Xianxia Blue-Violet Misty Clouds Background */}
+        <PokedexBackground activeElementType={activeElementTab} atmosphereMode={atmosphereMode} />
+
+        {/* 1. Header Bar: Title, Collection Progress, Atmosphere Mode Switcher, Milestones & Close */}
+        <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 bg-slate-950/75 backdrop-blur-md border-b border-indigo-500/30 z-10 shadow-md">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-400 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-cyan-500/25 border border-cyan-300/40">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-600 to-cyan-400 flex items-center justify-center text-white shadow-md shadow-indigo-500/30 border border-indigo-300/40">
               <BookOpen className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-lg sm:text-xl font-bold text-white tracking-wide">
-                  诸天幻灵图鉴
+                <h2 className="text-lg sm:text-xl font-bold text-amber-200 tracking-wide game-title-font">
+                  诸天幻灵图鉴 · 乾坤灵物志
                 </h2>
-                <span className="text-[10px] bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 px-2 py-0.5 rounded font-mono font-medium">
-                  Spirit Codex
+                <span className="text-[10px] bg-indigo-500/20 text-indigo-300 border border-indigo-400/40 px-2 py-0.5 rounded font-mono font-medium">
+                  Celestial Codex
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 flex items-center gap-2 mt-0.5">
+              <p className="text-[11px] text-slate-300 flex items-center gap-2 mt-0.5">
                 <span>契约诸天万物灵兽，勘破太古演变真形</span>
-                <span className="text-slate-600">·</span>
+                <span className="text-indigo-400">·</span>
                 <span className="text-cyan-300 font-mono font-medium">
                   已收录 {unlockedCount} / {totalCount} 尊 ({completionPercentage}%)
                 </span>
@@ -266,7 +272,35 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center gap-4 sm:gap-6">
+          <div className="flex items-center gap-3 sm:gap-5">
+            {/* Xianxia Atmosphere Mood Switcher (古风仙境天象切换) */}
+            <div className="hidden md:flex items-center gap-1 bg-[#060a1e]/80 border border-indigo-500/30 rounded-xl p-1 shadow-inner">
+              <span className="text-[10px] text-indigo-300 font-bold px-1.5 flex items-center gap-1">
+                <Cloud className="w-3 h-3 text-cyan-300" />
+                <span>天象:</span>
+              </span>
+              {[
+                { key: 'PURPLE_MIST' as const, label: '紫霄云海' },
+                { key: 'STARRY_NIGHT' as const, label: '幽夜星河' },
+                { key: 'CYAN_AURORA' as const, label: '青冥仙光' },
+              ].map((m) => (
+                <button
+                  key={m.key}
+                  onClick={() => {
+                    sound.playClick();
+                    setAtmosphereMode(m.key);
+                  }}
+                  className={`text-[10px] px-2 py-1 rounded-lg font-bold transition-all cursor-pointer ${
+                    atmosphereMode === m.key
+                      ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-[0_0_10px_rgba(99,102,241,0.5)] border border-indigo-300/40'
+                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                  }`}
+                >
+                  {m.label}
+                </button>
+              ))}
+            </div>
+
             {/* Progress & Milestone Claim Bar */}
             <div className="hidden lg:flex items-center gap-3 bg-slate-950/80 px-3 py-1.5 rounded-xl border border-slate-800">
               <div className="flex flex-col gap-1 w-36">
@@ -327,12 +361,12 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
         </div>
 
         {/* 2. Primary Elemental Category Tabs Bar (火、水、木、雷、土 分类标签系统) */}
-        <div className="px-4 sm:px-6 py-2.5 bg-slate-950/90 border-b border-cyan-500/20 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2.5 z-10">
+        <div className="px-4 sm:px-6 py-2.5 bg-[#080d24]/75 backdrop-blur-md border-b border-indigo-500/25 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2.5 z-10">
           {/* Scrollable Element Buttons with Counts */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-thin">
-            <span className="text-slate-400 text-xs font-medium mr-1 shrink-0 flex items-center gap-1">
-              <Filter className="w-3.5 h-3.5 text-cyan-400" />
-              <span>属性分类:</span>
+            <span className="text-indigo-300 text-xs font-medium mr-1 shrink-0 flex items-center gap-1">
+              <Filter className="w-3.5 h-3.5 text-indigo-400" />
+              <span>属性灵脉:</span>
             </span>
 
             {ELEMENT_TABS.map((tab) => {
@@ -371,7 +405,7 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
           {/* Secondary Filter: Collection Status & Search Bar */}
           <div className="flex items-center justify-between md:justify-end gap-2 shrink-0">
             {/* Unlocked status toggle */}
-            <div className="flex items-center bg-slate-900 border border-slate-700 rounded-lg p-0.5 text-xs">
+            <div className="flex items-center bg-[#070b1e]/85 border border-indigo-500/30 rounded-xl p-0.5 text-xs">
               {(
                 [
                   { key: 'ALL', label: '全部' },
@@ -398,26 +432,26 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
 
             {/* Search Input */}
             <div className="relative">
-              <Search className="w-3.5 h-3.5 absolute left-2.5 top-2 text-slate-500" />
+              <Search className="w-3.5 h-3.5 absolute left-2.5 top-2 text-indigo-400" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="搜索名称 / 编号..."
-                className="pl-8 pr-2.5 py-1 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 w-32 sm:w-40"
+                className="pl-8 pr-2.5 py-1 bg-[#060a1e]/80 border border-indigo-500/40 rounded-lg text-xs text-white placeholder-slate-400 focus:outline-none focus:border-amber-400 w-32 sm:w-40"
               />
             </div>
           </div>
         </div>
 
         {/* 3. Main Workspace: Split View (Left: Spirit Cards Grid, Right: Spirit Inspector) */}
-        <div className="flex-1 grid grid-cols-1 md:grid-cols-12 overflow-hidden bg-slate-950/60">
+        <div className="flex-1 grid grid-cols-1 md:grid-cols-12 overflow-hidden bg-transparent z-10">
           {/* Left Column: Collectible Spirits Grid (md:col-span-5 lg:col-span-6) */}
-          <div className="md:col-span-6 lg:col-span-6 border-r border-slate-800 p-3 sm:p-4 overflow-y-auto scrollbar-thin">
+          <div className="md:col-span-6 lg:col-span-6 border-r border-indigo-500/25 p-3 sm:p-4 overflow-y-auto scrollbar-thin bg-[#060a1e]/60 backdrop-blur-sm">
             {filteredList.length === 0 ? (
               <div className="h-64 flex flex-col items-center justify-center text-slate-500 gap-2">
-                <BookOpen className="w-10 h-10 text-slate-600" />
-                <p className="text-sm">该属性筛选下暂无匹配的幻灵伙伴</p>
+                <BookOpen className="w-10 h-10 text-indigo-400" />
+                <p className="text-sm text-indigo-200">该属性灵脉下暂无匹配的幻灵伙伴</p>
                 <button
                   onClick={() => {
                     setActiveElementTab('ALL');
@@ -446,10 +480,10 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
                       }}
                       className={`p-3 rounded-xl border text-left flex flex-col items-center justify-between min-h-[145px] transition-all cursor-pointer relative group ${
                         isSelected
-                          ? 'bg-amber-950/40 border-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.3)] ring-2 ring-amber-400/50'
+                          ? 'bg-gradient-to-b from-indigo-950/80 to-purple-950/80 border-amber-400 shadow-[0_0_20px_rgba(245,158,11,0.35)] ring-2 ring-amber-400/60'
                           : isUnlocked
-                          ? 'bg-slate-900/90 border-slate-800 hover:border-amber-400/50 hover:bg-slate-850'
-                          : 'bg-slate-950/70 border-slate-900/80 opacity-55 hover:opacity-85'
+                          ? 'bg-[#0b1333]/70 backdrop-blur-md border-indigo-900/60 hover:border-amber-400/60 hover:bg-[#121b44]/80'
+                          : 'bg-[#060918]/60 border-slate-900/80 opacity-55 hover:opacity-85'
                       }`}
                     >
                       {/* Top Row: Dex No. & Type Badge */}

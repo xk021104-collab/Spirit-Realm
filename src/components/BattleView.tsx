@@ -654,143 +654,177 @@ export const BattleView: React.FC<BattleViewProps> = ({
       <div className="corner-ornament-bl" />
       <div className="corner-ornament-br" />
 
-      {/* Top Arena Header Bar */}
-      <div className="relative flex items-center justify-between px-4 sm:px-6 py-2.5 flash-top-console z-30 shadow-md">
-        <div className="flex items-center gap-2 sm:gap-3">
-          <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-500/20 border border-amber-400/40 text-amber-300 font-bold text-xs game-title-font">
-            <Swords className="w-3.5 h-3.5 text-amber-400" />
-            <span>{isWild ? '野外奇遇' : '天骄对决'}</span>
+      {/* Top Arena Header Bar (Image 1 Layout) */}
+      <div className="relative flex items-center justify-between px-4 sm:px-6 py-2.5 bg-gradient-to-b from-[#0a1527]/95 via-[#09101f]/90 to-transparent z-30 shadow-md">
+        {/* Left: 幻灵秘境 SPIRIT REALM Logo with Vermilion Seal (Image 1) */}
+        <div className="flex items-center gap-2">
+          <div className="flex flex-col">
+            <div className="flex items-center gap-1.5">
+              <span className="game-title-font text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-300 to-yellow-500 drop-shadow-[0_2px_8px_rgba(245,158,11,0.6)]">
+                幻灵秘境
+              </span>
+              <span className="text-[9px] bg-red-700 text-amber-200 px-1 py-0.2 rounded border border-red-500/60 font-serif shadow-xs">
+                幻灵
+              </span>
+            </div>
+            <span className="text-[8px] sm:text-[9px] tracking-[0.25em] text-amber-300/80 font-mono font-bold -mt-0.5">
+              — SPIRIT REALM —
+            </span>
           </div>
-          <span className="text-xs text-slate-400 hidden md:inline">回合制灵术对决</span>
         </div>
 
-        {/* Center: Current Battle Weather Badge & Interactive Dropdown */}
-        {(() => {
-          const cfg = WEATHER_CONFIGS[weatherState.weather];
-          return (
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setShowWeatherTooltip(!showWeatherTooltip)}
-                className={`flex items-center gap-2 px-3 py-1 rounded-xl border transition-all cursor-pointer shadow-lg active:scale-95 ${cfg.color.badgeBg} ${cfg.color.badgeBorder} ${cfg.color.glow}`}
-                title="天象系统：点击查看当前天气属性增益与法则，或切换天象测试"
-              >
-                {/* Weather Icon with Animation */}
-                <div className="flex items-center justify-center">
-                  {weatherState.weather === 'SUNNY' && (
-                    <Sun className="w-4 h-4 text-amber-400 animate-[spin_8s_linear_infinite]" />
-                  )}
-                  {weatherState.weather === 'RAIN' && (
-                    <CloudRain className="w-4 h-4 text-cyan-400 animate-bounce" />
-                  )}
-                  {weatherState.weather === 'SANDSTORM' && (
-                    <Wind className="w-4 h-4 text-yellow-400 animate-pulse" />
-                  )}
-                  {weatherState.weather === 'THUNDER' && (
-                    <Zap className="w-4 h-4 text-purple-400 animate-pulse fill-purple-400/40" />
-                  )}
-                  {weatherState.weather === 'CLEAR' && (
-                    <SunDim className="w-4 h-4 text-emerald-400" />
-                  )}
-                </div>
-
-                <div className="flex items-center gap-1.5 text-xs font-black game-title-font">
-                  <span className={cfg.color.textColor}>{cfg.name}</span>
-                  <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-black/70 text-slate-300 border border-white/20">
-                    {weatherState.weather === 'CLEAR' ? '常态' : `余${weatherState.turnsLeft}回合`}
-                  </span>
-                </div>
-
-                <Info className="w-3.5 h-3.5 text-slate-400 hover:text-white" />
-              </button>
-
-              {/* Weather Details Tooltip Modal Popover */}
-              {showWeatherTooltip && (
-                <div
-                  onClick={(e) => e.stopPropagation()}
-                  className="absolute top-11 left-1/2 -translate-x-1/2 z-50 w-80 celestial-glass rounded-2xl p-4 shadow-2xl border border-cyan-500/30 text-xs animate-in fade-in zoom-in-95 duration-150"
-                >
-                  <div className="flex items-center justify-between border-b border-cyan-500/20 pb-2 mb-2.5">
-                    <div className="flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-cyan-400" />
-                      <span className="font-bold text-cyan-200 text-sm">
-                        天象法则 · {cfg.name}
-                      </span>
-                    </div>
-                    <span className="text-[10px] text-slate-400 font-mono">
-                      [{cfg.subName}]
-                    </span>
-                  </div>
-
-                  <p className="text-slate-300 text-[11px] leading-relaxed mb-3">
-                    {cfg.description}
-                  </p>
-
-                  <div className="bg-slate-900/80 rounded-xl p-2.5 border border-slate-800 space-y-1.5 mb-3">
-                    <span className="text-[10px] font-bold text-cyan-400 block mb-1">
-                      ✦ 当前天气属性修正：
-                    </span>
-                    {cfg.buffs.map((buff, idx) => (
-                      <div key={idx} className="text-[11px] text-slate-200 flex items-start gap-1">
-                        <span>•</span>
-                        <span>{buff}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Manual Weather Summon Testing Panel */}
-                  <div className="pt-2 border-t border-slate-800">
-                    <span className="text-[10px] text-slate-400 block mb-1.5 font-medium">
-                      引动天象测试：
-                    </span>
-                    <div className="grid grid-cols-5 gap-1.5">
-                      {(['SUNNY', 'RAIN', 'SANDSTORM', 'THUNDER', 'CLEAR'] as BattleWeather[]).map((wKey) => {
-                        const isCurrent = weatherState.weather === wKey;
-                        const wInfo = WEATHER_CONFIGS[wKey];
-                        return (
-                          <button
-                            key={wKey}
-                            type="button"
-                            onClick={() => handleSetWeather(wKey)}
-                            className={`p-1.5 rounded-lg border text-center transition-all cursor-pointer ${
-                              isCurrent
-                                ? 'bg-cyan-500 text-slate-950 border-cyan-300 font-bold'
-                                : 'bg-slate-900/80 hover:bg-slate-800 text-slate-300 border-slate-700'
-                            }`}
-                            title={`切换为【${wInfo.name}】`}
-                          >
-                            <span className="text-[11px] block">{wInfo.name.slice(0, 2)}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-              )}
+        {/* Center: 动作顺序 (Action Order Track) from Image 1 */}
+        <div className="flex flex-col items-center">
+          <span className="text-[10px] font-bold text-amber-300/90 tracking-widest">
+            动作顺序
+          </span>
+          <div className="flex items-center gap-1.5 mt-0.5 px-3 py-1 rounded-full bg-slate-950/80 border border-amber-500/40 shadow-inner">
+            <span className="text-amber-400 font-bold text-xs">‹</span>
+            {/* Player Spirit Icons */}
+            <div className="w-7 h-7 rounded-full border-2 border-emerald-400 bg-emerald-950 flex items-center justify-center overflow-hidden shadow-sm" title="我方动作">
+              <PetAvatar speciesId={activePet.speciesId} size={28} />
             </div>
-          );
-        })()}
+            <div className="w-7 h-7 rounded-full border-2 border-emerald-400 bg-emerald-950 flex items-center justify-center overflow-hidden opacity-85 shadow-sm" title="我方动作">
+              <PetAvatar speciesId={activePet.speciesId} size={28} />
+            </div>
+            {/* Enemy Spirit Icons */}
+            <div className="w-7 h-7 rounded-full border-2 border-rose-400 bg-rose-950 flex items-center justify-center overflow-hidden opacity-85 shadow-sm" title="敌方动作">
+              <PetAvatar speciesId={enemy.speciesId} size={28} />
+            </div>
+            <div className="w-7 h-7 rounded-full border-2 border-rose-400 bg-rose-950 flex items-center justify-center overflow-hidden opacity-70 shadow-sm" title="敌方动作">
+              <PetAvatar speciesId={enemy.speciesId} size={28} />
+            </div>
+            <span className="text-amber-400 font-bold text-xs">›</span>
+          </div>
+        </div>
 
-        <div className="flex items-center gap-3 text-xs font-mono text-slate-300">
-          <span className="text-amber-300 font-bold hidden sm:inline">
-            {activePet.nickname} (Lv.{activePet.level})
-          </span>
-          <span className="text-slate-600 hidden sm:inline">VS</span>
-          <span className="text-cyan-300 font-bold">
-            {enemySpecies.name} (Lv.{enemy.level})
-          </span>
+        {/* Right: Weather Pill & Ornate Utility Buttons (Image 1: 拥存 / 逃跑) */}
+        <div className="flex items-center gap-2.5">
+          {/* Weather Dropdown */}
+          {(() => {
+            const cfg = WEATHER_CONFIGS[weatherState.weather];
+            return (
+              <div className="relative hidden sm:block">
+                <button
+                  type="button"
+                  onClick={() => setShowWeatherTooltip(!showWeatherTooltip)}
+                  className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xl border text-xs font-bold transition-all cursor-pointer shadow-md ${cfg.color.badgeBg} ${cfg.color.badgeBorder} ${cfg.color.glow}`}
+                >
+                  <span className={cfg.color.textColor}>{cfg.name}</span>
+                </button>
+              </div>
+            );
+          })()}
+
+          {/* 拥存 (Inventory / Bag Button from Image 1) */}
+          <button
+            onClick={() => {
+              sound.playClick();
+              setBattleMenu(battleMenu === 'POTIONS' ? 'ACTIONS' : 'POTIONS');
+            }}
+            className="flex flex-col items-center group cursor-pointer"
+            title="查看储物袋与灵药"
+          >
+            <div className="w-8 h-8 rounded-full bg-gradient-to-b from-[#1e3a8a] to-[#0f172a] border-2 border-amber-400 flex items-center justify-center text-amber-200 shadow-md group-hover:scale-105 transition-transform">
+              <Backpack className="w-4 h-4" />
+            </div>
+            <span className="text-[9px] font-bold text-amber-200 mt-0.5">拥存</span>
+          </button>
+
+          {/* 逃跑 (Flee Button from Image 1) */}
+          <button
+            onClick={handleFlee}
+            disabled={isProcessingTurn}
+            className="flex flex-col items-center group cursor-pointer disabled:opacity-40"
+            title="脱离本次对决"
+          >
+            <div className="w-8 h-8 rounded-full bg-gradient-to-b from-rose-950 to-slate-900 border-2 border-amber-400 flex items-center justify-center text-rose-300 shadow-md group-hover:scale-105 transition-transform">
+              <ArrowRightLeft className="w-4 h-4" />
+            </div>
+            <span className="text-[9px] font-bold text-amber-200 mt-0.5">逃跑</span>
+          </button>
         </div>
       </div>
 
-      {/* Main Battle Stage Arena (Authentic Dual Elemental Platforms) */}
-      <div className="relative flex-1 p-6 md:p-8 flex flex-col justify-between overflow-hidden">
+      {/* Main Battle Stage Arena: Roco Kingdom Style Sunlit Magic Academy & Whispering Wind Meadow */}
+      <div className="relative flex-1 p-4 sm:p-6 md:p-8 flex flex-col justify-between overflow-hidden bg-[#0c2240]">
+        {/* =========================================================================
+            Roco Kingdom Illustrated Magic Meadow & Fairy Sky (Image 1 Style)
+            ========================================================================= */}
+        <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden select-none">
+          {/* Sunny Magic Sky Gradient */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#1e40af] via-[#0284c7] via-50% to-[#0f766e]" />
+
+          {/* Distant Floating Islands, Magic Academy Spires & Fluffy Clouds */}
+          <svg viewBox="0 0 1000 600" className="absolute inset-0 w-full h-full object-cover opacity-85">
+            {/* Distant Sunny Mountains */}
+            <path d="M 0 340 Q 220 220 460 280 Q 720 180 1000 300 L 1000 600 L 0 600 Z" fill="#044e54" opacity="0.6" />
+            <path d="M 120 360 Q 340 250 600 310 Q 820 230 1000 330" stroke="#06b6d4" strokeWidth="2" fill="none" opacity="0.5" />
+
+            {/* Distant Magic Academy Castle Spires on Mountain (Center Right) */}
+            <g transform="translate(680, 160)" opacity="0.75">
+              {/* Central Spire */}
+              <rect x="30" y="40" width="24" height="80" fill="#1e3a8a" />
+              <polygon points="30,40 42,0 54,40" fill="#3b82f6" stroke="#fde047" strokeWidth="1" />
+              <polygon points="42,0 43,2 45,2 43.5,3.5 44,5 42,4 40,5 40.5,3.5 39,2 41,2" fill="#fde047" />
+              {/* Left Spire */}
+              <rect x="10" y="60" width="16" height="60" fill="#1e3a8a" />
+              <polygon points="10,60 18,30 26,60" fill="#3b82f6" stroke="#fde047" strokeWidth="1" />
+              {/* Right Spire */}
+              <rect x="58" y="65" width="16" height="55" fill="#1e3a8a" />
+              <polygon points="58,65 66,35 74,65" fill="#3b82f6" stroke="#fde047" strokeWidth="1" />
+            </g>
+
+            {/* Floating Island in Sky (Top Left) */}
+            <g transform="translate(80, 80)" opacity="0.8">
+              <ellipse cx="60" cy="50" rx="55" ry="16" fill="#15803d" />
+              <path d="M 5 50 Q 60 90 115 50 Z" fill="#78350f" stroke="#451a03" strokeWidth="1" />
+              {/* Little tree on floating island */}
+              <rect x="56" y="30" width="6" height="20" fill="#78350f" />
+              <circle cx="59" cy="24" r="16" fill="#22c55e" />
+              <circle cx="50" cy="20" r="12" fill="#4ade80" />
+            </g>
+
+            {/* Soft Whimsical Anime Clouds */}
+            <g fill="#ffffff" opacity="0.35">
+              <ellipse cx="280" cy="140" rx="80" ry="24" />
+              <circle cx="250" cy="125" r="30" />
+              <circle cx="310" cy="130" r="25" />
+              <ellipse cx="820" cy="110" rx="90" ry="26" />
+              <circle cx="800" cy="95" r="32" />
+              <circle cx="850" cy="100" r="28" />
+            </g>
+
+            {/* Lush Foreground Green Meadow Grassland Waves */}
+            <path d="M -20 440 Q 220 380 500 420 Q 780 370 1020 430 L 1020 600 L -20 600 Z" fill="#15803d" opacity="0.85" />
+            <path d="M -20 480 Q 260 430 520 470 Q 780 430 1020 480 L 1020 600 L -20 600 Z" fill="#166534" />
+            
+            {/* Cute Daisies & Clover Flowers on Meadow */}
+            <circle cx="160" cy="470" r="3" fill="#fef08a" />
+            <circle cx="156" cy="468" r="2" fill="#ffffff" />
+            <circle cx="164" cy="468" r="2" fill="#ffffff" />
+            <circle cx="160" cy="464" r="2" fill="#ffffff" />
+            <circle cx="160" cy="474" r="2" fill="#ffffff" />
+
+            <circle cx="840" cy="460" r="3" fill="#fef08a" />
+            <circle cx="836" cy="458" r="2" fill="#ffffff" />
+            <circle cx="844" cy="458" r="2" fill="#ffffff" />
+            <circle cx="840" cy="454" r="2" fill="#ffffff" />
+            <circle cx="840" cy="464" r="2" fill="#ffffff" />
+          </svg>
+
+          {/* Floating Starlight Motes & Fairy Dust */}
+          <div className="absolute w-2.5 h-2.5 rounded-full bg-yellow-200 blur-2xs top-1/4 left-1/4 animate-ping" style={{ animationDuration: '3.5s' }} />
+          <div className="absolute w-3 h-3 rounded-full bg-cyan-200 blur-2xs top-1/3 right-1/4 animate-pulse" />
+          <div className="absolute w-2 h-2 rounded-full bg-amber-200 blur-2xs top-2/3 left-1/3 animate-ping" style={{ animationDuration: '4.5s' }} />
+          <div className="absolute w-2.5 h-2.5 rounded-full bg-emerald-200 blur-2xs bottom-1/3 right-1/3 animate-pulse" />
+
+          {/* Soft Sunlight Vignette */}
+          <div className="absolute inset-0 bg-radial from-transparent via-[#065f46]/10 to-[#022c22]/40 pointer-events-none" />
+        </div>
+
         {/* Dynamic Weather Particle & Light Rays Overlay */}
         <WeatherOverlay weather={weatherState.weather} />
-
-        {/* Subtle Arcane Arena Floor Rings */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-25 pointer-events-none">
-          <div className="w-[520px] h-[520px] rounded-full border-4 border-amber-400 border-dashed animate-[spin_50s_linear_infinite]" />
-        </div>
 
         {/* Floating Damage Text Popup */}
         {damagePopup && (
@@ -811,417 +845,379 @@ export const BattleView: React.FC<BattleViewProps> = ({
           </div>
         )}
 
-        {/* 1. Enemy Pet Zone (Top-Right Platform) */}
-        <div className="flex items-center justify-end gap-6 relative z-10">
-          {/* Enemy HUD Card */}
-          <div className="celestial-battle-card rounded-2xl p-4 shadow-2xl min-w-[260px] border border-cyan-500/30">
-            <div className="flex items-center justify-between gap-3 mb-1.5">
-              <span className="font-bold text-white text-base tracking-wide">{enemySpecies.name}</span>
-              <span className="text-xs font-mono font-medium px-2.5 py-0.5 rounded-full bg-slate-950/80 text-cyan-300 border border-cyan-500/30 shadow-inner">
-                Lv.{enemy.level}
-              </span>
-            </div>
-
-            <div className="flex items-center gap-2 mb-2">
-              <span
-                className={`text-[11px] px-2 py-0.5 rounded-md font-medium ${
-                  ELEMENT_COLORS[enemySpecies.type].bg
-                } ${ELEMENT_COLORS[enemySpecies.type].text} ${ELEMENT_COLORS[enemySpecies.type].border} border`}
-              >
-                {ELEMENT_COLORS[enemySpecies.type].label}系
-              </span>
-              <span className="text-xs text-slate-400 truncate">{enemySpecies.title}</span>
-            </div>
-
-            {/* Enemy HP Meter */}
-            <div className="space-y-1">
-              <div className="flex justify-between text-xs text-slate-300 font-mono">
-                <span>气血 (HP)</span>
-                <span className="font-medium">
-                  {enemy.currentHp} / {enemy.stats.hp}
-                </span>
+        {/* =========================================================================
+            DUELISTS ARENA STAGE (Image 1: Left Fawn & Right Phoenix)
+            ========================================================================= */}
+        <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-4 items-center flex-1 my-auto">
+          {/* 1. LEFT: Player Spirit (主灵唯鹿 / 青木鹿) */}
+          <div className="flex flex-col items-start space-y-3">
+            {/* Player Status Plaque (Image 1 Style) */}
+            <div className="flex items-center gap-3 p-3 rounded-2xl bg-gradient-to-r from-[#0d2238]/90 via-[#0a1b2d]/85 to-transparent border-2 border-emerald-500/40 shadow-xl backdrop-blur-md min-w-[260px] max-w-xs">
+              {/* Left Wood Element Badge (WOOD 🌿 in Image 1) */}
+              <div className="w-10 h-10 rounded-full border-2 border-emerald-400 bg-gradient-to-br from-emerald-600 to-teal-800 flex flex-col items-center justify-center text-white shadow-md shrink-0">
+                <Trees className="w-4 h-4 text-emerald-200" />
+                <span className="text-[7px] font-black uppercase tracking-wider -mt-0.5">WOOD</span>
               </div>
-              <div className="w-full bg-slate-950 rounded-full h-3 overflow-hidden p-0.5 border border-slate-800 shadow-inner">
-                <div
-                  className={`h-full rounded-full transition-all duration-300 ${
-                    enemy.currentHp / enemy.stats.hp > 0.5
-                      ? 'bg-gradient-to-r from-emerald-500 to-teal-400'
-                      : enemy.currentHp / enemy.stats.hp > 0.2
-                      ? 'bg-gradient-to-r from-amber-500 to-yellow-400'
-                      : 'bg-gradient-to-r from-rose-600 to-red-500'
-                  }`}
-                  style={{ width: `${Math.max(0, (enemy.currentHp / enemy.stats.hp) * 100)}%` }}
-                />
-              </div>
-            </div>
-          </div>
 
-          {/* Enemy Pet Avatar on Floating Arcane Pod */}
-          <div className="relative flex flex-col items-center">
-            {catchingState?.active ? (
-              <div className="w-28 h-28 flex flex-col items-center justify-center animate-pulse">
-                {/* 3D-styled Catching Crystal */}
-                <div
-                  className={`w-14 h-14 rounded-2xl rotate-45 border-2 border-white shadow-[0_0_25px_rgba(250,204,21,0.8)] flex items-center justify-center transition-transform ${
-                    catchingState.shakeCount % 2 === 1 ? 'rotate-12 scale-110' : '-rotate-12 scale-95'
-                  } ${
-                    catchingState.ballId === 'gulu_king'
-                      ? 'bg-gradient-to-br from-amber-300 via-purple-600 to-amber-500'
-                      : catchingState.ballId === 'gulu_high'
-                      ? 'bg-gradient-to-br from-purple-400 to-indigo-700'
-                      : catchingState.ballId === 'gulu_mid'
-                      ? 'bg-gradient-to-br from-blue-400 to-cyan-700'
-                      : 'bg-gradient-to-br from-rose-400 to-red-600'
-                  }`}
-                >
-                  <Sparkles className="w-6 h-6 text-white" />
+              <div className="flex-1 space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="font-black text-sm text-white tracking-wide">
+                    {activePet.nickname || '主灵唯鹿'}
+                  </span>
+                  <span className="text-[10px] font-mono text-emerald-300 font-bold">
+                    Lv.{activePet.level}
+                  </span>
                 </div>
-                <span className="text-xs text-amber-300 font-bold mt-3 whitespace-nowrap bg-black/80 px-2.5 py-0.5 rounded-full border border-amber-400">
-                  {catchingState.message}
-                </span>
-              </div>
-            ) : (
-              <>
-                <PetAvatar
-                  speciesId={enemy.speciesId}
-                  size={125}
-                  isAttacking={enemyAttacking}
-                  isHit={enemyHit}
-                  className="transition-transform duration-200"
-                />
-                {/* Glowing Elemental Battle Dais (敌方对战法阵底盘) */}
-                <div className="relative w-36 h-9 -mt-2 flex items-center justify-center">
-                  <div className="absolute inset-0 rounded-full border-2 border-amber-400 bg-amber-500/25 shadow-[0_0_15px_rgba(245,158,11,0.6)] animate-pulse" />
-                  <div className="absolute w-24 h-5 rounded-full border border-yellow-300 opacity-60" />
+
+                {/* HP Gauge (Red-Orange with Gold Border in Image 1) */}
+                <div className="flex items-center gap-1.5 text-[10px] font-mono">
+                  <span className="text-rose-400 font-bold shrink-0">HP</span>
+                  <div className="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-amber-500/50 p-0.2 shadow-inner">
+                    <div
+                      className="h-full bg-gradient-to-r from-red-600 to-rose-400 rounded-full transition-all duration-300"
+                      style={{ width: `${Math.max(0, (activePet.currentHp / activePet.stats.hp) * 100)}%` }}
+                    />
+                  </div>
+                  <span className="text-[9px] text-slate-300 shrink-0">
+                    {activePet.currentHp}/{activePet.stats.hp}
+                  </span>
                 </div>
-              </>
-            )}
+
+                {/* MP Gauge (Cyan-Blue with Gold Border in Image 1) */}
+                <div className="flex items-center gap-1.5 text-[10px] font-mono">
+                  <span className="text-cyan-400 font-bold shrink-0">MP</span>
+                  <div className="w-full bg-slate-950 rounded-full h-2 overflow-hidden border border-amber-500/50 p-0.2 shadow-inner">
+                    <div className="w-full h-full bg-gradient-to-r from-cyan-500 to-sky-400 rounded-full" />
+                  </div>
+                  <span className="text-[8px] text-slate-400 shrink-0">100/100</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Player Spirit Sprite on Meadow Grass with Glowing Flora (Image 1 Left) */}
+            <div className="relative flex flex-col items-center ml-2 sm:ml-6 mt-1">
+              <PetAvatar
+                speciesId={activePet.speciesId}
+                size={180}
+                isFlipped={true}
+                isAttacking={playerAttacking}
+                isHit={playerHit}
+                className="transition-transform duration-200 drop-shadow-[0_12px_32px_rgba(16,185,129,0.55)]"
+              />
+              {/* Grand Floating Celestial Meadow Dais with Ancient Runes & Cyan Spores */}
+              <div className="relative w-56 h-12 -mt-5 flex items-center justify-center pointer-events-none">
+                <div className="absolute inset-0 rounded-[50%] bg-gradient-to-r from-emerald-600/30 via-teal-500/40 to-cyan-500/30 border-2 border-emerald-400/60 shadow-[0_0_36px_rgba(52,211,153,0.7)] animate-pulse" />
+                <div className="absolute w-40 h-6 rounded-[50%] border border-cyan-300/80 blur-2xs" />
+                <div className="absolute w-24 h-3 rounded-[50%] bg-white/40 blur-xs" />
+              </div>
+            </div>
           </div>
-        </div>
 
-        {/* 2. Player Pet Zone (Bottom-Left Platform) */}
-        <div className="flex items-center justify-start gap-6 relative z-10 mt-6">
-          {/* Player Pet Avatar on Stage Pod */}
-          <div className="relative flex flex-col items-center">
-            <PetAvatar
-              speciesId={activePet.speciesId}
-              size={140}
-              isFlipped={true}
-              isAttacking={playerAttacking}
-              isHit={playerHit}
-              className="transition-transform duration-200"
-            />
-            {/* Glowing Elemental Battle Dais (我方对战召唤法阵底盘) */}
-            <div className="relative w-44 h-11 -mt-3 flex items-center justify-center">
-              <div className="absolute inset-0 rounded-full border-2 border-cyan-400 bg-cyan-500/25 shadow-[0_0_20px_rgba(6,182,212,0.7)] animate-pulse" />
-              <div className="absolute w-28 h-6 rounded-full border border-sky-300 opacity-70" />
-            </div>
-          </div>
+          {/* 2. RIGHT: Enemy Spirit (凤凰巢 / 烈焰凰) */}
+          <div className="flex flex-col items-end space-y-3">
+            {/* Enemy Status Plaque (Image 1 Style) */}
+            <div className="flex items-center gap-3 p-3 rounded-2xl bg-gradient-to-l from-[#2a0e0e]/95 via-[#1f0a0a]/90 to-transparent border-2 border-rose-500/50 shadow-2xl backdrop-blur-md min-w-[260px] max-w-xs">
+              <div className="flex-1 space-y-1 text-right">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-mono text-amber-300 font-bold">
+                    Lv.{enemy.level}
+                  </span>
+                  <span className="font-black text-sm text-white tracking-wide">
+                    {enemySpecies.name || '凤凰巢'}
+                  </span>
+                </div>
 
-          {/* Player HUD Card */}
-          <div className="celestial-battle-card rounded-2xl p-4 shadow-2xl min-w-[280px] border border-cyan-500/30">
-            <div className="flex items-center justify-between gap-3 mb-1.5">
-              <span className="font-bold text-white text-base tracking-wide">{activePet.nickname}</span>
-              <span className="text-xs font-mono font-medium px-2.5 py-0.5 rounded-full bg-slate-950/80 text-cyan-300 border border-cyan-500/30 shadow-inner">
-                Lv.{activePet.level}
-              </span>
-            </div>
+                {/* HP Gauge */}
+                <div className="flex items-center gap-1.5 text-[10px] font-mono justify-end">
+                  <span className="text-[9px] text-slate-300 shrink-0">
+                    {enemy.currentHp}/{enemy.stats.hp}
+                  </span>
+                  <div className="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-amber-500/50 p-0.2 shadow-inner">
+                    <div
+                      className="h-full bg-gradient-to-r from-red-600 to-rose-400 rounded-full transition-all duration-300"
+                      style={{ width: `${Math.max(0, (enemy.currentHp / enemy.stats.hp) * 100)}%` }}
+                    />
+                  </div>
+                  <span className="text-rose-400 font-bold shrink-0">HP</span>
+                </div>
 
-            <div className="flex items-center gap-2 mb-2">
-              <span
-                className={`text-[11px] px-2 py-0.5 rounded-md font-medium ${
-                  ELEMENT_COLORS[activeSpecies.type].bg
-                } ${ELEMENT_COLORS[activeSpecies.type].text} ${ELEMENT_COLORS[activeSpecies.type].border} border`}
-              >
-                {ELEMENT_COLORS[activeSpecies.type].label}系
-              </span>
-              <span className="text-xs text-slate-400">{activePet.nature}</span>
-            </div>
-
-            {/* Player HP Meter */}
-            <div className="space-y-1">
-              <div className="flex justify-between text-xs text-slate-300 font-mono">
-                <span>气血 (HP)</span>
-                <span className="font-medium text-white">
-                  {activePet.currentHp} / {activePet.stats.hp}
-                </span>
+                {/* MP Gauge */}
+                <div className="flex items-center gap-1.5 text-[10px] font-mono justify-end">
+                  <span className="text-[8px] text-slate-400 shrink-0">100/100</span>
+                  <div className="w-full bg-slate-950 rounded-full h-2 overflow-hidden border border-amber-500/50 p-0.2 shadow-inner">
+                    <div className="w-full h-full bg-gradient-to-r from-cyan-500 to-sky-400 rounded-full" />
+                  </div>
+                  <span className="text-cyan-400 font-bold shrink-0">MP</span>
+                </div>
               </div>
-              <div className="w-full bg-slate-950 rounded-full h-3 overflow-hidden p-0.5 border border-slate-800 shadow-inner">
-                <div
-                  className={`h-full rounded-full transition-all duration-300 ${
-                    activePet.currentHp / activePet.stats.hp > 0.5
-                      ? 'bg-gradient-to-r from-emerald-500 to-teal-400'
-                      : activePet.currentHp / activePet.stats.hp > 0.2
-                      ? 'bg-gradient-to-r from-amber-500 to-yellow-400'
-                      : 'bg-gradient-to-r from-rose-600 to-red-500'
-                  }`}
-                  style={{ width: `${Math.max(0, (activePet.currentHp / activePet.stats.hp) * 100)}%` }}
-                />
+
+              {/* Right Fire Element Badge (FIRE 🔥 in Image 1) */}
+              <div className="w-10 h-10 rounded-full border-2 border-amber-400 bg-gradient-to-br from-rose-600 to-amber-600 flex flex-col items-center justify-center text-white shadow-md shrink-0">
+                <Flame className="w-4 h-4 text-amber-200" />
+                <span className="text-[7px] font-black uppercase tracking-wider -mt-0.5">FIRE</span>
               </div>
             </div>
 
-            {/* EXP Bar */}
-            <div className="mt-2 space-y-0.5">
-              <div className="flex justify-between text-[10px] text-slate-400 font-mono">
-                <span>修为经验 (EXP)</span>
-                <span>
-                  {activePet.exp} / {activePet.maxExp}
-                </span>
-              </div>
-              <div className="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden border border-slate-800">
-                <div
-                  className="h-full bg-gradient-to-r from-cyan-400 to-sky-500 rounded-full transition-all duration-300"
-                  style={{ width: `${Math.min(100, (activePet.exp / activePet.maxExp) * 100)}%` }}
-                />
+            {/* Enemy Spirit Sprite Perched on Craggy Volcanic Rock (Image 1 Right) */}
+            <div className="relative flex flex-col items-center mr-2 sm:mr-6 mt-1">
+              <PetAvatar
+                speciesId={enemy.speciesId}
+                size={175}
+                isAttacking={enemyAttacking}
+                isHit={enemyHit}
+                className="transition-transform duration-200 drop-shadow-[0_12px_32px_rgba(244,63,94,0.55)]"
+              />
+              {/* Fiery Molten Volcanic Rock Dais with Pulsing Magma Glow */}
+              <div className="relative w-56 h-12 -mt-5 flex items-center justify-center pointer-events-none">
+                <div className="absolute inset-0 rounded-[50%] bg-gradient-to-r from-red-600/35 via-orange-500/40 to-amber-500/35 border-2 border-amber-400/60 shadow-[0_0_36px_rgba(245,158,11,0.7)] animate-pulse" />
+                <div className="absolute w-40 h-6 rounded-[50%] border border-orange-400/80 blur-2xs" />
+                <div className="absolute w-24 h-3 rounded-[50%] bg-amber-200/40 blur-xs" />
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Bottom Command Console */}
-      <div className="bg-slate-950/90 backdrop-blur-xl border-t border-cyan-500/25 p-4 md:p-5 grid grid-cols-1 md:grid-cols-12 gap-4 z-20 shadow-2xl">
-        {/* Left: Battle Announcer Text Log */}
-        <div className="md:col-span-5 celestial-glass rounded-2xl p-3 flex flex-col justify-between h-[132px] border border-cyan-500/20">
-          <div className="text-xs font-bold text-cyan-300 mb-1 flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-            <span>战场即时法则播报</span>
+      {/* =========================================================================
+          BOTTOM COMMAND CONSOLE: Battle Directory, Turn Pill & Circular Skills (Image 1)
+          ========================================================================= */}
+      <div className="relative bg-gradient-to-t from-[#020813] via-[#051120] to-[#081a2e]/90 border-t-2 border-[#b48a52]/40 p-4 md:p-5 flex flex-col md:flex-row items-center justify-between gap-4 z-20 shadow-2xl backdrop-blur-xl">
+        {/* Left: 战斗目录 (Battle Directory & Logs from Image 1) */}
+        <div className="w-full md:w-72 rounded-2xl p-3 bg-gradient-to-b from-[#0f243a]/90 to-[#071322]/95 border border-cyan-500/30 text-xs shadow-xl flex flex-col justify-between h-28">
+          <div className="flex items-center justify-between border-b border-cyan-500/20 pb-1 mb-1">
+            <span className="font-black text-amber-300 flex items-center gap-1.5 tracking-wider">
+              <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+              <span>✦ 战斗目录</span>
+            </span>
+            <span className="text-[9px] font-mono text-cyan-300">魔法对决</span>
           </div>
-          <div className="flex-1 overflow-y-auto space-y-1 text-xs pr-1">
-            {battleLog.map((log, idx) => (
-              <p key={idx} className={idx === 0 ? 'text-white font-medium' : 'text-slate-400'}>
+
+          <div className="flex-1 overflow-y-auto space-y-1 text-[11px] pr-1 leading-relaxed text-slate-300">
+            {battleLog.slice(0, 3).map((log, idx) => (
+              <p key={idx} className={idx === 0 ? 'text-amber-200 font-bold' : 'text-slate-400'}>
                 {idx === 0 ? '▶ ' : '  '}
                 {log}
               </p>
             ))}
+            {battleLog.length === 0 && (
+              <p className="text-slate-400 italic">双方幻灵蓄势待发，五行道韵与乾坤灵气在战台上流转！</p>
+            )}
           </div>
         </div>
 
-        {/* Right: Interactive Command Panels */}
-        <div className="md:col-span-7 flex flex-col justify-center">
-          {battleMenu === 'ACTIONS' && (
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {/* 1. Attack */}
-              <button
-                disabled={isProcessingTurn || activePet.currentHp <= 0}
-                onClick={() => {
-                  sound.playClick();
-                  setBattleMenu('MOVES');
-                }}
-                className="p-3 rounded-2xl flex flex-col items-center justify-center cursor-pointer shadow-lg bg-gradient-to-br from-rose-500 to-red-600 hover:from-rose-400 hover:to-red-500 text-white font-bold transition-all disabled:opacity-40"
-              >
-                <Swords className="w-5 h-5 mb-1" />
-                <span className="text-xs sm:text-sm font-bold">灵术决斗</span>
-              </button>
+        {/* Center: 当前回合: 玩家 (Current Turn Indicator from Image 1) */}
+        <div className="flex flex-col items-center">
+          <div className="px-5 py-1.5 rounded-full bg-gradient-to-r from-amber-950/80 via-slate-900/90 to-amber-950/80 border-2 border-amber-400 text-amber-200 text-xs font-black shadow-[0_0_16px_rgba(245,158,11,0.4)] animate-pulse">
+            当前回合: {isProcessingTurn ? '仙术对决中...' : '仙师出招'}
+          </div>
 
-              {/* 2. Catch */}
-              <button
-                disabled={isProcessingTurn || !isWild}
-                onClick={() => {
-                  sound.playClick();
-                  setBattleMenu('BALLS');
-                }}
-                className="p-3 rounded-2xl flex flex-col items-center justify-center cursor-pointer shadow-lg bg-gradient-to-br from-amber-400 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 font-bold transition-all disabled:opacity-40"
-              >
-                <CircleDot className="w-5 h-5 mb-1" />
-                <span className="text-xs sm:text-sm font-bold">灵契收服</span>
-              </button>
+          {/* Quick Utility Switchers below Turn Indicator */}
+          <div className="flex items-center gap-2 mt-2">
+            <button
+              onClick={() => {
+                sound.playClick();
+                setBattleMenu('BALLS');
+              }}
+              className="text-[10px] text-cyan-300 hover:text-white bg-slate-900/80 px-2.5 py-1 rounded-lg border border-cyan-500/40 cursor-pointer transition-colors"
+            >
+              灵契晶石
+            </button>
+            <button
+              onClick={() => {
+                sound.playClick();
+                setBattleMenu('SWITCH');
+              }}
+              className="text-[10px] text-slate-300 hover:text-white bg-slate-900/80 px-2.5 py-1 rounded-lg border border-slate-700 cursor-pointer transition-colors"
+            >
+              唤回轮换
+            </button>
+          </div>
+        </div>
 
-              {/* 3. Potions */}
+        {/* Right: Circular Golden Skill Buttons (Image 1 Exact Layout) */}
+        <div className="flex items-center gap-3">
+          {/* Sub-menu overlays (BALLS, POTIONS, SWITCH) */}
+          {battleMenu !== 'ACTIONS' && battleMenu !== 'MOVES' ? (
+            <div className="flex items-center gap-3">
               <button
-                disabled={isProcessingTurn}
-                onClick={() => {
-                  sound.playClick();
-                  setBattleMenu('POTIONS');
-                }}
-                className="p-3 rounded-2xl flex flex-col items-center justify-center cursor-pointer shadow-lg bg-gradient-to-br from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold transition-all disabled:opacity-40"
+                onClick={() => setBattleMenu('ACTIONS')}
+                className="px-4 py-2 rounded-xl bg-slate-800 text-amber-300 text-xs font-bold border border-amber-500/40 cursor-pointer"
               >
-                <Backpack className="w-5 h-5 mb-1" />
-                <span className="text-xs sm:text-sm font-bold">储物灵药</span>
+                返回灵术
               </button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2.5">
+              {/* Skill 1 (Secondary): 治愈之光 */}
+              {activePet.moves[1] && (
+                <button
+                  disabled={isProcessingTurn || activePet.moves[1].pp <= 0}
+                  onClick={() => handleSelectMove(activePet.moves[1].id)}
+                  className="flex flex-col items-center group cursor-pointer disabled:opacity-40"
+                  title={`${MOVES_DATA[activePet.moves[1].id]?.name || '治愈之光'} (PP: ${activePet.moves[1].pp})`}
+                >
+                  <div className="w-12 h-12 rounded-full border-2 border-amber-400 bg-gradient-to-b from-emerald-600 to-teal-900 flex items-center justify-center text-emerald-200 shadow-lg group-hover:scale-110 group-active:scale-95 transition-transform ring-2 ring-emerald-500/40">
+                    <Sparkles className="w-6 h-6 text-emerald-200 filter drop-shadow-[0_0_6px_#34d399]" />
+                  </div>
+                  <span className="text-[10px] font-bold text-amber-200 mt-1">
+                    {MOVES_DATA[activePet.moves[1].id]?.name || '治愈之光'}
+                  </span>
+                </button>
+              )}
 
-              {/* 4. Switch */}
+              {/* Skill 2 (Secondary): 烈焰之息 */}
+              {activePet.moves[2] && (
+                <button
+                  disabled={isProcessingTurn || activePet.moves[2].pp <= 0}
+                  onClick={() => handleSelectMove(activePet.moves[2].id)}
+                  className="flex flex-col items-center group cursor-pointer disabled:opacity-40"
+                  title={`${MOVES_DATA[activePet.moves[2].id]?.name || '烈焰之息'} (PP: ${activePet.moves[2].pp})`}
+                >
+                  <div className="w-12 h-12 rounded-full border-2 border-amber-400 bg-gradient-to-b from-rose-600 to-amber-900 flex items-center justify-center text-amber-200 shadow-lg group-hover:scale-110 group-active:scale-95 transition-transform ring-2 ring-orange-500/40">
+                    <Flame className="w-6 h-6 text-amber-300 filter drop-shadow-[0_0_6px_#f59e0b]" />
+                  </div>
+                  <span className="text-[10px] font-bold text-amber-200 mt-1">
+                    {MOVES_DATA[activePet.moves[2].id]?.name || '烈焰之息'}
+                  </span>
+                </button>
+              )}
+
+              {/* Skill 3 (Secondary): 凤凰涅槃 */}
+              {activePet.moves[3] && (
+                <button
+                  disabled={isProcessingTurn || activePet.moves[3].pp <= 0}
+                  onClick={() => handleSelectMove(activePet.moves[3].id)}
+                  className="flex flex-col items-center group cursor-pointer disabled:opacity-40"
+                  title={`${MOVES_DATA[activePet.moves[3].id]?.name || '凤凰涅槃'} (PP: ${activePet.moves[3].pp})`}
+                >
+                  <div className="w-12 h-12 rounded-full border-2 border-amber-400 bg-gradient-to-b from-amber-600 to-red-950 flex items-center justify-center text-yellow-200 shadow-lg group-hover:scale-110 group-active:scale-95 transition-transform ring-2 ring-yellow-500/40">
+                    <Zap className="w-6 h-6 text-amber-200 filter drop-shadow-[0_0_6px_#fde047]" />
+                  </div>
+                  <span className="text-[10px] font-bold text-amber-200 mt-1">
+                    {MOVES_DATA[activePet.moves[3].id]?.name || '凤凰涅槃'}
+                  </span>
+                </button>
+              )}
+
+              {/* PRIMARY HIGHLIGHTED SKILL BUTTON (Large Double-Rimmed Button from Image 1: 藤蔓缠绕) */}
+              {activePet.moves[0] && (
+                <button
+                  disabled={isProcessingTurn || activePet.moves[0].pp <= 0}
+                  onClick={() => handleSelectMove(activePet.moves[0].id)}
+                  className="flex flex-col items-center group cursor-pointer disabled:opacity-40 ml-1"
+                  title={`释放主技能【${MOVES_DATA[activePet.moves[0].id]?.name || '藤蔓缠绕'}】`}
+                >
+                  <div className="w-16 h-16 rounded-full border-4 border-[#ca8a04] bg-gradient-to-b from-[#065f46] via-[#047857] to-[#022c22] flex items-center justify-center text-white shadow-[0_0_24px_rgba(74,222,128,0.6)] group-hover:scale-108 group-active:scale-95 transition-all ring-2 ring-[#fde047]">
+                    <Trees className="w-8 h-8 text-emerald-300 filter drop-shadow-[0_0_8px_#4ade80]" />
+                  </div>
+                  <span className="text-xs font-black text-amber-300 mt-1 tracking-wider drop-shadow-sm">
+                    {MOVES_DATA[activePet.moves[0].id]?.name || '藤蔓缠绕'}
+                  </span>
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Drawer Overlay for BALLS, POTIONS, SWITCH, or MOVES */}
+      {battleMenu !== 'ACTIONS' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-200">
+          <div className="relative w-full max-w-xl bg-gradient-to-b from-[#0f243a] to-[#071322] rounded-3xl border-2 border-cyan-500/40 p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-cyan-500/30 pb-3">
+              <span className="text-base font-black text-amber-300 game-title-font flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-cyan-400" />
+                <span>
+                  {battleMenu === 'MOVES'
+                    ? '灵术秘典 · 选择施展神通'
+                    : battleMenu === 'BALLS'
+                    ? '灵契法器 · 祭出封神晶石'
+                    : battleMenu === 'POTIONS'
+                    ? '储物宝囊 · 服用回春丹药'
+                    : '本命随行 · 唤回轮换幻灵'}
+                </span>
+              </span>
+
               <button
-                disabled={isProcessingTurn}
-                onClick={() => {
-                  sound.playClick();
-                  setBattleMenu('SWITCH');
-                }}
-                className="p-3 rounded-2xl flex flex-col items-center justify-center cursor-pointer shadow-lg bg-gradient-to-br from-cyan-600 to-blue-700 hover:from-cyan-500 hover:to-blue-600 text-white font-bold transition-all disabled:opacity-40"
+                onClick={() => setBattleMenu('ACTIONS')}
+                className="px-3 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 cursor-pointer"
               >
-                <ArrowRightLeft className="w-5 h-5 mb-1" />
-                <span className="text-xs sm:text-sm font-bold">唤回轮换</span>
+                返回对决
               </button>
+            </div>
 
-              {isWild && (
-                <div className="col-span-2 sm:col-span-4 flex justify-end pt-1">
-                  <button
-                    disabled={isProcessingTurn}
-                    onClick={handleFlee}
-                    className="text-xs text-slate-400 hover:text-white underline cursor-pointer transition-colors"
-                  >
-                    避战撤退 (逃离本场对决)
-                  </button>
+            {/* BALLS PANEL */}
+            {battleMenu === 'BALLS' && (
+              <div className="space-y-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-72 overflow-y-auto pr-1">
+                  {inventory
+                    .filter((i) => ITEMS_DATA[i.itemId]?.category === 'BALL')
+                    .map((slot) => {
+                      const item = ITEMS_DATA[slot.itemId];
+                      return (
+                        <button
+                          key={slot.itemId}
+                          disabled={isProcessingTurn || slot.count <= 0}
+                          onClick={() => {
+                            setBattleMenu('ACTIONS');
+                            handleThrowBall(slot.itemId);
+                          }}
+                          className="text-left p-3.5 rounded-2xl bg-slate-900/90 border-2 border-amber-500/40 hover:border-amber-400 hover:bg-slate-850 transition-all cursor-pointer flex items-center justify-between shadow-md"
+                        >
+                          <div>
+                            <div className="font-bold text-sm text-amber-200 game-title-font">{item.name}</div>
+                            <div className="text-[11px] text-slate-400 mt-0.5">{item.description}</div>
+                          </div>
+                          <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-black/70 text-amber-300 border border-amber-400/50">
+                            x{slot.count}
+                          </span>
+                        </button>
+                      );
+                    })}
                 </div>
-              )}
-            </div>
-          )}
-
-          {/* Moves Selection (4 Colorful Move Tiles) */}
-          {battleMenu === 'MOVES' && (
-            <div className="space-y-2">
-              <div className="flex items-center justify-between pb-1">
-                <span className="text-xs font-bold text-amber-300 game-title-font">选择释放的灵术神技:</span>
-                <button
-                  onClick={() => setBattleMenu('ACTIONS')}
-                  className="text-xs text-slate-400 hover:text-white cursor-pointer underline"
-                >
-                  返回指令菜单
-                </button>
-              </div>
-              <div className="grid grid-cols-2 gap-2.5">
-                {activePet.moves.map((m) => {
-                  const moveData = MOVES_DATA[m.id];
-                  if (!moveData) return null;
-                  const elColor = ELEMENT_COLORS[moveData.type];
-                  return (
-                    <button
-                      key={m.id}
-                      disabled={isProcessingTurn || m.pp <= 0}
-                      onClick={() => handleSelectMove(m.id)}
-                      className={`text-left p-3 rounded-2xl border-2 transition-all active:scale-95 cursor-pointer disabled:opacity-40 bg-slate-900/90 hover:bg-slate-800 shadow-md ${elColor.border}`}
-                    >
-                      <div className="flex items-center justify-between mb-1">
-                        <div className="flex items-center gap-1.5 truncate">
-                          <span className="font-black text-sm text-white game-title-font truncate">{moveData.name}</span>
-                          {/* Weather Synergy Badge */}
-                          {(() => {
-                            if (weatherState.weather === 'SUNNY') {
-                              if (moveData.type === 'FIRE') return <span className="text-[9px] px-1 py-0.2 rounded bg-amber-500/30 text-amber-300 border border-amber-400 font-bold">☀️+50%</span>;
-                              if (moveData.type === 'WATER') return <span className="text-[9px] px-1 py-0.2 rounded bg-sky-950 text-sky-400 border border-sky-600/40 font-bold">☀️-30%</span>;
-                            } else if (weatherState.weather === 'RAIN') {
-                              if (moveData.type === 'WATER') return <span className="text-[9px] px-1 py-0.2 rounded bg-cyan-500/30 text-cyan-300 border border-cyan-400 font-bold">🌧️+50%</span>;
-                              if (moveData.type === 'FIRE') return <span className="text-[9px] px-1 py-0.2 rounded bg-rose-950 text-rose-400 border border-rose-600/40 font-bold">🌧️-30%</span>;
-                              if (moveData.type === 'ELECTRIC') return <span className="text-[9px] px-1 py-0.2 rounded bg-purple-500/30 text-purple-300 border border-purple-400 font-bold">⚡必暴</span>;
-                            } else if (weatherState.weather === 'SANDSTORM') {
-                              if (moveData.type === 'ROCK') return <span className="text-[9px] px-1 py-0.2 rounded bg-yellow-500/30 text-yellow-300 border border-yellow-400 font-bold">🌪️+30%</span>;
-                            } else if (weatherState.weather === 'THUNDER') {
-                              if (moveData.type === 'ELECTRIC') return <span className="text-[9px] px-1 py-0.2 rounded bg-purple-500/30 text-purple-300 border border-purple-400 font-bold">⚡+40%</span>;
-                            }
-                            return null;
-                          })()}
-                        </div>
-                        <span className={`text-[10px] px-1.5 py-0.2 rounded font-bold shrink-0 ${elColor.bg} ${elColor.text}`}>
-                          {elColor.label}系
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono">
-                        <span>威力 {moveData.power || '-'}</span>
-                        <span className={m.pp <= 3 ? 'text-rose-400 font-bold' : 'text-cyan-300 font-bold'}>
-                          PP: {m.pp}/{m.maxPp}
-                        </span>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-
-          {/* Spirit Crystal Selection */}
-          {battleMenu === 'BALLS' && (
-            <div className="space-y-2">
-              <div className="flex items-center justify-between pb-1">
-                <span className="text-xs font-bold text-amber-300 game-title-font">选择祭出的灵契晶石:</span>
-                <button
-                  onClick={() => setBattleMenu('ACTIONS')}
-                  className="text-xs text-slate-400 hover:text-white cursor-pointer underline"
-                >
-                  返回指令菜单
-                </button>
-              </div>
-              <div className="grid grid-cols-2 gap-2.5">
-                {inventory
-                  .filter((i) => ITEMS_DATA[i.itemId]?.category === 'BALL')
-                  .map((slot) => {
-                    const item = ITEMS_DATA[slot.itemId];
-                    return (
-                      <button
-                        key={slot.itemId}
-                        disabled={isProcessingTurn || slot.count <= 0}
-                        onClick={() => handleThrowBall(slot.itemId)}
-                        className="text-left p-3 rounded-2xl bg-slate-900/90 border-2 border-amber-500/40 hover:border-amber-400 hover:bg-slate-800 transition-all cursor-pointer flex items-center justify-between shadow-md"
-                      >
-                        <div>
-                          <div className="font-bold text-sm text-amber-200 game-title-font">{item.name}</div>
-                          <div className="text-[11px] text-slate-400">{item.description}</div>
-                        </div>
-                        <span className="text-xs font-mono font-bold px-2 py-1 rounded bg-black/60 text-amber-300 border border-amber-400/40">
-                          x{slot.count}
-                        </span>
-                      </button>
-                    );
-                  })}
-              </div>
-              {inventory.filter((i) => ITEMS_DATA[i.itemId]?.category === 'BALL').length === 0 && (
-                <div className="text-xs text-slate-400 text-center py-4">储物袋中已无灵契晶石，请前往万象宝阁购买！</div>
-              )}
-            </div>
-          )}
-
-          {/* Potions Selection */}
-          {battleMenu === 'POTIONS' && (
-            <div className="space-y-2">
-              <div className="flex items-center justify-between pb-1">
-                <span className="text-xs font-bold text-emerald-300 game-title-font">选择服用的回春丹药:</span>
-                <button
-                  onClick={() => setBattleMenu('ACTIONS')}
-                  className="text-xs text-slate-400 hover:text-white cursor-pointer underline"
-                >
-                  返回指令菜单
-                </button>
-              </div>
-              <div className="grid grid-cols-2 gap-2.5">
-                {inventory
-                  .filter((i) => ['POTION', 'PP', 'REVIVE'].includes(ITEMS_DATA[i.itemId]?.category))
-                  .map((slot) => {
-                    const item = ITEMS_DATA[slot.itemId];
-                    return (
-                      <button
-                        key={slot.itemId}
-                        disabled={isProcessingTurn || slot.count <= 0}
-                        onClick={() => handleUsePotion(slot.itemId)}
-                        className="text-left p-3 rounded-2xl bg-slate-900/90 border-2 border-emerald-500/40 hover:border-emerald-400 hover:bg-slate-800 transition-all cursor-pointer flex items-center justify-between shadow-md"
-                      >
-                        <div>
-                          <div className="font-bold text-sm text-emerald-200 game-title-font">{item.name}</div>
-                          <div className="text-[11px] text-slate-400 truncate max-w-[150px]">{item.description}</div>
-                        </div>
-                        <span className="text-xs font-mono font-bold px-2 py-1 rounded bg-black/60 text-emerald-300 border border-emerald-400/40">
-                          x{slot.count}
-                        </span>
-                      </button>
-                    );
-                  })}
-              </div>
-            </div>
-          )}
-
-          {/* Switch Pet Selection */}
-          {battleMenu === 'SWITCH' && (
-            <div className="space-y-2">
-              <div className="flex items-center justify-between pb-1">
-                <span className="text-xs font-bold text-cyan-300 game-title-font">选择换上场的随行幻灵:</span>
-                {activePet.currentHp > 0 && (
-                  <button
-                    onClick={() => setBattleMenu('ACTIONS')}
-                    className="text-xs text-slate-400 hover:text-white cursor-pointer underline"
-                  >
-                    取消更换
-                  </button>
+                {inventory.filter((i) => ITEMS_DATA[i.itemId]?.category === 'BALL').length === 0 && (
+                  <div className="text-xs text-slate-400 text-center py-6">
+                    储物袋中已无灵契晶石，请前往万宝商阁购买！
+                  </div>
                 )}
               </div>
-              <div className="grid grid-cols-3 gap-2">
+            )}
+
+            {/* POTIONS PANEL */}
+            {battleMenu === 'POTIONS' && (
+              <div className="space-y-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-72 overflow-y-auto pr-1">
+                  {inventory
+                    .filter((i) => ['POTION', 'PP', 'REVIVE'].includes(ITEMS_DATA[i.itemId]?.category))
+                    .map((slot) => {
+                      const item = ITEMS_DATA[slot.itemId];
+                      return (
+                        <button
+                          key={slot.itemId}
+                          disabled={isProcessingTurn || slot.count <= 0}
+                          onClick={() => {
+                            setBattleMenu('ACTIONS');
+                            handleUsePotion(slot.itemId);
+                          }}
+                          className="text-left p-3.5 rounded-2xl bg-slate-900/90 border-2 border-emerald-500/40 hover:border-emerald-400 hover:bg-slate-850 transition-all cursor-pointer flex items-center justify-between shadow-md"
+                        >
+                          <div>
+                            <div className="font-bold text-sm text-emerald-200 game-title-font">{item.name}</div>
+                            <div className="text-[11px] text-slate-400 mt-0.5">{item.description}</div>
+                          </div>
+                          <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-black/70 text-emerald-300 border border-emerald-400/50">
+                            x{slot.count}
+                          </span>
+                        </button>
+                      );
+                    })}
+                </div>
+              </div>
+            )}
+
+            {/* SWITCH PET PANEL */}
+            {battleMenu === 'SWITCH' && (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-h-72 overflow-y-auto pr-1">
                 {party.map((p, idx) => {
                   const isDead = p.currentHp <= 0;
                   const isCurrent = idx === activePetIndex;
@@ -1229,8 +1225,10 @@ export const BattleView: React.FC<BattleViewProps> = ({
                     <button
                       key={p.uid}
                       disabled={isDead || isCurrent}
-                      onClick={() => handleSwitchPet(idx)}
-                      className={`p-2.5 rounded-2xl text-left border-2 transition-all cursor-pointer ${
+                      onClick={() => {
+                        handleSwitchPet(idx);
+                      }}
+                      className={`p-3 rounded-2xl text-left border-2 transition-all cursor-pointer ${
                         isCurrent
                           ? 'bg-cyan-950/80 border-cyan-400 text-cyan-300 shadow-lg'
                           : isDead
@@ -1238,24 +1236,24 @@ export const BattleView: React.FC<BattleViewProps> = ({
                           : 'bg-slate-900 border-slate-700 hover:border-cyan-400 hover:bg-slate-850'
                       }`}
                     >
-                      <div className="flex items-center gap-2">
-                        <PetAvatar speciesId={p.speciesId} size={38} />
+                      <div className="flex items-center gap-2.5">
+                        <PetAvatar speciesId={p.speciesId} size={42} />
                         <div className="truncate">
                           <div className="font-bold text-xs text-white truncate game-title-font">{p.nickname}</div>
                           <div className="text-[10px] text-slate-400 font-mono">Lv.{p.level}</div>
                         </div>
                       </div>
-                      <div className="text-[10px] text-slate-400 mt-1 font-mono">
+                      <div className="text-[10px] text-slate-400 mt-1.5 font-mono">
                         HP: {p.currentHp}/{p.stats.hp}
                       </div>
                     </button>
                   );
                 })}
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Victory / Rewards Modal (Classic Flash Fanfare Pop-up) */}
       {victoryData?.show && (

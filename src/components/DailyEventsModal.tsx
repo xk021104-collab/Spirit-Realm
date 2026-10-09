@@ -98,7 +98,7 @@ export const DailyEventsModal: React.FC<DailyEventsModalProps> = ({
                 幻灵秘境 · 狂欢盛典活动中心
               </h2>
               <p className="text-[11px] text-amber-200/80">
-                奥奇/洛克/赛尔风格每日福利与神兽试炼降临！
+                仙家福地每日造化机缘与上古神兽试炼降临！
               </p>
             </div>
           </div>

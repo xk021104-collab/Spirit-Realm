@@ -126,10 +126,15 @@ export const SceneBackground: React.FC<SceneBackgroundProps> = ({ sceneId }) => 
             <ellipse cx="50%" cy="66%" rx="70" ry="22" fill="#38bdf8" fillOpacity="0.08" stroke="#38bdf8" strokeWidth="2" strokeOpacity="0.8" filter="drop-shadow(0 0 10px #38bdf8)" />
           </svg>
 
-          {/* Center Floating Monolith Crystal */}
-          <div className="absolute top-[28%] left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none animate-float">
-            <div className="w-10 h-20 bg-gradient-to-t from-cyan-400 via-sky-300 to-white clip-polygon-crystal shadow-[0_0_35px_rgba(56,189,248,0.8)] opacity-90" />
-            <div className="w-24 h-4 bg-cyan-400/30 rounded-full blur-md -mt-2" />
+          {/* Center Floating Monolith Celestial Crystal Spire (Distant Sky) */}
+          <div className="absolute top-[12%] left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none animate-float opacity-80">
+            <svg width="40" height="70" viewBox="0 0 40 70" className="drop-shadow-[0_0_16px_rgba(56,189,248,0.85)]">
+              <polygon points="20,2 34,25 20,68 6,25" fill="#38bdf8" opacity="0.85" />
+              <polygon points="20,2 34,25 20,68" fill="#bae6fd" opacity="0.95" />
+              <polygon points="20,2 20,68 6,25" fill="#0284c7" opacity="0.8" />
+              <polygon points="20,8 28,26 20,60" fill="#ffffff" opacity="0.6" />
+            </svg>
+            <div className="w-16 h-2.5 bg-cyan-400/25 rounded-full blur-xs mt-1" />
           </div>
 
           {/* Ambient Stardust Fireflies */}

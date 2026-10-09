@@ -210,6 +210,41 @@
   animation: starFloat 4s ease-in-out infinite;
 }
 
+/* Lightweight Spirit Breathing & Floating Keyframes */
+@keyframes spiritBreatheFloat {
+  0% {
+    transform: translateY(0px) scale(1);
+    filter: drop-shadow(0 4px 12px var(--spirit-glow, rgba(56, 189, 248, 0.35)));
+  }
+  50% {
+    transform: translateY(-8px) scale(1.04);
+    filter: drop-shadow(0 14px 24px var(--spirit-glow, rgba(56, 189, 248, 0.75)));
+  }
+  100% {
+    transform: translateY(0px) scale(1);
+    filter: drop-shadow(0 4px 12px var(--spirit-glow, rgba(56, 189, 248, 0.35)));
+  }
+}
+
+.animate-spirit-float {
+  animation: spiritBreatheFloat 3.2s ease-in-out infinite;
+}
+
+@keyframes spiritAuraPulse {
+  0%, 100% {
+    transform: scale(0.92);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1.16);
+    opacity: 0.85;
+  }
+}
+
+.animate-spirit-aura {
+  animation: spiritAuraPulse 2.8s ease-in-out infinite;
+}
+
 /* Custom Scrollbars */
 ::-webkit-scrollbar {
   width: 6px;

@@ -6,6 +6,8 @@ import { PetAvatar, ELEMENT_COLORS } from './PetAvatar';
 import { PlayerAvatar, NpcAvatar, FriendAvatar } from './PlayerAvatar';
 import { SceneBackground } from './SceneBackground';
 import { ArtGalleryModal } from './ArtGalleryModal';
+import { WorldMapView } from './WorldMapView';
+import { CharacterDetailModal } from './CharacterDetailModal';
 import { createPetInstance } from '../utils/battleEngine';
 import { sound } from '../utils/audio';
 import {
@@ -27,6 +29,7 @@ import {
   Award,
   Users,
   Gift,
+  User,
 } from 'lucide-react';
 
 interface SceneViewProps {
@@ -97,8 +100,11 @@ export const SceneView: React.FC<SceneViewProps> = ({
   // NPC dialogue popup
   const [activeDialogue, setActiveDialogue] = useState<{ name: string; text: string; actionType?: string } | null>(null);
 
-  // World map fast travel modal
+  // World map fast travel modal (Image 3)
   const [isMapModalOpen, setIsMapModalOpen] = useState<boolean>(false);
+
+  // Character detail modal (Image 2)
+  const [isCharacterModalOpen, setIsCharacterModalOpen] = useState<boolean>(false);
 
   // High-definition Art Gallery modal
   const [isGalleryOpen, setIsGalleryOpen] = useState<boolean>(false);
@@ -193,9 +199,16 @@ export const SceneView: React.FC<SceneViewProps> = ({
         {/* Top HUD: Elegant Player Status, Realm Plaque & Wealth */}
         <div className="h-14 celestial-top-hud px-4 flex items-center justify-between z-30 gap-3">
           {/* Left: Player Profile */}
-          <div className="flex items-center gap-3 shrink-0">
+          <div
+            onClick={() => {
+              sound.playClick();
+              setIsCharacterModalOpen(true);
+            }}
+            className="flex items-center gap-3 shrink-0 cursor-pointer group p-1 -m-1 rounded-xl hover:bg-slate-800/40 transition-colors"
+            title="点击查看灵契神师命途资质与全屏立绘"
+          >
             <div className="relative">
-              <div className="w-10 h-10 rounded-full border border-cyan-400/50 bg-gradient-to-b from-slate-900 to-indigo-950 p-0.5 shadow-md flex items-center justify-center overflow-hidden ring-2 ring-cyan-500/20">
+              <div className="w-10 h-10 rounded-full border border-cyan-400/50 bg-gradient-to-b from-slate-900 to-indigo-950 p-0.5 shadow-md flex items-center justify-center overflow-hidden ring-2 ring-cyan-500/20 group-hover:ring-cyan-300 transition-all">
                 <PlayerAvatar size={34} />
               </div>
               <span className="absolute -bottom-1 -right-1 bg-cyan-500 text-slate-950 text-[9px] font-bold px-1.5 py-0.2 rounded-full border border-cyan-300">
@@ -205,11 +218,11 @@ export const SceneView: React.FC<SceneViewProps> = ({
 
             <div className="flex flex-col">
               <div className="flex items-center gap-1.5">
-                <span className="font-bold text-xs sm:text-sm text-slate-100 tracking-wide">
+                <span className="font-bold text-xs sm:text-sm text-slate-100 tracking-wide group-hover:text-cyan-300 transition-colors">
                   {playerName}
                 </span>
                 <span className="text-[10px] text-cyan-300/90 font-light hidden xs:inline">
-                  灵契使
+                  灵契神师 ✦
                 </span>
               </div>
               {/* Spirit Energy Bar */}
@@ -612,7 +625,31 @@ export const SceneView: React.FC<SceneViewProps> = ({
             <span className="text-[11px] font-medium text-slate-300 group-hover:text-emerald-300 mt-1">万象宝阁</span>
           </button>
 
-          {/* 6. Full Heal */}
+          {/* 6. Character Profile (Image 2) */}
+          <button
+            onClick={() => {
+              sound.playClick();
+              setIsCharacterModalOpen(true);
+            }}
+            className="celestial-dock-btn group px-2.5 py-1.5 hover:bg-slate-800/60 rounded-xl"
+          >
+            <User className="w-5 h-5 text-sky-400 group-hover:scale-110 transition-transform" />
+            <span className="text-[11px] font-medium text-slate-300 group-hover:text-sky-300 mt-1">天命角色</span>
+          </button>
+
+          {/* 7. World Realm Map (Image 3) */}
+          <button
+            onClick={() => {
+              sound.playClick();
+              setIsMapModalOpen(true);
+            }}
+            className="celestial-dock-btn group px-2.5 py-1.5 hover:bg-slate-800/60 rounded-xl"
+          >
+            <Compass className="w-5 h-5 text-amber-300 group-hover:scale-110 transition-transform" />
+            <span className="text-[11px] font-medium text-slate-300 group-hover:text-amber-300 mt-1">诸天全图</span>
+          </button>
+
+          {/* 8. Full Heal */}
           <button
             onClick={() => {
               sound.playHeal();
@@ -902,72 +939,38 @@ export const SceneView: React.FC<SceneViewProps> = ({
       )}
 
 
-      {/* World Map Fast Travel Modal */}
+      {/* World Map Fast Travel Modal (Image 3) */}
       {isMapModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="relative w-full max-w-2xl celestial-glass rounded-2xl p-6 shadow-2xl border border-cyan-500/30">
-            <div className="flex items-center justify-between border-b border-cyan-500/20 pb-3 mb-4">
-              <div className="flex items-center gap-2">
-                <Compass className="w-5 h-5 text-cyan-400" />
-                <h3 className="font-bold text-cyan-100 text-base">
-                  诸天秘境 · 星轨罗盘
-                </h3>
-              </div>
-              <button
-                onClick={() => setIsMapModalOpen(false)}
-                className="w-7 h-7 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 flex items-center justify-center cursor-pointer border border-slate-700"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
+        <WorldMapView
+          currentSceneId={currentScene.id}
+          onSelectScene={(sceneId) => {
+            onTeleportToScene(sceneId as SceneId);
+            setIsMapModalOpen(false);
+          }}
+          onClose={() => setIsMapModalOpen(false)}
+          playerName={playerName}
+          gold={playerCoins}
+          onOpenBag={onOpenPetBag}
+          onOpenShop={onOpenShop}
+          onOpenCharacter={() => {
+            setIsMapModalOpen(false);
+            setIsCharacterModalOpen(true);
+          }}
+          onOpenFriends={onOpenFriends}
+        />
+      )}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mb-2 max-h-[60vh] overflow-y-auto p-1">
-              {Object.values(SCENES_DATA).map((scene) => {
-                const isCurrent = scene.id === currentScene.id;
-                return (
-                  <button
-                    key={scene.id}
-                    disabled={isCurrent}
-                    onClick={() => {
-                      sound.playClick();
-                      onTeleportToScene(scene.id);
-                      setIsMapModalOpen(false);
-                    }}
-                    className={`p-3.5 rounded-xl border text-left flex flex-col justify-between transition-all cursor-pointer ${
-                      isCurrent
-                        ? 'bg-cyan-950/60 border-cyan-400 shadow-md ring-1 ring-cyan-400/40'
-                        : 'bg-slate-900/60 hover:bg-slate-850 border-slate-800 hover:border-cyan-500/40'
-                    }`}
-                  >
-                    <div>
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="font-bold text-sm text-cyan-200">
-                          {scene.name}
-                        </span>
-                        {isCurrent && (
-                          <span className="text-[10px] bg-cyan-500 text-slate-950 px-2 py-0.5 rounded-full font-bold">
-                            当前位置
-                          </span>
-                        )}
-                      </div>
-                      <span className="text-[10px] text-slate-400 block font-light">
-                        [{scene.region}]
-                      </span>
-                      <p className="text-[11px] text-slate-300 mt-1 line-clamp-2 leading-relaxed">
-                        {scene.description}
-                      </p>
-                    </div>
-
-                    <div className="mt-3 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[10px] text-cyan-400/90 font-mono">
-                      <span>栖息幻灵: {scene.wildPets.length} 种</span>
-                      <ChevronRight className="w-3.5 h-3.5" />
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
+      {/* Character Detail & High-Definition Cultivator Portrait Modal (Image 2) */}
+      {isCharacterModalOpen && (
+        <CharacterDetailModal
+          playerName={playerName}
+          playerLevel={25}
+          playerTitle="诸天巡游 · 灵契神师"
+          coins={playerCoins}
+          spiritGems={480}
+          partyCount={playerParty.length}
+          onClose={() => setIsCharacterModalOpen(false)}
+        />
       )}
 
       {/* Full HD Eastern Fantasy Illustration Gallery Popup */}

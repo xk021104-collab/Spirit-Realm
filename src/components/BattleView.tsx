@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import { PetInstance, Move, Item, InventorySlot, SceneId } from '../types/game';
+import React, { useState, useEffect } from 'react';
+import { PetInstance, Move, Item, InventorySlot, SceneId, BattleWeather, WeatherState } from '../types/game';
 import { MOVES_DATA } from '../data/moves';
 import { PET_SPECIES } from '../data/species';
 import { ITEMS_DATA } from '../data/items';
+import { WEATHER_CONFIGS, getInitialWeatherForScene, calculateWeatherTurnEnd } from '../data/weather';
 import { calculateDamage, calculateCatchRate, calculateStats, calculateMaxExp } from '../utils/battleEngine';
 import { sound } from '../utils/audio';
 import { PetAvatar, ELEMENT_COLORS } from './PetAvatar';
+import { WeatherOverlay } from './WeatherOverlay';
 import {
   Swords,
   Backpack,
@@ -20,6 +22,11 @@ import {
   Flame,
   Droplets,
   Trees,
+  Sun,
+  CloudRain,
+  Wind,
+  SunDim,
+  Info,
 } from 'lucide-react';
 
 interface BattleViewProps {
@@ -95,8 +102,34 @@ export const BattleView: React.FC<BattleViewProps> = ({
   const activeSpecies = PET_SPECIES[activePet.speciesId];
   const enemySpecies = PET_SPECIES[enemy.speciesId];
 
+  // Weather System State
+  const [weatherState, setWeatherState] = useState<WeatherState>(() => {
+    return getInitialWeatherForScene(sceneId || 'ACADEMY');
+  });
+  const [showWeatherTooltip, setShowWeatherTooltip] = useState<boolean>(false);
+
   const logMessage = (msg: string) => {
     setBattleLog((prev) => [msg, ...prev.slice(0, 5)]);
+  };
+
+  // Announce initial weather on mount
+  useEffect(() => {
+    if (weatherState.weather !== 'CLEAR') {
+      const cfg = WEATHER_CONFIGS[weatherState.weather];
+      logMessage(`【天象显化】战场笼罩在【${cfg.name}】之中！（${cfg.subName}）`);
+    }
+  }, []);
+
+  // Weather switch manual handler
+  const handleSetWeather = (newWeather: BattleWeather) => {
+    sound.playClick();
+    const cfg = WEATHER_CONFIGS[newWeather];
+    setWeatherState({
+      weather: newWeather,
+      turnsLeft: newWeather === 'CLEAR' ? 0 : 5,
+    });
+    setShowWeatherTooltip(false);
+    logMessage(`【天象变幻】契灵使引动天象异变，战场转为【${cfg.name}】！`);
   };
 
   // Scene Arena Backgrounds
@@ -113,6 +146,87 @@ export const BattleView: React.FC<BattleViewProps> = ({
       default:
         return 'from-indigo-950 via-slate-900 to-blue-950';
     }
+  };
+
+  // Turn-end weather effects (Heal Grass in Sunny, Sandstorm chip damage, Rain chip on Fire, Decay turns)
+  const handleTurnEndWeather = async (
+    currentParty: PetInstance[],
+    currentEnemy: PetInstance
+  ): Promise<{ ended: boolean }> => {
+    let activeW = weatherState.weather;
+
+    // 1. Decrement Weather Duration
+    if (activeW !== 'CLEAR') {
+      const nextTurns = weatherState.turnsLeft - 1;
+      if (nextTurns <= 0) {
+        setWeatherState({ weather: 'CLEAR', turnsLeft: 0 });
+        logMessage('【天象更迭】异象平息，战场恢复风和日丽。');
+        activeW = 'CLEAR';
+      } else {
+        setWeatherState((prev) => ({ ...prev, turnsLeft: nextTurns }));
+      }
+    }
+
+    if (activeW === 'CLEAR') return { ended: false };
+
+    // 2. Player Active Pet Weather Passive
+    let currentP = currentParty[activePetIndex];
+    if (currentP && currentP.currentHp > 0) {
+      const pRes = calculateWeatherTurnEnd(currentP, activeW);
+      if (pRes.hpChange !== 0) {
+        await new Promise((r) => setTimeout(r, 260));
+        const newHp = Math.min(currentP.stats.hp, Math.max(0, currentP.currentHp + pRes.hpChange));
+        currentP = { ...currentP, currentHp: newHp };
+        const updatedParty = currentParty.map((p, idx) => (idx === activePetIndex ? currentP : p));
+        setParty(updatedParty);
+        if (pRes.message) logMessage(pRes.message);
+        if (pRes.hpChange > 0) sound.playHeal();
+        else sound.playAttackHit(false);
+
+        if (newHp <= 0) {
+          logMessage(`${currentP.nickname} 耗尽气血倒下了！`);
+          const hasAlive = updatedParty.some((p) => p.currentHp > 0);
+          if (!hasAlive) {
+            logMessage('所有随行幻灵均已脱力！本次战斗失败。');
+            setTimeout(() => {
+              onBattleEnd({
+                won: false,
+                updatedParty,
+                updatedInventory: inventory,
+                coinsEarned: 0,
+                expEarned: 0,
+              });
+            }, 1000);
+            return { ended: true };
+          } else {
+            setBattleMenu('SWITCH');
+            return { ended: true };
+          }
+        }
+      }
+    }
+
+    // 3. Enemy Pet Weather Passive
+    if (currentEnemy && currentEnemy.currentHp > 0) {
+      const eRes = calculateWeatherTurnEnd(currentEnemy, activeW);
+      if (eRes.hpChange !== 0) {
+        await new Promise((r) => setTimeout(r, 260));
+        const newHp = Math.min(currentEnemy.stats.hp, Math.max(0, currentEnemy.currentHp + eRes.hpChange));
+        const updatedE = { ...currentEnemy, currentHp: newHp };
+        setEnemy(updatedE);
+        if (eRes.message) logMessage(eRes.message);
+        if (eRes.hpChange > 0) sound.playHeal();
+        else sound.playAttackHit(false);
+
+        if (newHp <= 0) {
+          logMessage(`对方 ${enemySpecies.name} 耗尽气血倒下了！`);
+          handleBattleWin();
+          return { ended: true };
+        }
+      }
+    }
+
+    return { ended: false };
   };
 
   // Trigger attack
@@ -148,18 +262,27 @@ export const BattleView: React.FC<BattleViewProps> = ({
         return;
       }
       await new Promise((r) => setTimeout(r, 650));
-      await executeEnemyAttack(petWithPpDeducted);
+      const playerDied = await executeEnemyAttack(petWithPpDeducted);
+      if (playerDied) {
+        setIsProcessingTurn(false);
+        return;
+      }
     } else {
       const playerDied = await executeEnemyAttack(petWithPpDeducted);
-      if (!playerDied) {
-        await new Promise((r) => setTimeout(r, 650));
-        const enemyDied = await executePlayerAttack(petWithPpDeducted, move);
-        if (enemyDied) {
-          handleBattleWin();
-          return;
-        }
+      if (playerDied) {
+        setIsProcessingTurn(false);
+        return;
+      }
+      await new Promise((r) => setTimeout(r, 650));
+      const enemyDied = await executePlayerAttack(petWithPpDeducted, move);
+      if (enemyDied) {
+        handleBattleWin();
+        return;
       }
     }
+
+    // === Round End: Weather Passive Calculations ===
+    await handleTurnEndWeather(updatedPartyWithPp, enemy);
 
     setIsProcessingTurn(false);
   };
@@ -176,7 +299,12 @@ export const BattleView: React.FC<BattleViewProps> = ({
       return false;
     }
 
-    const { damage, multiplier, isCritical } = calculateDamage(attacker, enemy, move);
+    const { damage, multiplier, isCritical, weatherMsg } = calculateDamage(
+      attacker,
+      enemy,
+      move,
+      weatherState.weather
+    );
     sound.playAttackHit(isCritical);
     if (multiplier > 1.2) sound.playSuperEffective();
 
@@ -199,6 +327,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
     if (multiplier > 1.2) logMessage('⚡ 属性克制！造成双倍致命重创！');
     else if (multiplier < 0.8) logMessage('属性被克制，伤害受到削弱...');
     if (isCritical) logMessage('💥 会心一击！暴击命中要害！');
+    if (weatherMsg) logMessage(weatherMsg);
 
     await new Promise((r) => setTimeout(r, 300));
     setDamagePopup(null);
@@ -220,7 +349,12 @@ export const BattleView: React.FC<BattleViewProps> = ({
     await new Promise((r) => setTimeout(r, 220));
     setEnemyAttacking(false);
 
-    const { damage, multiplier, isCritical } = calculateDamage(enemy, currentActivePet, enemyMove);
+    const { damage, multiplier, isCritical, weatherMsg } = calculateDamage(
+      enemy,
+      currentActivePet,
+      enemyMove,
+      weatherState.weather
+    );
     sound.playAttackHit(isCritical);
     if (multiplier > 1.2) sound.playSuperEffective();
 
@@ -240,6 +374,10 @@ export const BattleView: React.FC<BattleViewProps> = ({
     const newPlayerHp = Math.max(0, currentActivePet.currentHp - damage);
     const updatedPartyHp = party.map((p, idx) => (idx === activePetIndex ? { ...p, currentHp: newPlayerHp } : p));
     setParty(updatedPartyHp);
+
+    if (multiplier > 1.2) logMessage('对方招式属性克制我方！造成剧烈创伤！');
+    if (isCritical) logMessage('对方打出了会心一击！');
+    if (weatherMsg) logMessage(weatherMsg);
 
     await new Promise((r) => setTimeout(r, 300));
     setDamagePopup(null);
@@ -506,29 +644,149 @@ export const BattleView: React.FC<BattleViewProps> = ({
 
   return (
     <div
-      className={`relative w-full max-w-5xl mx-auto flash-frame rounded-2xl overflow-hidden shadow-2xl bg-gradient-to-b ${getArenaGradients()} text-slate-100 flex flex-col min-h-[600px] ${
+      className={`relative w-full max-w-5xl mx-auto flash-viewport-wrapper rounded-2xl overflow-hidden shadow-2xl bg-gradient-to-b ${getArenaGradients()} text-slate-100 flex flex-col min-h-[600px] ${
         screenShaking ? 'animate-screen-shake' : ''
       }`}
     >
+      {/* Decorative Gilded Corner Brackets */}
+      <div className="corner-ornament-tl" />
+      <div className="corner-ornament-tr" />
+      <div className="corner-ornament-bl" />
+      <div className="corner-ornament-br" />
+
       {/* Top Arena Header Bar */}
-      <div className="flex items-center justify-between px-6 py-2.5 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border-b-2 border-amber-500/80 z-20 shadow-md">
-        <div className="flex items-center gap-3">
+      <div className="relative flex items-center justify-between px-4 sm:px-6 py-2.5 flash-top-console z-30 shadow-md">
+        <div className="flex items-center gap-2 sm:gap-3">
           <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-500/20 border border-amber-400/40 text-amber-300 font-bold text-xs game-title-font">
             <Swords className="w-3.5 h-3.5 text-amber-400" />
-            <span>{isWild ? '野外奇遇遭遇战' : '凌霄试炼天骄对决'}</span>
+            <span>{isWild ? '野外奇遇' : '天骄对决'}</span>
           </div>
-          <span className="text-xs text-slate-400">回合制灵术对决</span>
+          <span className="text-xs text-slate-400 hidden md:inline">回合制灵术对决</span>
         </div>
 
-        <div className="flex items-center gap-4 text-xs font-mono text-slate-300">
-          <span className="text-amber-300 font-bold">我方出战: {activePet.nickname} (Lv.{activePet.level})</span>
-          <span className="text-slate-600">|</span>
-          <span className="text-cyan-300">敌方: {enemySpecies.name} (Lv.{enemy.level})</span>
+        {/* Center: Current Battle Weather Badge & Interactive Dropdown */}
+        {(() => {
+          const cfg = WEATHER_CONFIGS[weatherState.weather];
+          return (
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setShowWeatherTooltip(!showWeatherTooltip)}
+                className={`flex items-center gap-2 px-3 py-1 rounded-xl border transition-all cursor-pointer shadow-lg active:scale-95 ${cfg.color.badgeBg} ${cfg.color.badgeBorder} ${cfg.color.glow}`}
+                title="天象系统：点击查看当前天气属性增益与法则，或切换天象测试"
+              >
+                {/* Weather Icon with Animation */}
+                <div className="flex items-center justify-center">
+                  {weatherState.weather === 'SUNNY' && (
+                    <Sun className="w-4 h-4 text-amber-400 animate-[spin_8s_linear_infinite]" />
+                  )}
+                  {weatherState.weather === 'RAIN' && (
+                    <CloudRain className="w-4 h-4 text-cyan-400 animate-bounce" />
+                  )}
+                  {weatherState.weather === 'SANDSTORM' && (
+                    <Wind className="w-4 h-4 text-yellow-400 animate-pulse" />
+                  )}
+                  {weatherState.weather === 'THUNDER' && (
+                    <Zap className="w-4 h-4 text-purple-400 animate-pulse fill-purple-400/40" />
+                  )}
+                  {weatherState.weather === 'CLEAR' && (
+                    <SunDim className="w-4 h-4 text-emerald-400" />
+                  )}
+                </div>
+
+                <div className="flex items-center gap-1.5 text-xs font-black game-title-font">
+                  <span className={cfg.color.textColor}>{cfg.name}</span>
+                  <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-black/70 text-slate-300 border border-white/20">
+                    {weatherState.weather === 'CLEAR' ? '常态' : `余${weatherState.turnsLeft}回合`}
+                  </span>
+                </div>
+
+                <Info className="w-3.5 h-3.5 text-slate-400 hover:text-white" />
+              </button>
+
+              {/* Weather Details Tooltip Modal Popover */}
+              {showWeatherTooltip && (
+                <div
+                  onClick={(e) => e.stopPropagation()}
+                  className="absolute top-11 left-1/2 -translate-x-1/2 z-50 w-80 bg-slate-950/95 border-2 border-amber-400 rounded-2xl p-4 shadow-2xl backdrop-blur-md text-xs animate-in fade-in zoom-in-95 duration-150"
+                >
+                  <div className="flex items-center justify-between border-b border-amber-500/30 pb-2 mb-2.5">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 text-amber-400" />
+                      <span className="font-black text-amber-300 text-sm game-title-font">
+                        天象法则 · {cfg.name}
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-slate-400 font-mono">
+                      [{cfg.subName}]
+                    </span>
+                  </div>
+
+                  <p className="text-slate-300 text-[11px] leading-relaxed mb-3">
+                    {cfg.description}
+                  </p>
+
+                  <div className="bg-slate-900/90 rounded-xl p-2.5 border border-slate-800 space-y-1.5 mb-3">
+                    <span className="text-[10px] font-bold text-amber-400 block mb-1">
+                      ⚡ 当前天气属性修正：
+                    </span>
+                    {cfg.buffs.map((buff, idx) => (
+                      <div key={idx} className="text-[11px] text-slate-200 flex items-start gap-1">
+                        <span>•</span>
+                        <span>{buff}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Manual Weather Summon Testing Panel */}
+                  <div className="pt-2 border-t border-slate-800">
+                    <span className="text-[10px] text-slate-400 block mb-1.5 font-bold">
+                      🔮 灵契使引动天象测试：
+                    </span>
+                    <div className="grid grid-cols-5 gap-1.5">
+                      {(['SUNNY', 'RAIN', 'SANDSTORM', 'THUNDER', 'CLEAR'] as BattleWeather[]).map((wKey) => {
+                        const isCurrent = weatherState.weather === wKey;
+                        const wInfo = WEATHER_CONFIGS[wKey];
+                        return (
+                          <button
+                            key={wKey}
+                            type="button"
+                            onClick={() => handleSetWeather(wKey)}
+                            className={`p-1.5 rounded-lg border text-center transition-all cursor-pointer ${
+                              isCurrent
+                                ? 'bg-amber-500 text-slate-950 border-amber-300 font-black'
+                                : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-700'
+                            }`}
+                            title={`切换为【${wInfo.name}】`}
+                          >
+                            <span className="text-[11px] block">{wInfo.name.slice(0, 2)}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })()}
+
+        <div className="flex items-center gap-3 text-xs font-mono text-slate-300">
+          <span className="text-amber-300 font-bold hidden sm:inline">
+            {activePet.nickname} (Lv.{activePet.level})
+          </span>
+          <span className="text-slate-600 hidden sm:inline">VS</span>
+          <span className="text-cyan-300 font-bold">
+            {enemySpecies.name} (Lv.{enemy.level})
+          </span>
         </div>
       </div>
 
       {/* Main Battle Stage Arena (Authentic Dual Elemental Platforms) */}
       <div className="relative flex-1 p-6 md:p-8 flex flex-col justify-between overflow-hidden">
+        {/* Dynamic Weather Particle & Light Rays Overlay */}
+        <WeatherOverlay weather={weatherState.weather} />
+
         {/* Subtle Arcane Arena Floor Rings */}
         <div className="absolute inset-0 flex items-center justify-center opacity-25 pointer-events-none">
           <div className="w-[520px] h-[520px] rounded-full border-4 border-amber-400 border-dashed animate-[spin_50s_linear_infinite]" />
@@ -631,8 +889,11 @@ export const BattleView: React.FC<BattleViewProps> = ({
                   isHit={enemyHit}
                   className="transition-transform duration-200"
                 />
-                {/* Arcane Platform Shadow */}
-                <div className="w-28 h-5 rounded-full border border-amber-400/40 bg-black/50 blur-xs mt-1" />
+                {/* Glowing Elemental Battle Dais (敌方对战法阵底盘) */}
+                <div className="relative w-36 h-9 -mt-2 flex items-center justify-center">
+                  <div className="absolute inset-0 rounded-full border-2 border-amber-400 bg-amber-500/25 shadow-[0_0_15px_rgba(245,158,11,0.6)] animate-pulse" />
+                  <div className="absolute w-24 h-5 rounded-full border border-yellow-300 opacity-60" />
+                </div>
               </>
             )}
           </div>
@@ -650,8 +911,11 @@ export const BattleView: React.FC<BattleViewProps> = ({
               isHit={playerHit}
               className="transition-transform duration-200"
             />
-            {/* Elemental Battle Ring Floor */}
-            <div className="w-32 h-6 rounded-full border-2 border-cyan-400/50 bg-black/50 blur-xs mt-1" />
+            {/* Glowing Elemental Battle Dais (我方对战召唤法阵底盘) */}
+            <div className="relative w-44 h-11 -mt-3 flex items-center justify-center">
+              <div className="absolute inset-0 rounded-full border-2 border-cyan-400 bg-cyan-500/25 shadow-[0_0_20px_rgba(6,182,212,0.7)] animate-pulse" />
+              <div className="absolute w-28 h-6 rounded-full border border-sky-300 opacity-70" />
+            </div>
           </div>
 
           {/* Player HUD Card (High-Gloss Beveled Flash Card) */}
@@ -828,8 +1092,26 @@ export const BattleView: React.FC<BattleViewProps> = ({
                       className={`text-left p-3 rounded-2xl border-2 transition-all active:scale-95 cursor-pointer disabled:opacity-40 bg-slate-900/90 hover:bg-slate-800 shadow-md ${elColor.border}`}
                     >
                       <div className="flex items-center justify-between mb-1">
-                        <span className="font-black text-sm text-white game-title-font">{moveData.name}</span>
-                        <span className={`text-[10px] px-1.5 py-0.2 rounded font-bold ${elColor.bg} ${elColor.text}`}>
+                        <div className="flex items-center gap-1.5 truncate">
+                          <span className="font-black text-sm text-white game-title-font truncate">{moveData.name}</span>
+                          {/* Weather Synergy Badge */}
+                          {(() => {
+                            if (weatherState.weather === 'SUNNY') {
+                              if (moveData.type === 'FIRE') return <span className="text-[9px] px-1 py-0.2 rounded bg-amber-500/30 text-amber-300 border border-amber-400 font-bold">☀️+50%</span>;
+                              if (moveData.type === 'WATER') return <span className="text-[9px] px-1 py-0.2 rounded bg-sky-950 text-sky-400 border border-sky-600/40 font-bold">☀️-30%</span>;
+                            } else if (weatherState.weather === 'RAIN') {
+                              if (moveData.type === 'WATER') return <span className="text-[9px] px-1 py-0.2 rounded bg-cyan-500/30 text-cyan-300 border border-cyan-400 font-bold">🌧️+50%</span>;
+                              if (moveData.type === 'FIRE') return <span className="text-[9px] px-1 py-0.2 rounded bg-rose-950 text-rose-400 border border-rose-600/40 font-bold">🌧️-30%</span>;
+                              if (moveData.type === 'ELECTRIC') return <span className="text-[9px] px-1 py-0.2 rounded bg-purple-500/30 text-purple-300 border border-purple-400 font-bold">⚡必暴</span>;
+                            } else if (weatherState.weather === 'SANDSTORM') {
+                              if (moveData.type === 'ROCK') return <span className="text-[9px] px-1 py-0.2 rounded bg-yellow-500/30 text-yellow-300 border border-yellow-400 font-bold">🌪️+30%</span>;
+                            } else if (weatherState.weather === 'THUNDER') {
+                              if (moveData.type === 'ELECTRIC') return <span className="text-[9px] px-1 py-0.2 rounded bg-purple-500/30 text-purple-300 border border-purple-400 font-bold">⚡+40%</span>;
+                            }
+                            return null;
+                          })()}
+                        </div>
+                        <span className={`text-[10px] px-1.5 py-0.2 rounded font-bold shrink-0 ${elColor.bg} ${elColor.text}`}>
                           {elColor.label}系
                         </span>
                       </div>

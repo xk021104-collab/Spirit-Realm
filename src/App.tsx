@@ -10,15 +10,14 @@ import { sound } from './utils/audio';
 import { SceneView } from './components/SceneView';
 import { BattleView } from './components/BattleView';
 import { PokedexModal } from './components/PokedexModal';
-import { QuestTracker } from './components/QuestTracker';
 import { PetBagModal } from './components/PetBagModal';
 import { ShopModal } from './components/ShopModal';
 import { PrologueIntroModal } from './components/PrologueIntroModal';
 import { DailyEventsModal } from './components/DailyEventsModal';
-import { DatabaseArchitectureModal } from './components/DatabaseArchitectureModal';
 import { PetTrainModal } from './components/PetTrainModal';
+import { QuestTracker } from './components/QuestTracker';
 
-import { Sparkles, Compass, BookOpen, Backpack, ShoppingBag, ScrollText, Volume2, VolumeX, Gift, Database, Zap } from 'lucide-react';
+import { Sparkles, Compass, BookOpen, Backpack, ShoppingBag, ScrollText, Volume2, VolumeX, Gift, Zap } from 'lucide-react';
 
 const STORAGE_KEY = 'huanling_mijing_save_v1';
 
@@ -63,8 +62,8 @@ export default function App() {
   const [isPetBagOpen, setIsPetBagOpen] = useState<boolean>(false);
   const [isShopOpen, setIsShopOpen] = useState<boolean>(false);
   const [isDailyEventsOpen, setIsDailyEventsOpen] = useState<boolean>(false);
-  const [isDatabaseModalOpen, setIsDatabaseModalOpen] = useState<boolean>(false);
   const [isPetTrainOpen, setIsPetTrainOpen] = useState<boolean>(false);
+  const [isQuestLogOpen, setIsQuestLogOpen] = useState<boolean>(false);
 
   // Audio Toggle
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
@@ -388,110 +387,57 @@ export default function App() {
   const currentScene = SCENES_DATA[currentSceneId] || SCENES_DATA.ACADEMY;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
-      {/* Universal Top Bar (Strict Top Bar Contract: 3 Zones separated by gap-8) */}
-      <header className="flex items-center justify-between gap-8 px-6 py-4 border-b border-slate-800 bg-slate-950/95 sticky top-0 z-40 backdrop-blur-md">
-        {/* Zone 1: Single text element wordmark */}
-        <button
-          onClick={() => {
-            sound.playClick();
-            setCurrentSceneId('ACADEMY');
-          }}
-          className="text-lg font-black tracking-tight text-amber-300 hover:text-amber-200 transition-colors whitespace-nowrap shrink-0 flex items-center gap-2 cursor-pointer"
-        >
-          <Sparkles className="w-5 h-5 text-amber-400" />
-          <span>幻灵秘境</span>
-        </button>
+    <div className="min-h-screen bg-[#020617] text-slate-100 flex flex-col items-center justify-between p-1 sm:p-3 select-none">
+      {/* 1. Classic Web Game Portal Top Bar (4399 / 淘米 / 腾讯页游风格官方顶栏) */}
+      <header className="w-full max-w-5xl bg-slate-900/90 border border-amber-500/40 rounded-t-xl px-4 py-2 flex flex-wrap items-center justify-between text-xs text-slate-300 shadow-md backdrop-blur-sm gap-2">
+        {/* Left: Game Title & Server Status */}
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center font-black text-slate-950 text-xs shadow-inner">
+              秘
+            </div>
+            <h1 className="font-black text-sm text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-500 game-title-font tracking-wide">
+              幻灵秘境
+            </h1>
+          </div>
+          <span className="hidden sm:inline-block text-slate-600">|</span>
+          <div className="flex items-center gap-1.5 text-[11px] font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded-full">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>电信一区 · 仙灵秘境 (12ms)</span>
+          </div>
+          <div className="hidden md:flex items-center gap-1 text-[11px] text-amber-300/80 font-mono">
+            <span>🔥 158,240 灵契使在线</span>
+          </div>
+        </div>
 
-        {/* Zone 2: 4-5 concise single-line text navigation links */}
-        <nav className="hidden md:flex items-center gap-5 text-sm font-medium text-slate-300">
+        {/* Right: Quick Portal Navigation & Sound / Fullscreen */}
+        <div className="flex items-center gap-2 sm:gap-3">
           <button
-            onClick={() => {
-              sound.playClick();
-              setActiveBattle({ inBattle: false, enemyPet: null, isWild: true });
-            }}
-            className="hover:text-white transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            onClick={() => setIsPrologueOpen(true)}
+            className="text-[11px] text-amber-300/90 hover:text-amber-200 underline cursor-pointer"
+            title="查看游戏序章与天地浩劫背景故事"
           >
-            探索圣境
+            【天命剧情】
           </button>
           <button
-            onClick={() => {
-              sound.playClick();
-              setIsPokedexOpen(true);
-            }}
-            className="hover:text-amber-300 transition-colors whitespace-nowrap shrink-0 cursor-pointer flex items-center gap-1.5"
+            onClick={() => setIsQuestLogOpen(true)}
+            className="text-[11px] text-slate-300 hover:text-amber-300 cursor-pointer"
+            title="查看主线任务进度"
           >
-            <BookOpen className="w-4 h-4 text-amber-400" />
-            <span>幻灵图鉴 ({unlockedSpeciesIds.length})</span>
+            历练指南
           </button>
           <button
-            onClick={() => {
-              sound.playClick();
-              setIsPetBagOpen(true);
-            }}
-            className="hover:text-cyan-300 transition-colors whitespace-nowrap shrink-0 cursor-pointer flex items-center gap-1.5"
+            onClick={handleToggleSound}
+            className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer border border-slate-700"
+            title={soundEnabled ? '音效开启' : '音效静音'}
           >
-            <Backpack className="w-4 h-4 text-cyan-400" />
-            <span>随行战队 ({party.length}/6)</span>
+            {soundEnabled ? <Volume2 className="w-3.5 h-3.5 text-amber-400" /> : <VolumeX className="w-3.5 h-3.5" />}
           </button>
-          <button
-            onClick={() => {
-              sound.playClick();
-              setIsPetTrainOpen(true);
-            }}
-            className="hover:text-purple-300 transition-colors whitespace-nowrap shrink-0 cursor-pointer flex items-center gap-1.5"
-          >
-            <Zap className="w-4 h-4 text-purple-400" />
-            <span>幻灵修炼</span>
-          </button>
-          <button
-            onClick={() => {
-              sound.playClick();
-              setIsDailyEventsOpen(true);
-            }}
-            className="hover:text-rose-300 transition-colors whitespace-nowrap shrink-0 cursor-pointer flex items-center gap-1.5"
-          >
-            <Gift className="w-4 h-4 text-rose-400" />
-            <span>狂欢盛典</span>
-          </button>
-          <button
-            onClick={() => {
-              sound.playClick();
-              setIsShopOpen(true);
-            }}
-            className="hover:text-emerald-300 transition-colors whitespace-nowrap shrink-0 cursor-pointer flex items-center gap-1.5"
-          >
-            <ShoppingBag className="w-4 h-4 text-emerald-400" />
-            <span>万象宝阁</span>
-          </button>
-        </nav>
-
-        {/* Zone 3: 1 primary action */}
-        <div className="flex items-center gap-3 shrink-0">
-          <button
-            onClick={() => {
-              sound.playClick();
-              setIsDatabaseModalOpen(true);
-            }}
-            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-850 text-indigo-300 hover:text-indigo-200 border border-indigo-500/40 text-xs font-bold cursor-pointer transition-colors shadow-sm"
-          >
-            <Database className="w-3.5 h-3.5 text-indigo-400" />
-            <span>数据库/SQL</span>
-          </button>
-
-          <QuestTracker
-            quests={quests}
-            onClaimReward={handleClaimQuestReward}
-            onNavigateToLocation={(sceneId) => {
-              setCurrentSceneId(sceneId);
-              setActiveBattle({ inBattle: false, enemyPet: null, isWild: true });
-            }}
-          />
         </div>
       </header>
 
-      {/* Main Game Stage Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 flex flex-col items-center justify-center">
+      {/* 2. Main Game Flash Viewport Stage (100% Focused on the Web Game) */}
+      <main className="w-full max-w-5xl flex flex-col items-center justify-center my-0 shadow-2xl">
         {activeBattle.inBattle && activeBattle.enemyPet ? (
           <BattleView
             playerParty={party}
@@ -517,14 +463,39 @@ export default function App() {
             onOpenPokedex={() => setIsPokedexOpen(true)}
             onOpenShop={() => setIsShopOpen(true)}
             onOpenDailyEvents={() => setIsDailyEventsOpen(true)}
-            onOpenDatabaseModal={() => setIsDatabaseModalOpen(true)}
             onOpenPetTrain={() => setIsPetTrainOpen(true)}
+            onOpenQuestLog={() => setIsQuestLogOpen(true)}
             onHealParty={handleHealParty}
             soundEnabled={soundEnabled}
             onToggleSound={handleToggleSound}
           />
         )}
       </main>
+
+      {/* 3. Classic Flash Portal Bottom Anti-Addiction Compliance Footer */}
+      <footer className="w-full max-w-5xl bg-slate-900/80 border border-slate-800 rounded-b-xl px-4 py-1.5 flex flex-wrap items-center justify-between text-[11px] text-slate-400 mt-1">
+        <div className="flex items-center gap-2">
+          <span className="font-bold text-amber-400">🛡️ 适龄提示：8+</span>
+          <span>抵制不良游戏，拒绝盗版游戏。注意自我保护，谨防受骗上当。适度游戏益脑，沉迷游戏伤身。</span>
+        </div>
+        <div className="hidden sm:flex items-center gap-3 text-slate-400 font-mono text-[10px]">
+          <span>⚡ WebGL/Flash 双模渲染</span>
+          <span>© 2026 《幻灵秘境》运营团队</span>
+        </div>
+      </footer>
+
+      {/* Main Quest Tracker Journal Modal */}
+      {isQuestLogOpen && (
+        <QuestTracker
+          quests={quests}
+          onClaimReward={handleClaimQuestReward}
+          onNavigateToLocation={(sceneId) => {
+            setCurrentSceneId(sceneId);
+            setActiveBattle({ inBattle: false, enemyPet: null, isWild: true });
+            setIsQuestLogOpen(false);
+          }}
+        />
+      )}
 
       {/* Prologue Opening Story & Starter Selection Modal */}
       {isPrologueOpen && (
@@ -569,13 +540,6 @@ export default function App() {
           onAddItem={handleAddItem}
           onStartBossBattle={handleStartBossBattle}
           onClose={() => setIsDailyEventsOpen(false)}
-        />
-      )}
-
-      {/* Database & Architecture (PostgreSQL + Redis + RabbitMQ) Modal */}
-      {isDatabaseModalOpen && (
-        <DatabaseArchitectureModal
-          onClose={() => setIsDatabaseModalOpen(false)}
         />
       )}
 

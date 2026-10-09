@@ -1,4 +1,4 @@
-import { ElementType, Move, PetInstance, PetSpecies } from '../types/game';
+import { ElementType, Move, PetInstance, PetSpecies, BattleWeather } from '../types/game';
 import { MOVES_DATA } from '../data/moves';
 import { PET_SPECIES } from '../data/species';
 
@@ -113,10 +113,17 @@ export function createPetInstance(speciesId: string, level: number, customNickna
 export function calculateDamage(
   attacker: PetInstance,
   defender: PetInstance,
-  move: Move
-): { damage: number; multiplier: number; isCritical: boolean } {
+  move: Move,
+  weather: BattleWeather = 'CLEAR'
+): {
+  damage: number;
+  multiplier: number;
+  isCritical: boolean;
+  weatherMultiplier: number;
+  weatherMsg?: string;
+} {
   if (move.category === 'STATUS') {
-    return { damage: 0, multiplier: 1, isCritical: false };
+    return { damage: 0, multiplier: 1, isCritical: false, weatherMultiplier: 1.0 };
   }
 
   const attackerSpecies = PET_SPECIES[attacker.speciesId];
@@ -128,8 +135,51 @@ export function calculateDamage(
 
   const multiplier = getTypeMultiplier(move.type, defenderSpecies.type);
 
-  // Critical hit 10% chance
-  const isCritical = Math.random() < 0.1;
+  // Weather damage & effect modifier
+  let weatherMultiplier = 1.0;
+  let weatherMsg: string | undefined;
+
+  if (weather === 'SUNNY') {
+    if (move.type === 'FIRE') {
+      weatherMultiplier = 1.5;
+      weatherMsg = '【烈阳普照】火系威能大增 50%！';
+    } else if (move.type === 'WATER') {
+      weatherMultiplier = 0.7;
+      weatherMsg = '【烈阳普照】水汽蒸腾，水系削弱 30%！';
+    }
+  } else if (weather === 'RAIN') {
+    if (move.type === 'WATER') {
+      weatherMultiplier = 1.5;
+      weatherMsg = '【倾盆暴雨】汪洋借暴雨狂澜，水系威力暴涨 50%！';
+    } else if (move.type === 'FIRE') {
+      weatherMultiplier = 0.7;
+      weatherMsg = '【倾盆暴雨】大雨浇灭焰芒，火系削弱 30%！';
+    }
+  } else if (weather === 'SANDSTORM') {
+    if (move.type === 'ROCK') {
+      weatherMultiplier = 1.3;
+      weatherMsg = '【遮天沙暴】沙石如刃，岩土威力提升 30%！';
+    }
+    if (defenderSpecies.type === 'ROCK') {
+      weatherMultiplier *= 0.8;
+      weatherMsg = (weatherMsg ? weatherMsg + ' ' : '') + '【遮天沙暴】岩甲护体减免 20% 伤害！';
+    }
+  } else if (weather === 'THUNDER') {
+    if (move.type === 'ELECTRIC') {
+      weatherMultiplier = 1.4;
+      weatherMsg = '【九天雷暴】引动天劫神雷，雷系威力提升 40%！';
+    }
+  }
+
+  // Critical hit calculation: Base 10%, in Thunderstorm +25%, in Rain electric moves 100%
+  let critChance = 0.1;
+  if (weather === 'THUNDER') critChance += 0.25;
+
+  let isCritical = Math.random() < critChance;
+  if (weather === 'RAIN' && move.type === 'ELECTRIC') {
+    isCritical = true; // Rain conduct electricity! Guaranteed crit!
+    weatherMsg = (weatherMsg ? weatherMsg + ' ' : '') + '【倾盆暴雨】暴雨导电！雷电必中要害！';
+  }
   const critMultiplier = isCritical ? 1.5 : 1.0;
 
   // Classic Pokemon / Roco damage calculation formula
@@ -144,13 +194,15 @@ export function calculateDamage(
 
   const totalDamage = Math.max(
     1,
-    Math.floor(baseDamage * multiplier * critMultiplier * randomFactor * stab)
+    Math.floor(baseDamage * multiplier * weatherMultiplier * critMultiplier * randomFactor * stab)
   );
 
   return {
     damage: totalDamage,
     multiplier,
     isCritical,
+    weatherMultiplier,
+    weatherMsg,
   };
 }
 

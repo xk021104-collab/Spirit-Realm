@@ -1,5 +1,12 @@
 export type ElementType = 'FIRE' | 'WATER' | 'GRASS' | 'ELECTRIC' | 'NORMAL' | 'ICE' | 'ROCK';
 
+export type BattleWeather = 'CLEAR' | 'SUNNY' | 'RAIN' | 'SANDSTORM' | 'THUNDER';
+
+export interface WeatherState {
+  weather: BattleWeather;
+  turnsLeft: number;
+}
+
 export type PetRarity = 'COMMON' | 'RARE' | 'EPIC' | 'LEGENDARY';
 
 export interface Move {

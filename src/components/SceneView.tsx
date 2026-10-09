@@ -4,6 +4,7 @@ import { SCENES_DATA } from '../data/scenes';
 import { PET_SPECIES } from '../data/species';
 import { PetAvatar } from './PetAvatar';
 import { PlayerAvatar, NpcAvatar } from './PlayerAvatar';
+import { SceneBackground } from './SceneBackground';
 import { createPetInstance } from '../utils/battleEngine';
 import { sound } from '../utils/audio';
 import {
@@ -25,7 +26,6 @@ import {
   Zap,
   MessageSquare,
   Radio,
-  Database,
   Flame,
   Droplets,
   Trees,
@@ -51,7 +51,6 @@ interface SceneViewProps {
   onOpenShop: () => void;
   onOpenQuestLog?: () => void;
   onOpenDailyEvents?: () => void;
-  onOpenDatabaseModal?: () => void;
   onOpenPetTrain?: () => void;
   onHealParty: () => void;
   soundEnabled: boolean;
@@ -74,7 +73,6 @@ export const SceneView: React.FC<SceneViewProps> = ({
   onOpenShop,
   onOpenQuestLog,
   onOpenDailyEvents,
-  onOpenDatabaseModal,
   onOpenPetTrain,
   onHealParty,
   soundEnabled,
@@ -225,103 +223,6 @@ export const SceneView: React.FC<SceneViewProps> = ({
     setChatInput('');
   };
 
-  // Render layered scene backdrop decorative elements
-  const renderSceneDecorations = () => {
-    switch (currentScene.id) {
-      case 'ACADEMY':
-        return (
-          <>
-            {/* Grand Arcane Summoning Ring */}
-            <div className="absolute inset-0 flex items-center justify-center opacity-30 pointer-events-none">
-              <div className="w-[480px] h-[480px] rounded-full border-4 border-amber-400 border-dashed animate-[spin_40s_linear_infinite]" />
-              <div className="absolute w-[360px] h-[360px] rounded-full border-2 border-indigo-400 opacity-60" />
-            </div>
-            {/* Floating Arcane Crystals */}
-            <div className="absolute left-8 top-16 w-8 h-8 bg-amber-400/40 rounded-full blur-md animate-bounce" />
-            <div className="absolute right-8 top-20 w-10 h-10 bg-cyan-400/40 rounded-full blur-md animate-pulse" />
-          </>
-        );
-
-      case 'PRAIRIE':
-        return (
-          <>
-            {/* Lush grass tufts and winding path */}
-            <div className="absolute inset-x-0 bottom-8 h-40 bg-gradient-to-t from-emerald-950/70 to-transparent pointer-events-none" />
-            <div className="absolute top-20 left-20 w-36 h-16 bg-emerald-500/20 rounded-full blur-xl pointer-events-none" />
-            {/* Ancient Meadow Sun Stone */}
-            <div className="absolute top-16 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none opacity-85">
-              <div className="w-16 h-28 bg-slate-800 border-2 border-emerald-500/60 rounded-t-full shadow-lg flex items-center justify-center">
-                <span className="text-emerald-400 text-xs font-black">木灵图腾</span>
-              </div>
-            </div>
-          </>
-        );
-
-      case 'VOLCANO':
-        return (
-          <>
-            {/* Molten Lava Fissure */}
-            <div className="absolute bottom-16 inset-x-8 h-20 bg-gradient-to-r from-transparent via-rose-600/35 to-transparent rounded-full blur-md pointer-events-none animate-pulse" />
-            <div className="absolute top-12 left-12 w-32 h-32 rounded-full bg-amber-500/25 blur-2xl pointer-events-none" />
-            {/* Magma Crag Formations */}
-            <div className="absolute left-8 top-24 w-16 h-40 bg-gradient-to-t from-stone-900 to-rose-950 border-t-2 border-rose-500 rounded-t-2xl opacity-85 pointer-events-none" />
-            <div className="absolute right-10 top-20 w-20 h-48 bg-gradient-to-t from-stone-900 to-rose-950 border-t-2 border-rose-500 rounded-t-2xl opacity-85 pointer-events-none" />
-          </>
-        );
-
-      case 'BAY':
-        return (
-          <>
-            {/* Shore Water Waves */}
-            <div className="absolute inset-x-0 top-16 h-36 bg-gradient-to-b from-cyan-900/40 via-sky-950/20 to-transparent pointer-events-none" />
-            <div className="absolute bottom-8 right-16 w-40 h-28 bg-cyan-500/15 rounded-full blur-xl pointer-events-none" />
-            {/* Lighthouse Reef */}
-            <div className="absolute right-14 top-16 w-14 h-48 bg-slate-900 border-2 border-cyan-400/60 rounded-t-xl opacity-80 flex flex-col items-center pointer-events-none">
-              <div className="w-5 h-5 rounded-full bg-cyan-300 animate-ping mt-2" />
-            </div>
-          </>
-        );
-
-      case 'HOSPITAL':
-        return (
-          <>
-            {/* Healing Sacred Pool */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-40">
-              <div className="w-80 h-44 rounded-[100px] border-4 border-pink-400 bg-pink-500/15 shadow-inner flex items-center justify-center">
-                <Heart className="w-16 h-16 text-pink-300 animate-pulse" />
-              </div>
-            </div>
-          </>
-        );
-
-      case 'SHOP':
-        return (
-          <>
-            {/* Treasure Pavilion Dragon Lanterns */}
-            <div className="absolute inset-x-24 top-20 bottom-12 bg-amber-950/25 border-x-2 border-amber-500/35 pointer-events-none" />
-            <div className="absolute left-20 top-14 w-8 h-12 bg-amber-500/80 rounded-md shadow-lg pointer-events-none flex items-center justify-center text-[10px] text-slate-950 font-black">
-              宝
-            </div>
-            <div className="absolute right-20 top-14 w-8 h-12 bg-amber-500/80 rounded-md shadow-lg pointer-events-none flex items-center justify-center text-[10px] text-slate-950 font-black">
-              阁
-            </div>
-          </>
-        );
-
-      case 'ARENA':
-      default:
-        return (
-          <>
-            {/* Floating Thunder Rings */}
-            <div className="absolute inset-0 flex items-center justify-center opacity-35 pointer-events-none">
-              <div className="w-[520px] h-[520px] rounded-full border-4 border-purple-400 border-dashed animate-[spin_30s_linear_infinite]" />
-              <div className="absolute w-[400px] h-[400px] rounded-full border-2 border-amber-400" />
-            </div>
-          </>
-        );
-    }
-  };
-
   return (
     <div className="relative w-full max-w-5xl mx-auto flex flex-col items-center select-none">
       {/* 1. Classic Flash Game Console Outer Frame */}
@@ -336,31 +237,32 @@ export const SceneView: React.FC<SceneViewProps> = ({
         <div className="h-14 flash-top-console px-4 flex items-center justify-between z-30">
           {/* Left: Player Avatar Badge & Vitality */}
           <div className="flex items-center gap-3">
-            <div className="relative">
-              <div className="w-11 h-11 rounded-full border-2 border-amber-400 bg-gradient-to-b from-indigo-900 to-slate-950 p-0.5 shadow-md flex items-center justify-center overflow-hidden">
+            <div className="relative group cursor-pointer">
+              <div className="w-11 h-11 rounded-full border-2 border-amber-400 bg-gradient-to-b from-indigo-900 to-slate-950 p-0.5 shadow-md flex items-center justify-center overflow-hidden ring-2 ring-amber-500/30">
                 <PlayerAvatar size={38} />
               </div>
-              <div className="absolute -bottom-1 -right-1 bg-amber-500 text-slate-950 text-[9px] font-black px-1 rounded-full border border-amber-300">
-                Lv.15
+              <div className="absolute -top-1.5 -left-1.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 text-[9px] font-black px-1.5 rounded-sm shadow-md border border-yellow-200">
+                VIP 8
+              </div>
+              <div className="absolute -bottom-1 -right-1 bg-amber-500 text-slate-950 text-[9px] font-black px-1.5 rounded-full border border-amber-300">
+                Lv.25
               </div>
             </div>
 
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <span className="font-black text-sm text-amber-300 tracking-wide game-title-font">
                   {playerName}
                 </span>
-                <span className="text-[10px] bg-slate-800 text-amber-400 px-1.5 py-0.2 rounded border border-amber-400/40 font-bold">
-                  【三阶灵契使】
+                <span className="text-[10px] bg-amber-950 text-amber-300 px-1.5 py-0.2 rounded border border-amber-400/50 font-bold shadow-xs">
+                  【天命灵契使】
                 </span>
               </div>
               {/* Vitality / Energy Meter */}
-              <div className="flex items-center gap-1.5 mt-0.5 text-[10px] text-slate-400 font-mono">
-                <span>体魄</span>
-                <div className="w-20 bg-slate-800 rounded-full h-1.5 overflow-hidden border border-slate-700">
-                  <div className="w-full h-full bg-emerald-400 rounded-full" />
-                </div>
-                <span className="text-emerald-400 font-bold">100/100</span>
+              <div className="flex items-center gap-2 mt-0.5 text-[10px] text-slate-300 font-mono">
+                <span className="text-amber-400 font-bold">⚡ 灵力 28,600</span>
+                <span className="text-slate-600">|</span>
+                <span>精力 100/100</span>
               </div>
             </div>
           </div>
@@ -396,20 +298,12 @@ export const SceneView: React.FC<SceneViewProps> = ({
               <span className="text-[10px] text-slate-400 font-normal">灵石</span>
             </div>
 
-            {/* Quick Database / Schema Inspector Button */}
-            {onOpenDatabaseModal && (
-              <button
-                onClick={() => {
-                  sound.playClick();
-                  onOpenDatabaseModal();
-                }}
-                className="px-2.5 py-1 rounded-lg bg-indigo-950 hover:bg-indigo-900 text-indigo-300 border border-indigo-500/50 text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shadow"
-                title="查看 PostgreSQL + Redis + RabbitMQ 架构与 SQL 脚本"
-              >
-                <Database className="w-3.5 h-3.5 text-indigo-400" />
-                <span className="hidden sm:inline">数据库架构</span>
-              </button>
-            )}
+            {/* Spirit Diamonds */}
+            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-xl bg-black/60 border border-cyan-400/50 text-xs font-mono font-bold text-cyan-300 shadow-inner">
+              <Sparkles className="w-3.5 h-3.5 text-cyan-400 fill-cyan-400" />
+              <span>50</span>
+              <span className="text-[10px] text-slate-400 font-normal">灵晶</span>
+            </div>
 
             {/* Audio Toggle */}
             <button
@@ -426,14 +320,11 @@ export const SceneView: React.FC<SceneViewProps> = ({
         <div
           onClick={handleMapClick}
           className="relative w-full h-[530px] bg-slate-950 select-none overflow-hidden cursor-crosshair"
-          style={{
-            backgroundImage: `radial-gradient(ellipse at 50% 50%, rgba(30, 41, 59, 0.4) 0%, rgba(2, 6, 23, 0.98) 100%)`,
-          }}
         >
-          {/* Layered Decorative Elements */}
-          {renderSceneDecorations()}
+          {/* Rich 2D Vector Scenery for each Zone */}
+          <SceneBackground sceneId={currentScene.id} />
 
-          {/* Floating Web Game Event Activity Badges (Top-Left & Top-Right) */}
+          {/* Floating Web Game Event Activity Badges (Top-Left) */}
           <div className="absolute top-4 left-4 z-20 flex flex-col gap-2">
             {onOpenDailyEvents && (
               <button
@@ -470,26 +361,26 @@ export const SceneView: React.FC<SceneViewProps> = ({
             </button>
           </div>
 
-          {/* Top-Right Quick Guide & Database Portal */}
-          <div className="absolute top-4 right-4 z-20 flex flex-col gap-2 items-end">
-            {onOpenDatabaseModal && (
+          {/* Top-Right Quick Quest & Fast Guide */}
+          {onOpenQuestLog && (
+            <div className="absolute top-4 right-4 z-20 flex flex-col gap-2 items-end">
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   sound.playClick();
-                  onOpenDatabaseModal();
+                  onOpenQuestLog();
                 }}
                 className="flash-event-badge group"
               >
-                <div className="w-11 h-11 rounded-2xl bg-gradient-to-b from-indigo-500 to-indigo-700 border-2 border-indigo-200 flex items-center justify-center shadow-lg group-hover:shadow-[0_0_15px_rgba(99,102,241,0.8)]">
-                  <Database className="w-5 h-5 text-white" />
+                <div className="w-11 h-11 rounded-2xl bg-gradient-to-b from-amber-400 to-orange-600 border-2 border-white flex items-center justify-center shadow-lg group-hover:shadow-[0_0_15px_rgba(251,146,60,0.8)]">
+                  <Award className="w-5 h-5 text-white" />
                 </div>
-                <span className="text-[10px] font-black text-indigo-300 bg-black/80 px-1.5 py-0.2 rounded border border-indigo-400/50 mt-1 game-title-font">
-                  SQL/配置
+                <span className="text-[10px] font-black text-orange-300 bg-black/80 px-1.5 py-0.2 rounded border border-amber-400/50 mt-1 game-title-font">
+                  历练卷轴
                 </span>
               </button>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Click-to-Move Ripple Effect (Classic Flash Golden Ring Target) */}
           {clickTarget && (
@@ -564,7 +455,7 @@ export const SceneView: React.FC<SceneViewProps> = ({
             );
           })}
 
-          {/* Scene NPCs with Floating Dialogue Badges */}
+          {/* Scene NPCs with Floating Dialogue Badges, Role Titles & Golden Arcane Ring */}
           {currentScene.npcs.map((npc) => (
             <div
               key={npc.id}
@@ -575,22 +466,50 @@ export const SceneView: React.FC<SceneViewProps> = ({
               style={{ left: `${npc.x}%`, top: `${npc.y}%` }}
               className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group flex flex-col items-center z-20"
             >
-              {/* NPC Quest / Dialogue Marker Bubble */}
-              <div className="bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 text-[10px] font-black px-2.5 py-0.5 rounded-full shadow-lg border border-amber-200 mb-1 flex items-center gap-1 group-hover:scale-110 transition-transform">
+              {/* NPC Animated Exclamation Quest Beacon */}
+              <div className="relative mb-0.5 animate-bounce">
+                <div className="w-5 h-5 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center font-black text-xs shadow-md border-2 border-yellow-200">
+                  !
+                </div>
+              </div>
+
+              {/* NPC Quest / Dialogue Marker Bubble & Role Title */}
+              <div className="bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 text-slate-950 text-[10px] font-black px-2.5 py-0.5 rounded-full shadow-lg border border-amber-200 mb-1 flex items-center gap-1 group-hover:scale-110 transition-transform">
                 <Sparkles className="w-3 h-3 text-slate-950" />
                 <span>{npc.name}</span>
+                <span className="text-[9px] font-normal text-slate-900 border-l border-slate-900/30 pl-1">
+                  {npc.role}
+                </span>
               </div>
-              <NpcAvatar type={npc.avatarSvg} size={68} />
-              <div className="w-14 h-3 bg-black/50 rounded-full blur-xs mt-0.5" />
+
+              <div className="relative">
+                <NpcAvatar type={npc.avatarSvg} size={72} />
+                {/* Golden Arcane Base Circle */}
+                <div className="w-16 h-4 border border-amber-400/60 bg-amber-500/20 rounded-full blur-2xs mx-auto -mt-2 animate-pulse" />
+              </div>
             </div>
           ))}
 
-          {/* Roaming Wild Spirits with Level Plate and Battle Swords */}
+          {/* Roaming Wild Spirits with Elemental Aura, Level Plate and Battle Swords */}
           {currentScene.wildPets.map((wp, index) => {
             const sp = PET_SPECIES[wp.speciesId];
             if (!sp) return null;
             const xPos = 20 + ((index * 36 + 24) % 65);
             const yPos = 38 + ((index * 26 + 18) % 36);
+
+            // Elemental aura colors
+            const auraColor =
+              sp.type === 'FIRE'
+                ? 'border-orange-500/80 bg-orange-500/25 shadow-orange-500/50'
+                : sp.type === 'WATER'
+                ? 'border-cyan-400/80 bg-cyan-500/25 shadow-cyan-400/50'
+                : sp.type === 'GRASS'
+                ? 'border-emerald-400/80 bg-emerald-500/25 shadow-emerald-400/50'
+                : sp.type === 'ELECTRIC'
+                ? 'border-yellow-400/80 bg-yellow-500/25 shadow-yellow-400/50'
+                : sp.type === 'ICE'
+                ? 'border-sky-300/80 bg-sky-400/25 shadow-sky-300/50'
+                : 'border-slate-400/80 bg-slate-500/25 shadow-slate-400/50';
 
             return (
               <div
@@ -602,17 +521,21 @@ export const SceneView: React.FC<SceneViewProps> = ({
                 style={{ left: `${xPos}%`, top: `${yPos}%` }}
                 className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group flex flex-col items-center z-20 animate-bounce"
               >
-                {/* Level Tag & Swords Trigger Badge */}
-                <div className="flex items-center gap-1 bg-slate-950/90 px-2 py-0.5 rounded-full border border-amber-400 text-[10px] text-amber-300 font-bold mb-1 shadow-lg group-hover:scale-110 group-hover:border-amber-200 transition-transform">
+                {/* Level Tag & Swords Trigger Badge with Rarity Star */}
+                <div className="flex items-center gap-1 bg-slate-950/95 px-2.5 py-0.5 rounded-full border border-amber-400 text-[10px] text-amber-300 font-bold mb-1 shadow-lg group-hover:scale-110 group-hover:border-amber-200 transition-transform">
                   <Swords className="w-3 h-3 text-rose-400" />
                   <span>
                     {sp.name} Lv.{wp.minLevel}
                   </span>
+                  <span className="text-[9px] text-amber-400 font-black">
+                    {sp.rarity === 'LEGENDARY' ? '★传世' : sp.rarity === 'EPIC' ? '★史诗' : '★灵兽'}
+                  </span>
                 </div>
 
                 <div className="relative">
-                  <PetAvatar speciesId={wp.speciesId} size={58} />
-                  <div className="w-14 h-3 bg-black/50 rounded-full blur-xs mx-auto -mt-1" />
+                  <PetAvatar speciesId={wp.speciesId} size={62} />
+                  {/* Dynamic Pulsing Elemental Floor Aura */}
+                  <div className={`w-16 h-4 rounded-full border shadow-md blur-2xs mx-auto -mt-2 animate-pulse ${auraColor}`} />
                 </div>
               </div>
             );
@@ -626,8 +549,8 @@ export const SceneView: React.FC<SceneViewProps> = ({
               className="absolute transform -translate-x-1/2 -translate-y-1/2 flex items-end gap-1.5 opacity-85 pointer-events-none z-15"
             >
               <div className="flex flex-col items-center">
-                <span className="text-[9px] font-bold text-cyan-300 bg-slate-950/80 px-1.5 py-0.2 rounded border border-cyan-400/30 whitespace-nowrap mb-0.5">
-                  {op.name}
+                <span className="text-[9px] font-bold text-cyan-300 bg-slate-950/90 px-1.5 py-0.2 rounded border border-cyan-400/40 whitespace-nowrap mb-0.5">
+                  [天枢] {op.name}
                 </span>
                 <PlayerAvatar size={50} direction={op.dir} />
               </div>
@@ -646,27 +569,34 @@ export const SceneView: React.FC<SceneViewProps> = ({
             }}
             className="absolute transform -translate-x-1/2 -translate-y-1/2 z-25 flex items-end gap-2 pointer-events-none"
           >
-            {/* Following Pet Companion (跟随幻灵) */}
+            {/* Following Pet Companion (跟随幻灵) with Heart Bubble and Elemental Aura */}
             {leaderPet && (
               <div
                 className={`flex flex-col items-center transition-all ${
                   playerDirection === 'left' ? 'order-last' : 'order-first'
                 } animate-bounce`}
               >
-                <div className="flex items-center gap-1 bg-slate-950/90 text-amber-300 text-[9px] font-bold px-1.5 py-0.2 rounded-full border border-amber-400/50 mb-0.5 shadow">
-                  <Heart className="w-2.5 h-2.5 text-rose-400 fill-rose-400" />
+                <div className="flex items-center gap-1 bg-slate-950/95 text-amber-300 text-[9px] font-bold px-2 py-0.5 rounded-full border border-amber-400 shadow-md mb-0.5">
+                  <Heart className="w-2.5 h-2.5 text-rose-400 fill-rose-400 animate-pulse" />
                   <span>{leaderPet.nickname}</span>
+                  <span className="text-slate-400 text-[8px]">Lv.{leaderPet.level}</span>
                 </div>
-                <PetAvatar speciesId={leaderPet.speciesId} size={44} />
+                <div className="relative">
+                  <PetAvatar speciesId={leaderPet.speciesId} size={48} />
+                  <div className="w-12 h-3.5 bg-amber-400/30 border border-amber-400/50 rounded-full blur-2xs mx-auto -mt-1.5 animate-pulse" />
+                </div>
               </div>
             )}
 
             {/* Player Avatar */}
             <div className="flex flex-col items-center">
-              <span className="text-[10px] font-black text-amber-300 bg-slate-950/90 px-2 py-0.5 rounded border border-amber-400 whitespace-nowrap mb-0.5 shadow game-title-font">
-                {playerName}
+              <span className="text-[10px] font-black text-amber-300 bg-slate-950/95 px-2 py-0.5 rounded border border-amber-400 whitespace-nowrap mb-0.5 shadow-md game-title-font">
+                👑 {playerName}
               </span>
-              <PlayerAvatar size={58} isMoving={isMoving} direction={playerDirection} />
+              <div className="relative">
+                <PlayerAvatar size={62} isMoving={isMoving} direction={playerDirection} />
+                <div className="w-14 h-4 bg-blue-500/25 border border-blue-400/40 rounded-full blur-2xs mx-auto -mt-1.5" />
+              </div>
             </div>
           </div>
         </div>

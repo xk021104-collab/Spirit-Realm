@@ -277,22 +277,38 @@ export const CultivatorPortrait: React.FC<WizardPortraitProps> = ({
           )}
         </g>
 
-        {/* 7. Cute Chibi Face */}
+        {/* 7. Cute Chibi Face with Ears */}
+        {/* Left Ear */}
+        <ellipse cx="96" cy="166" rx="8" ry="11" fill="#fff7ed" stroke="#fed7aa" strokeWidth="1.5" />
+        <ellipse cx="96" cy="166" rx="4.5" ry="6" fill="#fca5a5" opacity="0.5" />
+        {/* Right Ear */}
+        <ellipse cx="184" cy="166" rx="8" ry="11" fill="#fff7ed" stroke="#fed7aa" strokeWidth="1.5" />
+        <ellipse cx="184" cy="166" rx="4.5" ry="6" fill="#fca5a5" opacity="0.5" />
+
+        {/* Head Contour */}
         <ellipse cx="140" cy="165" rx="44" ry="38" fill="#fff7ed" stroke="#fed7aa" strokeWidth="2" />
-        <circle cx="110" cy="175" r="7" fill="#f43f5e" opacity="0.3" />
-        <circle cx="170" cy="175" r="7" fill="#f43f5e" opacity="0.3" />
+        <ellipse cx="110" cy="175" rx="8" ry="4.5" fill="#f43f5e" opacity="0.35" />
+        <line x1="105" y1="174" x2="115" y2="176" stroke="#e11d48" strokeWidth="1" opacity="0.4" />
+        <ellipse cx="170" cy="175" rx="8" ry="4.5" fill="#f43f5e" opacity="0.35" />
+        <line x1="165" y1="174" x2="175" y2="176" stroke="#e11d48" strokeWidth="1" opacity="0.4" />
 
         {/* Sparkling Anime Eyes */}
         <g>
-          <ellipse cx="118" cy="162" rx="9" ry="13" fill="#1e3a8a" />
-          <ellipse cx="118" cy="159" rx="7" ry="10" fill="#0284c7" />
-          <circle cx="116" cy="156" r="3.8" fill="#ffffff" />
-          <circle cx="121" cy="164" r="1.8" fill="#ffffff" />
+          {/* Left Eye */}
+          <ellipse cx="118" cy="162" rx="9" ry="13" fill="#172554" />
+          <ellipse cx="118" cy="164" rx="8" ry="10" fill="#1d4ed8" />
+          <ellipse cx="118" cy="168" rx="6.5" ry="5.5" fill="#38bdf8" />
+          <circle cx="115" cy="157" r="3.8" fill="#ffffff" />
+          <circle cx="122" cy="167" r="1.8" fill="#ffffff" />
+          <path d="M 106 153 Q 118 147 130 155" stroke="#0f172a" strokeWidth="2.5" strokeLinecap="round" fill="none" />
 
-          <ellipse cx="162" cy="162" rx="9" ry="13" fill="#1e3a8a" />
-          <ellipse cx="162" cy="159" rx="7" ry="10" fill="#0284c7" />
-          <circle cx="160" cy="156" r="3.8" fill="#ffffff" />
-          <circle cx="165" cy="164" r="1.8" fill="#ffffff" />
+          {/* Right Eye */}
+          <ellipse cx="162" cy="162" rx="9" ry="13" fill="#172554" />
+          <ellipse cx="162" cy="164" rx="8" ry="10" fill="#1d4ed8" />
+          <ellipse cx="162" cy="168" rx="6.5" ry="5.5" fill="#38bdf8" />
+          <circle cx="159" cy="157" r="3.8" fill="#ffffff" />
+          <circle cx="166" cy="167" r="1.8" fill="#ffffff" />
+          <path d="M 150 155 Q 162 147 174 153" stroke="#0f172a" strokeWidth="2.5" strokeLinecap="round" fill="none" />
 
           <path d="M 132 180 Q 140 188 148 180" stroke="#ea580c" strokeWidth="2.5" fill="none" strokeLinecap="round" />
         </g>

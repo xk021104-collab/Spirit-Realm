@@ -13,7 +13,7 @@ export const DEFAULT_CHARACTER_OUTFIT: CharacterOutfit = {
 };
 
 /**
- * 洛克王国 装扮部位数据字典
+ * 星灵王国 装扮部位数据字典
  */
 export const OUTFIT_ITEMS: Record<string, OutfitItem> = {
   // ==========================================
@@ -24,7 +24,7 @@ export const OUTFIT_ITEMS: Record<string, OutfitItem> = {
     name: '经典星夜魔法帽',
     slot: 'HAT',
     rarity: 'COMMON',
-    description: '深蓝缎面星芒大巫师帽，顶端微微弯曲，缀以金星胸针，是洛克王国的经典象征。',
+    description: '深蓝缎面星芒大巫师帽，顶端微微弯曲，缀以金星胸针，是星灵王国的经典象征。',
     bonusText: '魔攻加成 +5',
     unlockedByDefault: true,
     colors: { primary: '#1e3a8a', secondary: '#facc15', accent: '#38bdf8' },
@@ -44,7 +44,7 @@ export const OUTFIT_ITEMS: Record<string, OutfitItem> = {
     name: '炽焰红莲法师冠',
     slot: 'HAT',
     rarity: 'RARE',
-    description: '维苏威地心淬炼的炽火冠冕，镶嵌璀璨红宝石，跃动着温暖纯净的火苗。',
+    description: '烈焰峡谷地心淬炼的炽火冠冕，镶嵌璀璨红宝石，跃动着温暖纯净的火苗。',
     priceCoins: 800,
     bonusText: '火系技能伤害 +8%',
     colors: { primary: '#dc2626', secondary: '#f59e0b', accent: '#ef4444' },
@@ -169,7 +169,7 @@ export const OUTFIT_ITEMS: Record<string, OutfitItem> = {
   },
   robe_ocean_mermaid: {
     id: 'robe_ocean_mermaid',
-    name: '人鱼湾沧海灵波裙',
+    name: '蔚蓝海湾灵波裙',
     slot: 'ROBE',
     rarity: 'RARE',
     description: '以深海珍珠丝与蔚蓝灵波织就的法裙，走动间泛起碧波涟漪。',
@@ -345,7 +345,7 @@ export const OUTFIT_PRESETS: OutfitPreset[] = [
   {
     id: 'preset_classic_academy',
     name: '经典学园生',
-    description: '洛克王国最经典的学员装扮，星夜巫师帽搭配深蓝斗篷。',
+    description: '星灵王国最经典的学员装扮，星夜巫师帽搭配深蓝斗篷。',
     themeColor: '#2563eb',
     outfit: {
       hatId: 'hat_classic_wizard',
@@ -373,7 +373,7 @@ export const OUTFIT_PRESETS: OutfitPreset[] = [
   {
     id: 'preset_flame_archmage',
     name: '烈焰大魔导',
-    description: '维苏威火山熔岩掌控者，赤红冠冕与烈火大披风。',
+    description: '烈焰峡谷熔岩掌控者，赤红冠冕与烈火大披风。',
     themeColor: '#ea580c',
     outfit: {
       hatId: 'hat_flame_crown',
@@ -387,7 +387,7 @@ export const OUTFIT_PRESETS: OutfitPreset[] = [
   {
     id: 'preset_ocean_mermaid',
     name: '沧海人鱼灵',
-    description: '人鱼湾沧海之女与蔚蓝水族装扮，流光羽扇与碧波清涟。',
+    description: '蔚蓝海湾沧海之女与蔚蓝水族装扮，流光羽扇与碧波清涟。',
     themeColor: '#06b6d4',
     outfit: {
       hatId: 'hat_academy_beret',
@@ -415,7 +415,7 @@ export const OUTFIT_PRESETS: OutfitPreset[] = [
   {
     id: 'preset_bunny_sweet',
     name: '元气萌兔使',
-    description: '轻风山花海间的可爱兔耳少女，搭配仙女胡萝卜棒。',
+    description: '翡翠平原花海间的可爱兔耳少女，搭配仙女胡萝卜棒。',
     themeColor: '#ec4899',
     outfit: {
       hatId: 'hat_bunny_hood',

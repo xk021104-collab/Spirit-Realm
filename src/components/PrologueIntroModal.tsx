@@ -15,7 +15,7 @@ interface PrologueIntroModalProps {
 export const PrologueIntroModal: React.FC<PrologueIntroModalProps> = ({ onCompletePrologue }) => {
   const [step, setStep] = useState<'STORY' | 'CHOOSE_STARTER'>('STORY');
   const [selectedStarterId, setSelectedStarterId] = useState<'chiyanque' | 'bishuiling' | 'qingmulu'>('chiyanque');
-  const [playerName, setPlayerName] = useState<string>('云游御灵师');
+  const [playerName, setPlayerName] = useState<string>('小魔法师');
 
   const starterOptions = [
     {
@@ -24,13 +24,13 @@ export const PrologueIntroModal: React.FC<PrologueIntroModalProps> = ({ onComple
       color: 'text-rose-400',
       bg: 'bg-rose-950/40 border-rose-500/30',
       activeBg: 'bg-gradient-to-b from-rose-950/90 via-orange-950/70 to-slate-950 border-rose-400 ring-2 ring-rose-400/80 shadow-[0_0_32px_rgba(244,63,94,0.55)]',
-      trait: '极致物攻 · 极速突袭 · 烈火涅槃',
+      trait: '极致物攻 · 极速突袭 · 烈火燎原',
       glowColor: 'rgba(249, 115, 22, 0.75)',
       ringColor: 'border-orange-500/70 bg-orange-500/20 shadow-[0_0_18px_rgba(249,115,22,0.6)]',
       floatDuration: 3.0,
       breathDelay: 0,
       elementLabel: '火系 · 赤焰雀',
-      loreBadge: '炽火灵羽',
+      loreBadge: '炽火魔羽',
     },
     {
       id: 'bishuiling' as const,
@@ -44,7 +44,7 @@ export const PrologueIntroModal: React.FC<PrologueIntroModalProps> = ({ onComple
       floatDuration: 3.4,
       breathDelay: 0.35,
       elementLabel: '水系 · 碧水灵',
-      loreBadge: '玄渊圣露',
+      loreBadge: '纯澈水韵',
     },
     {
       id: 'qingmulu' as const,
@@ -52,13 +52,13 @@ export const PrologueIntroModal: React.FC<PrologueIntroModalProps> = ({ onComple
       color: 'text-emerald-400',
       bg: 'bg-emerald-950/40 border-emerald-500/30',
       activeBg: 'bg-gradient-to-b from-emerald-950/90 via-teal-950/70 to-slate-950 border-emerald-400 ring-2 ring-emerald-400/80 shadow-[0_0_32px_rgba(16,185,129,0.55)]',
-      trait: '生机回复 · 均衡成长 · 万木生发',
+      trait: '生机回复 · 均衡成长 · 森林守护',
       glowColor: 'rgba(34, 197, 94, 0.75)',
       ringColor: 'border-emerald-400/70 bg-emerald-500/20 shadow-[0_0_18px_rgba(16,185,129,0.6)]',
       floatDuration: 3.2,
       breathDelay: 0.7,
       elementLabel: '草系 · 青木鹿',
-      loreBadge: '神木生机',
+      loreBadge: '自然生机',
     },
   ];
 
@@ -67,7 +67,7 @@ export const PrologueIntroModal: React.FC<PrologueIntroModalProps> = ({ onComple
   const handleConfirmStarter = () => {
     sound.playCatchSuccess();
     const starterPet = createPetInstance(selectedStarterId, 5, currentSpecies.name);
-    onCompletePrologue(starterPet, playerName.trim() || '云游御灵师');
+    onCompletePrologue(starterPet, playerName.trim() || '小魔法师');
   };
 
   return (
@@ -121,33 +121,33 @@ export const PrologueIntroModal: React.FC<PrologueIntroModalProps> = ({ onComple
                   </div>
                 </motion.div>
                 <div className="absolute -bottom-2 -right-2 bg-gradient-to-r from-amber-400 to-amber-600 text-slate-950 text-[10px] font-black px-2.5 py-0.5 rounded-full border border-yellow-200 shadow-lg roco-title-font">
-                  圣殿大长老 · 玄冥
+                  学院院长 · 格里芬
                 </div>
               </div>
 
               <div className="space-y-1">
                 <div className="flex items-center justify-center gap-2">
                   <span className="text-xs font-mono font-bold tracking-widest text-amber-300 uppercase">
-                    《幻灵秘境》· 灵契仙途启程
+                    《洛克王国》· 魔法学徒启程
                   </span>
                   <span className="roco-seal text-[10px] px-1.5 py-0.2 font-bold tracking-wider">
                     序幕
                   </span>
                 </div>
                 <h2 className="text-3xl font-black roco-gold-text tracking-tight roco-title-font">
-                  乾坤道引 · 初始本命契约
+                  魔法学院 · 挑选初始宠物
                 </h2>
               </div>
 
               <div className="p-6 rounded-2xl roco-panel text-xs md:text-sm text-slate-200 leading-relaxed text-left space-y-3 max-w-xl border border-[#b8860b]/50 shadow-inner">
                 <p className="indent-6">
-                  “福生无量！初悟大道的年轻御灵仙师，欢迎降临<strong>《幻灵秘境》</strong>仙元大陆！”
+                  “你好，年轻的小魔法师！欢迎来到充满奇迹与冒险的<strong>《洛克王国》</strong>！”
                 </p>
                 <p className="indent-6">
-                  “自太古洪荒以降，悬浮在九天九霄之上的混沌灵脉滋养天地万物，化生出百种通灵百兽。作为新晋踏入宗门修行的御灵之子，你将在此证道飞升！”
+                  “在广袤的魔法大陆上，生活着众多不可思议的魔法宠物。从蔚蓝的人鱼湾到炽热的维苏威火山，每一个角落都等待着勇敢的小洛克去探索！”
                 </p>
                 <p className="indent-6 text-amber-300 font-semibold">
-                  “漫漫仙途，唯有心意相通的本命幻灵伙伴方能与你并肩而战。速前挑选属于你的第一只御三家本命幻灵，缔结天地仙契！”
+                  “作为初入魔法学院的见习魔法师，你需要挑选一只忠诚的宠物作为你的第一位冒险伙伴。来吧，挑选属于你的初始伙伴，握紧魔杖，开启属于你的魔法传奇吧！”
                 </p>
               </div>
 
@@ -158,7 +158,7 @@ export const PrologueIntroModal: React.FC<PrologueIntroModalProps> = ({ onComple
                 }}
                 className="roco-turn-capsule py-3 px-8 text-slate-950 text-sm font-black cursor-pointer flex items-center gap-2 shadow-xl hover:scale-105 transition-transform"
               >
-                <span>恭聆长老道谕 · 前往挑选初始幻灵</span>
+                <span>聆听院长嘱托 · 挑选初始宠物</span>
                 <ChevronRight className="w-5 h-5 text-slate-950" />
               </button>
             </motion.div>
@@ -175,8 +175,8 @@ export const PrologueIntroModal: React.FC<PrologueIntroModalProps> = ({ onComple
               className="p-6 md:p-8 space-y-6"
             >
               <div className="text-center space-y-1">
-                <h3 className="text-2xl font-black text-amber-300 game-title-font">缔结契约 · 挑选御三家本命幻灵</h3>
-                <p className="text-xs text-slate-400">选择跟随你一生的初始伙伴，它将伴随你成长并在 Lv.16 与 Lv.36 完成华丽化形蜕变！</p>
+                <h3 className="text-2xl font-black text-amber-300 game-title-font">魔法契约 · 挑选御三家初始宠物</h3>
+                <p className="text-xs text-slate-400">选择跟随你的初始伙伴，它将伴随你成长并在 Lv.16 与 Lv.36 完成华丽进化！</p>
               </div>
 
               {/* Three Starter Cards with Motion-powered Breathing & Hover */}
@@ -315,20 +315,20 @@ export const PrologueIntroModal: React.FC<PrologueIntroModalProps> = ({ onComple
               {/* Player Name Input & Bestowal Details */}
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl roco-panel border border-[#b8860b]/40">
                 <div className="flex items-center gap-3 w-full sm:w-auto">
-                  <span className="text-xs text-amber-300 font-bold whitespace-nowrap roco-title-font">御灵仙号:</span>
+                  <span className="text-xs text-amber-300 font-bold whitespace-nowrap roco-title-font">魔法师姓名:</span>
                   <input
                     type="text"
                     maxLength={8}
                     value={playerName}
                     onChange={(e) => setPlayerName(e.target.value)}
-                    placeholder="输入你的仙号..."
+                    placeholder="输入你的魔法师昵称..."
                     className="px-3 py-1.5 bg-[#061426] border border-amber-500/50 rounded-xl text-xs text-white focus:outline-none focus:border-amber-400 w-full sm:w-44 font-bold shadow-inner"
                   />
                 </div>
 
                 <div className="text-right text-xs text-slate-300">
-                  宗门礼赠: <span className="text-amber-300 font-bold font-mono">1000 灵石</span> ·{' '}
-                  <span className="text-cyan-300 font-bold font-mono">初阶灵契晶 x5</span>
+                  学院赠礼: <span className="text-amber-300 font-bold font-mono">1000 洛克贝</span> ·{' '}
+                  <span className="text-cyan-300 font-bold font-mono">普通咕噜球 x5</span>
                 </div>
               </div>
 
@@ -346,7 +346,7 @@ export const PrologueIntroModal: React.FC<PrologueIntroModalProps> = ({ onComple
                   className="roco-turn-capsule py-3 px-8 text-sm cursor-pointer flex items-center gap-2 shadow-xl hover:scale-105 transition-transform text-slate-950 font-black"
                 >
                   <Sparkles className="w-4 h-4 text-slate-950" />
-                  <span>与【{currentSpecies.name}】缔结契约 · 开启冒险</span>
+                  <span>收服【{currentSpecies.name}】· 开启王国冒险</span>
                 </button>
               </div>
             </motion.div>

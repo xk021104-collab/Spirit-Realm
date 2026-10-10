@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SceneConfig, PetInstance, SceneId, Friend } from '../types/game';
+import { SceneConfig, PetInstance, SceneId, Friend, CharacterOutfit } from '../types/game';
 import { SCENES_DATA } from '../data/scenes';
 import { PET_SPECIES } from '../data/species';
 import { PetAvatar, ELEMENT_COLORS } from './PetAvatar';
@@ -57,6 +57,8 @@ interface SceneViewProps {
   onClaimFromFriend?: (friendId: string) => void;
   onToggleFollowInScene?: (friendId: string) => void;
   claimableShardsCount?: number;
+  playerOutfit?: CharacterOutfit;
+  onOpenWardrobe?: () => void;
   onOpenChest: (chestId: string, coins: number, itemId?: string, itemCount?: number) => void;
   onEnterBattle: (enemyPet: PetInstance, isWild: boolean) => void;
   onTeleportToScene: (sceneId: SceneId) => void;
@@ -84,6 +86,8 @@ export const SceneView: React.FC<SceneViewProps> = ({
   onClaimFromFriend,
   onToggleFollowInScene,
   claimableShardsCount = 0,
+  playerOutfit,
+  onOpenWardrobe,
   onOpenChest,
   onEnterBattle,
   onTeleportToScene,
@@ -191,7 +195,7 @@ export const SceneView: React.FC<SceneViewProps> = ({
     if (actionType === 'HEAL') {
       sound.playHeal();
       onHealParty();
-      setHealNotice('✨ 圣域甘露洗礼！全队幻灵气血与招式灵力已全部回复满状态！');
+      setHealNotice('✨ 宠物医院爱心护理！全队宠物精力与技能 PP 已全部回满！');
       setTimeout(() => setHealNotice(null), 3000);
     } else if (actionType === 'SHOP') {
       onOpenShop();
@@ -229,7 +233,7 @@ export const SceneView: React.FC<SceneViewProps> = ({
                 setIsMapModalOpen(true);
               }}
               className="roco-action-pill text-[11px] py-1 px-3 shadow-md"
-              title="查看诸天秘境全景地图并快速传送"
+              title="查看王国世界地图并快速传送"
             >
               <Compass className="w-3.5 h-3.5 text-amber-300" />
               <span className="hidden xs:inline">大地图</span>
@@ -243,14 +247,14 @@ export const SceneView: React.FC<SceneViewProps> = ({
               onClick={() => {
                 sound.playHeal();
                 onHealParty();
-                setHealNotice('✨ 圣域甘露！全队幻灵气血与招式已回复至圆满状态！');
+                setHealNotice('✨ 宠物医院爱心护理！全队宠物精力与技能 PP 已全部回满！');
                 setTimeout(() => setHealNotice(null), 3000);
               }}
               className="roco-action-pill bg-gradient-to-b from-rose-950/80 to-rose-900/60 text-rose-200 hover:text-white border-rose-500/50"
-              title="圣泉调息 · 秒回全队幻灵满气血满灵力"
+              title="爱心护理 · 秒回全队宠物满精力满 PP"
             >
               <Heart className="w-3.5 h-3.5 text-rose-400 fill-rose-500/30" />
-              <span className="hidden sm:inline">圣泉回血</span>
+              <span className="hidden sm:inline">爱心回血</span>
             </button>
 
             {/* Roco Coins Display */}
@@ -308,7 +312,7 @@ export const SceneView: React.FC<SceneViewProps> = ({
             className={`absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group z-15 ${
               bushShaking ? 'animate-screen-shake' : ''
             }`}
-            title="点击探索灌木丛（可能惊醒潜伏的野生幻灵）"
+            title="点击探索灌木丛（可能惊醒潜伏的野生宠物）"
           >
             <div className="relative">
               <svg viewBox="0 0 60 50" className="w-12 h-10 drop-shadow-md">
@@ -496,7 +500,7 @@ export const SceneView: React.FC<SceneViewProps> = ({
                 ✦ {playerName}
               </span>
               <div className="relative">
-                <PlayerAvatar size={56} isMoving={isMoving} direction={playerDirection} />
+                <PlayerAvatar size={56} isMoving={isMoving} direction={playerDirection} outfit={playerOutfit} />
                 <div className="w-12 h-3.5 bg-blue-500/20 border border-blue-400/30 rounded-full blur-2xs mx-auto -mt-1" />
               </div>
             </div>
@@ -524,7 +528,7 @@ export const SceneView: React.FC<SceneViewProps> = ({
                     top: `${fY}%`,
                   }}
                   className="absolute transform -translate-x-1/2 -translate-y-1/2 z-22 flex items-end gap-2 cursor-pointer group hover:scale-105 transition-transform"
-                  title="点击与同游道友交流、互赠灵力碎片或抚摸其守护灵兽"
+                  title="点击与学院好友交流、互赠友谊碎片或抚摸其跟随宠物"
                 >
                   {/* Friend's Spirit Companion Following Closely */}
                   <div className="flex flex-col items-center animate-bounce" style={{ animationDuration: '2.8s' }}>
@@ -567,7 +571,7 @@ export const SceneView: React.FC<SceneViewProps> = ({
               onOpenPetBag();
             }}
             className="roco-dock-btn group"
-            title="点击打开魔法行囊 · 随行魔灵与道具"
+            title="点击打开魔法背包 · 随行宠物与道具"
           >
             <div className="relative">
               <div className="roco-dock-icon-circle border-[#facc15] shadow-[0_0_12px_rgba(250,204,21,0.5)]">
@@ -720,7 +724,7 @@ export const SceneView: React.FC<SceneViewProps> = ({
             onClick={() => {
               sound.playHeal();
               onHealParty();
-              setHealNotice('✨ 萌萌护士爱心治疗！全队宠物体力与招式灵力（PP）已全部恢复满状态！');
+              setHealNotice('✨ 萌萌护士爱心治疗！全队宠物精力与招式魔力（PP）已全部恢复满状态！');
               setTimeout(() => setHealNotice(null), 3000);
             }}
             className="roco-dock-btn group"
@@ -744,12 +748,31 @@ export const SceneView: React.FC<SceneViewProps> = ({
             title="查看小魔法师个人档案与装备"
           >
             <div className="roco-dock-icon-circle overflow-hidden">
-              <PlayerAvatar size={28} />
+              <PlayerAvatar size={28} outfit={playerOutfit} />
             </div>
             <span className="text-[11px] font-bold text-slate-200 group-hover:text-sky-300 roco-title-font tracking-wider mt-1">
               法师档案
             </span>
           </button>
+
+          {/* 10. Magic Wardrobe Salon (魔力衣橱) */}
+          {onOpenWardrobe && (
+            <button
+              onClick={() => {
+                sound.playClick();
+                onOpenWardrobe();
+              }}
+              className="roco-dock-btn group"
+              title="皮卡魔力衣橱 · 魔法服饰换装与发型装扮"
+            >
+              <div className="roco-dock-icon-circle border-pink-400 shadow-[0_0_12px_rgba(244,114,182,0.4)]">
+                <Sparkles className="w-5 h-5 text-pink-300 animate-spin" style={{ animationDuration: '6s' }} />
+              </div>
+              <span className="text-[11px] font-bold text-slate-200 group-hover:text-pink-300 roco-title-font tracking-wider mt-1">
+                魔力衣橱
+              </span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -868,7 +891,7 @@ export const SceneView: React.FC<SceneViewProps> = ({
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-400 mt-0.5">
-                    仙友本命契约灵兽 · 随行护道
+                    学院好友跟随宠物 · 亲密陪伴
                   </p>
                   {activeFriendCard.petReaction && (
                     <p className="text-xs text-rose-300 mt-1 font-medium animate-fadeIn">
@@ -886,7 +909,7 @@ export const SceneView: React.FC<SceneViewProps> = ({
                   const reactions = [
                     `✨【${compName}】亲昵地蹭了蹭你的手心，周身泛起温润星光！`,
                     `💖【${compName}】发出了欢快的鸣响，好感度提升！`,
-                    `🌟【${compName}】舒展灵羽，向你轻洒下一阵祥和的灵力光尘！`,
+                    `🌟【${compName}】舒展魔羽，向你轻洒下一阵祥和的魔法光尘！`,
                   ];
                   const chosen = reactions[Math.floor(Math.random() * reactions.length)];
                   setActiveFriendCard((prev) => (prev ? { ...prev, petReaction: chosen } : null));
@@ -894,7 +917,7 @@ export const SceneView: React.FC<SceneViewProps> = ({
                 className="px-3 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/40 text-rose-300 text-xs font-medium transition-all cursor-pointer flex items-center gap-1 shadow-sm shrink-0"
               >
                 <Heart className="w-3.5 h-3.5 fill-rose-400/40" />
-                <span>抚摸灵兽</span>
+                <span>抚摸宠物</span>
               </button>
             </div>
 
@@ -919,7 +942,7 @@ export const SceneView: React.FC<SceneViewProps> = ({
                     }`}
                   >
                     <Gift className="w-3.5 h-3.5" />
-                    <span>{activeFriendCard.friend.hasGiftedToday ? '今日已赠' : '赠送灵力碎片'}</span>
+                    <span>{activeFriendCard.friend.hasGiftedToday ? '今日已赠' : '赠送友谊碎片'}</span>
                   </button>
                 )}
 
@@ -941,7 +964,7 @@ export const SceneView: React.FC<SceneViewProps> = ({
                     }`}
                   >
                     <Sparkles className="w-3.5 h-3.5" />
-                    <span>{activeFriendCard.friend.canClaimFromFriend ? '收取灵力碎片' : '碎片已收'}</span>
+                    <span>{activeFriendCard.friend.canClaimFromFriend ? '收取友谊碎片' : '碎片已收'}</span>
                   </button>
                 )}
               </div>
@@ -978,7 +1001,7 @@ export const SceneView: React.FC<SceneViewProps> = ({
                     }}
                     className="px-3 py-1.5 rounded-xl bg-cyan-950/60 hover:bg-cyan-900/60 text-cyan-300 border border-cyan-500/30 text-xs font-medium cursor-pointer"
                   >
-                    打开仙友录
+                    打开好友录
                   </button>
                 )}
               </div>
@@ -1018,6 +1041,11 @@ export const SceneView: React.FC<SceneViewProps> = ({
           coins={playerCoins}
           spiritGems={480}
           partyCount={playerParty.length}
+          outfit={playerOutfit}
+          onOpenWardrobe={() => {
+            setIsCharacterModalOpen(false);
+            onOpenWardrobe?.();
+          }}
           onClose={() => setIsCharacterModalOpen(false)}
         />
       )}

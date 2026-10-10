@@ -293,3 +293,40 @@ export interface CloudAccount {
   lastSyncedAt?: string;
 }
 
+export type OutfitSlot = 'HAT' | 'HAIR' | 'ROBE' | 'HANDHELD' | 'WINGS' | 'AURA';
+
+export interface OutfitItem {
+  id: string;
+  name: string;
+  slot: OutfitSlot;
+  description: string;
+  rarity: 'COMMON' | 'RARE' | 'EPIC' | 'LEGENDARY';
+  priceCoins?: number;
+  priceDiamonds?: number;
+  bonusText?: string;
+  unlockedByDefault?: boolean;
+  colors?: {
+    primary: string;
+    secondary: string;
+    accent?: string;
+  };
+}
+
+export interface CharacterOutfit {
+  hatId: string;
+  hairId: string;
+  robeId: string;
+  handheldId: string;
+  wingsId: string;
+  auraId: string;
+}
+
+export interface OutfitPreset {
+  id: string;
+  name: string;
+  description: string;
+  outfit: CharacterOutfit;
+  themeColor: string;
+}
+
+

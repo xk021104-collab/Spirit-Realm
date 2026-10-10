@@ -111,8 +111,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [editingLevel, setEditingLevel] = useState<number>(1);
 
   // GM Mail Dispatcher state
-  const [mailTitle, setMailTitle] = useState<string>('全服修仙福利大礼包');
-  const [mailContent, setMailContent] = useState<string>('恭祝各位灵契使修道日进千里，特奉上宗门修炼物资！');
+  const [mailTitle, setMailTitle] = useState<string>('全服魔法福利大礼包');
+  const [mailContent, setMailContent] = useState<string>('祝愿各位小魔法师学业有成，特奉上跳跳集市魔法物资！');
   const [mailTarget, setMailTarget] = useState<'ALL' | 'INDIVIDUAL'>('ALL');
   const [mailTargetId, setMailTargetId] = useState<string>('');
   const [mailCoinsReward, setMailCoinsReward] = useState<number>(10000);
@@ -161,7 +161,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       {
         id: 'p-001-yunyou',
         username: 'yunyou_master',
-        nickname: localPlayerState?.playerName || '云游灵契师',
+        nickname: localPlayerState?.playerName || '见习小魔法师',
         title: '天命契约者',
         level: localPlayerState?.party?.[0]?.level || 20,
         vipLevel: 1,
@@ -205,9 +205,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       },
       {
         id: 'p-002-lingjian',
-        username: 'lingjian_zi',
-        nickname: '青莲剑仙·李白',
-        title: '太白剑意传人',
+        username: 'augustine_mage',
+        nickname: '大法师·奥古斯丁',
+        title: '皇家首席魔导师',
         level: 45,
         vipLevel: 3,
         spiritCoins: 188000,
@@ -363,7 +363,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     };
     setSelectedPlayer(updated);
     setPlayers((prev) => prev.map((p) => (p.id === selectedPlayer.id ? updated : p)));
-    addAuditLog('Admin', 'UPDATE_PLAYER', selectedPlayer.id, `修改资产: 灵石=${editingCoins}, 等级=${editingLevel}`);
+    addAuditLog('Admin', 'UPDATE_PLAYER', selectedPlayer.id, `修改资产: 洛克贝=${editingCoins}, 等级=${editingLevel}`);
     showNotify('已在本地后台更新玩家资产！');
   };
 
@@ -467,7 +467,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       );
     }
 
-    addAuditLog('Admin', 'DISPATCH_MAIL', mailTarget, `下发邮件【${mailTitle}】，包含灵石+${mailCoinsReward}`);
+    addAuditLog('Admin', 'DISPATCH_MAIL', mailTarget, `下发邮件【${mailTitle}】，包含洛克贝+${mailCoinsReward}`);
     showNotify('邮件及道具已下发至玩家邮箱！');
   };
 
@@ -486,7 +486,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   // Generate SQL Dump
   const handleExportSql = () => {
     let sql = `-- ========================================================\n`;
-    sql += `-- 《幻灵秘境》 生产数据库导出演算 SQL DUMP\n`;
+    sql += `-- 《洛克王国》 生产数据库导出演算 SQL DUMP\n`;
     sql += `-- 生成时间: ${new Date().toISOString()}\n`;
     sql += `-- ========================================================\n\n`;
 
@@ -521,7 +521,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             title="返回游戏客户端"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>返回修仙游戏</span>
+            <span>返回洛克王国</span>
           </button>
 
           <div className="h-4 w-px bg-slate-700" />
@@ -533,14 +533,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-indigo-200 to-cyan-300">
-                  《幻灵秘境》运营中台管理系统
+                  《洛克王国》运营中台管理系统
                 </h1>
                 <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-purple-950 text-purple-300 border border-purple-800/60">
                   v1.2.0 PRO
                 </span>
               </div>
               <p className="text-[11px] text-slate-400">
-                PostgreSQL + Redis + RabbitMQ 服务端架构配套管控平台
+                MySQL + Redis + RabbitMQ 服务端架构配套管控平台
               </p>
             </div>
           </div>
@@ -587,9 +587,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       <div className="bg-slate-900 border-b border-slate-800 px-6 flex items-center gap-2 overflow-x-auto">
         {[
           { id: 'METRICS', label: '运营概览看板', icon: Activity },
-          { id: 'PLAYERS', label: '灵契师档案管理', icon: Users },
+          { id: 'PLAYERS', label: '小魔法师档案管理', icon: Users },
           { id: 'MAIL_GM', label: '全服邮件与道具下发', icon: Mail },
-          { id: 'SPECIES', label: '幻灵种族与平衡字典', icon: Sparkles },
+          { id: 'SPECIES', label: '宠物种族与平衡字典', icon: Sparkles },
           { id: 'INFRA', label: '中间件与数据库监控', icon: Database },
           { id: 'LOGS', label: '管理员审计日志', icon: FileText },
         ].map((tab) => {
@@ -622,7 +622,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
               <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex items-center justify-between shadow">
                 <div>
-                  <span className="text-xs text-slate-400">全服注册修仙者</span>
+                  <span className="text-xs text-slate-400">全服注册魔法师</span>
                   <div className="text-2xl font-bold font-mono text-cyan-300 mt-1">
                     {players.length.toLocaleString()}
                   </div>
@@ -635,7 +635,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
               <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex items-center justify-between shadow">
                 <div>
-                  <span className="text-xs text-slate-400">全服灵石流通池</span>
+                  <span className="text-xs text-slate-400">全服洛克贝流通池</span>
                   <div className="text-2xl font-bold font-mono text-amber-300 mt-1">
                     {players.reduce((sum, p) => sum + p.spiritCoins, 0).toLocaleString()}
                   </div>
@@ -648,11 +648,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
               <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex items-center justify-between shadow">
                 <div>
-                  <span className="text-xs text-slate-400">契约幻灵总数</span>
+                  <span className="text-xs text-slate-400">捕获宠物总数</span>
                   <div className="text-2xl font-bold font-mono text-purple-300 mt-1">
                     {players.reduce((sum, p) => sum + p.pets.length, 0).toLocaleString()}
                   </div>
-                  <span className="text-[10px] text-purple-400">含 16 种图鉴神兽</span>
+                  <span className="text-[10px] text-purple-400">含 16 种经典魔法宠物</span>
                 </div>
                 <div className="p-3 rounded-xl bg-purple-950/60 border border-purple-800/50 text-purple-400">
                   <Sparkles className="w-5 h-5" />
@@ -724,7 +724,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <div className="flex items-center justify-between border-b border-slate-800 pb-3">
                   <h3 className="text-xs font-bold text-slate-300 flex items-center gap-2">
                     <Radio className="w-4 h-4 text-cyan-400" />
-                    幻灵大陆场景分布与活跃热度
+                    洛克王国场景分布与活跃热度
                   </h3>
                   <span className="text-[11px] text-slate-500 font-mono">AOI 视野心跳同步</span>
                 </div>
@@ -803,11 +803,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
                   <tr className="bg-slate-950/80 border-b border-slate-800 text-slate-400">
-                    <th className="py-3 px-4">玩家修仙档案</th>
+                    <th className="py-3 px-4">魔法师档案</th>
                     <th className="py-3 px-4">等级 / VIP</th>
-                    <th className="py-3 px-4">灵石资产</th>
+                    <th className="py-3 px-4">洛克贝资产</th>
                     <th className="py-3 px-4">综合战力</th>
-                    <th className="py-3 px-4">所在洞天</th>
+                    <th className="py-3 px-4">所在场景</th>
                     <th className="py-3 px-4">账号状态</th>
                     <th className="py-3 px-4 text-right">管理操作</th>
                   </tr>
@@ -831,7 +831,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         )}
                       </td>
                       <td className="py-3 px-4 font-mono text-amber-400">
-                        {player.spiritCoins.toLocaleString()} 灵石
+                        {player.spiritCoins.toLocaleString()} 洛克贝
                       </td>
                       <td className="py-3 px-4 font-mono text-purple-300 font-bold">
                         {player.combatPower.toLocaleString()}
@@ -906,7 +906,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     </h4>
                     <div className="grid grid-cols-3 gap-3">
                       <div>
-                        <label className="text-[11px] text-slate-400 block mb-1">灵石 (金币)</label>
+                        <label className="text-[11px] text-slate-400 block mb-1">洛克贝 (金币)</label>
                         <input
                           type="number"
                           value={editingCoins}
@@ -915,7 +915,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         />
                       </div>
                       <div>
-                        <label className="text-[11px] text-slate-400 block mb-1">灵晶 (钻石)</label>
+                        <label className="text-[11px] text-slate-400 block mb-1">洛克钻 (钻石)</label>
                         <input
                           type="number"
                           value={editingGems}
@@ -924,7 +924,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         />
                       </div>
                       <div>
-                        <label className="text-[11px] text-slate-400 block mb-1">修仙等级</label>
+                        <label className="text-[11px] text-slate-400 block mb-1">魔法师等级</label>
                         <input
                           type="number"
                           value={editingLevel}
@@ -946,10 +946,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   {/* Pets in Party */}
                   <div className="space-y-2">
                     <h4 className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
-                      <Sparkles className="w-3.5 h-3.5 text-purple-400" /> 随行出战幻灵 ({selectedPlayer.pets.length}/6)
+                      <Sparkles className="w-3.5 h-3.5 text-purple-400" /> 随行出战宠物 ({selectedPlayer.pets.length}/6)
                     </h4>
                     {selectedPlayer.pets.length === 0 ? (
-                      <div className="text-xs text-slate-500 p-3 bg-slate-950 rounded-xl">背包暂无随行幻灵</div>
+                      <div className="text-xs text-slate-500 p-3 bg-slate-950 rounded-xl">背包暂无随行宠物</div>
                     ) : (
                       <div className="grid grid-cols-2 gap-2.5">
                         {selectedPlayer.pets.map((pet) => (
@@ -1009,10 +1009,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <div>
                   <h3 className="text-sm font-bold text-purple-300 flex items-center gap-2">
                     <Mail className="w-4 h-4 text-purple-400" />
-                    运营邮件与全服道具/幻灵下发中台
+                    运营邮件与全服道具/宠物下发中台
                   </h3>
                   <p className="text-xs text-slate-400 mt-0.5">
-                    支持通过 RabbitMQ 事件总线向全服广播或指定修士发放修仙资源
+                    支持通过 RabbitMQ 事件总线向全服广播或指定魔法师发放冒险资源
                   </p>
                 </div>
               </div>
@@ -1090,7 +1090,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
-                    <label className="text-[11px] text-slate-400 block mb-1">赠送灵石 (金币)</label>
+                    <label className="text-[11px] text-slate-400 block mb-1">赠送洛克贝 (金币)</label>
                     <input
                       type="number"
                       value={mailCoinsReward}
@@ -1099,7 +1099,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     />
                   </div>
                   <div>
-                    <label className="text-[11px] text-slate-400 block mb-1">赠送灵晶 (钻石)</label>
+                    <label className="text-[11px] text-slate-400 block mb-1">赠送洛克钻 (钻石)</label>
                     <input
                       type="number"
                       value={mailGemsReward}
@@ -1135,13 +1135,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     />
                   </div>
                   <div>
-                    <label className="text-[11px] text-slate-400 block mb-1">直接特赠神兽幻灵</label>
+                    <label className="text-[11px] text-slate-400 block mb-1">直接特赠稀有宠物</label>
                     <select
                       value={mailPetSpeciesId}
                       onChange={(e) => setMailPetSpeciesId(e.target.value)}
                       className="w-full px-2.5 py-1.5 bg-slate-900 border border-slate-700 rounded text-xs text-purple-200"
                     >
-                      <option value="">-- 无特赠幻灵 --</option>
+                      <option value="">-- 无特赠宠物 --</option>
                       {Object.values(PET_SPECIES).map((spec) => (
                         <option key={spec.id} value={spec.id}>
                           {spec.name} ({spec.type} - {spec.rarity})
@@ -1170,10 +1170,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-sm font-bold text-slate-200">
-                  全大陆 16 种天地幻灵种族字典 (Species Config Table)
+                  全王国 16 种经典魔法宠物种族字典 (Species Config Table)
                 </h3>
                 <p className="text-xs text-slate-400">
-                  对应 PostgreSQL `pet_species_config` 基础数值配置表
+                  对应 MySQL `pet_species_config` 基础数值配置表
                 </p>
               </div>
             </div>
@@ -1249,7 +1249,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </div>
                 <div className="space-y-1.5 text-xs text-slate-300">
                   <div>• `player_profiles`: 核心角色资产表</div>
-                  <div>• `player_pets`: 幻灵实例与资质</div>
+                  <div>• `player_pets`: 宠物实例与资质</div>
                   <div>• `player_inventory`: 道具背包堆叠</div>
                   <div>• `battle_logs`: 战斗流水审计</div>
                 </div>

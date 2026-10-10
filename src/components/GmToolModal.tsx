@@ -111,7 +111,7 @@ export const GmToolModal: React.FC<GmToolModalProps> = ({
   const handleAddCoins = (amount: number) => {
     onSetCoins(Math.max(0, playerCoins + amount));
     sound.playCatchSuccess();
-    notify(`灵石 ${amount > 0 ? `+${amount.toLocaleString()}` : amount.toLocaleString()}`);
+    notify(`洛克贝 ${amount > 0 ? `+${amount.toLocaleString()}` : amount.toLocaleString()}`);
   };
 
   // 2. One-click Set Coins
@@ -120,7 +120,7 @@ export const GmToolModal: React.FC<GmToolModalProps> = ({
     if (!isNaN(val) && val >= 0) {
       onSetCoins(val);
       sound.playCatchSuccess();
-      notify(`灵石已设定为 ${val.toLocaleString()}`);
+      notify(`洛克贝已设定为 ${val.toLocaleString()}`);
     }
   };
 
@@ -128,13 +128,13 @@ export const GmToolModal: React.FC<GmToolModalProps> = ({
   const handleAddShards = (amount: number) => {
     onSetSpiritShards(Math.max(0, spiritShards + amount));
     sound.playCatchSuccess();
-    notify(`灵契碎片 +${amount}`);
+    notify(`友谊魔法碎片 +${amount}`);
   };
 
   // 4. One-click Max Level for Party
   const handleMaxLevelParty = () => {
     if (party.length === 0) {
-      notify('同行队伍中暂无幻灵！');
+      notify('同行队伍中暂无宠物！');
       return;
     }
     const updated = party.map((pet) => {
@@ -191,7 +191,7 @@ export const GmToolModal: React.FC<GmToolModalProps> = ({
         const newParty = [...party];
         newParty[newParty.length - 1] = newPet;
         onSetParty(newParty);
-        notify(`同行队伍已满，已替换末位幻灵为 Lv.${spawnLevel} ${newPet.nickname}！`);
+        notify(`同行队伍已满，已替换末位宠物为 Lv.${spawnLevel} ${newPet.nickname}！`);
       }
       sound.playCatchSuccess();
     } catch (e: any) {
@@ -240,14 +240,14 @@ export const GmToolModal: React.FC<GmToolModalProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-pink-200 to-cyan-300">
-                  天道造化 · GM 开发者调试控制台
+                  魔法学院 · GM 开发者调试控制台
                 </h2>
                 <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-purple-900/60 text-purple-300 border border-purple-500/40">
                   DEVELOPER MODE
                 </span>
               </div>
               <p className="text-xs text-slate-400">
-                可快速调试修仙资产、神兽造化、乾坤百宝、场景瞬移与存档热更
+                可快速调试魔法资产、稀有宠物、魔法百宝、场景瞬移与存档热更
               </p>
             </div>
           </div>
@@ -277,9 +277,9 @@ export const GmToolModal: React.FC<GmToolModalProps> = ({
         <div className="flex items-center px-6 pt-3 bg-slate-950/50 border-b border-slate-800 gap-2 overflow-x-auto">
           {[
             { id: 'ASSETS', label: '资产与状态', icon: Coins },
-            { id: 'SPAWNER', label: '万象造灵炉', icon: Sparkles },
-            { id: 'ITEMS', label: '乾坤宝物库', icon: Package },
-            { id: 'PROGRESS', label: '天道与传送', icon: Compass },
+            { id: 'SPAWNER', label: '宠物召唤台', icon: Sparkles },
+            { id: 'ITEMS', label: '魔法道具库', icon: Package },
+            { id: 'PROGRESS', label: '世界与传送', icon: Compass },
             { id: 'SAVEFILE', label: '存档导出导入', icon: Layers },
           ].map((tab) => {
             const Icon = tab.icon;
@@ -311,7 +311,7 @@ export const GmToolModal: React.FC<GmToolModalProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="p-4 rounded-xl bg-slate-800/50 border border-amber-500/30 flex items-center justify-between">
                   <div>
-                    <span className="text-xs text-slate-400">当前灵石 (金币)</span>
+                    <span className="text-xs text-slate-400">当前洛克贝 (金币)</span>
                     <div className="text-xl font-bold text-amber-400 font-mono">
                       {playerCoins.toLocaleString()}
                     </div>
@@ -320,14 +320,14 @@ export const GmToolModal: React.FC<GmToolModalProps> = ({
                 </div>
                 <div className="p-4 rounded-xl bg-slate-800/50 border border-cyan-500/30 flex items-center justify-between">
                   <div>
-                    <span className="text-xs text-slate-400">灵契碎片 (社交)</span>
+                    <span className="text-xs text-slate-400">友谊魔法碎片 (社交)</span>
                     <div className="text-xl font-bold text-cyan-400 font-mono">{spiritShards}</div>
                   </div>
                   <Sparkles className="w-8 h-8 text-cyan-400/40" />
                 </div>
                 <div className="p-4 rounded-xl bg-slate-800/50 border border-purple-500/30 flex items-center justify-between">
                   <div>
-                    <span className="text-xs text-slate-400">随行同行幻灵</span>
+                    <span className="text-xs text-slate-400">随行同行宠物</span>
                     <div className="text-xl font-bold text-purple-300 font-mono">{party.length} / 6</div>
                   </div>
                   <Award className="w-8 h-8 text-purple-400/40" />
@@ -337,32 +337,32 @@ export const GmToolModal: React.FC<GmToolModalProps> = ({
               {/* Coins Manipulation */}
               <div className="p-5 rounded-xl bg-slate-800/40 border border-slate-700/60 space-y-4">
                 <h3 className="text-sm font-semibold text-amber-300 flex items-center gap-2">
-                  <Coins className="w-4 h-4" /> 灵石财富调配
+                  <Coins className="w-4 h-4" /> 洛克贝财富调配
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   <button
                     onClick={() => handleAddCoins(10000)}
                     className="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-medium cursor-pointer transition-colors"
                   >
-                    +10,000 灵石
+                    +10,000 洛克贝
                   </button>
                   <button
                     onClick={() => handleAddCoins(50000)}
                     className="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-medium cursor-pointer transition-colors"
                   >
-                    +50,000 灵石
+                    +50,000 洛克贝
                   </button>
                   <button
                     onClick={() => handleAddCoins(200000)}
                     className="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-medium cursor-pointer transition-colors"
                   >
-                    +200,000 灵石
+                    +200,000 洛克贝
                   </button>
                   <button
                     onClick={() => handleAddCoins(-5000)}
                     className="px-3 py-1.5 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/40 text-xs font-medium cursor-pointer transition-colors"
                   >
-                    -5,000 灵石
+                    -5,000 洛克贝
                   </button>
                 </div>
                 <div className="flex items-center gap-3 pt-2">
@@ -386,7 +386,7 @@ export const GmToolModal: React.FC<GmToolModalProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="p-5 rounded-xl bg-slate-800/40 border border-slate-700/60 space-y-4">
                   <h3 className="text-sm font-semibold text-cyan-300 flex items-center gap-2">
-                    <Sparkles className="w-4 h-4" /> 灵契碎片下发
+                    <Sparkles className="w-4 h-4" /> 友谊碎片下发
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     <button
@@ -412,19 +412,19 @@ export const GmToolModal: React.FC<GmToolModalProps> = ({
 
                 <div className="p-5 rounded-xl bg-slate-800/40 border border-slate-700/60 space-y-4">
                   <h3 className="text-sm font-semibold text-emerald-300 flex items-center gap-2">
-                    <Zap className="w-4 h-4" /> 队伍神迹指令
+                    <Zap className="w-4 h-4" /> 队伍魔法指令
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     <button
                       onClick={() => {
                         onHealAll();
                         sound.playCatchSuccess();
-                        notify('全员气血与法术 PP 已 100% 满状态恢复！');
+                        notify('全员精力与技能 PP 已 100% 满状态恢复！');
                       }}
                       className="px-3.5 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 text-xs font-medium cursor-pointer transition-colors flex items-center gap-1.5"
                     >
                       <Zap className="w-3.5 h-3.5 text-emerald-400" />
-                      全员满血满灵力
+                      全员满精力满PP
                     </button>
                     <button
                       onClick={handleMaxLevelParty}
@@ -445,15 +445,15 @@ export const GmToolModal: React.FC<GmToolModalProps> = ({
               <div className="p-5 rounded-xl bg-slate-800/40 border border-purple-500/30 space-y-5">
                 <div className="flex items-center justify-between border-b border-slate-700/60 pb-3">
                   <h3 className="text-sm font-bold text-purple-300 flex items-center gap-2">
-                    <Sparkles className="w-4 h-4" /> 创世造灵神炉 (任意幻灵一键炼制)
+                    <Sparkles className="w-4 h-4" /> 皇家魔导召唤台 (任意宠物一键召唤)
                   </h3>
-                  <span className="text-xs text-slate-400">目前全大陆共收录 16 种天地灵兽</span>
+                  <span className="text-xs text-slate-400">目前全大陆共收录 16 种魔法宠物</span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Select Species */}
                   <div>
-                    <label className="block text-xs text-slate-400 mb-1.5">选择目标灵兽原型</label>
+                    <label className="block text-xs text-slate-400 mb-1.5">选择目标宠物原型</label>
                     <select
                       value={selectedSpeciesId}
                       onChange={(e) => setSelectedSpeciesId(e.target.value)}
@@ -519,7 +519,7 @@ export const GmToolModal: React.FC<GmToolModalProps> = ({
                         onChange={(e) => setIsShiny(e.target.checked)}
                         className="rounded border-slate-700 text-amber-500 focus:ring-amber-500 accent-amber-500"
                       />
-                      <span>变异异相 (闪光幻灵)</span>
+                      <span>闪光宠物 (稀有形态)</span>
                     </label>
                   </div>
                 </div>
@@ -531,7 +531,7 @@ export const GmToolModal: React.FC<GmToolModalProps> = ({
                     className="w-full py-2.5 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold text-xs tracking-wide shadow-lg shadow-purple-900/40 cursor-pointer transition-all flex items-center justify-center gap-2"
                   >
                     <Sparkles className="w-4 h-4" />
-                    立即炼制并收服至队伍
+                    立即召唤并加入队伍
                   </button>
                 </div>
               </div>
@@ -635,7 +635,7 @@ export const GmToolModal: React.FC<GmToolModalProps> = ({
               {/* Teleportation */}
               <div className="p-5 rounded-xl bg-slate-800/40 border border-slate-700/60 space-y-3">
                 <h3 className="text-sm font-semibold text-cyan-300 flex items-center gap-2">
-                  <Compass className="w-4 h-4" /> 洞天福地瞬移传送 (当前场景: {SCENES_DATA[currentSceneId]?.name || currentSceneId})
+                  <Compass className="w-4 h-4" /> 王国场景瞬移传送 (当前场景: {SCENES_DATA[currentSceneId]?.name || currentSceneId})
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                   {Object.values(SCENES_DATA).map((scene) => (
@@ -735,7 +735,7 @@ export const GmToolModal: React.FC<GmToolModalProps> = ({
                   </button>
                 </div>
                 <p className="text-xs text-slate-400">
-                  当前本地存储的完整数据快照，包含主角、金币、图鉴、背包及全部幻灵资质。
+                  当前本地存储的完整数据快照，包含主角、洛克贝、图鉴、背包及全部宠物资质。
                 </p>
               </div>
 

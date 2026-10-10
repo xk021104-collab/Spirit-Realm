@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { PetInstance, InventorySlot, SceneId, Quest, Friend, GameMail, GuildInfo, ChatMessage, CloudAccount } from './types/game';
+import { PetInstance, InventorySlot, SceneId, Quest, Friend, GameMail, GuildInfo, ChatMessage, CloudAccount, CharacterOutfit } from './types/game';
 import { SCENES_DATA } from './data/scenes';
 import { INITIAL_QUESTS } from './data/quests';
 import { PET_SPECIES } from './data/species';
 import { ITEMS_DATA } from './data/items';
 import { MOVES_DATA } from './data/moves';
+import { DEFAULT_CHARACTER_OUTFIT } from './data/outfits';
 import { calculateStats } from './utils/battleEngine';
 import { sound } from './utils/audio';
 
@@ -28,6 +29,7 @@ import { LeaderboardModal } from './components/LeaderboardModal';
 import { GuildModal } from './components/GuildModal';
 import { AuthModal } from './components/AuthModal';
 import { WorldChatPanel } from './components/WorldChatPanel';
+import { WardrobeModal } from './components/WardrobeModal';
 import { INITIAL_FRIENDS } from './data/friends';
 
 import { PlayerAvatar } from './components/PlayerAvatar';
@@ -63,9 +65,9 @@ const STORAGE_KEY = 'huanling_mijing_save_v1';
 const INITIAL_MAILS: GameMail[] = [
   {
     id: 'mail_001',
-    title: '【天道开服献礼】首发至尊修仙礼包',
-    sender: '天道灵官',
-    content: '欢迎诸位道友踏入《幻灵秘境》！感念道友仙途初启，天道特赐下极品灵葫与洗髓仙丹，助道友降伏上古神兽，成就仙尊之位！',
+    title: '【奥术学院开学礼】新晋小魔法师启航礼包',
+    sender: '阿尔弗雷德院长',
+    content: '亲爱的小魔法师，欢迎来到美丽的星灵王国奥术学院！为了助你在翡翠平原与各大王国场景中结识更多心仪的宠物伙伴，学院特为你准备了高级星灵球、精力魔药与天赋洗礼魔药！',
     sentAt: '2026-10-10 08:00',
     isClaimed: false,
     rewards: {
@@ -79,9 +81,9 @@ const INITIAL_MAILS: GameMail[] = [
   },
   {
     id: 'mail_002',
-    title: '【太古秘境探索】九天神玉补给函',
-    sender: '灵虚秘境守护使',
-    content: '近日太古禁地灵气紊乱，诸多神兽躁动。此为定魂神玉与大还丹，可定幻灵先天神魂并迅速充盈修为。',
+    title: '【皇家魔导物资】星辉集市巴纳比特别回馈',
+    sender: '商人巴纳比',
+    content: '来自星辉集市的特供魔法补给！包含智慧圣果与大袋星露果，能帮助你的宠物迅速提升经验，并在群星竞技场大显身手。',
     sentAt: '2026-10-10 10:30',
     isClaimed: false,
     rewards: {
@@ -96,22 +98,22 @@ const INITIAL_MAILS: GameMail[] = [
 
 const DEFAULT_GUILD: GuildInfo = {
   id: 'guild_001',
-  name: '缥缈问道仙宗',
-  leaderName: '太玄真人',
+  name: '皇家晨星魔法师公会',
+  leaderName: '大法师·奥古斯丁',
   level: 4,
   totalFunds: 98000,
   exp: 3400,
   maxExp: 5000,
   memberCount: 28,
   maxMembers: 30,
-  notice: '大道争锋，诸法唯心。每日修仙打卡领取俸禄，共同参悟宗门绝学护法心法！',
+  notice: '守护星灵王国，探索古老魔导奥秘！每日魔法打卡领取金库津贴，共同研习皇家公会魔导研究！',
   playerRole: 'ELDER',
   playerDevotion: 180,
   hasClaimedSalaryToday: false,
   skills: [
     {
       id: 'guild_atk',
-      name: '纯阳剑罡',
+      name: '魔导锋芒阵',
       level: 2,
       maxLevel: 10,
       effectStat: 'atk',
@@ -119,11 +121,11 @@ const DEFAULT_GUILD: GuildInfo = {
       bonusType: 'ATK',
       bonusValue: 6,
       cost: 50,
-      description: '引动九天纯阳之气，提高全体上阵幻灵 6 点物攻与特攻。',
+      description: '引动元素魔导共鸣，提高全体上阵随行宠物 6 点物攻与魔攻。',
     },
     {
       id: 'guild_hp',
-      name: '枯木逢春诀',
+      name: '生命圣泉契约',
       level: 3,
       maxLevel: 10,
       effectStat: 'hp',
@@ -131,11 +133,11 @@ const DEFAULT_GUILD: GuildInfo = {
       bonusType: 'HP',
       bonusValue: 45,
       cost: 60,
-      description: '参悟生生不息之理，提高全体上阵幻灵 45 点气血上限。',
+      description: '引导精灵圣泉滋润，提高全体上阵随行宠物 45 点精力上限。',
     },
     {
       id: 'guild_def',
-      name: '玄武御甲真经',
+      name: '奥术护盾壁垒',
       level: 1,
       maxLevel: 10,
       effectStat: 'def',
@@ -143,11 +145,11 @@ const DEFAULT_GUILD: GuildInfo = {
       bonusType: 'DEF',
       bonusValue: 5,
       cost: 40,
-      description: '凝练玄武重水化盾，提高全体上阵幻灵 5 点物防与特防。',
+      description: '凝聚奥术偏转护盾，提高全体上阵随行宠物 5 点物防与魔抗。',
     },
     {
       id: 'guild_spd',
-      name: '惊鸿踏云步',
+      name: '风灵疾速光环',
       level: 1,
       maxLevel: 10,
       effectStat: 'speed',
@@ -155,7 +157,7 @@ const DEFAULT_GUILD: GuildInfo = {
       bonusType: 'SPD',
       bonusValue: 3,
       cost: 50,
-      description: '御风而行轻盈如鸿，提高全体上阵幻灵 3 点先手速度。',
+      description: '加持轻灵之风祝福，提高全体上阵随行宠物 3 点先手速度。',
     },
   ],
 };
@@ -164,9 +166,9 @@ const INITIAL_CHAT_MESSAGES: ChatMessage[] = [
   {
     id: 'msg_001',
     senderId: 'sys',
-    senderName: '天道之音',
-    senderTitle: '天道法则',
-    content: '欢迎来到《幻灵秘境》！天地混沌初开，万千灵宠应劫而生，祝各位仙契师早日问鼎大道！',
+    senderName: '星灵王国广播',
+    senderTitle: '阿尔弗雷德院长',
+    content: '欢迎来到《星灵王国》！奥术学院钟声敲响，万千神奇宠物等待与你结伴冒险，祝各位小魔法师早日成为皇家大魔导师！',
     channel: 'WORLD',
     timestamp: Date.now() - 3600000,
     isSystem: true,
@@ -174,18 +176,18 @@ const INITIAL_CHAT_MESSAGES: ChatMessage[] = [
   {
     id: 'msg_002',
     senderId: 'npc_001',
-    senderName: '青莲剑仙·李白',
-    senderTitle: '太白剑意传人',
-    content: '大鹏一日同风起，扶摇直上九万里！我的苍穹圣龙刚刚洗出满星气运！',
+    senderName: '艾丽西亚小公主',
+    senderTitle: '皇家小公主',
+    content: '哼，本公主刚刚在宠物训练室给火羽小公主吃了两颗星露果，实力大增！谁来竞技场挑战本公主？',
     channel: 'WORLD',
     timestamp: Date.now() - 1800000,
   },
   {
     id: 'msg_003',
     senderId: 'npc_002',
-    senderName: '摇光圣女',
-    senderTitle: '星宿宗亲传',
-    content: '灵泉幽径的白玉狐狸好难捕捉，求教道友们用何种灵葫最稳？',
+    senderName: '诺亚',
+    senderTitle: '学院同桌',
+    content: '翡翠平原的水灵儿好可爱啊，我用了两颗初级星灵球才捕捉到呢！',
     channel: 'WORLD',
     timestamp: Date.now() - 600000,
   },
@@ -196,7 +198,7 @@ export default function App() {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   // Core Player State
-  const [playerName, setPlayerName] = useState<string>('云游灵契师');
+  const [playerName, setPlayerName] = useState<string>('见习小魔法师');
   const [playerCoins, setPlayerCoins] = useState<number>(1000);
   const [playerBadges, setPlayerBadges] = useState<string[]>([]);
   const [party, setParty] = useState<PetInstance[]>([]);
@@ -250,13 +252,13 @@ export default function App() {
   const [guild, setGuild] = useState<GuildInfo>(DEFAULT_GUILD);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>(INITIAL_CHAT_MESSAGES);
   const [cloudAccount, setCloudAccount] = useState<CloudAccount>({
-    username: '云游灵契师',
+    username: '见习小魔法师',
     token: null,
     isLoggedIn: false,
     lastSyncTime: null,
   });
   const [marqueeAnnouncement, setMarqueeAnnouncement] = useState<string | null>(
-    '欢迎诸位道友降临幻灵大陆！天道福泽现已降临，可前往信箱领取开服好礼！'
+    '欢迎各位小魔法师来到星灵王国！奥术学院已开学，快去信箱领取开学好礼吧！'
   );
   const [hasPraisedToday, setHasPraisedToday] = useState<boolean>(false);
 
@@ -272,6 +274,33 @@ export default function App() {
     fromSpeciesId: string;
     toSpeciesId: string;
   } | null>(null);
+
+  // 12. Character Outfit & Magic Wardrobe Salon State
+  const [playerOutfit, setPlayerOutfit] = useState<CharacterOutfit>(() => {
+    try {
+      const saved = localStorage.getItem('roco_character_outfit');
+      return saved ? JSON.parse(saved) : DEFAULT_CHARACTER_OUTFIT;
+    } catch {
+      return DEFAULT_CHARACTER_OUTFIT;
+    }
+  });
+  const [unlockedOutfitIds, setUnlockedOutfitIds] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('roco_unlocked_outfits');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [playerDiamonds, setPlayerDiamonds] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('roco_player_diamonds');
+      return saved ? parseInt(saved, 10) : 680;
+    } catch {
+      return 680;
+    }
+  });
+  const [isWardrobeOpen, setIsWardrobeOpen] = useState<boolean>(false);
 
   // Global Keyboard Listener for GM console (Backquote ~ or F8)
   useEffect(() => {
@@ -302,7 +331,7 @@ export default function App() {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        setPlayerName(parsed.playerName || '云游灵契师');
+        setPlayerName(parsed.playerName || '见习小魔法师');
         setPlayerCoins(parsed.playerCoins || 1000);
         setPlayerBadges(parsed.playerBadges || []);
         setParty(parsed.party || []);
@@ -458,7 +487,51 @@ export default function App() {
     localStorage.removeItem('huanling_friends_data');
     localStorage.removeItem('huanling_spirit_shards');
     localStorage.removeItem('huanling_last_gift_date');
+    localStorage.removeItem('roco_character_outfit');
+    localStorage.removeItem('roco_unlocked_outfits');
+    localStorage.removeItem('roco_player_diamonds');
     window.location.reload();
+  };
+
+  // Magic Wardrobe Outfit Customization Handlers
+  const handleSaveOutfit = (newOutfit: CharacterOutfit) => {
+    setPlayerOutfit(newOutfit);
+    try {
+      localStorage.setItem('roco_character_outfit', JSON.stringify(newOutfit));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleUnlockOutfitItem = (itemId: string, costCoins?: number, costDiamonds?: number) => {
+    if (costCoins && playerCoins < costCoins) return;
+    if (costDiamonds && playerDiamonds < costDiamonds) return;
+
+    if (costCoins) {
+      setPlayerCoins((prev) => Math.max(0, prev - costCoins));
+    }
+    if (costDiamonds) {
+      setPlayerDiamonds((prev) => {
+        const next = Math.max(0, prev - costDiamonds);
+        try {
+          localStorage.setItem('roco_player_diamonds', next.toString());
+        } catch (e) {
+          console.error(e);
+        }
+        return next;
+      });
+    }
+
+    setUnlockedOutfitIds((prev) => {
+      if (prev.includes(itemId)) return prev;
+      const next = [...prev, itemId];
+      try {
+        localStorage.setItem('roco_unlocked_outfits', JSON.stringify(next));
+      } catch (e) {
+        console.error(e);
+      }
+      return next;
+    });
   };
 
   // Helper to progress Quest
@@ -571,8 +644,8 @@ export default function App() {
           }
           return nextStorage;
         });
-        const petName = PET_SPECIES[result.capturedPet.speciesId]?.name || '灵宠';
-        setMarqueeAnnouncement(`出战灵宠背包已满，捕获的【${petName}】已自动收入仙府珍兽居！`);
+        const petName = PET_SPECIES[result.capturedPet.speciesId]?.name || '宠物';
+        setMarqueeAnnouncement(`随行宠物背包已满，捕获的【${petName}】已自动存入王国宠物仓库！`);
       }
 
       if (!unlockedSpeciesIds.includes(result.capturedPet.speciesId)) {
@@ -800,7 +873,7 @@ export default function App() {
   // 11. Pet Storage Handlers
   const handleDepositToStorage = (partyIndex: number) => {
     if (party.length <= 1) {
-      alert('上阵出战位至少保留 1 只幻灵！');
+      alert('上阵出战位至少保留 1 只宠物！');
       return;
     }
     const petToDeposit = party[partyIndex];
@@ -822,7 +895,7 @@ export default function App() {
 
   const handleWithdrawFromStorage = (storageIndex: number) => {
     if (party.length >= 6) {
-      alert('上阵出战位已满（至多 6 只），请先将出战灵宠存入仙府！');
+      alert('随行宠物已满（至多 6 只），请先将宠物存入仓库！');
       return;
     }
     const petToWithdraw = petStorage[storageIndex];
@@ -860,7 +933,7 @@ export default function App() {
   const handleReleasePet = (from: 'party' | 'storage', index: number) => {
     if (from === 'party') {
       if (party.length <= 1) {
-        alert('上阵出战位至少保留 1 只幻灵，不可全部放生！');
+        alert('随行宠物至少保留 1 只，不可全部放生！');
         return;
       }
       const pet = party[index];
@@ -1107,7 +1180,7 @@ export default function App() {
 
   const handleLogout = () => {
     const acc: CloudAccount = {
-      username: '云游灵契师',
+      username: '见习小魔法师',
       token: null,
       isLoggedIn: false,
       lastSyncTime: null,
@@ -1201,11 +1274,11 @@ export default function App() {
     <div className="min-h-screen bg-[#020617] text-slate-100 flex flex-col items-center justify-start sm:justify-center p-1 sm:p-2 select-none overflow-x-hidden">
       {/* 1. Roco Kingdom Classic Fantasy Game Top Navigation Bar */}
       <header className="w-full max-w-5xl roco-top-bar rounded-t-2xl px-3 py-2 flex flex-wrap items-center justify-between text-xs text-slate-300 gap-2">
-        {/* Left: Player Profile & Realm Crest (洛克小魔法师头像与修仙铭牌) */}
+        {/* Left: Player Profile & Level Crest (洛克小魔法师头像与等级铭牌) */}
         <div className="flex items-center gap-2.5">
-          <div className="relative group cursor-pointer" onClick={() => setIsPetTrainOpen(true)} title="点击查看灵宠修炼与详细资料">
+          <div className="relative group cursor-pointer" onClick={() => setIsPetTrainOpen(true)} title="点击查看宠物锻炼与详细资料">
             <div className="w-10 h-10 rounded-full border-2 border-[#fde047] bg-gradient-to-br from-[#1e3a8a] to-[#0f172a] flex items-center justify-center overflow-hidden shadow-[0_0_12px_rgba(250,204,21,0.5)]">
-              <PlayerAvatar size={36} />
+              <PlayerAvatar size={36} outfit={playerOutfit} />
             </div>
             <div className="absolute -bottom-1 -right-1 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-[9px] px-1 rounded-full border border-yellow-200 shadow font-mono">
               Lv.{myTopLevel}
@@ -1230,13 +1303,13 @@ export default function App() {
           </div>
         </div>
 
-        {/* Center: Roco Kingdom Iconic Currencies & Vitality Gauges (洛克贝/洛克钻/活力值) */}
+        {/* Center: Astra Kingdom Iconic Currencies & Vitality Gauges (星辉金币/璀璨星钻/活力值) */}
         <div className="hidden sm:flex items-center gap-2">
-          {/* 1. 洛克贝 */}
+          {/* 1. 星辉金币 */}
           <div
             onClick={() => setIsShopOpen(true)}
             className="roco-currency-badge cursor-pointer group"
-            title="查看洛克贝储备 · 点击前往跳跳集市"
+            title="查看星辉金币储备 · 点击前往星辉集市"
           >
             <div className="w-4 h-4 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-xs">
               <Coins className="w-2.5 h-2.5 text-slate-950" />
@@ -1244,23 +1317,23 @@ export default function App() {
             <span className="font-mono text-[11px] font-bold text-amber-300">
               {playerCoins.toLocaleString()}
             </span>
-            <span className="text-[9px] text-slate-400 font-mono">贝</span>
+            <span className="text-[9px] text-slate-400 font-mono">金</span>
             <div className="w-3.5 h-3.5 rounded-full bg-amber-500/30 group-hover:bg-amber-400 text-amber-200 group-hover:text-slate-950 flex items-center justify-center text-[10px] font-bold ml-0.5 transition-colors">
               +
             </div>
           </div>
 
-          {/* 2. 洛克钻 */}
+          {/* 2. 璀璨星钻 */}
           <div
             onClick={() => setIsShopOpen(true)}
             className="roco-currency-badge cursor-pointer group"
-            title="洛克魔法钻 · 用于兑换珍贵魔法道具与稀有咕噜球"
+            title="璀璨星钻 · 用于兑换珍贵魔法道具与稀有星灵球"
           >
             <div className="w-4 h-4 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center shadow-xs">
               <Gem className="w-2.5 h-2.5 text-white" />
             </div>
             <span className="font-mono text-[11px] font-bold text-cyan-300">
-              680
+              {playerDiamonds.toLocaleString()}
             </span>
             <span className="text-[9px] text-slate-400 font-mono">钻</span>
             <div className="w-3.5 h-3.5 rounded-full bg-cyan-500/30 group-hover:bg-cyan-400 text-cyan-200 group-hover:text-slate-950 flex items-center justify-center text-[10px] font-bold ml-0.5 transition-colors">
@@ -1269,7 +1342,7 @@ export default function App() {
           </div>
 
           {/* 3. 活力值 */}
-          <div className="roco-currency-badge" title="小洛克每日探索活力值">
+          <div className="roco-currency-badge" title="小魔法师每日探索活力值">
             <div className="w-4 h-4 rounded-full bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center shadow-xs">
               <Zap className="w-2.5 h-2.5 text-slate-950" />
             </div>
@@ -1279,7 +1352,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* Right: Quick Action Candy Buttons & Utilities (活动/信箱/公会/天梯/GM) */}
+        {/* Right: Quick Action Candy Buttons & Utilities (活动/装扮/信箱/公会/天梯/GM) */}
         <div className="flex items-center gap-1 sm:gap-1.5 flex-wrap justify-end">
           {/* Daily Events Activity Center */}
           <button
@@ -1289,6 +1362,19 @@ export default function App() {
           >
             <Gift className="w-3.5 h-3.5 text-amber-300 animate-bounce" />
             <span className="hidden md:inline">活动</span>
+          </button>
+
+          {/* Magic Wardrobe Salon Button */}
+          <button
+            onClick={() => {
+              sound.playClick();
+              setIsWardrobeOpen(true);
+            }}
+            className="roco-action-pill bg-gradient-to-b from-purple-600/40 to-pink-950/60 border-purple-400/50"
+            title="皮卡魔力衣橱 · 魔法服饰换装与沙龙"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-pink-300 animate-spin" style={{ animationDuration: '6s' }} />
+            <span className="hidden md:inline font-bold text-pink-200">装扮</span>
           </button>
 
           {/* Mailbox Button */}
@@ -1361,7 +1447,7 @@ export default function App() {
           <button
             onClick={() => setIsAuthOpen(true)}
             className="roco-action-pill"
-            title="天道云端账号与进度同步"
+            title="王国云端档案与进度同步"
           >
             <Cloud className="w-3.5 h-3.5 text-indigo-400" />
             <span className="hidden md:inline">云端</span>
@@ -1371,7 +1457,7 @@ export default function App() {
           <button
             onClick={() => setIsGmOpen(true)}
             className="px-2 py-1 rounded-full text-xs text-purple-200 hover:text-white bg-purple-950/80 hover:bg-purple-900 border border-purple-500/50 transition-all cursor-pointer font-bold flex items-center gap-1 roco-title-font shadow"
-            title="呼出天道 GM 调试控制台 (快捷键 ~)"
+            title="呼出魔法学院 GM 调试控制台 (快捷键 ~)"
           >
             <Wrench className="w-3.5 h-3.5 text-purple-400" />
             <span>GM</span>
@@ -1387,7 +1473,7 @@ export default function App() {
             <span className="hidden sm:inline">后台</span>
           </button>
 
-          {/* Pentatonic Xianxia BGM Toggle Button */}
+          {/* Magic Academy BGM Toggle Button */}
           <button
             onClick={handleToggleBgm}
             className={`p-1.5 rounded-full border transition-all cursor-pointer ${
@@ -1395,7 +1481,7 @@ export default function App() {
                 ? 'bg-amber-500/30 border-amber-400 text-amber-300 shadow-[0_0_10px_rgba(245,158,11,0.5)]'
                 : 'bg-slate-800/80 hover:bg-slate-750 border-slate-700/60 text-slate-400'
             }`}
-            title={bgmPlaying ? '仙乐播放中 (点击停止)' : '播放空灵仙乐五声音阶'}
+            title={bgmPlaying ? '王国魔法乐章播放中 (点击停止)' : '播放轻快魔法旋律'}
           >
             <Music className={`w-3.5 h-3.5 ${bgmPlaying ? 'animate-spin' : ''}`} />
           </button>
@@ -1442,6 +1528,8 @@ export default function App() {
             onClaimFromFriend={handleClaimFromFriend}
             onToggleFollowInScene={handleToggleFollowInScene}
             claimableShardsCount={friends.filter((f) => f.canClaimFromFriend).length}
+            playerOutfit={playerOutfit}
+            onOpenWardrobe={() => setIsWardrobeOpen(true)}
             onOpenChest={handleOpenChest}
             onEnterBattle={handleStartBattle}
             onTeleportToScene={(scId) => setCurrentSceneId(scId)}
@@ -1460,7 +1548,7 @@ export default function App() {
         {/* Global World Chat Bar */}
         <WorldChatPanel
           playerName={playerName}
-          playerTitle={party[0]?.level && party[0].level >= 30 ? '灵宗大师' : '引气修者'}
+          playerTitle={party[0]?.level && party[0].level >= 30 ? '皇家大法师' : '见习魔法师'}
           messages={chatMessages}
           onSendMessage={handleSendMessage}
           marqueeAnnouncement={marqueeAnnouncement}
@@ -1470,16 +1558,16 @@ export default function App() {
       {/* 3. Subtle RPG Footer */}
       <footer className="w-full max-w-5xl bg-[#040e1b]/90 border-x-2 border-b-2 border-[#b8860b]/40 rounded-b-2xl px-4 py-2 flex flex-wrap items-center justify-between text-[11px] text-slate-400 mt-1">
         <div className="flex items-center gap-2">
-          <span className="text-amber-400 font-bold roco-title-font">◇ 幻灵大陆</span>
+          <span className="text-amber-400 font-bold roco-title-font">◇ 星灵王国</span>
           <span className="text-slate-600">·</span>
-          <span>纯正经典回合制幻灵契约与技能对决 · 参考洛克王国网页游戏</span>
+          <span>经典西幻魔法回合制宠物页游 · 奥术学院与奇迹进化</span>
         </div>
         <div className="hidden sm:flex items-center gap-3 text-amber-200/80 font-mono text-[10px]">
-          <span>全图鉴收录 16 种天地神兽</span>
+          <span>全图鉴收录 16 种经典魔灵宠物</span>
           <span className="text-amber-600">|</span>
-          <span>五行相生相克法则</span>
+          <span>魔法系别克制法则</span>
           <span className="text-amber-600">|</span>
-          <span>按 ~ 键呼出天道控制台</span>
+          <span>按 ~ 键呼出管理控制台</span>
         </div>
       </footer>
 
@@ -1652,6 +1740,19 @@ export default function App() {
           onAddFriend={handleAddFriend}
           onRemoveFriend={handleRemoveFriend}
           onExchangeReward={handleExchangeReward}
+        />
+      )}
+
+      {/* Magic Wardrobe Salon & Character Dressing Modal */}
+      {isWardrobeOpen && (
+        <WardrobeModal
+          currentOutfit={playerOutfit}
+          unlockedOutfitIds={unlockedOutfitIds}
+          playerCoins={playerCoins}
+          playerDiamonds={playerDiamonds}
+          onSaveOutfit={handleSaveOutfit}
+          onUnlockOutfitItem={handleUnlockOutfitItem}
+          onClose={() => setIsWardrobeOpen(false)}
         />
       )}
 

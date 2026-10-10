@@ -66,7 +66,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
 
   const [battleMenu, setBattleMenu] = useState<'ACTIONS' | 'MOVES' | 'BALLS' | 'POTIONS' | 'SWITCH'>('ACTIONS');
 
-  const [battleLog, setBattleLog] = useState<string[]>(['★ 战斗开始！双方幻灵已就位！']);
+  const [battleLog, setBattleLog] = useState<string[]>(['★ 战斗开始！双方宠物已就位！']);
   const [isProcessingTurn, setIsProcessingTurn] = useState<boolean>(false);
   const [playerAttacking, setPlayerAttacking] = useState<boolean>(false);
   const [enemyAttacking, setEnemyAttacking] = useState<boolean>(false);
@@ -131,7 +131,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
       turnsLeft: newWeather === 'CLEAR' ? 0 : 5,
     });
     setShowWeatherTooltip(false);
-    logMessage(`【天象变幻】契灵使引动天象异变，战场转为【${cfg.name}】！`);
+    logMessage(`【天象变幻】小魔法师引动天象异变，战场转为【${cfg.name}】！`);
   };
 
   // Scene Arena Backgrounds
@@ -186,10 +186,10 @@ export const BattleView: React.FC<BattleViewProps> = ({
         else sound.playAttackHit(false);
 
         if (newHp <= 0) {
-          logMessage(`${currentP.nickname} 耗尽气血倒下了！`);
+          logMessage(`${currentP.nickname} 精力耗尽倒下了！`);
           const hasAlive = updatedParty.some((p) => p.currentHp > 0);
           if (!hasAlive) {
-            logMessage('所有随行幻灵均已脱力！本次战斗失败。');
+            logMessage('所有随行宠物均已脱力！本次战斗失败。');
             setTimeout(() => {
               onBattleEnd({
                 won: false,
@@ -221,7 +221,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
         else sound.playAttackHit(false);
 
         if (newHp <= 0) {
-          logMessage(`对方 ${enemySpecies.name} 耗尽气血倒下了！`);
+          logMessage(`对方 ${enemySpecies.name} 精力耗尽倒下了！`);
           handleBattleWin();
           return { ended: true };
         }
@@ -244,7 +244,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
       petMoves.push(moveSlot);
     }
     if (moveSlot.pp <= 0) {
-      logMessage('此招式灵力 (PP) 已耗尽，请使用其他灵术！');
+      logMessage('此招式魔力 (PP) 已耗尽，请施展其他技能！');
       return;
     }
 
@@ -295,7 +295,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
   };
 
   const executePlayerAttack = async (attacker: PetInstance, move: Move): Promise<boolean> => {
-    logMessage(`【我方】${attacker.nickname} 运转灵力施展【${move.name}】！`);
+    logMessage(`【我方】${attacker.nickname} 汇聚魔力施展【${move.name}】！`);
     setPlayerAttacking(true);
     await new Promise((r) => setTimeout(r, 220));
     setPlayerAttacking(false);
@@ -308,10 +308,10 @@ export const BattleView: React.FC<BattleViewProps> = ({
         attacker.currentHp = newHp;
         setParty((prev) => prev.map((p, idx) => (idx === activePetIndex ? { ...p, currentHp: newHp } : p)));
         sound.playHeal();
-        logMessage(`【治愈之光】灵气充盈，${attacker.nickname} 回复了 ${healAmt} 点生命！`);
+        logMessage(`【治愈之光】圣光充盈，${attacker.nickname} 回复了 ${healAmt} 点精力！`);
         return false;
       }
-      logMessage(`状态灵术【${move.name}】生效了！`);
+      logMessage(`辅助技能【${move.name}】生效了！`);
       return false;
     }
 
@@ -349,7 +349,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
     setDamagePopup(null);
 
     if (newEnemyHp <= 0) {
-      logMessage(`对方 ${enemySpecies.name} 耗尽气血倒下了！`);
+      logMessage(`对方 ${enemySpecies.name} 精力耗尽倒下了！`);
       return true;
     }
     return false;
@@ -399,10 +399,10 @@ export const BattleView: React.FC<BattleViewProps> = ({
     setDamagePopup(null);
 
     if (newPlayerHp <= 0) {
-      logMessage(`${currentActivePet.nickname} 耗尽气血倒下了！`);
+      logMessage(`${currentActivePet.nickname} 精力耗尽倒下了！`);
       const hasAlivePet = updatedPartyHp.some((p) => p.currentHp > 0);
       if (!hasAlivePet) {
-        logMessage('所有随行幻灵均已脱力！本次试炼失败...');
+        logMessage('所有随行宠物均已脱力！本次对决失败...');
         await new Promise((r) => setTimeout(r, 1200));
         onBattleEnd({
           won: false,
@@ -427,7 +427,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
 
     const slot = inventory.find((i) => i.itemId === ballId);
     if (!slot || slot.count <= 0) {
-      logMessage('灵契晶石数量不足！');
+      logMessage('咕噜球数量不足！');
       return;
     }
 
@@ -440,13 +440,13 @@ export const BattleView: React.FC<BattleViewProps> = ({
     setBattleMenu('ACTIONS');
 
     sound.playBallThrow();
-    logMessage(`祭出【${item.name}】，划破长空飞向目标！`);
+    logMessage(`投掷出【${item.name}】，划破长空飞向目标！`);
 
     setCatchingState({
       active: true,
       ballId,
       shakeCount: 0,
-      message: '灵契晶石化作宝光笼罩目标...',
+      message: '咕噜球抛出，魔法光芒笼罩目标...',
     });
 
     const { success, shakes } = calculateCatchRate(enemy, item.catchMultiplier || 1, item.isGuaranteed);
@@ -454,15 +454,15 @@ export const BattleView: React.FC<BattleViewProps> = ({
     for (let s = 1; s <= shakes; s++) {
       await new Promise((r) => setTimeout(r, 700));
       sound.playBallShake();
-      setCatchingState((prev) => (prev ? { ...prev, shakeCount: s, message: `晶石共鸣晃动... (${s}/3)` } : null));
+      setCatchingState((prev) => (prev ? { ...prev, shakeCount: s, message: `咕噜球晃动中... (${s}/3)` } : null));
     }
 
     await new Promise((r) => setTimeout(r, 600));
 
     if (success) {
       sound.playCatchSuccess();
-      setCatchingState((prev) => (prev ? { ...prev, message: `★ 契约达成！成功收服【${enemySpecies.name}】！` } : null));
-      logMessage(`太棒了！成功与野生 ${enemySpecies.name} 缔结契约！`);
+      setCatchingState((prev) => (prev ? { ...prev, message: `★ 捕捉成功！成功收服【${enemySpecies.name}】！` } : null));
+      logMessage(`太棒了！成功使用咕噜球捕获了野生 ${enemySpecies.name}！`);
 
       await new Promise((r) => setTimeout(r, 1200));
       setCatchingState(null);
@@ -482,8 +482,8 @@ export const BattleView: React.FC<BattleViewProps> = ({
       });
     } else {
       sound.playClick();
-      setCatchingState((prev) => (prev ? { ...prev, message: `哎呀！野生 ${enemySpecies.name} 震碎了灵契宝光！` } : null));
-      logMessage(`契约失败！野生 ${enemySpecies.name} 挣脱了束缚！`);
+      setCatchingState((prev) => (prev ? { ...prev, message: `哎呀！野生 ${enemySpecies.name} 挣脱了咕噜球！` } : null));
+      logMessage(`捕捉失败！野生 ${enemySpecies.name} 挣脱了束缚！`);
 
       await new Promise((r) => setTimeout(r, 900));
       setCatchingState(null);
@@ -500,11 +500,11 @@ export const BattleView: React.FC<BattleViewProps> = ({
     if (!potion) return;
 
     if (potion.isRevive && activePet.currentHp > 0) {
-      logMessage('该幻灵尚未脱力，无需使用复生灵草！');
+      logMessage('该宠物尚未脱力，无需使用复活药剂！');
       return;
     }
     if (!potion.isRevive && activePet.currentHp <= 0) {
-      logMessage('脱力幻灵需使用返魂定魄草！');
+      logMessage('脱力宠物需使用复活药剂！');
       return;
     }
 
@@ -519,14 +519,14 @@ export const BattleView: React.FC<BattleViewProps> = ({
       const restored = Math.min(activePet.stats.hp, activePet.currentHp + potion.healHp);
       updatedPet.currentHp = restored;
       sound.playHeal();
-      logMessage(`${activePet.nickname} 服用灵药，恢复了气血！`);
+      logMessage(`${activePet.nickname} 服用魔药，恢复了精力！`);
     } else if (potion.healPp) {
       updatedPet.moves = activePet.moves.map((m) => ({
         ...m,
         pp: Math.min(m.maxPp, m.pp + (potion.healPp || 10)),
       }));
       sound.playHeal();
-      logMessage(`${activePet.nickname} 招式灵力 (PP) 恢复了！`);
+      logMessage(`${activePet.nickname} 技能 (PP) 恢复了！`);
     }
 
     const updatedParty = party.map((p, idx) => (idx === activePetIndex ? updatedPet : p));
@@ -544,7 +544,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
   const handleSwitchPet = (index: number) => {
     if (index === activePetIndex || party[index].currentHp <= 0 || isProcessingTurn) return;
     sound.playClick();
-    logMessage(`召回 ${activePet.nickname}，唤出出战幻灵 ${party[index].nickname}！`);
+    logMessage(`召回 ${activePet.nickname}，换上出战宠物 ${party[index].nickname}！`);
     setActivePetIndex(index);
     setBattleMenu('ACTIONS');
 
@@ -691,19 +691,19 @@ export const BattleView: React.FC<BattleViewProps> = ({
 
       {/* Top Arena Header Bar (Roco Kingdom Image 1 Layout) */}
       <div className="relative flex items-center justify-between px-4 sm:px-6 py-2.5 bg-gradient-to-b from-[#040e1b]/95 via-[#061426]/85 to-transparent z-30 select-none border-b border-[#b8860b]/20">
-        {/* Left: 幻灵秘境 SPIRIT REALM Logo with Vermilion Seal */}
+        {/* Left: 洛克王国 ROCO KINGDOM Logo with Vermilion Seal */}
         <div className="flex items-center gap-2">
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
               <span className="roco-title-font text-2xl sm:text-3xl roco-gold-text tracking-wide drop-shadow-[0_2px_10px_rgba(245,158,11,0.6)]">
-                幻灵秘境
+                星灵王国
               </span>
               <span className="roco-seal text-[10px] px-1.5 py-0.5 font-bold tracking-wider">
-                幻境
+                王国
               </span>
             </div>
             <span className="text-[9px] sm:text-[10px] tracking-[0.28em] text-amber-300/85 font-mono font-bold -mt-0.5">
-              — SPIRIT REALM —
+              — ROCO KINGDOM —
             </span>
           </div>
         </div>
@@ -760,7 +760,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
               setBattleMenu(battleMenu === 'POTIONS' ? 'ACTIONS' : 'POTIONS');
             }}
             className="flex flex-col items-center group cursor-pointer"
-            title="查看储物袋与灵药"
+            title="打开魔法背包与药剂"
           >
             <div className="roco-medallion-btn text-amber-200">
               <Backpack className="w-4 h-4 text-amber-200 filter drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" />
@@ -1109,7 +1109,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
             }`}
           >
             <Swords className="w-3.5 h-3.5" />
-            <span>灵术技能</span>
+            <span>魔法技能</span>
           </button>
 
           {/* 2. 咕噜球 (Capture) */}
@@ -1261,7 +1261,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
                 <Sparkles className="w-4 h-4 text-amber-400" />
                 <span>
                   {battleMenu === 'MOVES'
-                    ? '灵术秘典 · 选择施展神通'
+                    ? '魔法技能 · 选择施展技能'
                     : battleMenu === 'BALLS'
                     ? '咕噜球 · 投掷收服野生宠物'
                     : battleMenu === 'POTIONS'
@@ -1440,8 +1440,8 @@ export const BattleView: React.FC<BattleViewProps> = ({
             {/* Evolutions */}
             {victoryData.evolutions.map((evo, i) => (
               <div key={i} className="bg-purple-950/80 border-2 border-purple-400 p-4 rounded-2xl text-purple-200 text-sm">
-                <p className="text-amber-300 font-black text-base mb-1 game-title-font">✨ 远古血脉觉醒 · 化形蜕变！</p>
-                【{evo.petName}】 领悟了天地本源灵脉，成功化形为 【{evo.newSpeciesName}】！
+                <p className="text-amber-300 font-black text-base mb-1 roco-title-font">✨ 奇迹觉醒 · 宠物华丽进化！</p>
+                【{evo.petName}】 觉醒了魔导源核，成功进化为 【{evo.newSpeciesName}】！
                 <div className="flex justify-center mt-3">
                   <PetAvatar speciesId={evo.newSpeciesId} size={76} />
                 </div>

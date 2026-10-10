@@ -21,7 +21,7 @@ export const WEATHER_CONFIGS: Record<BattleWeather, WeatherConfig> = {
   CLEAR: {
     id: 'CLEAR',
     name: '风和日丽',
-    subName: '灵气均衡',
+    subName: '魔力均衡',
     icon: 'SunDim',
     color: {
       badgeBg: 'bg-emerald-950/80',
@@ -30,8 +30,8 @@ export const WEATHER_CONFIGS: Record<BattleWeather, WeatherConfig> = {
       glow: 'shadow-[0_0_15px_rgba(16,185,129,0.35)]',
       bgGradient: 'from-sky-950/40 to-emerald-950/40',
     },
-    buffs: ['天地灵气安详，各系招式发挥正常无额外修正'],
-    description: '天朗气清，惠风和畅。所有五行术法维持常规威能。',
+    buffs: ['魔力波动平稳，各系魔法技能发挥正常无额外修正'],
+    description: '天朗气清，惠风和畅。所有自然与魔法元素维持常规威能。',
   },
 
   SUNNY: {
@@ -91,9 +91,9 @@ export const WEATHER_CONFIGS: Record<BattleWeather, WeatherConfig> = {
     buffs: [
       '🪨 石系/土系技能受风暴狂澜加持，威力提升 30%',
       '🛡️ 石系/土系宠物魔抗提升，受到伤害减免 20%',
-      '🌪️ 非石系的宠物每回合受到 6% 最大生命值的刮擦风沙伤害',
+      '🌪️ 非石系的宠物每回合受到 6% 最大精力值的刮擦风沙伤害',
     ],
-    description: '狂沙呼啸席卷！石系宠物受大地庇护，其余生灵皆遭风沙刮擦。',
+    description: '狂沙呼啸席卷！石系宠物受大地庇护，其余宠物皆遭风沙刮擦。',
   },
 
   THUNDER: {

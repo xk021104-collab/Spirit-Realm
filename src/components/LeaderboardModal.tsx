@@ -314,7 +314,7 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({
                 {/* Score */}
                 <div className="text-right">
                   <div className="text-xs font-bold font-mono text-amber-300">
-                    {activeBoard === 'POWER' ? `${entry.score.toLocaleString()} 战力` : `${entry.score} 尊神兽`}
+                    {activeBoard === 'POWER' ? `${entry.score.toLocaleString()} 战力` : `${entry.score} 种宠物`}
                   </div>
                   <span className="text-[10px] text-slate-500 font-mono">
                     {activeBoard === 'POWER' ? '全队评分' : '图鉴点亮率'}

@@ -197,7 +197,7 @@ export function calculateDamage(
   } else if (weather === 'THUNDER') {
     if (move.type === 'ELECTRIC') {
       weatherMultiplier = 1.4;
-      weatherMsg = '【九天雷暴】引动天劫神雷，雷系威力提升 40%！';
+      weatherMsg = '【极天雷暴】引动极光狂雷，电系魔法威力提升 40%！';
     }
   }
 

@@ -32,7 +32,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     sound.playCatchSuccess();
     const success = onLogin(usernameInput.trim());
     if (success) {
-      setSyncStatus(`登录成功！已载入修仙道号【${usernameInput.trim()}】。`);
+      setSyncStatus(`登录成功！已载入小魔法师档案【${usernameInput.trim()}】。`);
       setTimeout(() => setSyncStatus(null), 3000);
     }
   };
@@ -58,7 +58,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     setIsSyncing(false);
     if (ok) {
       sound.playCatchSuccess();
-      setSyncStatus('已成功从云端拉取最新修为进度！');
+      setSyncStatus('已成功从云端拉取最新冒险进度！');
     } else {
       setSyncStatus('云端拉取失败，请检查账号是否存在云端存档。');
     }
@@ -83,10 +83,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             </div>
             <div>
               <h2 className="text-lg font-black roco-gold-text tracking-wide flex items-center gap-2 roco-title-font">
-                天道云匣 · 账号与云存档
+                王国云匣 · 账号与云存档
               </h2>
               <p className="text-xs text-slate-400 mt-0.5">
-                基于 PostgreSQL + Redis 的跨设备多端云存档同步体系
+                基于 MySQL + Redis 的跨设备多端云存档同步体系
               </p>
             </div>
           </div>
@@ -113,7 +113,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               </div>
               <div>
                 <div className="text-xs font-bold text-slate-200">
-                  {cloudAccount.isCloudLoggedIn ? cloudAccount.username : '本地游客道友 (未登云端)'}
+                  {cloudAccount.isCloudLoggedIn ? cloudAccount.username : '本地小魔法师 (未登云端)'}
                 </div>
                 <div className="text-[11px] text-slate-400 font-mono mt-0.5">
                   上次云端备份: {cloudAccount.lastSyncedAt ? new Date(cloudAccount.lastSyncedAt).toLocaleString() : '暂无'}
@@ -135,12 +135,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           {!cloudAccount.isCloudLoggedIn && (
             <form onSubmit={handleLoginSubmit} className="space-y-3 p-4 rounded-2xl bg-slate-950/60 border border-slate-800">
               <span className="text-xs font-bold text-amber-300 block mb-1">
-                登录或注册仙盟云端通行证
+                登录或注册王国通行证
               </span>
               <div>
                 <input
                   type="text"
-                  placeholder="请输入道号 / 账号名..."
+                  placeholder="请输入魔法师昵称 / 账号名..."
                   value={usernameInput}
                   onChange={(e) => setUsernameInput(e.target.value)}
                   className="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-amber-400"
@@ -149,7 +149,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <div>
                 <input
                   type="password"
-                  placeholder="请输入仙符密文 (留空为快捷游历)..."
+                  placeholder="请输入通行密码 (留空为快捷游历)..."
                   value={passwordInput}
                   onChange={(e) => setPasswordInput(e.target.value)}
                   className="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-amber-400"
@@ -159,7 +159,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 type="submit"
                 className="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-700 hover:from-amber-400 hover:to-amber-600 text-slate-950 font-bold text-xs shadow cursor-pointer transition-all"
               >
-                快速认证并登入天道云端
+                快速认证并登入王国云端
               </button>
             </form>
           )}

@@ -172,7 +172,7 @@ export const PetStorageModal: React.FC<PetStorageModalProps> = ({
                           {sp?.type}
                         </span>
                         <span className="text-[9px] text-slate-400 font-mono">
-                          气血: {pet.currentHp}/{pet.stats.hp}
+                          精力: {pet.currentHp}/{pet.stats.hp}
                         </span>
                       </div>
                     </div>
@@ -187,7 +187,7 @@ export const PetStorageModal: React.FC<PetStorageModalProps> = ({
             <div className="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold text-cyan-300 flex items-center gap-1.5">
-                  <Archive className="w-3.5 h-3.5 text-cyan-400" /> 仙府玄匣 ({storage.length} 尊)
+                  <Archive className="w-3.5 h-3.5 text-cyan-400" /> 王国宠物仓库 ({storage.length} 只)
                 </span>
               </div>
               <div className="flex items-center gap-1.5 text-xs">
@@ -199,7 +199,7 @@ export const PetStorageModal: React.FC<PetStorageModalProps> = ({
                   ◀
                 </button>
                 <span className="text-[11px] font-mono text-amber-300">
-                  匣 {activeBoxPage}/{totalBoxPages}
+                  仓 {activeBoxPage}/{totalBoxPages}
                 </span>
                 <button
                   disabled={activeBoxPage >= totalBoxPages}
@@ -214,9 +214,9 @@ export const PetStorageModal: React.FC<PetStorageModalProps> = ({
             {storage.length === 0 ? (
               <div className="flex-1 flex flex-col items-center justify-center text-slate-500 text-xs p-6 text-center space-y-2">
                 <Archive className="w-10 h-10 text-slate-600 animate-pulse" />
-                <p>仙府宝匣尚无寄宿幻灵</p>
+                <p>宠物仓库暂无存放宠物</p>
                 <p className="text-[10px] text-slate-600">
-                  随行战队满 6 只后收服的新幻灵，将自动珍藏于此
+                  随行背包满 6 只后捕获的新宠物，将自动存入此仓库
                 </p>
               </div>
             ) : (
@@ -341,7 +341,7 @@ export const PetStorageModal: React.FC<PetStorageModalProps> = ({
                         className="w-full py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 disabled:opacity-40 text-white text-xs font-bold cursor-pointer transition-colors shadow flex items-center justify-center gap-1.5"
                       >
                         <ArrowDown className="w-3.5 h-3.5" />
-                        存入仙府宝匣
+                        存入宠物仓库
                       </button>
                     </>
                   ) : (
@@ -362,7 +362,7 @@ export const PetStorageModal: React.FC<PetStorageModalProps> = ({
                   {confirmRelease ? (
                     <div className="p-2 rounded-xl bg-red-950/60 border border-red-500/40 text-center space-y-1.5">
                       <p className="text-[10px] text-red-300">
-                        确认放生【{selectedPet.nickname}】？将返还 500 灵石与 2 灵力碎片！
+                        确认放生【{selectedPet.nickname}】？将返还 500 洛克贝与 2 友谊魔法碎片！
                       </p>
                       <div className="flex items-center justify-center gap-2">
                         <button
@@ -373,7 +373,7 @@ export const PetStorageModal: React.FC<PetStorageModalProps> = ({
                           }}
                           className="px-3 py-1 rounded bg-red-600 hover:bg-red-500 text-white text-xs font-bold cursor-pointer"
                         >
-                          确认遣返
+                          确认放生
                         </button>
                         <button
                           onClick={() => setConfirmRelease(false)}
@@ -390,14 +390,14 @@ export const PetStorageModal: React.FC<PetStorageModalProps> = ({
                       className="w-full py-1.5 rounded-lg bg-red-950/40 hover:bg-red-950/80 border border-red-900/50 text-red-400 hover:text-red-300 text-xs cursor-pointer transition-colors flex items-center justify-center gap-1"
                     >
                       <Trash2 className="w-3 h-3" />
-                      放生遣返归于天地
+                      放生宠物归于自然
                     </button>
                   )}
                 </div>
               </>
             ) : (
               <div className="text-center text-slate-500 text-xs my-auto">
-                请点击选择幻灵查看详情
+                请点击选择宠物查看详情
               </div>
             )}
           </div>

@@ -9,8 +9,8 @@ export const PET_SPECIES: Record<string, PetSpecies> = {
     title: '火系初阶宠物',
     type: 'FIRE',
     rarity: 'RARE',
-    acquisitionMethod: '魔法学院格里芬院长开局赠礼 / 维苏威火山外围偶遇',
-    description: '诞生于维苏威地脉火晶之中的赤羽雏鸟，尾羽燃动着永不熄灭的魔焰，性格桀骜勇猛。',
+    acquisitionMethod: '星灵奥术学院阿尔弗雷德院长开局赠礼 / 烈焰峡谷外围偶遇',
+    description: '诞生于烈焰地脉火晶之中的赤羽雏鸟，尾羽燃动着永不熄灭的魔焰，性格桀骜勇猛。',
     starter: true,
     baseStats: { hp: 46, atk: 54, def: 42, spAtk: 62, spDef: 48, speed: 68 },
     learnableMoves: [
@@ -63,7 +63,7 @@ export const PET_SPECIES: Record<string, PetSpecies> = {
     type: 'FIRE',
     rarity: 'LEGENDARY',
     acquisitionMethod: '由【灼羽鹰】达到 Lv.36 终极浴火涅槃',
-    description: '洛克王国维苏威火山的古老守护者，凤鸣九霄，周身缠绕炽火烈焰，展翼翱翔守护王国安宁！',
+    description: '星灵王国烈焰峡谷的古老守护者，凤鸣九霄，周身缠绕炽火烈焰，展翼翱翔守护王国安宁！',
     evolvesFrom: 'zhuoyuying',
     baseStats: { hp: 80, atk: 86, def: 78, spAtk: 114, spDef: 86, speed: 106 },
     learnableMoves: [
@@ -84,7 +84,7 @@ export const PET_SPECIES: Record<string, PetSpecies> = {
     title: '火系神禽 · 涅槃真火',
     type: 'FIRE',
     rarity: 'LEGENDARY',
-    acquisitionMethod: '维苏威古岩魔火显化',
+    acquisitionMethod: '烈焰古岩魔火显化',
     description: '栖息于远古赤岩之上的神圣火凤幼雏，通体燃动永不熄灭的太阳之火，鸣动九天！',
     baseStats: { hp: 76, atk: 82, def: 72, spAtk: 108, spDef: 82, speed: 98 },
     learnableMoves: [
@@ -104,7 +104,7 @@ export const PET_SPECIES: Record<string, PetSpecies> = {
     title: '水系初阶宠物',
     type: 'WATER',
     rarity: 'RARE',
-    acquisitionMethod: '魔法学院格里芬院长开局赠礼 / 人鱼湾浅滩偶遇',
+    acquisitionMethod: '星灵奥术学院阿尔弗雷德院长开局赠礼 / 蔚蓝海湾浅滩偶遇',
     description: '由极纯净的清泉凝聚而成的水滴精灵，性情温柔聪慧，周身流转着剔透的生命水韵。',
     starter: true,
     baseStats: { hp: 48, atk: 46, def: 62, spAtk: 54, spDef: 66, speed: 44 },
@@ -181,7 +181,7 @@ export const PET_SPECIES: Record<string, PetSpecies> = {
     title: '草系初阶宠物',
     type: 'GRASS',
     rarity: 'RARE',
-    acquisitionMethod: '魔法学院格里芬院长开局赠礼 / 轻风山草甸繁花中偶遇',
+    acquisitionMethod: '星灵奥术学院阿尔弗雷德院长开局赠礼 / 翡翠平原繁花中偶遇',
     description: '双角生有嫩绿幼芽的通灵小鹿，天生具有亲和万物的草木灵气，能够倾听森林心语。',
     starter: true,
     baseStats: { hp: 48, atk: 50, def: 50, spAtk: 60, spDef: 60, speed: 52 },
@@ -258,8 +258,8 @@ export const PET_SPECIES: Record<string, PetSpecies> = {
     title: '轻灵逐风灵兔',
     type: 'NORMAL',
     rarity: 'COMMON',
-    acquisitionMethod: '【轻风山草甸】投掷咕噜球捕捉',
-    description: '轻风山草甸极速奔跑的毛茸绒兔子，耳尖能捕捉微风律动，擅长灵巧规避攻击。',
+    acquisitionMethod: '【翡翠平原草甸】投掷星灵球捕捉',
+    description: '翡翠平原草甸极速奔跑的毛茸绒兔子，耳尖能捕捉微风律动，擅长灵巧规避攻击。',
     baseStats: { hp: 42, atk: 52, def: 40, spAtk: 40, spDef: 42, speed: 74 },
     learnableMoves: [
       { level: 1, moveId: 'soul_tackle' },
@@ -303,7 +303,7 @@ export const PET_SPECIES: Record<string, PetSpecies> = {
     title: '惊雷狂暴古兽',
     type: 'ELECTRIC',
     rarity: 'RARE',
-    acquisitionMethod: '【皇家竞技场】浮空演武台投掷咕噜球捕捉',
+    acquisitionMethod: '【群星竞技场】浮空演武台投掷星灵球捕捉',
     description: '周身生有金色雷霆魔纹的凶悍魔兽，一声咆哮足以引动九天落雷震慑四方！',
     baseStats: { hp: 55, atk: 76, def: 54, spAtk: 80, spDef: 58, speed: 82 },
     learnableMoves: [
@@ -323,7 +323,7 @@ export const PET_SPECIES: Record<string, PetSpecies> = {
     title: '厚土紫晶负岳龟',
     type: 'ROCK',
     rarity: 'COMMON',
-    acquisitionMethod: '【维苏威火山】岩浆岩窟投掷咕噜球捕捉',
+    acquisitionMethod: '【烈焰峡谷】岩浆岩窟投掷星灵球捕捉',
     description: '背负嶙峋紫灵晶石的万年古龟，防御浑厚如高耸山岳，受击反震石崩巨浪。',
     baseStats: { hp: 65, atk: 62, def: 98, spAtk: 38, spDef: 75, speed: 28 },
     learnableMoves: [
@@ -342,7 +342,7 @@ export const PET_SPECIES: Record<string, PetSpecies> = {
     title: '九渊冰魄天狐',
     type: 'ICE',
     rarity: 'RARE',
-    acquisitionMethod: '【魔法学院】极冰水晶窟投掷咕噜球捕捉',
+    acquisitionMethod: '【星灵奥术学院】极冰水晶窟投掷星灵球捕捉',
     description: '雪原深处凝练极光奥术化形的银白雪狐，尾摇冰霜，吐息凝冰成镜，美丽非凡。',
     baseStats: { hp: 52, atk: 48, def: 56, spAtk: 84, spDef: 74, speed: 76 },
     learnableMoves: [
@@ -360,28 +360,28 @@ export const RARITY_BADGES: Record<
   { label: string; bg: string; text: string; border: string; stars: string }
 > = {
   COMMON: {
-    label: '凡品',
+    label: '普通',
     bg: 'bg-slate-700/50',
     text: 'text-slate-300',
     border: 'border-slate-600',
     stars: '★',
   },
   RARE: {
-    label: '灵珍',
+    label: '稀有',
     bg: 'bg-blue-600/20',
     text: 'text-blue-300',
     border: 'border-blue-500/40',
     stars: '★★',
   },
   EPIC: {
-    label: '地煞',
+    label: '史诗',
     bg: 'bg-purple-600/20',
     text: 'text-purple-300',
     border: 'border-purple-500/40',
     stars: '★★★',
   },
   LEGENDARY: {
-    label: '天穹传世',
+    label: '王国传世',
     bg: 'bg-amber-500/20',
     text: 'text-amber-300',
     border: 'border-amber-400/50',

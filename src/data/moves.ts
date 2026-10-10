@@ -4,13 +4,13 @@ export const MOVES_DATA: Record<string, Move> = {
   // Normal Moves
   soul_tackle: {
     id: 'soul_tackle',
-    name: '灵魄撞击',
+    name: '魔力冲撞',
     type: 'NORMAL',
     category: 'PHYSICAL',
     power: 45,
     accuracy: 100,
     maxPp: 35,
-    description: '凝聚周身灵力猛烈撞击对手。',
+    description: '凝聚周身魔力猛烈冲撞对手。',
   },
   // Iconic Skills from Reference Image (藤蔓缠绕, 治愈之光, 烈焰之息, 凤凰涅槃)
   vine_entangle: {
@@ -31,7 +31,7 @@ export const MOVES_DATA: Record<string, Move> = {
     power: 0,
     accuracy: 100,
     maxPp: 15,
-    description: '引动秘境天地灵脉甘霖，沐浴温暖翠绿神辉，恢复自身 50 点气血。',
+    description: '引动自然草木魔法甘霖，沐浴温暖翠绿辉光，恢复自身 50 点精力。',
     effect: { type: 'HEAL', target: 'SELF', amount: 50 },
   },
   blazing_breath: {
@@ -98,7 +98,7 @@ export const MOVES_DATA: Record<string, Move> = {
     power: 45,
     accuracy: 100,
     maxPp: 25,
-    description: '射出点燃赤火的灵羽，有15%概率造成灼伤。',
+    description: '射出点燃赤火的魔羽，有15%概率造成灼伤。',
     effect: { type: 'BURN', target: 'OPPONENT', chance: 15 },
   },
   flame_talon: {
@@ -175,7 +175,7 @@ export const MOVES_DATA: Record<string, Move> = {
     power: 115,
     accuracy: 85,
     maxPp: 5,
-    description: '幻海灵尊唤引深渊洪流，排山倒海倾泻而下！',
+    description: '沧海守护者唤引深渊洪流，排山倒海倾泻而下！',
   },
 
   // Grass Moves (青木鹿系列)
@@ -187,7 +187,7 @@ export const MOVES_DATA: Record<string, Move> = {
     power: 45,
     accuracy: 100,
     maxPp: 25,
-    description: '甩出如刀刃般锋锐的灵树翠叶。',
+    description: '甩出如刀刃般锋锐的魔法翠叶。',
   },
   life_drain: {
     id: 'life_drain',
@@ -246,13 +246,13 @@ export const MOVES_DATA: Record<string, Move> = {
   },
   celestial_judgment: {
     id: 'celestial_judgment',
-    name: '九天神雷劫',
+    name: '极天雷霆裁决',
     type: 'ELECTRIC',
     category: 'SPECIAL',
     power: 95,
     accuracy: 100,
     maxPp: 10,
-    description: '自凌霄引下天劫狂雷，威力毁天灭地！',
+    description: '自苍穹引下极光狂雷，雷霆之威震撼全场！',
     effect: { type: 'PARALYZE', target: 'OPPONENT', chance: 30 },
   },
 

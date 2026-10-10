@@ -452,7 +452,7 @@ export const PetTrainModal: React.FC<PetTrainModalProps> = ({
                     皇家魔法学院秘制洗礼魔药，重塑宠物各项天资潜能(1~31)，重塑性格属性专精倾向！
                   </p>
 
-                  {/* Item 1: 洗髓丹 */}
+                  {/* Item 1: 天赋洗礼魔药 */}
                   <div className="bg-slate-900 p-3.5 rounded-xl border border-slate-800 flex items-center justify-between">
                     <div>
                       <div className="flex items-center gap-2">
@@ -475,7 +475,7 @@ export const PetTrainModal: React.FC<PetTrainModalProps> = ({
                     </button>
                   </div>
 
-                  {/* Item 2: 定魂玉 */}
+                  {/* Item 2: 性格洗礼魔药 */}
                   <div className="bg-slate-900 p-3.5 rounded-xl border border-slate-800 flex items-center justify-between">
                     <div>
                       <div className="flex items-center gap-2">

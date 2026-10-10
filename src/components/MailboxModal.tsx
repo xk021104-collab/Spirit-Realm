@@ -56,15 +56,15 @@ export const MailboxModal: React.FC<MailboxModalProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-xl font-black roco-gold-text tracking-wide flex items-center gap-2 roco-title-font">
-                  诸天灵鸽 · 仙阁传书
+                  王国猫头鹰 · 皇家传信箱
                 </h2>
                 <span className="roco-seal text-[10px] px-1.5 py-0.2 font-bold tracking-wider">
                   信箱
                 </span>
-                <span className="text-xs text-amber-300/60 font-mono font-bold tracking-widest">— SPIRIT MAILBOX —</span>
+                <span className="text-xs text-amber-300/60 font-mono font-bold tracking-widest">— ROYAL MAGIC MAILBOX —</span>
               </div>
               <p className="text-xs text-slate-400 mt-0.5">
-                全服天命诏令、宗门福利礼赠与运营补偿 · 未领奖励 ({unreadCount} 封)
+                全服魔法诏令、学院福利礼赠与王国运营补偿 · 未领奖励 ({unreadCount} 封)
               </p>
             </div>
           </div>
@@ -173,7 +173,7 @@ export const MailboxModal: React.FC<MailboxModalProps> = ({
                   <div className="border-b border-slate-800 pb-3 space-y-1">
                     <h3 className="text-base font-bold text-amber-200">{selectedMail.title}</h3>
                     <div className="flex items-center gap-3 text-[11px] text-slate-400">
-                      <span>发件人: <strong className="text-slate-300">幻灵秘境天道司</strong></span>
+                      <span>发件人: <strong className="text-slate-300">洛克王国皇家事务司</strong></span>
                       <span>·</span>
                       <span className="font-mono">{new Date(selectedMail.sentAt).toLocaleString()}</span>
                     </div>
@@ -187,7 +187,7 @@ export const MailboxModal: React.FC<MailboxModalProps> = ({
                   {/* Rewards Section */}
                   <div className="space-y-2">
                     <span className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
-                      <Gift className="w-3.5 h-3.5" /> 附赠修仙物资
+                      <Gift className="w-3.5 h-3.5" /> 附赠魔法物资
                     </span>
 
                     <div className="grid grid-cols-2 gap-2">
@@ -195,7 +195,7 @@ export const MailboxModal: React.FC<MailboxModalProps> = ({
                         <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex items-center gap-2">
                           <Coins className="w-5 h-5 text-amber-400" />
                           <div>
-                            <div className="text-[10px] text-slate-400">灵石</div>
+                            <div className="text-[10px] text-slate-400">洛克贝</div>
                             <div className="text-xs font-bold font-mono text-amber-300">
                               +{selectedMail.rewards.coins.toLocaleString()}
                             </div>
@@ -207,7 +207,7 @@ export const MailboxModal: React.FC<MailboxModalProps> = ({
                         <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex items-center gap-2">
                           <Sparkles className="w-5 h-5 text-cyan-400" />
                           <div>
-                            <div className="text-[10px] text-slate-400">灵晶</div>
+                            <div className="text-[10px] text-slate-400">洛克钻</div>
                             <div className="text-xs font-bold font-mono text-cyan-300">
                               +{selectedMail.rewards.gems}
                             </div>
@@ -239,7 +239,7 @@ export const MailboxModal: React.FC<MailboxModalProps> = ({
                         <div className="p-2.5 rounded-xl bg-slate-950 border border-amber-500/40 flex items-center gap-2 col-span-2">
                           <PetAvatar speciesId={selectedMail.rewards.petSpeciesId} size={36} />
                           <div>
-                            <div className="text-[10px] text-amber-300 font-bold">特赠极品幻灵</div>
+                            <div className="text-[10px] text-amber-300 font-bold">特赠稀有魔法宠物</div>
                             <div className="text-xs font-bold text-slate-200">
                               {PET_SPECIES[selectedMail.rewards.petSpeciesId]?.name || selectedMail.rewards.petSpeciesId}
                             </div>

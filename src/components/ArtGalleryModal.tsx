@@ -30,39 +30,39 @@ interface ArtGalleryModalProps {
 const STARTER_LINEAGES = [
   {
     id: 'FIRE_LINE',
-    name: '炽焱玄羽脉',
+    name: '维苏威烈焰系',
     element: 'FIRE' as ElementType,
     speciesIds: ['chiyanque', 'zhuoyuying', 'fentianhuang'],
-    sealName: '朱雀神火印',
+    sealName: '炽火魔导师徽章',
     themeColor: 'from-orange-500/20 via-red-500/10 to-transparent',
     borderColor: 'border-orange-500/40',
     accentText: 'text-orange-400',
     icon: Flame,
-    quote: '浴火九重涅槃生，双翼遮天万界明。',
+    quote: '烈焰重重奇迹觉醒，火羽翱翔点亮夜空。',
   },
   {
     id: 'WATER_LINE',
-    name: '星辰瀚海脉',
+    name: '人鱼湾圣泉系',
     element: 'WATER' as ElementType,
     speciesIds: ['bishuiling', 'yuanchaoshou', 'huanhailingzun'],
-    sealName: '沧海龙尊印',
+    sealName: '碧水魔导师徽章',
     themeColor: 'from-cyan-500/20 via-blue-500/10 to-transparent',
     borderColor: 'border-cyan-500/40',
     accentText: 'text-cyan-400',
     icon: Droplets,
-    quote: '浩瀚澄波凝水魄，神龙覆海镇乾坤。',
+    quote: '浩瀚澄波凝水魄，深蓝狂澜守护人鱼湾。',
   },
   {
     id: 'GRASS_LINE',
-    name: '苍木万灵脉',
+    name: '轻风山萌萌系',
     element: 'GRASS' as ElementType,
     speciesIds: ['qingmulu', 'feicuijiaolu', 'canglinshenzun'],
-    sealName: '太古森皇印',
+    sealName: '草木魔导师徽章',
     themeColor: 'from-emerald-500/20 via-teal-500/10 to-transparent',
     borderColor: 'border-emerald-500/40',
     accentText: 'text-emerald-400',
     icon: Trees,
-    quote: '太古建木生灵角，白羽踏云天地春。',
+    quote: '轻风山林翠叶生，自然祝福润万物。',
   },
 ];
 
@@ -119,13 +119,13 @@ export const ArtGalleryModal: React.FC<ArtGalleryModalProps> = ({
             </div>
             <div>
               <h2 className="text-base sm:text-lg font-black text-amber-300 tracking-wider game-title-font flex items-center gap-2">
-                <span>御三家 · 东方奇幻高精立绘鉴赏</span>
+                <span>御三家 · 洛克王国高精立绘鉴赏</span>
                 <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300/80 border border-amber-500/30 font-normal">
-                  神灵画卷
+                  皇家画卷
                 </span>
               </h2>
               <p className="text-[11px] text-slate-400 font-sans">
-                幻灵秘境古法秘录 · 气贯长虹之太古法相
+                洛克王国经典档案 · 奇迹进化之魔法伙伴
               </p>
             </div>
           </div>
@@ -229,7 +229,7 @@ export const ArtGalleryModal: React.FC<ArtGalleryModalProps> = ({
                   <span
                     className={`text-[11px] px-2.5 py-0.5 rounded-md font-bold border ${elColor.bg} ${elColor.text} ${elColor.border}`}
                   >
-                    {elColor.label}系灵兽
+                    {elColor.label}系魔法宠物
                   </span>
                   <span
                     className={`text-[11px] px-2.5 py-0.5 rounded-md font-bold border ${rarityBadge.bg} ${rarityBadge.text} ${rarityBadge.border}`}
@@ -254,7 +254,7 @@ export const ArtGalleryModal: React.FC<ArtGalleryModalProps> = ({
                   {activeLine.speciesIds.map((spId, sIdx) => {
                     const sp = PET_SPECIES[spId];
                     const isCurrent = spId === selectedSpeciesId;
-                    const stageNames = ['一阶 · 初生雏灵', '二阶 · 飞腾化形', '三阶 · 至尊法相'];
+                    const stageNames = ['一阶 · 初级形态', '二阶 · 觉醒形态', '三阶 · 终极形态'];
 
                     return (
                       <button
@@ -281,13 +281,13 @@ export const ArtGalleryModal: React.FC<ArtGalleryModalProps> = ({
               <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-1.5">
                 <span className="text-xs font-bold text-amber-400 block flex items-center gap-1.5">
                   <Eye className="w-3.5 h-3.5" />
-                  <span>万灵图志本纪</span>
+                  <span>王国宠物图鉴志</span>
                 </span>
                 <p className="text-xs text-slate-300 leading-relaxed font-sans">
                   {species.description}
                 </p>
                 <div className="text-[11px] text-slate-400 pt-1 border-t border-slate-800/80 flex items-center justify-between">
-                  <span>契约途径：</span>
+                  <span>获得途径：</span>
                   <span className="text-amber-300/90 font-medium">{species.acquisitionMethod}</span>
                 </div>
               </div>

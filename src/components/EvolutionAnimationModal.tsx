@@ -51,16 +51,16 @@ export const EvolutionAnimationModal: React.FC<EvolutionAnimationModalProps> = (
         <div className="space-y-2 z-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/50 text-amber-300 text-xs font-bold animate-bounce">
             <Sparkles className="w-4 h-4 text-amber-400" />
-            <span>天地通玄 · 幻灵形态蜕变仪式</span>
+            <span>奇迹觉醒 · 宠物进化仪式</span>
           </div>
 
           <h2 className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-400 roco-title-font drop-shadow-[0_2px_12px_rgba(245,158,11,0.8)]">
-            {phase === 'REVEALED' ? `【${newSpecies?.name || '神兽'}】觉醒降世！` : `脱胎换骨，神光聚顶！`}
+            {phase === 'REVEALED' ? `【${newSpecies?.name || '宠物'}】进化登场！` : `魔力凝聚，光芒绽放！`}
           </h2>
           <p className="text-xs text-slate-300 font-sans">
             {phase === 'REVEALED'
-              ? `破茧化羽，契约神力全面暴涨，悟得太古至尊神相！`
-              : `灵气翻涌激荡，体内潜藏的神脉即将脱胎蜕变...`}
+              ? `突破形态界限，魔力全面暴涨，领悟更强力的魔法技能！`
+              : `魔法光芒耀眼闪烁，宠物即将迎来华丽形态蜕变...`}
           </p>
         </div>
 
@@ -100,10 +100,10 @@ export const EvolutionAnimationModal: React.FC<EvolutionAnimationModalProps> = (
             </div>
 
             <div className="grid grid-cols-2 gap-2 text-[11px] font-mono bg-slate-950 p-2.5 rounded-xl border border-slate-800">
-              <div>生命: <strong className="text-cyan-400">{newSpecies.baseStats.hp}</strong> (+{newSpecies.baseStats.hp - oldSpecies.baseStats.hp})</div>
+              <div>精力: <strong className="text-cyan-400">{newSpecies.baseStats.hp}</strong> (+{newSpecies.baseStats.hp - oldSpecies.baseStats.hp})</div>
               <div>物攻: <strong className="text-red-400">{newSpecies.baseStats.atk}</strong> (+{newSpecies.baseStats.atk - oldSpecies.baseStats.atk})</div>
               <div>物防: <strong className="text-blue-400">{newSpecies.baseStats.def}</strong> (+{newSpecies.baseStats.def - oldSpecies.baseStats.def})</div>
-              <div>特攻: <strong className="text-purple-400">{newSpecies.baseStats.spAtk}</strong> (+{newSpecies.baseStats.spAtk - oldSpecies.baseStats.spAtk})</div>
+              <div>魔攻: <strong className="text-purple-400">{newSpecies.baseStats.spAtk}</strong> (+{newSpecies.baseStats.spAtk - oldSpecies.baseStats.spAtk})</div>
             </div>
 
             <button
@@ -114,7 +114,7 @@ export const EvolutionAnimationModal: React.FC<EvolutionAnimationModalProps> = (
               className="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-400 hover:to-amber-600 text-slate-950 font-black text-xs shadow-lg cursor-pointer transition-all flex items-center justify-center gap-1.5"
             >
               <Check className="w-4 h-4" />
-              蜕变完成 · 承接天命神力
+              进化完成 · 开启全新冒险
             </button>
           </div>
         )}

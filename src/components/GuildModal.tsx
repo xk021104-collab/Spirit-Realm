@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { GuildInfo, GuildSkill } from '../types/game';
 import { sound } from '../utils/audio';
-import { Shield, Users, Coins, Sparkles, Award, Zap, Check, X, ArrowUp, Crown } from 'lucide-react';
+import { Shield, Users, Coins, Sparkles, Zap, Check, X, ArrowUp, Crown } from 'lucide-react';
 
 interface GuildModalProps {
   guild: GuildInfo;
@@ -23,20 +23,20 @@ export const GuildModal: React.FC<GuildModalProps> = ({
     if (guild.hasClaimedSalaryToday) return;
     sound.playCatchSuccess();
     onClaimSalary();
-    setNotice('成功领取今日宗门每日修仙俸禄：灵石 +1,000，宗门功勋 +50！');
+    setNotice('成功领取今日公会每日津贴：洛克贝 +1,000，公会贡献 +50！');
     setTimeout(() => setNotice(null), 3000);
   };
 
   const handleUpgradeSkill = (skill: GuildSkill) => {
     if (guild.playerDevotion < skill.cost) {
       sound.playClick();
-      setNotice('宗门贡献功勋不足，无法参悟更高层心法！');
+      setNotice('公会贡献不足，无法研习更高级魔导科技！');
       setTimeout(() => setNotice(null), 2500);
       return;
     }
     sound.playLevelUp();
     onUpgradeGuildSkill(skill.id);
-    setNotice(`恭喜参悟【${skill.name}】至第 ${skill.level + 1} 重！全队属性获得提升！`);
+    setNotice(`恭喜研习【${skill.name}】至第 ${skill.level + 1} 阶！全队属性获得提升！`);
     setTimeout(() => setNotice(null), 3000);
   };
 
@@ -59,15 +59,15 @@ export const GuildModal: React.FC<GuildModalProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-xl font-black roco-gold-text tracking-wide flex items-center gap-2 roco-title-font">
-                  {guild.name} · 仙盟宗堂
+                  {guild.name} · 皇家公会
                 </h2>
                 <span className="roco-seal text-[10px] px-1.5 py-0.2 font-bold tracking-wider">
-                  仙盟
+                  公会
                 </span>
-                <span className="text-xs text-amber-300/60 font-mono font-bold tracking-widest hidden sm:inline">— GUILD CITADEL —</span>
+                <span className="text-xs text-amber-300/60 font-mono font-bold tracking-widest hidden sm:inline">— ROYAL MAGIC GUILD —</span>
               </div>
               <p className="text-xs text-slate-400 mt-0.5">
-                宗门等级 Lv.{guild.level} · 盟主【{guild.leaderName}】 · 同门修士 ({guild.memberCount}/{guild.maxMembers})
+                公会等级 Lv.{guild.level} · 会长【{guild.leaderName}】 · 公会成员 ({guild.memberCount}/{guild.maxMembers})
               </p>
             </div>
           </div>
@@ -75,7 +75,7 @@ export const GuildModal: React.FC<GuildModalProps> = ({
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-950/80 border border-purple-500/30 text-xs shadow-inner">
               <Sparkles className="w-4 h-4 text-purple-400" />
-              <span className="text-slate-400">个人贡献:</span>
+              <span className="text-slate-400">公会贡献:</span>
               <span className="font-mono font-bold text-purple-300">{guild.playerDevotion}</span>
             </div>
 
@@ -85,7 +85,7 @@ export const GuildModal: React.FC<GuildModalProps> = ({
                 onClose();
               }}
               className="roco-close-btn shrink-0"
-              title="离开宗堂"
+              title="离开公会"
             >
               <X className="w-5 h-5" />
             </button>
@@ -96,9 +96,9 @@ export const GuildModal: React.FC<GuildModalProps> = ({
         <div className="bg-slate-950/80 px-6 py-2.5 border-b border-slate-800 flex items-center justify-between">
           <div className="flex items-center gap-2">
             {[
-              { id: 'HALL', label: '宗门大殿与俸禄', icon: Shield },
-              { id: 'SKILLS', label: '仙盟图腾心法', icon: Zap },
-              { id: 'MEMBERS', label: '同门修仙名录', icon: Users },
+              { id: 'HALL', label: '公会大厅与津贴', icon: Shield },
+              { id: 'SKILLS', label: '公会魔导研究', icon: Zap },
+              { id: 'MEMBERS', label: '公会成员名录', icon: Users },
             ].map((tab) => {
               const Icon = tab.icon;
               const active = activeTab === tab.id;
@@ -128,7 +128,7 @@ export const GuildModal: React.FC<GuildModalProps> = ({
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-700 hover:from-amber-400 hover:to-amber-600 disabled:opacity-40 text-slate-950 font-bold text-xs cursor-pointer shadow transition-all"
           >
             <Coins className="w-3.5 h-3.5" />
-            <span>{guild.hasClaimedSalaryToday ? '今日俸禄已领' : '领取每日宗门俸禄 (+1000灵石)'}</span>
+            <span>{guild.hasClaimedSalaryToday ? '今日津贴已领' : '领取每日公会津贴 (+1000 洛克贝)'}</span>
           </button>
         </div>
 
@@ -147,8 +147,8 @@ export const GuildModal: React.FC<GuildModalProps> = ({
             <div className="space-y-4">
               <div className="p-5 rounded-2xl bg-slate-950/70 border border-slate-800 space-y-3">
                 <div className="flex items-center justify-between border-b border-slate-800/80 pb-2">
-                  <span className="text-xs font-bold text-amber-300">宗门长老训诫告示</span>
-                  <span className="text-[10px] text-slate-500 font-mono">每日戌时刷新</span>
+                  <span className="text-xs font-bold text-amber-300">公会导师训诫告示板</span>
+                  <span className="text-[10px] text-slate-500 font-mono">每日 00:00 刷新</span>
                 </div>
                 <p className="text-xs text-slate-300 leading-relaxed font-sans">
                   {guild.notice}
@@ -157,19 +157,19 @@ export const GuildModal: React.FC<GuildModalProps> = ({
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="p-4 rounded-xl bg-slate-950 border border-slate-800">
-                  <div className="text-xs text-slate-400">宗门府库灵石</div>
+                  <div className="text-xs text-slate-400">公会金库洛克贝</div>
                   <div className="text-lg font-bold font-mono text-amber-300 mt-1">
-                    {guild.totalFunds.toLocaleString()} 灵石
+                    {guild.totalFunds.toLocaleString()} 洛克贝
                   </div>
                 </div>
                 <div className="p-4 rounded-xl bg-slate-950 border border-slate-800">
-                  <div className="text-xs text-slate-400">仙盟演武战阶</div>
+                  <div className="text-xs text-slate-400">皇家公会战阶</div>
                   <div className="text-lg font-bold font-mono text-cyan-300 mt-1">
-                    天阶四品宗门
+                    白金三阶魔法公会
                   </div>
                 </div>
                 <div className="p-4 rounded-xl bg-slate-950 border border-slate-800">
-                  <div className="text-xs text-slate-400">宗门心法加成</div>
+                  <div className="text-xs text-slate-400">魔导科技加成</div>
                   <div className="text-lg font-bold font-mono text-purple-300 mt-1">
                     全队攻击 +{guild.skills[0]?.level * 5}%
                   </div>
@@ -182,7 +182,7 @@ export const GuildModal: React.FC<GuildModalProps> = ({
           {activeTab === 'SKILLS' && (
             <div className="space-y-4">
               <p className="text-xs text-slate-400">
-                消耗宗门贡献功勋点，参悟仙盟至高心法图腾，永久强化出战幻灵的基础六维神威！
+                消耗公会贡献点，研习公会魔导核心科技，永久强化出战宠物的六维战斗属性！
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
@@ -199,7 +199,7 @@ export const GuildModal: React.FC<GuildModalProps> = ({
                         <div className="flex items-center gap-2">
                           <span className="text-xs font-bold text-amber-200">{sk.name}</span>
                           <span className="text-[10px] font-mono text-purple-300 bg-purple-950/60 px-1.5 py-0.2 rounded border border-purple-800">
-                            第 {sk.level}/{sk.maxLevel} 重
+                            第 {sk.level}/{sk.maxLevel} 阶
                           </span>
                         </div>
                         <p className="text-[11px] text-slate-400">{sk.description}</p>
@@ -214,7 +214,7 @@ export const GuildModal: React.FC<GuildModalProps> = ({
                         className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 disabled:opacity-40 text-white text-xs font-bold cursor-pointer transition-all shadow flex items-center gap-1 shrink-0"
                       >
                         <ArrowUp className="w-3.5 h-3.5" />
-                        <span>{isMax ? '已至化境' : `参悟 (-${sk.cost}功勋)`}</span>
+                        <span>{isMax ? '已至上限' : `研习 (-${sk.cost}贡献)`}</span>
                       </button>
                     </div>
                   );
@@ -227,11 +227,11 @@ export const GuildModal: React.FC<GuildModalProps> = ({
           {activeTab === 'MEMBERS' && (
             <div className="space-y-2">
               {[
-                { name: '青莲剑仙·李白', role: '盟主', level: 55, devotion: 1420 },
-                { name: '炽炎炎皇', role: '副盟主', level: 48, devotion: 980 },
-                { name: '沧海遗珠', role: '传功长老', level: 42, devotion: 650 },
-                { name: '云游灵契师', role: '核心真传 (我)', level: 22, devotion: guild.playerDevotion },
-                { name: '九幽玄冥客', role: '内门弟子', level: 38, devotion: 420 },
+                { name: '大法师·奥古斯丁', role: '会长', level: 55, devotion: 1420 },
+                { name: '炽火狂骑·卡特', role: '副会长', level: 48, devotion: 980 },
+                { name: '沧海使者·艾琳', role: '魔法导师', level: 42, devotion: 650 },
+                { name: '见习小魔法师', role: '精英学员 (我)', level: 22, devotion: guild.playerDevotion },
+                { name: '雷霆游侠·莱恩', role: '正式成员', level: 38, devotion: 420 },
               ].map((mem, idx) => (
                 <div
                   key={idx}
@@ -246,7 +246,7 @@ export const GuildModal: React.FC<GuildModalProps> = ({
                   </div>
                   <div className="flex items-center gap-4 font-mono">
                     <span className="text-slate-400">Lv.{mem.level}</span>
-                    <span className="text-purple-300">{mem.devotion} 功勋</span>
+                    <span className="text-purple-300">{mem.devotion} 贡献</span>
                   </div>
                 </div>
               ))}

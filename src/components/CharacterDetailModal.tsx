@@ -1,5 +1,6 @@
 import React from 'react';
 import { CultivatorPortrait } from './CultivatorPortrait';
+import { CharacterOutfit } from '../types/game';
 import { sound } from '../utils/audio';
 import { IconGuluBall, IconRocoCoin, IconSpellbook } from './GameIcons';
 import { X, Sparkles, Award, Shield, Zap } from 'lucide-react';
@@ -12,6 +13,8 @@ interface CharacterDetailModalProps {
   currentGold?: number;
   spiritGems?: number;
   partyCount?: number;
+  outfit?: CharacterOutfit;
+  onOpenWardrobe?: () => void;
   onClose: () => void;
 }
 
@@ -28,6 +31,8 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
   currentGold = 3280,
   spiritGems = 168,
   partyCount = 1,
+  outfit,
+  onOpenWardrobe,
   onClose,
 }) => {
   const displayGold = coins ?? currentGold;
@@ -81,13 +86,28 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
             {/* Background Halo */}
             <div className="absolute w-56 h-56 rounded-full bg-cyan-500/10 blur-3xl pointer-events-none" />
 
-            <CultivatorPortrait mode="full" className="w-full max-w-[280px]" />
+            <CultivatorPortrait mode="full" outfit={outfit} className="w-full max-w-[280px]" />
 
             <div className="mt-2 text-center">
               <span className="text-xs font-bold text-amber-300 bg-blue-950/80 border border-amber-500/40 px-3 py-1 rounded-full shadow-md">
                 ✦ {playerName} · 魔法学院二年级
               </span>
             </div>
+
+            {/* Magic Wardrobe Salon Entry Button */}
+            {onOpenWardrobe && (
+              <button
+                onClick={() => {
+                  sound.playClick();
+                  onOpenWardrobe();
+                }}
+                className="mt-3 w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 text-slate-950 font-black text-xs shadow-[0_4px_15px_rgba(245,158,11,0.4)] hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-2 border border-yellow-200 cursor-pointer"
+                title="进入皮卡魔力衣橱定制个人外观"
+              >
+                <Sparkles className="w-4 h-4 text-slate-950 animate-spin" style={{ animationDuration: '4s' }} />
+                <span>进入魔力衣橱 · 角色装扮</span>
+              </button>
+            )}
           </div>
 
           {/* Right Column: Magic Stats & Equipment */}
@@ -101,7 +121,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                 </div>
                 <div className="text-right">
                   <span className="text-xl font-black font-mono text-amber-300">Lv.{playerLevel}</span>
-                  <div className="text-[10px] text-slate-400">皇家骑士团预备役 · {partyCount} 只随行魔灵</div>
+                  <div className="text-[10px] text-slate-400">皇家骑士团预备役 · {partyCount} 只随行宠物</div>
                 </div>
               </div>
 
@@ -136,7 +156,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                   </div>
                 </div>
                 <div className="p-2 rounded-xl bg-slate-900/80 border border-slate-800">
-                  <div className="text-[10px] text-slate-400">洛克魔晶</div>
+                  <div className="text-[10px] text-slate-400">洛克钻</div>
                   <div className="text-sm font-bold text-cyan-400 font-mono">{spiritGems}</div>
                 </div>
               </div>
@@ -172,7 +192,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                     </div>
                     <div>
                       <div className="font-bold text-slate-200">皇家学院金边魔导袍</div>
-                      <div className="text-[10px] text-slate-400">皇家工坊高级附魔编织，抵御野外魔灵突袭</div>
+                      <div className="text-[10px] text-slate-400">皇家工坊高级附魔编织，抵御野外野生宠物突袭</div>
                     </div>
                   </div>
                   <span className="text-[10px] font-mono text-cyan-400 border border-cyan-500/40 px-2 py-0.5 rounded">

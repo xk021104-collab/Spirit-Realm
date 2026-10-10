@@ -70,15 +70,15 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
   const [isDayTime, setIsDayTime] = useState<boolean>(true);
   const [zoomLevel, setZoomLevel] = useState<number>(1);
 
-  // 7 Map Nodes corresponding to authentic Roco Kingdom Western Fantasy scenes
+  // 7 Map Nodes corresponding to Astra Kingdom Western Fantasy scenes
   const realmNodes: MapRealmNode[] = [
     {
       id: 'ancient_forest',
-      name: '轻风山',
+      name: '翡翠平原',
       sceneId: 'PRAIRIE',
       x: 23,
       y: 45,
-      description: '绿草如茵、微风和煦的轻风山，大风车与七彩蘑菇林立，青木鹿常在草丛中嬉戏。',
+      description: '绿草如茵、微风和煦的翡翠平原，大风车与七彩蘑菇林立，青木鹿常在草丛中嬉戏。',
       spiritTypes: ['草系', '萌宠'],
       climate: '微风和煦 · 繁花盛开',
       levelRange: 'Lv.5 - 15',
@@ -86,7 +86,7 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
     },
     {
       id: 'crystal_lake',
-      name: '人鱼湾',
+      name: '蔚蓝海湾',
       sceneId: 'BAY',
       x: 48,
       y: 53,
@@ -98,11 +98,11 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
     },
     {
       id: 'celestial_island',
-      name: '魔法学院',
+      name: '星灵奥术学院',
       sceneId: 'ACADEMY',
       x: 62,
       y: 26,
-      description: '漂浮在云端之上的宏伟魔法城堡，德高望重的格里芬院长与沃尔克导师在此指导小魔法师。',
+      description: '漂浮在云端之上的宏伟魔法城堡，德高望重的阿尔弗雷德院长与艾德里安导师在此指导小魔法师。',
       spiritTypes: ['魔法', '全系'],
       climate: '云端城堡 · 繁星璀璨',
       levelRange: 'Lv.1 - 100',
@@ -110,11 +110,11 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
     },
     {
       id: 'ancient_city',
-      name: '跳跳集市',
+      name: '星辉集市',
       sceneId: 'SHOP',
       x: 32,
       y: 70,
-      description: '洛克王国最热闹的交易集市，神秘商人罗伦斯在此摆摊，各种咕噜球与魔药应有尽有。',
+      description: '星灵王国最热闹的交易集市，神秘商人巴纳比在此摆摊，各种星灵球与魔药应有尽有。',
       spiritTypes: ['集市', '魔药'],
       climate: '游商如织 · 货物琳琅',
       levelRange: '安全城镇',
@@ -122,11 +122,11 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
     },
     {
       id: 'volcano',
-      name: '维苏威火山',
+      name: '烈焰峡谷',
       sceneId: 'VOLCANO',
       x: 74,
       y: 52,
-      description: '地心熔浆翻滚的炎热火山，赤火神凰在此展翅翱翔，火系宠物在此修炼魔焰。',
+      description: '地心熔浆翻滚的炎热火山峡谷，赤火神凰在此展翅翱翔，火系宠物在此修炼魔焰。',
       spiritTypes: ['火系', '地心'],
       climate: '烈火熔岩 · 炽热升腾',
       levelRange: 'Lv.15 - 30',
@@ -134,11 +134,11 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
     },
     {
       id: 'snow_mountain',
-      name: '宠物医院',
+      name: '爱心护理所',
       sceneId: 'HOSPITAL',
       x: 82,
       y: 78,
-      description: '温馨静谧的宠物疗愈中心，温柔的萌萌护士为每一只受伤疲惫的宠物恢复满状态。',
+      description: '温馨静谧的宠物疗愈中心，温柔的莉莉娅护士为每一只受伤疲惫的宠物恢复满状态。',
       spiritTypes: ['恢复', '庇护'],
       climate: '温暖宁静 · 治愈之光',
       levelRange: 'Lv.1 - 100',
@@ -146,7 +146,7 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
     },
     {
       id: 'desert_ruins',
-      name: '皇家竞技场',
+      name: '群星竞技场',
       sceneId: 'ARENA',
       x: 58,
       y: 74,
@@ -226,7 +226,7 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
             <div className="relative flex items-center justify-center">
               <div className="absolute w-44 h-10 rounded-full bg-amber-400/35 blur-md -top-1 pointer-events-none" />
               <h1 className="relative font-black text-2xl md:text-3xl tracking-wider text-transparent bg-clip-text bg-gradient-to-b from-[#2563eb] via-[#1d4ed8] to-[#1e3a8a] drop-shadow-[0_2px_4px_rgba(245,158,11,0.8)] font-serif">
-                洛克王国
+                星灵王国
               </h1>
             </div>
 
@@ -246,20 +246,20 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
 
           {/* Top-Right: Currencies & Close Window */}
           <div className="flex items-center gap-3">
-            {/* Roco Gold Coins */}
-            <div className="roco-currency-badge" title="当前拥有的洛克贝">
+            {/* Astra Gold Coins */}
+            <div className="roco-currency-badge" title="当前拥有的星辉金币">
               <IconRocoCoin size={20} />
               <span className="font-mono text-xs font-bold text-amber-300">{gold.toLocaleString()}</span>
-              <span className="text-[10px] text-amber-400 font-bold hidden sm:inline">洛克贝</span>
+              <span className="text-[10px] text-amber-400 font-bold hidden sm:inline">星辉金币</span>
             </div>
 
-            {/* Roco Diamonds */}
+            {/* Astra Diamonds */}
             <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#2a1a0d]/80 text-cyan-300 border border-[#b48a52]/60 shadow-sm text-xs font-mono font-bold">
               <div className="w-4 h-4 rounded-full bg-cyan-400 text-slate-950 flex items-center justify-center text-[10px] font-black">
                 钻
               </div>
               <span>90</span>
-              <span className="text-[10px] text-cyan-400 font-bold hidden sm:inline">洛克钻</span>
+              <span className="text-[10px] text-cyan-400 font-bold hidden sm:inline">璀璨星钻</span>
             </div>
 
             <button
@@ -367,7 +367,7 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
                 <circle cx="480" cy="270" r="28" fill="#a5f3fc" opacity="0.5" filter="blur(6px)" />
               </g>
 
-              {/* 3. FLOATING SKY ISLAND (神山岛 / 灵灵岛) - Top Center */}
+              {/* 3. FLOATING SKY ISLAND (天空之城 / 皇家浮空岛) - Top Center */}
               <g id="realm_floating_island">
                 {/* Clouds */}
                 <ellipse cx="620" cy="175" rx="60" ry="16" fill="#ffffff" opacity="0.6" />

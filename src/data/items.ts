@@ -3,36 +3,36 @@ import { Item } from '../types/game';
 export const ITEMS_DATA: Record<string, Item> = {
   gulu_normal: {
     id: 'gulu_normal',
-    name: '普通咕噜球',
+    name: '初级星灵球',
     category: 'BALL',
     price: 100,
     catchMultiplier: 1.0,
-    description: '以精炼魔铜与魔晶打造的经典咕噜球，可用来收服野外初阶宠物。',
+    description: '以精炼魔铜与星晶打造的魔导星灵球，可用来收服野外初阶宠物。',
   },
   gulu_mid: {
     id: 'gulu_mid',
-    name: '中级咕噜球',
+    name: '中级星灵球',
     category: 'BALL',
     price: 300,
     catchMultiplier: 1.6,
-    description: '蕴含精纯魔力的高品质咕噜球，捕获野外宠物的成功率提升60%。',
+    description: '蕴含精纯星能的高品质星灵球，捕获野外宠物的成功率提升60%。',
   },
   gulu_high: {
     id: 'gulu_high',
-    name: '高级咕噜球',
+    name: '高级星灵球',
     category: 'BALL',
     price: 800,
     catchMultiplier: 2.5,
-    description: '皇家工坊精密炼制的进阶咕噜球，大幅提高野生宠物的捕获概率。',
+    description: '皇家工坊精密炼制的进阶星灵球，大幅提高野生宠物的捕获概率。',
   },
   gulu_king: {
     id: 'gulu_king',
-    name: '国王球',
+    name: '至尊星辰球',
     category: 'BALL',
     price: 5000,
     catchMultiplier: 99.0,
     isGuaranteed: true,
-    description: '洛克王国至高无上的圣物国王球，100%必中！必定能收服任何野外宠物！',
+    description: '星灵王国至高无上的圣物星辰球，100%必中！必定能收服任何野外宠物！',
   },
 
   // Potions & Elixirs
@@ -42,7 +42,7 @@ export const ITEMS_DATA: Record<string, Item> = {
     category: 'POTION',
     price: 80,
     healHp: 50,
-    description: '萌萌护士调配的温和伤药，恢复单只宠物 50 点精力生命。',
+    description: '莉莉娅护士调配的温和伤药，恢复单只宠物 50 点精力生命。',
   },
   potion_mid: {
     id: 'potion_mid',
@@ -78,27 +78,27 @@ export const ITEMS_DATA: Record<string, Item> = {
     description: '唤醒陷入战斗不能脱力的宠物，并恢复其半数精力。',
   },
 
-  // EXP & Evolution Cultivation Treasures (经典可可果 / 严父果)
+  // EXP & Evolution Cultivation Treasures (星露果 / 智慧圣果)
   exp_pill_small: {
     id: 'exp_pill_small',
-    name: '可可果',
+    name: '星露果',
     category: 'POTION',
     price: 150,
-    description: '洛克王国最受宠物喜爱的香甜果实，宠物食用后立刻获得 200 点升级经验！',
+    description: '星灵王国最受宠物喜爱的甘甜果实，宠物食用后立刻获得 200 点升级经验！',
   },
   exp_pill_large: {
     id: 'exp_pill_large',
-    name: '严父果',
+    name: '智慧圣果',
     category: 'POTION',
     price: 600,
-    description: '洛克王国传说中极其珍贵的魔法圣果，宠物食用后暴涨 1000 点升级经验！',
+    description: '星灵王国传说中极其珍贵的魔法圣果，宠物食用后暴涨 1000 点升级经验！',
   },
   spirit_shard: {
     id: 'spirit_shard',
-    name: '友谊魔法碎片',
+    name: '星光友谊碎片',
     category: 'POTION',
     price: 100,
-    description: '小洛克每日互相赠送的友谊之证，集齐可在好友中心兑换珍稀咕噜球与可可果。',
+    description: '小魔法师每日互相赠送的友谊之证，集齐可在好友中心兑换珍稀星灵球与星露果。',
   },
 
   // Cultivation & Alchemy Treasures

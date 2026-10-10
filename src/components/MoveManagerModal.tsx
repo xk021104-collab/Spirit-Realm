@@ -36,7 +36,7 @@ export const MoveManagerModal: React.FC<MoveManagerModalProps> = ({
     setErrorMsg(null);
     if (selectedIds.includes(moveId)) {
       if (selectedIds.length <= 1) {
-        setErrorMsg('幻灵出战必须至少保留 1 个招式！');
+        setErrorMsg('宠物出战必须至少保留 1 个技能！');
         return;
       }
       setSelectedIds(selectedIds.filter((id) => id !== moveId));
@@ -77,7 +77,7 @@ export const MoveManagerModal: React.FC<MoveManagerModalProps> = ({
             </div>
             <div>
               <h2 className="text-lg font-black roco-gold-text tracking-wide flex items-center gap-2 roco-title-font">
-                招式殿堂 · 技能装配
+                魔法学院 · 技能配置室
               </h2>
               <p className="text-xs text-slate-400 mt-0.5">
                 【{pet.nickname}】当前已掌握技能库 · 已选槽位 ({selectedIds.length}/4)

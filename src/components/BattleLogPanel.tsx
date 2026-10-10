@@ -338,7 +338,7 @@ export const BattleLogPanel: React.FC<BattleLogPanelProps> = ({
 };
 
 // ============================================================================
-// FULL COMBAT CHRONICLE MODAL (乾坤斗法 · 详尽战纪)
+// FULL COMBAT CHRONICLE MODAL (皇家对决 · 详尽战纪)
 // ============================================================================
 
 interface BattleLogModalProps {
@@ -355,8 +355,8 @@ export const BattleLogModal: React.FC<BattleLogModalProps> = ({
   onClose,
   logs,
   currentTurn,
-  playerName = '我方幻灵',
-  enemyName = '敌方幻灵',
+  playerName = '我方宠物',
+  enemyName = '敌方宠物',
 }) => {
   const [filterTab, setFilterTab] = useState<'ALL' | 'MOVE_DMG' | 'STATUS' | 'WEATHER'>('ALL');
   const [selectedTurn, setSelectedTurn] = useState<number | 'ALL'>('ALL');
@@ -433,14 +433,14 @@ export const BattleLogModal: React.FC<BattleLogModalProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-lg sm:text-xl font-bold text-amber-200 game-title-font tracking-wide">
-                  乾坤斗法 · 战斗全纪录
+                  皇家对决 · 战斗全纪录
                 </h2>
                 <span className="text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-400/40 px-2 py-0.5 rounded font-mono font-bold">
                   共 {logs.length} 条记录
                 </span>
               </div>
               <p className="text-[11px] text-slate-400 mt-0.5 flex items-center gap-2">
-                <span>实时勘定五行生克、技能灵力、伤损数值与道法状态</span>
+                <span>实时记录魔法克制、技能威力、伤害数值与状态变化</span>
               </p>
             </div>
           </div>
@@ -578,7 +578,7 @@ export const BattleLogModal: React.FC<BattleLogModalProps> = ({
                       )}
                       {log.actorSide === 'ENVIRONMENT' && (
                         <span className="font-bold text-amber-300 bg-amber-950/60 px-2 py-0.2 rounded border border-amber-700/40">
-                          天象灵境
+                          战场天象
                         </span>
                       )}
                     </div>

@@ -9,15 +9,13 @@ interface PokedexBackgroundProps {
 }
 
 /**
- * 诸天幻灵图鉴 · 专属古风仙侠蓝紫色调云雾背景 (Gu Feng Xianxia Spirit Codex Background)
- * Perfectly adheres to Eastern Fantasy Xianxia aesthetics for 《幻灵秘境》:
+ * 洛克王国皇家魔兽图鉴 · 专属魔幻蓝紫色调星空背景 (Roco Kingdom Magic Codex Background)
+ * Perfectly adheres to Western Fantasy Magic aesthetics for 《洛克王国》:
  * - Deep twilight indigo, sapphire blue, and imperial amethyst/purple palette
- * - Multi-layered swirling immortal clouds & mist (云雾缭绕) with fluid parallax drift
- * - Floating celestial mountain peaks (浮空仙峰), misty crags & ancient gnarled pines (苍劲古松)
- * - Shrouded immortal pagoda spires & pavilions with glowing finials (凌霄飞阁)
- * - Luminous spirit moon (太阴玄月) with Bagua astrological astrolabe rings
- * - Flying cranes (云鹤归山), floating spirit essence runes, and starlight constellation paths
- * - Fully responsive to element filters and customizable celestial atmosphere modes
+ * - Multi-layered swirling magical clouds & nebula with fluid parallax drift
+ * - Floating mystical peaks, castle silhouettes, and magic academy towers
+ * - Luminous arcane moon with magic circle astrolabe rings
+ * - Starlight constellation paths and floating arcane motes
  */
 export const PokedexBackground: React.FC<PokedexBackgroundProps> = ({
   className = '',
@@ -213,7 +211,7 @@ export const PokedexBackground: React.FC<PokedexBackgroundProps> = ({
           opacity="0.8"
         />
 
-        {/* 4. Mid-Ground Floating Celestial Peaks & Ancient Pagodas (浮空仙峰 · 凌霄飞阁) */}
+        {/* 4. Mid-Ground Floating Peaks & Magic Academy Spires (浮空魔法群峰 · 皇家魔导高塔) */}
         <g>
           {/* Left Floating Island Peak */}
           <path
@@ -239,12 +237,12 @@ export const PokedexBackground: React.FC<PokedexBackgroundProps> = ({
             opacity="0.85"
           />
 
-          {/* Right Grand Immortal Cloud Mountain Peak (紫霄主峰) */}
+          {/* Right Grand Magic Peak (皇家魔导主峰) */}
           <path
             d="M 810 480 Q 910 210, 1010 230 Q 1110 290, 1200 430 L 1200 700 L 810 700 Z"
             fill="url(#mtnGradMid)"
           />
-          {/* Multi-Tier Grand Celestial Pagoda on Right Peak (天宝通天塔) */}
+          {/* Multi-Tier Grand Magic Citadel Spire (王国通天魔导塔) */}
           <g transform="translate(970, 170)" opacity="0.92">
             {/* Upper Tier Roof */}
             <path d="M -5 20 Q 20 12, 45 20 L 38 14 Q 20 10, 2 14 Z" fill="#818cf8" />
@@ -276,7 +274,7 @@ export const PokedexBackground: React.FC<PokedexBackgroundProps> = ({
           />
         </g>
 
-        {/* 6. Foreground Misty Crags & Ancient Immortal Pine Silhouettes (苍劲古松 · 仙崖) */}
+        {/* 6. Foreground Misty Crags & Ancient Pine Silhouettes (皇家古木 · 魔导悬崖) */}
         <g>
           {/* Left Foreground Cliff Crag */}
           <path
@@ -321,7 +319,7 @@ export const PokedexBackground: React.FC<PokedexBackgroundProps> = ({
           fill="url(#floorMistGrad)"
         />
 
-        {/* 8. Pairs of Flying Immortal Cranes & Floating Spirit Essence Motes (仙鹤凌云 · 天地灵韵) */}
+        {/* 8. Pairs of Flying Magic Eagles & Floating Spirit Essence Motes (苍穹飞禽 · 魔法光粒) */}
         <g opacity="0.7">
           {/* Distant Pair of Flying Immortal Cranes */}
           <g transform="translate(470, 200) scale(0.85)">

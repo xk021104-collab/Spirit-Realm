@@ -167,11 +167,7 @@ export const PetStorageModal: React.FC<PetStorageModalProps> = ({
                       </div>
                       <div className="flex items-center gap-1.5 mt-1">
                         <span
-                          className="text-[9px] px-1 py-0.2 rounded font-bold"
-                          style={{
-                            backgroundColor: `${ELEMENT_COLORS[sp?.type || 'NORMAL']}22`,
-                            color: ELEMENT_COLORS[sp?.type || 'NORMAL'],
-                          }}
+                          className={`text-[9px] px-1 py-0.2 rounded font-bold border ${ELEMENT_COLORS[sp?.type || 'NORMAL']?.bg || 'bg-slate-700/50'} ${ELEMENT_COLORS[sp?.type || 'NORMAL']?.text || 'text-slate-200'} ${ELEMENT_COLORS[sp?.type || 'NORMAL']?.border || 'border-slate-600'}`}
                         >
                           {sp?.type}
                         </span>
@@ -273,11 +269,7 @@ export const PetStorageModal: React.FC<PetStorageModalProps> = ({
                         {species.name} · Lv.{selectedPet.level}
                       </div>
                       <span
-                        className="inline-block mt-1 text-[9px] px-1.5 py-0.2 rounded font-bold"
-                        style={{
-                          backgroundColor: `${ELEMENT_COLORS[species.type]}22`,
-                          color: ELEMENT_COLORS[species.type],
-                        }}
+                        className={`inline-block mt-1 text-[9px] px-1.5 py-0.2 rounded font-bold border ${ELEMENT_COLORS[species.type]?.bg || 'bg-slate-700/50'} ${ELEMENT_COLORS[species.type]?.text || 'text-slate-200'} ${ELEMENT_COLORS[species.type]?.border || 'border-slate-600'}`}
                       >
                         {species.type}
                       </span>

@@ -118,11 +118,7 @@ export const MoveManagerModal: React.FC<MoveManagerModalProps> = ({
                     <div className="flex items-center gap-2">
                       <span className="text-xs font-bold text-slate-100">{move.name}</span>
                       <span
-                        className="text-[9px] px-1.5 py-0.2 rounded font-bold"
-                        style={{
-                          backgroundColor: `${ELEMENT_COLORS[move.type]}22`,
-                          color: ELEMENT_COLORS[move.type],
-                        }}
+                        className={`text-[9px] px-1.5 py-0.2 rounded font-bold border ${ELEMENT_COLORS[move.type]?.bg || 'bg-slate-700/50'} ${ELEMENT_COLORS[move.type]?.text || 'text-slate-200'} ${ELEMENT_COLORS[move.type]?.border || 'border-slate-600'}`}
                       >
                         {move.type}
                       </span>

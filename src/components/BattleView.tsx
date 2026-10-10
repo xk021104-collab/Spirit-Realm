@@ -786,148 +786,24 @@ export const BattleView: React.FC<BattleViewProps> = ({
         {/* =========================================================================
             Roco Kingdom Illustrated Enchanted Night Forest & Waterfall Secret Realm
             ========================================================================= */}
+        {/* =========================================================================
+            Roco Kingdom Genuine High-Resolution Illustrated Battle Arena Background
+            ========================================================================= */}
         <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden select-none">
-          {/* Deep Twilight Night Gradient */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#020713] via-[#051527] 55% via-[#082232] 85% to-[#041a1c]" />
+          <img
+            src="/assets/scenes/battle_forest.jpg"
+            alt="Battle Arena"
+            className="w-full h-full object-cover object-center brightness-90 contrast-105"
+          />
+          {/* Subtle Ambient Night Vignette */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 pointer-events-none" />
+          <div className="absolute inset-0 bg-radial-vignette opacity-50 pointer-events-none" />
 
-          {/* Enchanted Forest Night Landscape SVG */}
-          <svg viewBox="0 0 1000 600" className="absolute inset-0 w-full h-full object-cover opacity-95">
-            <defs>
-              {/* Cyan Mushroom Bioluminescence Glow */}
-              <radialGradient id="cyanMushroomGlow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#67e8f9" stopOpacity="0.9" />
-                <stop offset="45%" stopColor="#06b6d4" stopOpacity="0.5" />
-                <stop offset="100%" stopColor="#083344" stopOpacity="0" />
-              </radialGradient>
-              {/* Ground Flora Soft Blue Glow */}
-              <radialGradient id="blueFloraGlow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.85" />
-                <stop offset="60%" stopColor="#0284c7" stopOpacity="0.3" />
-                <stop offset="100%" stopColor="#0c4a6e" stopOpacity="0" />
-              </radialGradient>
-              {/* Waterfall Shimmer Gradient */}
-              <linearGradient id="waterfallStream" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#bae6fd" stopOpacity="0.8" />
-                <stop offset="50%" stopColor="#38bdf8" stopOpacity="0.95" />
-                <stop offset="85%" stopColor="#0284c7" stopOpacity="0.7" />
-                <stop offset="100%" stopColor="#67e8f9" stopOpacity="0.9" />
-              </linearGradient>
-              {/* Night Sky Cloud Soft Fog */}
-              <linearGradient id="nightMistGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#0e2a47" stopOpacity="0" />
-                <stop offset="50%" stopColor="#164e63" stopOpacity="0.4" />
-                <stop offset="100%" stopColor="#0e2a47" stopOpacity="0" />
-              </linearGradient>
-            </defs>
-
-            {/* Distant Midnight Mountains & Starry Sky */}
-            <path d="M 0 320 Q 200 240 450 280 Q 720 210 1000 270 L 1000 600 L 0 600 Z" fill="#041829" opacity="0.7" />
-            <path d="M 300 340 Q 560 260 820 300 Q 940 270 1000 310 L 1000 600 L 300 600 Z" fill="#062238" opacity="0.8" />
-
-            {/* Distant High Waterfall Cliffs (Right Center) */}
-            <g transform="translate(760, 120)" opacity="0.95">
-              {/* Mountain Cliff Outcrop */}
-              <path d="M 40 40 L 70 20 L 120 50 L 140 180 L 30 180 Z" fill="#08283e" />
-              <path d="M 70 50 L 100 35 L 110 180 L 60 180 Z" fill="#0c3552" />
-              {/* Cascading Moonlit Waterfall Ribbons */}
-              <path d="M 82 45 Q 86 110 84 175" stroke="url(#waterfallStream)" strokeWidth="6" strokeLinecap="round" opacity="0.9" filter="drop-shadow(0 0 6px #38bdf8)" />
-              <path d="M 90 48 Q 93 115 91 175" stroke="#bae6fd" strokeWidth="3" strokeLinecap="round" opacity="0.85" />
-              <path d="M 77 55 Q 80 110 79 175" stroke="#7dd3fc" strokeWidth="2.5" strokeLinecap="round" opacity="0.75" />
-              {/* Waterfall Base Mist & Cyan Pool Radiance */}
-              <ellipse cx="85" cy="176" rx="42" ry="14" fill="#06b6d4" opacity="0.45" filter="blur(6px)" />
-              <ellipse cx="85" cy="178" rx="26" ry="7" fill="#e0f2fe" opacity="0.7" filter="blur(2px)" />
-            </g>
-
-            {/* Soft Night Mist Drifting Across Distant Mountains */}
-            <ellipse cx="500" cy="290" rx="360" ry="40" fill="url(#nightMistGrad)" />
-
-            {/* Massive Ancient Enchanted Tree (Left Side & Top Canopy Frame) */}
-            <g>
-              {/* Main Twisted Trunk */}
-              <path
-                d="M -40 600 L -20 220 Q -10 120 40 60 Q 90 10 240 0 L 320 0 Q 180 30 100 80 Q 40 130 30 260 Q 20 440 80 600 Z"
-                fill="#071b1d"
-              />
-              <path
-                d="M 10 320 Q 30 240 70 170 Q 130 110 260 70 Q 360 40 520 20 L 530 0 Q 340 30 220 70 Q 100 120 40 220 Q 0 350 30 600 Z"
-                fill="#051416"
-              />
-              {/* Hanging Lichen Moss & Tendrils from Upper Branch */}
-              <path d="M 160 50 Q 165 95 162 130" stroke="#0d3b36" strokeWidth="2.5" fill="none" opacity="0.75" />
-              <path d="M 220 40 Q 223 90 220 125" stroke="#0d3b36" strokeWidth="2" fill="none" opacity="0.7" />
-              <path d="M 280 35 Q 284 80 281 115" stroke="#0d3b36" strokeWidth="2.5" fill="none" opacity="0.65" />
-              <path d="M 360 25 Q 364 70 360 98" stroke="#0d3b36" strokeWidth="1.8" fill="none" opacity="0.6" />
-
-              {/* Tiers of Glowing Cyan Shelf Mushrooms Growing on Tree Trunk */}
-              {/* Tier 1 (Upper Shelf) */}
-              <ellipse cx="280" cy="180" rx="46" ry="14" fill="#083344" />
-              <ellipse cx="280" cy="176" rx="44" ry="11" fill="#06b6d4" filter="drop-shadow(0 0 10px #22d3ee)" />
-              <ellipse cx="276" cy="174" rx="34" ry="7" fill="#67e8f9" />
-              <ellipse cx="270" cy="172" rx="18" ry="3.5" fill="#e0f2fe" />
-
-              {/* Tier 2 (Middle Large Shelf) */}
-              <ellipse cx="220" cy="225" rx="58" ry="16" fill="#083344" />
-              <ellipse cx="220" cy="220" rx="55" ry="13" fill="#0891b2" filter="drop-shadow(0 0 14px #06b6d4)" />
-              <ellipse cx="215" cy="217" rx="42" ry="8" fill="#38bdf8" />
-              <ellipse cx="210" cy="215" rx="22" ry="4" fill="#bae6fd" />
-
-              {/* Tier 3 (Lower Shelf) */}
-              <ellipse cx="295" cy="268" rx="42" ry="12" fill="#083344" />
-              <ellipse cx="295" cy="264" rx="40" ry="10" fill="#06b6d4" filter="drop-shadow(0 0 8px #22d3ee)" />
-              <ellipse cx="292" cy="262" rx="28" ry="6" fill="#67e8f9" />
-
-              {/* Tier 4 (Small lower outgrowth) */}
-              <ellipse cx="170" cy="290" rx="30" ry="9" fill="#0e7490" />
-              <ellipse cx="168" cy="288" rx="24" ry="6" fill="#67e8f9" filter="drop-shadow(0 0 6px #38bdf8)" />
-            </g>
-
-            {/* Lush Rolling Mossy Forest Floor Waves */}
-            <path d="M -20 440 Q 260 370 540 420 Q 780 370 1020 430 L 1020 600 L -20 600 Z" fill="#073225" />
-            <path d="M -20 480 Q 280 420 560 465 Q 820 420 1020 475 L 1020 600 L -20 600 Z" fill="#083d2c" />
-            <path d="M -20 525 Q 300 470 580 510 Q 840 470 1020 525 L 1020 600 L -20 600 Z" fill="#064e3b" />
-
-            {/* Glowing Bioluminescent Flora on Forest Floor (Left Side) */}
-            <g transform="translate(60, 410)">
-              {/* Soft Luminous Blue Flora Aura */}
-              <circle cx="50" cy="40" r="54" fill="url(#blueFloraGlow)" />
-              {/* Luminous Bulb 1 */}
-              <path d="M 20 60 Q 22 28 32 16" stroke="#0284c7" strokeWidth="3" fill="none" strokeLinecap="round" />
-              <circle cx="34" cy="14" r="9" fill="#38bdf8" filter="drop-shadow(0 0 8px #67e8f9)" />
-              <circle cx="34" cy="14" r="4.5" fill="#f0f9ff" />
-              {/* Luminous Bulb 2 */}
-              <path d="M 45 65 Q 52 35 62 25" stroke="#0284c7" strokeWidth="3.5" fill="none" strokeLinecap="round" />
-              <circle cx="64" cy="22" r="11" fill="#06b6d4" filter="drop-shadow(0 0 10px #22d3ee)" />
-              <circle cx="64" cy="22" r="5.5" fill="#f0f9ff" />
-              {/* Luminous Bulb 3 */}
-              <path d="M 75 70 Q 78 48 88 40" stroke="#0284c7" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-              <circle cx="90" cy="38" r="8" fill="#38bdf8" filter="drop-shadow(0 0 6px #67e8f9)" />
-              {/* Purple/Violet Forest Blossom */}
-              <circle cx="108" cy="62" r="6" fill="#c084fc" filter="drop-shadow(0 0 6px #d8b4fe)" />
-              <circle cx="108" cy="62" r="3" fill="#ffffff" />
-            </g>
-
-            {/* Craggy Slate Rock Outcrop for Phoenix (Center-Right Side) */}
-            <g transform="translate(610, 360)">
-              {/* Warm Volcanic Ember Underglow from Phoenix */}
-              <ellipse cx="140" cy="60" rx="90" ry="28" fill="#ea580c" opacity="0.32" filter="blur(10px)" />
-              {/* Stacked Jagged Slate Boulders */}
-              <polygon points="60,110 110,55 180,68 210,120 140,140" fill="#1c1917" stroke="#292524" strokeWidth="2" />
-              <polygon points="100,75 145,20 205,35 225,95 160,110" fill="#292524" stroke="#44403c" strokeWidth="2" />
-              <polygon points="135,38 175,0 220,10 230,58 180,68" fill="#44403c" stroke="#57534e" strokeWidth="1.5" />
-              <polygon points="40,135 90,85 160,95 180,160 90,170" fill="#171717" stroke="#262626" strokeWidth="1.5" />
-              {/* Highlights on top facets */}
-              <polygon points="140,35 175,2 215,12 185,42" fill="#78716c" opacity="0.65" />
-              <polygon points="105,72 145,22 175,32 135,78" fill="#57534e" opacity="0.6" />
-            </g>
-          </svg>
-
-          {/* Floating Twinkling Golden & Cyan Fireflies / Light Motes */}
+          {/* Floating Twinkling Golden & Cyan Fireflies */}
           <div className="absolute w-2 h-2 rounded-full bg-yellow-200 blur-2xs top-1/3 left-1/4 animate-ping" style={{ animationDuration: '3.2s' }} />
           <div className="absolute w-2.5 h-2.5 rounded-full bg-cyan-200 blur-2xs top-1/4 right-1/3 animate-pulse" />
           <div className="absolute w-1.5 h-1.5 rounded-full bg-amber-200 blur-2xs top-2/3 left-1/3 animate-ping" style={{ animationDuration: '4.2s' }} />
           <div className="absolute w-2 h-2 rounded-full bg-emerald-200 blur-2xs bottom-1/3 right-1/4 animate-pulse" />
-          <div className="absolute w-2 h-2 rounded-full bg-cyan-300 blur-2xs bottom-1/2 left-1/5 animate-pulse" />
-          <div className="absolute w-1.5 h-1.5 rounded-full bg-orange-300 blur-2xs top-1/2 right-1/5 animate-ping" style={{ animationDuration: '2.8s' }} />
         </div>
 
         {/* Dynamic Weather Particle & Light Rays Overlay */}

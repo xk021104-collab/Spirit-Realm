@@ -8,6 +8,7 @@ interface PetAvatarProps {
   isFlipped?: boolean;
   isAttacking?: boolean;
   isHit?: boolean;
+  isShiny?: boolean;
 }
 
 export const ELEMENT_COLORS: Record<ElementType, { bg: string; text: string; border: string; label: string }> = {
@@ -47,6 +48,7 @@ export const PetAvatar: React.FC<PetAvatarProps> = ({
   isFlipped = false,
   isAttacking = false,
   isHit = false,
+  isShiny = false,
 }) => {
   const pixelSize = typeof size === 'number' ? `${size}px` : size;
   const [imgError, setImgError] = React.useState(false);

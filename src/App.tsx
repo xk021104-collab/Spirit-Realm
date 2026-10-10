@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { PetInstance, InventorySlot, SceneId, Quest } from './types/game';
+import { PetInstance, InventorySlot, SceneId, Quest, Friend, GameMail, GuildInfo, ChatMessage, CloudAccount } from './types/game';
 import { SCENES_DATA } from './data/scenes';
 import { INITIAL_QUESTS } from './data/quests';
 import { PET_SPECIES } from './data/species';
 import { ITEMS_DATA } from './data/items';
+import { MOVES_DATA } from './data/moves';
 import { calculateStats } from './utils/battleEngine';
 import { sound } from './utils/audio';
 
@@ -19,12 +20,169 @@ import { QuestTracker } from './components/QuestTracker';
 import { FriendsModal } from './components/FriendsModal';
 import { GmToolModal } from './components/GmToolModal';
 import { AdminDashboard } from './components/admin/AdminDashboard';
+import { PetStorageModal } from './components/PetStorageModal';
+import { MoveManagerModal } from './components/MoveManagerModal';
+import { EvolutionAnimationModal } from './components/EvolutionAnimationModal';
+import { MailboxModal } from './components/MailboxModal';
+import { LeaderboardModal } from './components/LeaderboardModal';
+import { GuildModal } from './components/GuildModal';
+import { AuthModal } from './components/AuthModal';
+import { WorldChatPanel } from './components/WorldChatPanel';
 import { INITIAL_FRIENDS } from './data/friends';
-import { Friend } from './types/game';
 
-import { Sparkles, Compass, BookOpen, Backpack, ShoppingBag, ScrollText, Volume2, VolumeX, Gift, Zap, Users, Wrench, Shield } from 'lucide-react';
+import {
+  Sparkles,
+  Compass,
+  BookOpen,
+  Backpack,
+  ShoppingBag,
+  ScrollText,
+  Volume2,
+  VolumeX,
+  Gift,
+  Zap,
+  Users,
+  Wrench,
+  Shield,
+  Archive,
+  Trophy,
+  Mail,
+  Cloud,
+  Music,
+} from 'lucide-react';
 
 const STORAGE_KEY = 'huanling_mijing_save_v1';
+
+const INITIAL_MAILS: GameMail[] = [
+  {
+    id: 'mail_001',
+    title: '【天道开服献礼】首发至尊修仙礼包',
+    sender: '天道灵官',
+    content: '欢迎诸位道友踏入《幻灵秘境》！感念道友仙途初启，天道特赐下极品灵葫与洗髓仙丹，助道友降伏上古神兽，成就仙尊之位！',
+    sentAt: '2026-10-10 08:00',
+    isClaimed: false,
+    rewards: {
+      coins: 2000,
+      items: [
+        { itemId: 'gulu_high', count: 5 },
+        { itemId: 'potion_mid', count: 3 },
+        { itemId: 'xi_sui_dan', count: 2 },
+      ],
+    },
+  },
+  {
+    id: 'mail_002',
+    title: '【太古秘境探索】九天神玉补给函',
+    sender: '灵虚秘境守护使',
+    content: '近日太古禁地灵气紊乱，诸多神兽躁动。此为定魂神玉与大还丹，可定幻灵先天神魂并迅速充盈修为。',
+    sentAt: '2026-10-10 10:30',
+    isClaimed: false,
+    rewards: {
+      coins: 1000,
+      items: [
+        { itemId: 'ding_hun_dan', count: 1 },
+        { itemId: 'exp_pill_large', count: 3 },
+      ],
+    },
+  },
+];
+
+const DEFAULT_GUILD: GuildInfo = {
+  id: 'guild_001',
+  name: '缥缈问道仙宗',
+  leaderName: '太玄真人',
+  level: 4,
+  totalFunds: 98000,
+  exp: 3400,
+  maxExp: 5000,
+  memberCount: 28,
+  maxMembers: 30,
+  notice: '大道争锋，诸法唯心。每日修仙打卡领取俸禄，共同参悟宗门绝学护法心法！',
+  playerRole: 'ELDER',
+  playerDevotion: 180,
+  hasClaimedSalaryToday: false,
+  skills: [
+    {
+      id: 'guild_atk',
+      name: '纯阳剑罡',
+      level: 2,
+      maxLevel: 10,
+      effectStat: 'atk',
+      bonusPerLevel: 3,
+      bonusType: 'ATK',
+      bonusValue: 6,
+      cost: 50,
+      description: '引动九天纯阳之气，提高全体上阵幻灵 6 点物攻与特攻。',
+    },
+    {
+      id: 'guild_hp',
+      name: '枯木逢春诀',
+      level: 3,
+      maxLevel: 10,
+      effectStat: 'hp',
+      bonusPerLevel: 15,
+      bonusType: 'HP',
+      bonusValue: 45,
+      cost: 60,
+      description: '参悟生生不息之理，提高全体上阵幻灵 45 点气血上限。',
+    },
+    {
+      id: 'guild_def',
+      name: '玄武御甲真经',
+      level: 1,
+      maxLevel: 10,
+      effectStat: 'def',
+      bonusPerLevel: 3,
+      bonusType: 'DEF',
+      bonusValue: 5,
+      cost: 40,
+      description: '凝练玄武重水化盾，提高全体上阵幻灵 5 点物防与特防。',
+    },
+    {
+      id: 'guild_spd',
+      name: '惊鸿踏云步',
+      level: 1,
+      maxLevel: 10,
+      effectStat: 'speed',
+      bonusPerLevel: 2,
+      bonusType: 'SPD',
+      bonusValue: 3,
+      cost: 50,
+      description: '御风而行轻盈如鸿，提高全体上阵幻灵 3 点先手速度。',
+    },
+  ],
+};
+
+const INITIAL_CHAT_MESSAGES: ChatMessage[] = [
+  {
+    id: 'msg_001',
+    senderId: 'sys',
+    senderName: '天道之音',
+    senderTitle: '天道法则',
+    content: '欢迎来到《幻灵秘境》！天地混沌初开，万千灵宠应劫而生，祝各位仙契师早日问鼎大道！',
+    channel: 'WORLD',
+    timestamp: Date.now() - 3600000,
+    isSystem: true,
+  },
+  {
+    id: 'msg_002',
+    senderId: 'npc_001',
+    senderName: '青莲剑仙·李白',
+    senderTitle: '太白剑意传人',
+    content: '大鹏一日同风起，扶摇直上九万里！我的苍穹圣龙刚刚洗出满星气运！',
+    channel: 'WORLD',
+    timestamp: Date.now() - 1800000,
+  },
+  {
+    id: 'msg_003',
+    senderId: 'npc_002',
+    senderName: '摇光圣女',
+    senderTitle: '星宿宗亲传',
+    content: '灵泉幽径的白玉狐狸好难捕捉，求教道友们用何种灵葫最稳？',
+    channel: 'WORLD',
+    timestamp: Date.now() - 600000,
+  },
+];
 
 export default function App() {
   // Game Loaded state
@@ -79,6 +237,35 @@ export default function App() {
     return false;
   });
 
+  // 11 Core Extended Systems State
+  const [petStorage, setPetStorage] = useState<PetInstance[]>([]);
+  const [mails, setMails] = useState<GameMail[]>(INITIAL_MAILS);
+  const [guild, setGuild] = useState<GuildInfo>(DEFAULT_GUILD);
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>(INITIAL_CHAT_MESSAGES);
+  const [cloudAccount, setCloudAccount] = useState<CloudAccount>({
+    username: '云游灵契师',
+    token: null,
+    isLoggedIn: false,
+    lastSyncTime: null,
+  });
+  const [marqueeAnnouncement, setMarqueeAnnouncement] = useState<string | null>(
+    '欢迎诸位道友降临幻灵大陆！天道福泽现已降临，可前往信箱领取开服好礼！'
+  );
+  const [hasPraisedToday, setHasPraisedToday] = useState<boolean>(false);
+
+  // Sub-modal states
+  const [isPetStorageOpen, setIsPetStorageOpen] = useState<boolean>(false);
+  const [isMailboxOpen, setIsMailboxOpen] = useState<boolean>(false);
+  const [isLeaderboardOpen, setIsLeaderboardOpen] = useState<boolean>(false);
+  const [isGuildOpen, setIsGuildOpen] = useState<boolean>(false);
+  const [isAuthOpen, setIsAuthOpen] = useState<boolean>(false);
+  const [moveManagerPet, setMoveManagerPet] = useState<PetInstance | null>(null);
+  const [evolutionData, setEvolutionData] = useState<{
+    pet: PetInstance;
+    fromSpeciesId: string;
+    toSpeciesId: string;
+  } | null>(null);
+
   // Global Keyboard Listener for GM console (Backquote ~ or F8)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -98,8 +285,9 @@ export default function App() {
   const [friends, setFriends] = useState<Friend[]>(INITIAL_FRIENDS);
   const [spiritShards, setSpiritShards] = useState<number>(6);
 
-  // Audio Toggle
+  // Audio Toggle & BGM State
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
+  const [bgmPlaying, setBgmPlaying] = useState<boolean>(false);
 
   // 1. Initial Load & Persistence
   useEffect(() => {
@@ -128,11 +316,41 @@ export default function App() {
         setIsPrologueOpen(true);
       }
 
+      // Load Pet Storage
+      const savedStorage = localStorage.getItem('huanling_pet_storage');
+      if (savedStorage) {
+        setPetStorage(JSON.parse(savedStorage));
+      }
+
+      // Load Mails
+      const savedMails = localStorage.getItem('huanling_mails_data');
+      if (savedMails) {
+        setMails(JSON.parse(savedMails));
+      }
+
+      // Load Guild
+      const savedGuild = localStorage.getItem('huanling_guild_data');
+      if (savedGuild) {
+        setGuild(JSON.parse(savedGuild));
+      }
+
+      // Load Cloud Account
+      const savedAccount = localStorage.getItem('huanling_cloud_account');
+      if (savedAccount) {
+        setCloudAccount(JSON.parse(savedAccount));
+      }
+
+      // Load Praise Status
+      const savedPraiseDate = localStorage.getItem('huanling_praise_date');
+      const todayDate = new Date().toISOString().split('T')[0];
+      if (savedPraiseDate === todayDate) {
+        setHasPraisedToday(true);
+      }
+
       // Load Social Friends & Shards
       const savedFriends = localStorage.getItem('huanling_friends_data');
       const savedShards = localStorage.getItem('huanling_spirit_shards');
       const lastGiftDate = localStorage.getItem('huanling_last_gift_date');
-      const todayDate = new Date().toISOString().split('T')[0];
 
       if (savedShards) {
         setSpiritShards(parseInt(savedShards, 10));
@@ -140,7 +358,6 @@ export default function App() {
 
       if (savedFriends) {
         let parsedFriends = JSON.parse(savedFriends) as Friend[];
-        // Reset daily gifting flags on a new calendar day
         if (lastGiftDate !== todayDate) {
           parsedFriends = parsedFriends.map((f) => ({
             ...f,
@@ -201,6 +418,12 @@ export default function App() {
     setSoundEnabled(!soundEnabled);
   };
 
+  // BGM toggle
+  const handleToggleBgm = () => {
+    const isPlaying = sound.toggleBgm();
+    setBgmPlaying(isPlaying);
+  };
+
   // GM Savefile Handlers
   const handleImportSave = (jsonStr: string): boolean => {
     try {
@@ -221,6 +444,10 @@ export default function App() {
 
   const handleResetSave = () => {
     localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem('huanling_pet_storage');
+    localStorage.removeItem('huanling_mails_data');
+    localStorage.removeItem('huanling_guild_data');
+    localStorage.removeItem('huanling_cloud_account');
     localStorage.removeItem('huanling_friends_data');
     localStorage.removeItem('huanling_spirit_shards');
     localStorage.removeItem('huanling_last_gift_date');
@@ -252,10 +479,8 @@ export default function App() {
     if (qIndex === -1) return;
     const targetQuest = quests[qIndex];
 
-    // Award coins
     setPlayerCoins((prev) => prev + targetQuest.rewards.coins);
 
-    // Award items
     if (targetQuest.rewards.items) {
       setInventory((prev) => {
         let updated = [...prev];
@@ -271,16 +496,13 @@ export default function App() {
       });
     }
 
-    // Award badge
     if (targetQuest.rewards.badge && !playerBadges.includes(targetQuest.rewards.badge)) {
       setPlayerBadges((prev) => [...prev, targetQuest.rewards.badge!]);
     }
 
-    // Update quest status to CLAIMED and unlock next quest
     setQuests((prev) => {
       const nextQuests = [...prev];
       nextQuests[qIndex] = { ...targetQuest, status: 'CLAIMED' };
-      // Unlock next
       if (qIndex + 1 < nextQuests.length && nextQuests[qIndex + 1].status === 'LOCKED') {
         nextQuests[qIndex + 1] = { ...nextQuests[qIndex + 1], status: 'ACTIVE' };
       }
@@ -293,17 +515,13 @@ export default function App() {
     setPlayerName(chosenName);
     setParty([starterPet]);
     setActiveLeaderIndex(0);
-    // Unlock starter species in Pokedex!
     setUnlockedSpeciesIds([starterPet.speciesId]);
     setIsPrologueOpen(false);
-
-    // Progress Quest 1
     updateQuestProgress('CHOOSE_STARTER', 1);
   };
 
   // 4. Battle Events
   const handleStartBattle = (enemyPet: PetInstance, isWild: boolean) => {
-    // Recalculate stats for enemy
     const spec = PET_SPECIES[enemyPet.speciesId];
     if (spec) {
       const calculated = calculateStats(spec, enemyPet.level);
@@ -333,15 +551,26 @@ export default function App() {
     // If captured wild spirit:
     if (result.capturedPet) {
       sound.playCatchSuccess();
-      // Add to party if < 6
       if (result.updatedParty.length < 6) {
         setParty([...result.updatedParty, result.capturedPet]);
+      } else {
+        // Auto deposit into storage box!
+        setPetStorage((prev) => {
+          const nextStorage = [...prev, result.capturedPet!];
+          try {
+            localStorage.setItem('huanling_pet_storage', JSON.stringify(nextStorage));
+          } catch (e) {
+            console.error(e);
+          }
+          return nextStorage;
+        });
+        const petName = PET_SPECIES[result.capturedPet.speciesId]?.name || '灵宠';
+        setMarqueeAnnouncement(`出战灵宠背包已满，捕获的【${petName}】已自动收入仙府珍兽居！`);
       }
-      // Unlock in Pokedex!
+
       if (!unlockedSpeciesIds.includes(result.capturedPet.speciesId)) {
         setUnlockedSpeciesIds((prev) => [...prev, result.capturedPet!.speciesId]);
       }
-      // Progress Quest 3
       updateQuestProgress('CATCH_PET', 1);
     }
 
@@ -350,7 +579,6 @@ export default function App() {
       if (activeBattle.isWild) {
         updateQuestProgress('WIN_WILD_BATTLE', 1);
       } else {
-        // Beat Arena Boss
         updateQuestProgress('WIN_ARENA_CHALLENGE', 1);
       }
     }
@@ -397,7 +625,7 @@ export default function App() {
     updateQuestProgress('HEAL_PET', 1);
   };
 
-  // 7. Shop Purchase
+  // 7. Shop Purchase & Sell
   const handleBuyItem = (itemId: string, count: number, totalCost: number) => {
     setPlayerCoins((prev) => Math.max(0, prev - totalCost));
     setInventory((prev) => {
@@ -409,6 +637,12 @@ export default function App() {
       }
     });
     updateQuestProgress('BUY_SHOP_ITEM', 1);
+  };
+
+  const handleSellItem = (itemId: string, count: number, totalEarned: number) => {
+    handleDeductItem(itemId, count);
+    setPlayerCoins((prev) => prev + totalEarned);
+    sound.playCatchSuccess();
   };
 
   // 8. Pokedex Milestone Reward Claim
@@ -493,7 +727,7 @@ export default function App() {
       f.id === friendId ? { ...f, hasGiftedToday: true } : f
     );
     saveFriends(updated);
-    setPlayerCoins((prev) => prev + 50); // reward 50 spirit coins for gifting
+    setPlayerCoins((prev) => prev + 50);
   };
 
   const handleClaimFromFriend = (friendId: string) => {
@@ -556,6 +790,389 @@ export default function App() {
     }
   };
 
+  // 11. Pet Storage Handlers
+  const handleDepositToStorage = (partyIndex: number) => {
+    if (party.length <= 1) {
+      alert('上阵出战位至少保留 1 只幻灵！');
+      return;
+    }
+    const petToDeposit = party[partyIndex];
+    if (!petToDeposit) return;
+    const newParty = party.filter((_, idx) => idx !== partyIndex);
+    const newStorage = [...petStorage, petToDeposit];
+    setParty(newParty);
+    setPetStorage(newStorage);
+    if (activeLeaderIndex >= newParty.length) {
+      setActiveLeaderIndex(0);
+    }
+    sound.playCatchSuccess();
+    try {
+      localStorage.setItem('huanling_pet_storage', JSON.stringify(newStorage));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleWithdrawFromStorage = (storageIndex: number) => {
+    if (party.length >= 6) {
+      alert('上阵出战位已满（至多 6 只），请先将出战灵宠存入仙府！');
+      return;
+    }
+    const petToWithdraw = petStorage[storageIndex];
+    if (!petToWithdraw) return;
+    const newStorage = petStorage.filter((_, idx) => idx !== storageIndex);
+    const newParty = [...party, petToWithdraw];
+    setParty(newParty);
+    setPetStorage(newStorage);
+    sound.playCatchSuccess();
+    try {
+      localStorage.setItem('huanling_pet_storage', JSON.stringify(newStorage));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleSwapPartyAndStorage = (partyIndex: number, storageIndex: number) => {
+    const partyPet = party[partyIndex];
+    const storagePet = petStorage[storageIndex];
+    if (!partyPet || !storagePet) return;
+    const newParty = [...party];
+    const newStorage = [...petStorage];
+    newParty[partyIndex] = storagePet;
+    newStorage[storageIndex] = partyPet;
+    setParty(newParty);
+    setPetStorage(newStorage);
+    sound.playCatchSuccess();
+    try {
+      localStorage.setItem('huanling_pet_storage', JSON.stringify(newStorage));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleReleasePet = (from: 'party' | 'storage', index: number) => {
+    if (from === 'party') {
+      if (party.length <= 1) {
+        alert('上阵出战位至少保留 1 只幻灵，不可全部放生！');
+        return;
+      }
+      const pet = party[index];
+      if (!pet) return;
+      const refundCoins = pet.level * 60;
+      setParty((prev) => prev.filter((_, idx) => idx !== index));
+      setPlayerCoins((prev) => prev + refundCoins);
+      setSpiritShards((prev) => prev + 1);
+      sound.playCatchSuccess();
+    } else {
+      const pet = petStorage[index];
+      if (!pet) return;
+      const refundCoins = pet.level * 60;
+      const newStorage = petStorage.filter((_, idx) => idx !== index);
+      setPetStorage(newStorage);
+      setPlayerCoins((prev) => prev + refundCoins);
+      setSpiritShards((prev) => prev + 1);
+      sound.playCatchSuccess();
+      try {
+        localStorage.setItem('huanling_pet_storage', JSON.stringify(newStorage));
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  };
+
+  // 12. Move Manager Handler
+  const handleSaveMoves = (petUid: string, selectedMoveIds: string[]) => {
+    const newMoves = selectedMoveIds
+      .map((id) => MOVES_DATA[id])
+      .filter(Boolean)
+      .map((m) => ({
+        ...m,
+        pp: m.maxPp,
+      }));
+
+    setParty((prev) =>
+      prev.map((pet) => {
+        if (pet.uid === petUid) {
+          const learned = Array.from(new Set([...(pet.learnedMoveIds || []), ...selectedMoveIds]));
+          return {
+            ...pet,
+            moves: newMoves,
+            learnedMoveIds: learned,
+          };
+        }
+        return pet;
+      })
+    );
+
+    setPetStorage((prev) =>
+      prev.map((pet) => {
+        if (pet.uid === petUid) {
+          const learned = Array.from(new Set([...(pet.learnedMoveIds || []), ...selectedMoveIds]));
+          return {
+            ...pet,
+            moves: newMoves,
+            learnedMoveIds: learned,
+          };
+        }
+        return pet;
+      })
+    );
+
+    setMoveManagerPet(null);
+    sound.playCatchSuccess();
+  };
+
+  // 13. Mailbox Handlers
+  const handleClaimMail = (mailId: string) => {
+    const mail = mails.find((m) => m.id === mailId);
+    if (!mail || mail.isClaimed) return;
+
+    sound.playCatchSuccess();
+    if (mail.rewards) {
+      if (mail.rewards.coins) {
+        setPlayerCoins((prev) => prev + mail.rewards!.coins!);
+      }
+      if (mail.rewards.items) {
+        mail.rewards.items.forEach((slot) => {
+          handleAddItem(slot.itemId, slot.count);
+        });
+      }
+      if (mail.rewards.pet) {
+        if (party.length < 6) {
+          setParty((prev) => [...prev, mail.rewards!.pet!]);
+        } else {
+          setPetStorage((prev) => [...prev, mail.rewards!.pet!]);
+        }
+      }
+    }
+
+    const updatedMails = mails.map((m) =>
+      m.id === mailId ? { ...m, isClaimed: true } : m
+    );
+    setMails(updatedMails);
+    try {
+      localStorage.setItem('huanling_mails_data', JSON.stringify(updatedMails));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleClaimAllMails = () => {
+    sound.playCatchSuccess();
+    let totalCoins = 0;
+    const addedItems: { [id: string]: number } = {};
+    const addedPets: PetInstance[] = [];
+
+    const updatedMails = mails.map((m) => {
+      if (!m.isClaimed && m.rewards) {
+        if (m.rewards.coins) totalCoins += m.rewards.coins;
+        if (m.rewards.items) {
+          m.rewards.items.forEach((slot) => {
+            addedItems[slot.itemId] = (addedItems[slot.itemId] || 0) + slot.count;
+          });
+        }
+        if (m.rewards.pet) {
+          addedPets.push(m.rewards.pet);
+        }
+        return { ...m, isClaimed: true };
+      }
+      return m;
+    });
+
+    if (totalCoins > 0) setPlayerCoins((prev) => prev + totalCoins);
+    Object.entries(addedItems).forEach(([id, count]) => {
+      handleAddItem(id, count);
+    });
+    if (addedPets.length > 0) {
+      addedPets.forEach((p) => {
+        setParty((curr) => {
+          if (curr.length < 6) return [...curr, p];
+          setPetStorage((st) => [...st, p]);
+          return curr;
+        });
+      });
+    }
+
+    setMails(updatedMails);
+    try {
+      localStorage.setItem('huanling_mails_data', JSON.stringify(updatedMails));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleDeleteReadMails = () => {
+    const remaining = mails.filter((m) => !m.isClaimed);
+    setMails(remaining);
+    try {
+      localStorage.setItem('huanling_mails_data', JSON.stringify(remaining));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // 14. Guild Handlers
+  const handleClaimGuildSalary = () => {
+    setPlayerCoins((prev) => prev + 1000);
+    const updatedGuild: GuildInfo = {
+      ...guild,
+      playerDevotion: guild.playerDevotion + 50,
+      hasClaimedSalaryToday: true,
+    };
+    setGuild(updatedGuild);
+    try {
+      localStorage.setItem('huanling_guild_data', JSON.stringify(updatedGuild));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleUpgradeGuildSkill = (skillId: string) => {
+    const updatedSkills = guild.skills.map((sk) => {
+      if (sk.id === skillId) {
+        return {
+          ...sk,
+          level: sk.level + 1,
+          bonusValue: (sk.bonusValue ?? 10) + Math.ceil((sk.bonusValue ?? 10) / Math.max(sk.level, 1)),
+          cost: sk.cost + 50,
+        };
+      }
+      return sk;
+    });
+    const currentCost = guild.skills.find((s) => s.id === skillId)?.cost || 50;
+    const updatedGuild: GuildInfo = {
+      ...guild,
+      playerDevotion: Math.max(0, guild.playerDevotion - currentCost),
+      skills: updatedSkills,
+    };
+    setGuild(updatedGuild);
+    try {
+      localStorage.setItem('huanling_guild_data', JSON.stringify(updatedGuild));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // 15. Leaderboard Praise Handler
+  const handlePraiseLeader = () => {
+    if (hasPraisedToday) return;
+    setPlayerCoins((prev) => prev + 200);
+    setSpiritShards((prev) => prev + 1);
+    setHasPraisedToday(true);
+    const today = new Date().toISOString().split('T')[0];
+    localStorage.setItem('huanling_has_praised_today', 'true');
+    localStorage.setItem('huanling_praise_date', today);
+    sound.playCatchSuccess();
+  };
+
+  // 16. World Chat Handler
+  const handleSendMessage = (content: string, channel: 'WORLD' | 'SCENE') => {
+    const newMsg: ChatMessage = {
+      id: `chat_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+      senderId: 'player',
+      senderName: playerName,
+      senderTitle: party[0]?.level && party[0].level >= 30 ? '灵宗大师' : '引气修者',
+      content,
+      channel,
+      timestamp: Date.now(),
+    };
+    setChatMessages((prev) => [...prev.slice(-49), newMsg]);
+    return true;
+  };
+
+  // 17. Cloud Account Auth & Sync
+  const handleLogin = (username: string) => {
+    const acc: CloudAccount = {
+      username,
+      token: `token_${Date.now()}`,
+      isLoggedIn: true,
+      lastSyncTime: new Date().toLocaleTimeString(),
+    };
+    setPlayerName(username);
+    setCloudAccount(acc);
+    try {
+      localStorage.setItem('huanling_cloud_account', JSON.stringify(acc));
+    } catch (e) {
+      console.error(e);
+    }
+    return true;
+  };
+
+  const handleLogout = () => {
+    const acc: CloudAccount = {
+      username: '云游灵契师',
+      token: null,
+      isLoggedIn: false,
+      lastSyncTime: null,
+    };
+    setCloudAccount(acc);
+    try {
+      localStorage.setItem('huanling_cloud_account', JSON.stringify(acc));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleSyncUpload = async (): Promise<boolean> => {
+    try {
+      const payload = {
+        name: playerName,
+        coins: playerCoins,
+        level: Math.max(...party.map((p) => p.level), 1),
+        pets: party,
+        storagePets: petStorage,
+        badges: playerBadges,
+        dexCount: unlockedSpeciesIds.length,
+        currentScene: currentSceneId,
+      };
+      const res = await fetch('/api/admin/sync-local-player', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) {
+        const timeStr = new Date().toLocaleTimeString();
+        setCloudAccount((prev) => ({ ...prev, lastSyncTime: timeStr }));
+        return true;
+      }
+    } catch {
+      // offline fallback
+    }
+    const timeStr = new Date().toLocaleTimeString();
+    setCloudAccount((prev) => ({ ...prev, lastSyncTime: timeStr }));
+    return true;
+  };
+
+  const handleSyncDownload = async (): Promise<boolean> => {
+    try {
+      const res = await fetch('/api/admin/players');
+      if (res.ok) {
+        const data = await res.json();
+        const found = data.find((p: any) => p.name === playerName);
+        if (found) {
+          if (found.coins) setPlayerCoins(found.coins);
+          if (found.pets && Array.isArray(found.pets) && found.pets.length > 0) {
+            setParty(found.pets);
+          }
+          return true;
+        }
+      }
+    } catch {
+      // offline fallback
+    }
+    return true;
+  };
+
+  // Metrics for Leaderboard
+  const myCombatPower = party.reduce((sum, pet) => {
+    const s = pet.stats;
+    const talentBonus = Math.floor((pet.talentScore || 70) * 1.5);
+    return sum + (s.hp + s.atk * 2 + s.def * 2 + s.spAtk * 2 + s.spDef * 2 + s.speed * 2 + talentBonus);
+  }, 0);
+  const myTopLevel = party.length > 0 ? Math.max(...party.map((p) => p.level)) : 1;
+  const myLeaderSpeciesId = party[0]?.speciesId || 'huoyanhou';
+  const unreadMailsCount = mails.filter((m) => !m.isClaimed).length;
+
   const currentScene = SCENES_DATA[currentSceneId] || SCENES_DATA.ACADEMY;
 
   if (isAdminDashboardOpen) {
@@ -576,10 +1193,10 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#020617] text-slate-100 flex flex-col items-center justify-start sm:justify-center p-1 sm:p-2 select-none overflow-x-hidden">
       {/* 1. Roco Kingdom Classic Fantasy Game Header Bar */}
-      <header className="w-full max-w-5xl bg-gradient-to-r from-[#061426] via-[#091b30] to-[#061426] border-2 border-[#b8860b]/40 rounded-t-2xl px-4 py-2 flex items-center justify-between text-xs text-slate-300 shadow-2xl backdrop-blur-md gap-2">
+      <header className="w-full max-w-5xl bg-gradient-to-r from-[#061426] via-[#091b30] to-[#061426] border-2 border-[#b8860b]/40 rounded-t-2xl px-3 py-2 flex items-center justify-between text-xs text-slate-300 shadow-2xl backdrop-blur-md gap-2">
         {/* Left: Game Title with Vermilion Seal */}
-        <div className="flex items-center gap-2.5">
-          <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <h1 className="roco-title-font text-base sm:text-xl roco-gold-text font-black tracking-wide drop-shadow-[0_2px_8px_rgba(245,158,11,0.6)]">
               幻灵秘境
             </h1>
@@ -587,7 +1204,7 @@ export default function App() {
               幻境
             </span>
           </div>
-          <span className="text-[9px] text-amber-300/80 hidden sm:inline tracking-[0.25em] font-mono font-bold -mb-0.5">
+          <span className="text-[9px] text-amber-300/80 hidden lg:inline tracking-[0.25em] font-mono font-bold -mb-0.5">
             · SPIRIT REALM
           </span>
         </div>
@@ -598,8 +1215,8 @@ export default function App() {
           <span className="roco-title-font">秘境探索中：{currentScene.name}</span>
         </div>
 
-        {/* Right: Clean Navigation Shortcuts */}
-        <div className="flex items-center gap-1.5 sm:gap-2">
+        {/* Right: Comprehensive Navigation Shortcuts */}
+        <div className="flex items-center gap-1 sm:gap-1.5 flex-wrap justify-end">
           {/* GM Tools Button */}
           <button
             onClick={() => setIsGmOpen(true)}
@@ -607,7 +1224,7 @@ export default function App() {
             title="呼出天道 GM 调试控制台 (快捷键 ~)"
           >
             <Wrench className="w-3.5 h-3.5 text-purple-400" />
-            <span>GM 秘宝</span>
+            <span className="hidden sm:inline">GM</span>
           </button>
 
           {/* Admin Operations Portal Button */}
@@ -617,34 +1234,108 @@ export default function App() {
             title="进入服务端运营后台管理系统"
           >
             <Shield className="w-3.5 h-3.5 text-cyan-400" />
-            <span>运营后台</span>
+            <span className="hidden sm:inline">后台</span>
           </button>
 
+          {/* Pet Storage / Sanctuary */}
+          <button
+            onClick={() => setIsPetStorageOpen(true)}
+            className="px-2 py-1 rounded-lg text-xs text-emerald-200 hover:text-white bg-emerald-950/70 hover:bg-emerald-900 border border-emerald-500/50 transition-all cursor-pointer font-medium flex items-center gap-1 roco-title-font shadow"
+            title="查看仙府珍兽居与灵宠仓库"
+          >
+            <Archive className="w-3.5 h-3.5 text-emerald-400" />
+            <span className="hidden sm:inline">仙府</span>
+            {petStorage.length > 0 && (
+              <span className="px-1 text-[9px] bg-emerald-600/80 text-white rounded-full">
+                {petStorage.length}
+              </span>
+            )}
+          </button>
+
+          {/* Mailbox Button */}
+          <button
+            onClick={() => setIsMailboxOpen(true)}
+            className="px-2 py-1 rounded-lg text-xs text-amber-200 hover:text-white bg-[#0a1f36]/70 hover:bg-[#0e2a4a] border border-[#b8860b]/40 transition-all cursor-pointer font-medium flex items-center gap-1 roco-title-font relative"
+            title="查看飞剑传书与补偿礼包"
+          >
+            <Mail className="w-3.5 h-3.5 text-amber-300" />
+            <span className="hidden sm:inline">信箱</span>
+            {unreadMailsCount > 0 && (
+              <span className="absolute -top-1 -right-1 px-1 text-[9px] bg-rose-500 text-white rounded-full font-bold animate-pulse shadow">
+                {unreadMailsCount}
+              </span>
+            )}
+          </button>
+
+          {/* Guild / Alliance Button */}
+          <button
+            onClick={() => setIsGuildOpen(true)}
+            className="px-2 py-1 rounded-lg text-xs text-sky-200 hover:text-white bg-sky-950/70 hover:bg-sky-900 border border-sky-500/50 transition-all cursor-pointer font-medium flex items-center gap-1 roco-title-font"
+            title="查看宗门仙盟与护法心法"
+          >
+            <Shield className="w-3.5 h-3.5 text-sky-400" />
+            <span className="hidden sm:inline">仙盟</span>
+            {!guild.hasClaimedSalaryToday && (
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+            )}
+          </button>
+
+          {/* Leaderboard Button */}
+          <button
+            onClick={() => setIsLeaderboardOpen(true)}
+            className="px-2 py-1 rounded-lg text-xs text-amber-200 hover:text-white bg-amber-950/70 hover:bg-amber-900 border border-amber-500/50 transition-all cursor-pointer font-medium flex items-center gap-1 roco-title-font"
+            title="查看全服战力与图鉴天梯榜"
+          >
+            <Trophy className="w-3.5 h-3.5 text-amber-400" />
+            <span className="hidden sm:inline">天梯</span>
+          </button>
+
+          {/* Social Friends Button */}
           <button
             onClick={() => setIsFriendsOpen(true)}
             className="px-2 py-1 rounded-lg text-xs text-amber-200 hover:text-white bg-[#0a1f36]/70 hover:bg-[#0e2a4a] border border-[#b8860b]/40 transition-all cursor-pointer font-medium flex items-center gap-1 roco-title-font"
             title="查看同修仙友录与互赠灵力碎片"
           >
             <Users className="w-3.5 h-3.5 text-amber-300" />
-            <span className="hidden sm:inline">仙友录</span>
+            <span className="hidden sm:inline">仙友</span>
             {friends.some((f) => f.canClaimFromFriend) && (
               <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse" />
             )}
           </button>
+
+          {/* Cloud Account Button */}
           <button
-            onClick={() => setIsPrologueOpen(true)}
-            className="px-2 py-1 rounded-lg text-xs text-amber-200 hover:text-white bg-[#0a1f36]/70 hover:bg-[#0e2a4a] border border-[#b8860b]/40 transition-all cursor-pointer font-medium roco-title-font hidden sm:inline"
-            title="回顾世界序章与创世神兽起源"
+            onClick={() => setIsAuthOpen(true)}
+            className="px-2 py-1 rounded-lg text-xs text-indigo-200 hover:text-white bg-indigo-950/70 hover:bg-indigo-900 border border-indigo-500/50 transition-all cursor-pointer font-medium flex items-center gap-1 roco-title-font"
+            title="天道云端账号与进度同步"
           >
-            天命序章
+            <Cloud className="w-3.5 h-3.5 text-indigo-400" />
+            <span className="hidden sm:inline">云端</span>
           </button>
+
+          {/* Quest Log Button */}
           <button
             onClick={() => setIsQuestLogOpen(true)}
             className="px-2 py-1 rounded-lg text-xs text-slate-300 hover:text-white bg-slate-800/60 hover:bg-slate-750 border border-slate-700/60 transition-all cursor-pointer font-medium hidden md:inline"
             title="查看主线修道任务"
           >
-            历练日志
+            任务
           </button>
+
+          {/* Pentatonic Xianxia BGM Toggle Button */}
+          <button
+            onClick={handleToggleBgm}
+            className={`p-1.5 rounded-lg border transition-all cursor-pointer ${
+              bgmPlaying
+                ? 'bg-amber-500/30 border-amber-400 text-amber-300 shadow-[0_0_10px_rgba(245,158,11,0.5)]'
+                : 'bg-slate-800/80 hover:bg-slate-750 border-slate-700/60 text-slate-400'
+            }`}
+            title={bgmPlaying ? '仙乐播放中 (点击停止)' : '播放空灵仙乐五声音阶'}
+          >
+            <Music className={`w-3.5 h-3.5 ${bgmPlaying ? 'animate-spin' : ''}`} />
+          </button>
+
+          {/* Sound FX Toggle Button */}
           <button
             onClick={handleToggleSound}
             className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-750 text-slate-300 hover:text-white transition-colors cursor-pointer border border-slate-700/60"
@@ -656,7 +1347,7 @@ export default function App() {
       </header>
 
       {/* 2. Main Game Viewport Stage */}
-      <main className="w-full max-w-5xl flex flex-col items-center justify-center my-0 shadow-2xl">
+      <main className="w-full max-w-5xl flex flex-col items-center justify-center my-0 shadow-2xl relative">
         {activeBattle.inBattle && activeBattle.enemyPet ? (
           <BattleView
             playerParty={party}
@@ -695,8 +1386,16 @@ export default function App() {
             onToggleSound={handleToggleSound}
           />
         )}
-      </main>
 
+        {/* Global World Chat Bar */}
+        <WorldChatPanel
+          playerName={playerName}
+          playerTitle={party[0]?.level && party[0].level >= 30 ? '灵宗大师' : '引气修者'}
+          messages={chatMessages}
+          onSendMessage={handleSendMessage}
+          marqueeAnnouncement={marqueeAnnouncement}
+        />
+      </main>
 
       {/* 3. Subtle RPG Footer */}
       <footer className="w-full max-w-5xl bg-[#040e1b]/90 border-x-2 border-b-2 border-[#b8860b]/40 rounded-b-2xl px-4 py-2 flex flex-wrap items-center justify-between text-[11px] text-slate-400 mt-1">
@@ -709,6 +1408,8 @@ export default function App() {
           <span>全图鉴收录 16 种天地神兽</span>
           <span className="text-amber-600">|</span>
           <span>五行相生相克法则</span>
+          <span className="text-amber-600">|</span>
+          <span>按 ~ 键呼出天道控制台</span>
         </div>
       </footer>
 
@@ -750,12 +1451,13 @@ export default function App() {
         />
       )}
 
-      {/* Treasure Shop Modal */}
+      {/* Treasure Shop Modal with Batch Buy & Item Pawn/Sell */}
       {isShopOpen && (
         <ShopModal
           playerCoins={playerCoins}
           inventory={inventory}
           onBuyItem={handleBuyItem}
+          onSellItem={handleSellItem}
           onClose={() => setIsShopOpen(false)}
         />
       )}
@@ -771,14 +1473,99 @@ export default function App() {
         />
       )}
 
-      {/* Pet Cultivation, Feed EXP & Evolution Modal */}
+      {/* Pet Cultivation, Feed EXP, Wash Talent & Evolution Modal */}
       {isPetTrainOpen && (
         <PetTrainModal
           party={party}
           inventory={inventory}
           onUpdatePartyPet={handleUpdatePartyPet}
           onDeductItem={handleDeductItem}
+          onOpenMoveManager={(pet) => setMoveManagerPet(pet)}
+          onTriggerEvolution={(pet, oldId, newId) =>
+            setEvolutionData({ pet, fromSpeciesId: oldId, toSpeciesId: newId })
+          }
           onClose={() => setIsPetTrainOpen(false)}
+        />
+      )}
+
+      {/* Pet Storage / Sanctuary PC Box Modal */}
+      {isPetStorageOpen && (
+        <PetStorageModal
+          party={party}
+          storage={petStorage}
+          activeLeaderIndex={activeLeaderIndex}
+          onSetLeaderIndex={(idx) => setActiveLeaderIndex(idx)}
+          onDepositToStorage={handleDepositToStorage}
+          onWithdrawFromStorage={handleWithdrawFromStorage}
+          onSwapPartyAndStorage={handleSwapPartyAndStorage}
+          onReleasePet={handleReleasePet}
+          onClose={() => setIsPetStorageOpen(false)}
+        />
+      )}
+
+      {/* Moves / Skills Manager Modal */}
+      {moveManagerPet && (
+        <MoveManagerModal
+          pet={moveManagerPet}
+          onSaveMoves={handleSaveMoves}
+          onClose={() => setMoveManagerPet(null)}
+        />
+      )}
+
+      {/* Evolution Animation Awakening Modal */}
+      {evolutionData && (
+        <EvolutionAnimationModal
+          pet={evolutionData.pet}
+          fromSpeciesId={evolutionData.fromSpeciesId}
+          toSpeciesId={evolutionData.toSpeciesId}
+          onClose={() => setEvolutionData(null)}
+        />
+      )}
+
+      {/* Mailbox Modal */}
+      {isMailboxOpen && (
+        <MailboxModal
+          mails={mails}
+          onClaimMail={handleClaimMail}
+          onClaimAllMails={handleClaimAllMails}
+          onDeleteReadMails={handleDeleteReadMails}
+          onClose={() => setIsMailboxOpen(false)}
+        />
+      )}
+
+      {/* Leaderboard Modal */}
+      {isLeaderboardOpen && (
+        <LeaderboardModal
+          myPlayerName={playerName}
+          myCombatPower={myCombatPower}
+          myDexCount={unlockedSpeciesIds.length}
+          myLevel={myTopLevel}
+          myLeaderSpeciesId={myLeaderSpeciesId}
+          onPraiseLeader={handlePraiseLeader}
+          hasPraisedToday={hasPraisedToday}
+          onClose={() => setIsLeaderboardOpen(false)}
+        />
+      )}
+
+      {/* Guild / Alliance Modal */}
+      {isGuildOpen && (
+        <GuildModal
+          guild={guild}
+          onClaimSalary={handleClaimGuildSalary}
+          onUpgradeGuildSkill={handleUpgradeGuildSkill}
+          onClose={() => setIsGuildOpen(false)}
+        />
+      )}
+
+      {/* Account & Cloud Sync Modal */}
+      {isAuthOpen && (
+        <AuthModal
+          cloudAccount={cloudAccount}
+          onLogin={handleLogin}
+          onLogout={handleLogout}
+          onSyncUpload={handleSyncUpload}
+          onSyncDownload={handleSyncDownload}
+          onClose={() => setIsAuthOpen(false)}
         />
       )}
 
@@ -833,4 +1620,3 @@ export default function App() {
     </div>
   );
 }
-

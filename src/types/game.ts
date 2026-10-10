@@ -217,15 +217,17 @@ export interface Friend {
 export interface GameMail {
   id: string;
   title: string;
+  sender?: string;
   content: string;
   sentAt: string;
-  isRead: boolean;
+  isRead?: boolean;
   isClaimed: boolean;
   rewards: {
     coins?: number;
     gems?: number;
     items?: { itemId: string; count: number }[];
     petSpeciesId?: string;
+    pet?: PetInstance;
   };
 }
 
@@ -236,8 +238,10 @@ export interface GuildSkill {
   maxLevel: number;
   description: string;
   cost: number;
-  effectStat: 'hp' | 'atk' | 'def' | 'spAtk' | 'spDef' | 'speed';
+  effectStat?: 'hp' | 'atk' | 'def' | 'spAtk' | 'spDef' | 'speed';
   bonusPerLevel: number;
+  bonusType?: string;
+  bonusValue?: number;
 }
 
 export interface GuildInfo {
@@ -249,6 +253,9 @@ export interface GuildInfo {
   memberCount: number;
   maxMembers: number;
   totalFunds: number;
+  exp?: number;
+  maxExp?: number;
+  playerRole?: 'LEADER' | 'ELDER' | 'MEMBER';
   playerDevotion: number; // 玩家个人贡献点
   hasClaimedSalaryToday: boolean;
   skills: GuildSkill[];
@@ -256,12 +263,14 @@ export interface GuildInfo {
 
 export interface ChatMessage {
   id: string;
+  senderId?: string;
   senderName: string;
   senderTitle?: string;
   content: string;
-  timestamp: string;
+  timestamp: string | number;
   channel: 'WORLD' | 'SYSTEM' | 'SCENE';
   isMarquee?: boolean;
+  isSystem?: boolean;
 }
 
 export interface LeaderboardItem {
@@ -277,7 +286,10 @@ export interface LeaderboardItem {
 
 export interface CloudAccount {
   username: string;
-  token?: string;
-  isCloudLoggedIn: boolean;
+  token?: string | null;
+  isLoggedIn?: boolean;
+  isCloudLoggedIn?: boolean;
+  lastSyncTime?: string | null;
   lastSyncedAt?: string;
 }
+

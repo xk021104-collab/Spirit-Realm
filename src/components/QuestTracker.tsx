@@ -49,60 +49,72 @@ export const QuestTracker: React.FC<QuestTrackerProps> = ({
             sound.playClick();
             setIsModalOpen(true);
           }}
-          className={`group flex items-center gap-3 p-2.5 px-3.5 rounded-xl border backdrop-blur-md shadow-xl transition-all cursor-pointer text-left ${
+          className={`group flex items-center gap-3 p-2.5 px-3.5 rounded-2xl border backdrop-blur-md shadow-xl transition-all cursor-pointer text-left roco-panel ${
             currentActiveQuest?.status === 'COMPLETED'
-              ? 'bg-amber-950/80 border-amber-400/80 hover:bg-amber-900/90 ring-1 ring-amber-400/40 animate-pulse'
-              : 'bg-slate-900/80 border-slate-700/80 hover:bg-slate-800/90'
+              ? 'border-amber-400 ring-2 ring-amber-400/50 animate-pulse'
+              : 'border-[#b8860b]/40 hover:border-[#d4af37]/70'
           }`}
         >
           <div
-            className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
+            className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
               currentActiveQuest?.status === 'COMPLETED'
-                ? 'bg-amber-500 text-slate-950 font-bold'
-                : 'bg-indigo-500/20 text-indigo-300 border border-indigo-400/30'
+                ? 'bg-amber-400 text-slate-950 font-bold shadow-md'
+                : 'bg-amber-500/20 text-amber-300 border border-amber-400/40'
             }`}
           >
             {currentActiveQuest?.status === 'COMPLETED' ? (
               <Gift className="w-4 h-4 animate-bounce" />
             ) : (
-              <ScrollText className="w-4 h-4" />
+              <ScrollText className="w-4 h-4 text-amber-300" />
             )}
           </div>
 
           <div className="max-w-[210px] truncate">
-            <div className="flex items-center gap-1.5 text-[10px] font-mono text-amber-400">
-              <span>{currentActiveQuest?.chapter}</span>
+            <div className="flex items-center gap-1.5 text-[10px] font-mono text-amber-300">
+              <span className="roco-title-font font-bold">{currentActiveQuest?.chapter}</span>
               {currentActiveQuest?.status === 'COMPLETED' && (
-                <span className="bg-amber-400 text-slate-950 px-1 rounded font-bold">可领奖</span>
+                <span className="roco-seal text-[9px] px-1 py-0.2 font-bold">可领奖</span>
               )}
             </div>
-            <div className="font-bold text-xs text-white truncate">{currentActiveQuest?.title}</div>
-            <div className="text-[10px] text-slate-400 truncate">
+            <div className="font-bold text-xs text-white truncate roco-title-font">{currentActiveQuest?.title}</div>
+            <div className="text-[10px] text-slate-300 truncate">
               {currentActiveQuest?.status === 'COMPLETED'
                 ? '已达成！点击领取奖励'
                 : `目标: ${currentActiveQuest?.targetLocationName}`}
             </div>
           </div>
 
-          <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-amber-300 transition-colors shrink-0 ml-1" />
+          <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-amber-300 transition-colors shrink-0 ml-1" />
         </button>
       </div>
 
       {/* 2. Full Quest Log / Adventure Diary Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-3 md:p-6 animate-in fade-in duration-200">
-          <div className="bg-slate-900 border border-slate-700/80 rounded-2xl w-full max-w-4xl h-[88vh] max-h-[760px] flex flex-col shadow-2xl overflow-hidden text-slate-100">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-3 md:p-6 animate-in fade-in duration-200 select-none">
+          <div className="relative border-2 border-[#b8860b]/50 rounded-3xl w-full max-w-4xl h-[88vh] max-h-[760px] flex flex-col shadow-[0_20px_60px_rgba(0,0,0,0.9)] overflow-hidden text-slate-100 bg-gradient-to-b from-[#0a1829] via-[#06121f] to-[#040c17]">
+            {/* Decorative Gilded Corner Brackets */}
+            <div className="corner-ornament-tl" />
+            <div className="corner-ornament-tr" />
+            <div className="corner-ornament-bl" />
+            <div className="corner-ornament-br" />
+
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 bg-slate-950/80 border-b border-slate-800">
+            <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-b from-[#081a2e]/95 via-[#061426]/90 to-transparent border-b border-[#b8860b]/40">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-300">
-                  <ScrollText className="w-5 h-5" />
+                <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-700/30 border-2 border-[#d4af37]/60 flex items-center justify-center text-amber-300 shadow-md">
+                  <ScrollText className="w-6 h-6 text-amber-300" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-black text-amber-300 tracking-wide flex items-center gap-2">
-                    幻灵秘境手札 <span className="text-xs text-slate-400 font-normal">Quest Log</span>
-                  </h2>
-                  <p className="text-xs text-slate-400">跟随主线剧情，解开幻灵大陆地脉异变与天地本源奥秘</p>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-xl font-black roco-gold-text tracking-wide flex items-center gap-2 roco-title-font">
+                      仙途历练手札
+                    </h2>
+                    <span className="roco-seal text-[10px] px-1.5 py-0.2 font-bold tracking-wider">
+                      历练
+                    </span>
+                    <span className="text-xs text-amber-300/60 font-mono font-bold tracking-widest">— QUEST LOG —</span>
+                  </div>
+                  <p className="text-xs text-slate-400 mt-0.5">跟随主线剧情，解开幻灵大陆地脉异变与天地本源奥秘</p>
                 </div>
               </div>
 
@@ -111,9 +123,10 @@ export const QuestTracker: React.FC<QuestTrackerProps> = ({
                   sound.playClick();
                   setIsModalOpen(false);
                 }}
-                className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors cursor-pointer"
+                className="roco-medallion-btn text-amber-200 cursor-pointer"
+                title="关闭任务手札"
               >
-                <X className="w-5 h-5" />
+                <X className="w-5 h-5 text-amber-200 filter drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" />
               </button>
             </div>
 

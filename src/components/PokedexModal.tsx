@@ -243,28 +243,37 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-2 sm:p-4 select-none animate-in fade-in duration-200">
       {/* Outer Celestial Grimoire Modal Box */}
-      <div className="bg-[#070b18]/95 border-2 border-indigo-500/40 rounded-3xl w-full max-w-6xl h-[94vh] max-h-[820px] flex flex-col shadow-[0_0_80px_rgba(79,70,229,0.3)] overflow-hidden text-slate-100 relative">
+      <div className="bg-[#070b18]/95 border-2 border-[#b8860b]/50 rounded-3xl w-full max-w-6xl h-[94vh] max-h-[820px] flex flex-col shadow-[0_20px_60px_rgba(0,0,0,0.9)] overflow-hidden text-slate-100 relative">
+        {/* Decorative Gilded Corner Brackets */}
+        <div className="corner-ornament-tl" />
+        <div className="corner-ornament-tr" />
+        <div className="corner-ornament-bl" />
+        <div className="corner-ornament-br" />
+
         {/* Dynamic Eastern Xianxia Blue-Violet Misty Clouds Background */}
         <PokedexBackground activeElementType={activeElementTab} atmosphereMode={atmosphereMode} />
 
         {/* 1. Header Bar: Title, Collection Progress, Atmosphere Mode Switcher, Milestones & Close */}
-        <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 bg-slate-950/75 backdrop-blur-md border-b border-indigo-500/30 z-10 shadow-md">
+        <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 bg-gradient-to-b from-[#081a2e]/95 via-[#061426]/90 to-transparent border-b border-[#b8860b]/40 z-10 shadow-md">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-600 to-cyan-400 flex items-center justify-center text-white shadow-md shadow-indigo-500/30 border border-indigo-300/40">
-              <BookOpen className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-700/30 border-2 border-[#d4af37]/60 flex items-center justify-center text-amber-300 shadow-md">
+              <BookOpen className="w-5 h-5 text-amber-300" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-lg sm:text-xl font-bold text-amber-200 tracking-wide game-title-font">
+                <h2 className="text-lg sm:text-xl font-bold roco-gold-text tracking-wide roco-title-font flex items-center gap-2">
                   诸天幻灵图鉴 · 乾坤灵物志
                 </h2>
-                <span className="text-[10px] bg-indigo-500/20 text-indigo-300 border border-indigo-400/40 px-2 py-0.5 rounded font-mono font-medium">
-                  Celestial Codex
+                <span className="roco-seal text-[10px] px-1.5 py-0.2 font-bold tracking-wider">
+                  图鉴
+                </span>
+                <span className="text-[10px] bg-amber-500/10 text-amber-300 border border-amber-400/30 px-2 py-0.5 rounded font-mono font-medium hidden sm:inline">
+                  CELESTIAL CODEX
                 </span>
               </div>
               <p className="text-[11px] text-slate-300 flex items-center gap-2 mt-0.5">
                 <span>契约诸天万物灵兽，勘破太古演变真形</span>
-                <span className="text-indigo-400">·</span>
+                <span className="text-amber-400">·</span>
                 <span className="text-cyan-300 font-mono font-medium">
                   已收录 {unlockedCount} / {totalCount} 尊 ({completionPercentage}%)
                 </span>
@@ -292,7 +301,7 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
                   }}
                   className={`text-[10px] px-2 py-1 rounded-lg font-bold transition-all cursor-pointer ${
                     atmosphereMode === m.key
-                      ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-[0_0_10px_rgba(99,102,241,0.5)] border border-indigo-300/40'
+                      ? 'bg-gradient-to-r from-amber-500 to-amber-700 text-slate-950 font-bold shadow-[0_0_10px_rgba(245,158,11,0.5)] border border-amber-300/60'
                       : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
                   }`}
                 >
@@ -353,9 +362,10 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
                 sound.playClick();
                 onClose();
               }}
-              className="p-1.5 rounded-xl bg-slate-800/80 hover:bg-rose-900/60 text-slate-400 hover:text-rose-200 transition-colors cursor-pointer border border-slate-700 hover:border-rose-400"
+              className="roco-medallion-btn text-amber-200 cursor-pointer"
+              title="关闭图鉴"
             >
-              <X className="w-5 h-5" />
+              <X className="w-5 h-5 text-amber-200 filter drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" />
             </button>
           </div>
         </div>

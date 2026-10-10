@@ -123,25 +123,34 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-950/85 backdrop-blur-md">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-950/85 backdrop-blur-md select-none">
       {/* Outer Celestial Frame */}
-      <div className="relative w-full max-w-4xl h-[92vh] max-h-[740px] bg-[#070d1a] border border-cyan-500/30 rounded-2xl flex flex-col shadow-[0_0_50px_rgba(6,182,212,0.18)] overflow-hidden text-slate-100">
+      <div className="relative w-full max-w-4xl h-[92vh] max-h-[740px] bg-gradient-to-b from-[#0a1829] via-[#06121f] to-[#040c17] border-2 border-[#b8860b]/50 rounded-3xl flex flex-col shadow-[0_20px_60px_rgba(0,0,0,0.9)] overflow-hidden text-slate-100">
+        {/* Decorative Gilded Corner Brackets */}
+        <div className="corner-ornament-tl" />
+        <div className="corner-ornament-tr" />
+        <div className="corner-ornament-bl" />
+        <div className="corner-ornament-br" />
+
         {/* Top Header */}
-        <div className="px-5 py-3.5 bg-gradient-to-r from-slate-900 via-indigo-950/70 to-slate-900 border-b border-cyan-500/20 flex items-center justify-between gap-3">
+        <div className="px-5 py-3.5 bg-gradient-to-b from-[#081a2e]/95 via-[#061426]/90 to-transparent border-b border-[#b8860b]/40 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-400/40 flex items-center justify-center shadow-inner">
-              <Users className="w-5 h-5 text-cyan-400" />
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-700/30 border-2 border-[#d4af37]/60 flex items-center justify-center text-amber-300 shadow-md">
+              <Users className="w-6 h-6 text-amber-300" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="font-bold text-base sm:text-lg text-slate-100 tracking-wide">
+                <h2 className="font-bold text-base sm:text-lg roco-gold-text roco-title-font tracking-wide flex items-center gap-2">
                   仙友结社 · 灵犀录
                 </h2>
-                <span className="text-[10px] text-cyan-300 px-2 py-0.5 rounded-full bg-cyan-950/60 border border-cyan-500/30">
+                <span className="roco-seal text-[10px] px-1.5 py-0.2 font-bold tracking-wider">
+                  好友
+                </span>
+                <span className="text-[10px] text-amber-300 px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-400/40">
                   仙友 {friends.length}/50
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 hidden sm:block">
+              <p className="text-[11px] text-slate-300 hidden sm:block mt-0.5">
                 结识诸天同修灵契使，携手同行秘境，每日互赠灵力碎片共登仙阶
               </p>
             </div>
@@ -150,10 +159,10 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
           {/* Right: Spirit Shards Balance & Close */}
           <div className="flex items-center gap-3">
             {/* Shards Currency Counter */}
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-cyan-400/30 shadow-inner">
-              <Sparkles className="w-4 h-4 text-cyan-300 animate-pulse" />
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#061426]/90 border border-amber-400/50 shadow-inner">
+              <Sparkles className="w-4 h-4 text-amber-300 animate-pulse" />
               <div className="flex flex-col text-right">
-                <span className="text-xs font-bold font-mono text-cyan-200">
+                <span className="text-xs font-bold font-mono text-amber-200">
                   {spiritShards}
                 </span>
                 <span className="text-[9px] text-slate-400">灵力碎片</span>
@@ -165,10 +174,10 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
                 sound.playClick();
                 onClose();
               }}
-              className="p-1.5 rounded-xl bg-slate-800/60 hover:bg-slate-700/80 text-slate-400 hover:text-white transition-colors cursor-pointer border border-slate-700"
-              title="关闭"
+              className="roco-medallion-btn text-amber-200 cursor-pointer"
+              title="关闭结社"
             >
-              <X className="w-5 h-5" />
+              <X className="w-5 h-5 text-amber-200 filter drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" />
             </button>
           </div>
         </div>

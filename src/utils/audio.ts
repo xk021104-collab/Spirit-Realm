@@ -234,6 +234,60 @@ class SoundEngine {
       osc.stop(now + idx * 0.12 + 0.35);
     });
   }
+
+  // 仙侠空灵五声音阶背景音乐发生器
+  private bgmIntervalId: any = null;
+  public isBgmPlaying: boolean = false;
+
+  public startBgm() {
+    if (!this.enabled || this.isBgmPlaying) return;
+    this.initCtx();
+    if (!this.ctx) return;
+
+    this.isBgmPlaying = true;
+    const pentatonicFrequencies = [
+      261.63, 293.66, 329.63, 392.0, 440.0,
+      523.25, 587.33, 659.25, 783.99, 880.0
+    ];
+
+    let noteIdx = 0;
+    this.bgmIntervalId = setInterval(() => {
+      if (!this.enabled || !this.isBgmPlaying || !this.ctx) return;
+      const now = this.ctx.currentTime;
+      const freq = pentatonicFrequencies[noteIdx % pentatonicFrequencies.length];
+      noteIdx = (noteIdx + Math.floor(Math.random() * 3) + 1) % pentatonicFrequencies.length;
+
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now);
+
+      gain.gain.setValueAtTime(0.035, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(now);
+      osc.stop(now + 1.2);
+    }, 700);
+  }
+
+  public stopBgm() {
+    this.isBgmPlaying = false;
+    if (this.bgmIntervalId) {
+      clearInterval(this.bgmIntervalId);
+      this.bgmIntervalId = null;
+    }
+  }
+
+  public toggleBgm() {
+    if (this.isBgmPlaying) {
+      this.stopBgm();
+    } else {
+      this.startBgm();
+    }
+    return this.isBgmPlaying;
+  }
 }
 
 export const sound = new SoundEngine();

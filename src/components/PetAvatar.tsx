@@ -20,6 +20,26 @@ export const ELEMENT_COLORS: Record<ElementType, { bg: string; text: string; bor
   ROCK: { bg: 'bg-stone-500/20', text: 'text-stone-300', border: 'border-stone-500/30', label: '岩' },
 };
 
+export const PET_SPRITES: Record<string, string> = {
+  chiyanque: '/assets/pets/chiyanque.png',
+  zhuoyuying: '/assets/pets/chiyanque.png',
+  fentianhuang: '/assets/pets/fenghuang.png',
+  fenghuangchu: '/assets/pets/chiyanque.png',
+  bishuiling: '/assets/pets/bishuiling.png',
+  yuanchao: '/assets/pets/bishuiling.png',
+  huanhailingzun: '/assets/pets/bishuiling.png',
+  qingmulu: '/assets/pets/qingmulu.png',
+  senlinlu: '/assets/pets/qingmulu.png',
+  lingyeluxian: '/assets/pets/qingmulu.png',
+  dianjihu: '/assets/pets/dianjihu.png',
+  leitinghu: '/assets/pets/dianjihu.png',
+  baihu: '/assets/pets/dianjihu.png',
+  shenlong: '/assets/pets/shenlong.png',
+  xuantianlong: '/assets/pets/shenlong.png',
+  youminglong: '/assets/pets/shenlong.png',
+  chiyanlong: '/assets/pets/fenghuang.png',
+};
+
 export const PetAvatar: React.FC<PetAvatarProps> = ({
   speciesId,
   size = 96,
@@ -29,6 +49,8 @@ export const PetAvatar: React.FC<PetAvatarProps> = ({
   isHit = false,
 }) => {
   const pixelSize = typeof size === 'number' ? `${size}px` : size;
+  const [imgError, setImgError] = React.useState(false);
+  const spriteUrl = !imgError ? PET_SPRITES[speciesId] : null;
 
   const renderPetSvg = () => {
     switch (speciesId) {
@@ -288,7 +310,8 @@ export const PetAvatar: React.FC<PetAvatarProps> = ({
           </svg>
         );
 
-      // 003 焚天凰 (Fentianhuang - Heaven-Scorching Sovereign Fenghuang)
+      // 003 焚天凰 / 凤凰雏 (Heaven-Scorching Phoenix)
+      case 'fenghuangchu':
       case 'fentianhuang':
         return (
           <svg viewBox="0 0 140 140" className="w-full h-full drop-shadow-[0_8px_24px_rgba(239,68,68,0.7)] overflow-visible">
@@ -975,7 +998,20 @@ export const PetAvatar: React.FC<PetAvatarProps> = ({
         isFlipped ? 'scale-x-[-1]' : ''
       } ${isAttacking ? 'animate-bounce' : ''} ${isHit ? 'animate-ping brightness-150' : ''} ${className}`}
     >
-      {renderPetSvg()}
+      {spriteUrl ? (
+        <div className="relative w-full h-full flex items-center justify-center group pointer-events-none">
+          {/* Summoning ground aura ring */}
+          <div className="absolute -bottom-1 w-4/5 h-3 bg-gradient-to-r from-amber-400/0 via-amber-400/35 to-amber-400/0 rounded-full blur-[2px] animate-pulse pointer-events-none" />
+          <img
+            src={spriteUrl}
+            alt={speciesId}
+            className="w-full h-full object-contain filter drop-shadow-[0_8px_18px_rgba(0,0,0,0.5)] transition-transform duration-300 pointer-events-none roco-pet-float"
+            onError={() => setImgError(true)}
+          />
+        </div>
+      ) : (
+        renderPetSvg()
+      )}
     </div>
   );
 };

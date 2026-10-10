@@ -72,7 +72,13 @@ export const PrologueIntroModal: React.FC<PrologueIntroModalProps> = ({ onComple
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-in fade-in duration-300">
-      <div className="flash-frame rounded-3xl w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col text-slate-100">
+      <div className="relative rounded-3xl w-full max-w-3xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.9)] flex flex-col text-slate-100 border-2 border-[#b8860b]/50 bg-gradient-to-b from-[#0a1829] via-[#06121f] to-[#040c17]">
+        {/* Decorative Gilded Corner Brackets */}
+        <div className="corner-ornament-tl" />
+        <div className="corner-ornament-tr" />
+        <div className="corner-ornament-bl" />
+        <div className="corner-ornament-br" />
+
         <AnimatePresence mode="wait">
           {/* Step 1: Epic Opening Narrative with Headmaster Griffin */}
           {step === 'STORY' && (
@@ -110,25 +116,30 @@ export const PrologueIntroModal: React.FC<PrologueIntroModalProps> = ({ onComple
                     }}
                     className="absolute -inset-2.5 rounded-full bg-gradient-to-r from-amber-500/40 via-yellow-400/30 to-indigo-500/40 blur-md pointer-events-none"
                   />
-                  <div className="relative w-26 h-26 rounded-full border-4 border-amber-400 bg-gradient-to-b from-indigo-950 via-slate-900 to-slate-950 p-1 shadow-2xl flex items-center justify-center">
+                  <div className="relative w-26 h-26 rounded-full border-4 border-[#d4af37] bg-gradient-to-b from-indigo-950 via-slate-900 to-slate-950 p-1 shadow-2xl flex items-center justify-center">
                     <NpcAvatar type="griffin" size={88} />
                   </div>
                 </motion.div>
-                <div className="absolute -bottom-2 -right-2 bg-gradient-to-r from-amber-400 to-amber-600 text-slate-950 text-[10px] font-black px-2.5 py-0.5 rounded-full border border-yellow-200 shadow-lg">
+                <div className="absolute -bottom-2 -right-2 bg-gradient-to-r from-amber-400 to-amber-600 text-slate-950 text-[10px] font-black px-2.5 py-0.5 rounded-full border border-yellow-200 shadow-lg roco-title-font">
                   圣殿大长老 · 玄冥
                 </div>
               </div>
 
               <div className="space-y-1">
-                <span className="text-xs font-mono font-bold tracking-widest text-amber-400 uppercase">
-                  《幻灵秘境》· 灵契仙途启程
-                </span>
-                <h2 className="text-3xl font-black text-amber-300 tracking-tight game-title-font">
+                <div className="flex items-center justify-center gap-2">
+                  <span className="text-xs font-mono font-bold tracking-widest text-amber-300 uppercase">
+                    《幻灵秘境》· 灵契仙途启程
+                  </span>
+                  <span className="roco-seal text-[10px] px-1.5 py-0.2 font-bold tracking-wider">
+                    序幕
+                  </span>
+                </div>
+                <h2 className="text-3xl font-black roco-gold-text tracking-tight roco-title-font">
                   乾坤道引 · 初始本命契约
                 </h2>
               </div>
 
-              <div className="p-6 rounded-2xl flash-panel text-xs md:text-sm text-slate-200 leading-relaxed text-left space-y-3 max-w-xl border-2 border-amber-500/60 shadow-inner">
+              <div className="p-6 rounded-2xl roco-panel text-xs md:text-sm text-slate-200 leading-relaxed text-left space-y-3 max-w-xl border border-[#b8860b]/50 shadow-inner">
                 <p className="indent-6">
                   “福生无量！初悟大道的年轻御灵仙师，欢迎降临<strong>《幻灵秘境》</strong>仙元大陆！”
                 </p>
@@ -145,7 +156,7 @@ export const PrologueIntroModal: React.FC<PrologueIntroModalProps> = ({ onComple
                   sound.playClick();
                   setStep('CHOOSE_STARTER');
                 }}
-                className="flash-gold-btn py-3.5 px-8 rounded-2xl text-base cursor-pointer flex items-center gap-2 shadow-xl hover:scale-105 transition-transform"
+                className="roco-turn-capsule py-3 px-8 text-slate-950 text-sm font-black cursor-pointer flex items-center gap-2 shadow-xl hover:scale-105 transition-transform"
               >
                 <span>恭聆长老道谕 · 前往挑选初始幻灵</span>
                 <ChevronRight className="w-5 h-5 text-slate-950" />
@@ -302,16 +313,16 @@ export const PrologueIntroModal: React.FC<PrologueIntroModalProps> = ({ onComple
               </div>
 
               {/* Player Name Input & Bestowal Details */}
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl flash-panel">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl roco-panel border border-[#b8860b]/40">
                 <div className="flex items-center gap-3 w-full sm:w-auto">
-                  <span className="text-xs text-amber-300 font-bold whitespace-nowrap">御灵仙号:</span>
+                  <span className="text-xs text-amber-300 font-bold whitespace-nowrap roco-title-font">御灵仙号:</span>
                   <input
                     type="text"
                     maxLength={8}
                     value={playerName}
                     onChange={(e) => setPlayerName(e.target.value)}
                     placeholder="输入你的仙号..."
-                    className="px-3 py-1.5 bg-slate-950 border border-amber-500/50 rounded-xl text-xs text-white focus:outline-none focus:border-amber-400 w-full sm:w-44 font-bold shadow-inner"
+                    className="px-3 py-1.5 bg-[#061426] border border-amber-500/50 rounded-xl text-xs text-white focus:outline-none focus:border-amber-400 w-full sm:w-44 font-bold shadow-inner"
                   />
                 </div>
 
@@ -332,7 +343,7 @@ export const PrologueIntroModal: React.FC<PrologueIntroModalProps> = ({ onComple
 
                 <button
                   onClick={handleConfirmStarter}
-                  className="flash-gold-btn py-3 px-8 rounded-2xl text-sm cursor-pointer flex items-center gap-2 shadow-xl hover:scale-105 transition-transform"
+                  className="roco-turn-capsule py-3 px-8 text-sm cursor-pointer flex items-center gap-2 shadow-xl hover:scale-105 transition-transform text-slate-950 font-black"
                 >
                   <Sparkles className="w-4 h-4 text-slate-950" />
                   <span>与【{currentSpecies.name}】缔结契约 · 开启冒险</span>

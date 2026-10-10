@@ -100,4 +100,22 @@ export const ITEMS_DATA: Record<string, Item> = {
     price: 100,
     description: '仙友每日灵犀相通互赠的灵力碎片，集齐可在灵友仙阁兑换珍稀契约晶石与九转仙果。',
   },
+
+  // Cultivation & Alchemy Treasures
+  xi_sui_dan: {
+    id: 'xi_sui_dan',
+    name: '九叶洗髓仙丹',
+    category: 'CULTIVATION',
+    price: 800,
+    sellPrice: 400,
+    description: '太古灵脉千年灵芝炼制的神丹，可重塑幻灵灵根与潜能资质(1~31)，极大几率突破至极品灵兽！',
+  },
+  ding_hun_dan: {
+    id: 'ding_hun_dan',
+    name: '太素定魂神玉',
+    category: 'CULTIVATION',
+    price: 600,
+    sellPrice: 300,
+    description: '采集九天清气凝结的玄冰温玉，可洗练并重塑幻灵先天性格，调整属性专精倾向！',
+  },
 };

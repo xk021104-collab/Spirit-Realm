@@ -86,13 +86,17 @@ export interface PetInstance {
     spDef: number;
     speed: number;
   };
+  talentScore?: number;
+  isShiny?: boolean;
+  learnedMoveIds?: string[];
 }
 
 export interface Item {
   id: string;
   name: string;
-  category: 'BALL' | 'POTION' | 'PP' | 'REVIVE';
+  category: 'BALL' | 'POTION' | 'PP' | 'REVIVE' | 'CULTIVATION';
   price: number;
+  sellPrice?: number;
   description: string;
   catchMultiplier?: number;
   healHp?: number;
@@ -208,4 +212,72 @@ export interface Friend {
   isFollowingInScene: boolean;   // Whether this friend and pet are currently accompanying the player in the realm scene
   x?: number;                    // Optional coordinate percentage in scene (20-80)
   y?: number;
+}
+
+export interface GameMail {
+  id: string;
+  title: string;
+  content: string;
+  sentAt: string;
+  isRead: boolean;
+  isClaimed: boolean;
+  rewards: {
+    coins?: number;
+    gems?: number;
+    items?: { itemId: string; count: number }[];
+    petSpeciesId?: string;
+  };
+}
+
+export interface GuildSkill {
+  id: string;
+  name: string;
+  level: number;
+  maxLevel: number;
+  description: string;
+  cost: number;
+  effectStat: 'hp' | 'atk' | 'def' | 'spAtk' | 'spDef' | 'speed';
+  bonusPerLevel: number;
+}
+
+export interface GuildInfo {
+  id: string;
+  name: string;
+  level: number;
+  leaderName: string;
+  notice: string;
+  memberCount: number;
+  maxMembers: number;
+  totalFunds: number;
+  playerDevotion: number; // 玩家个人贡献点
+  hasClaimedSalaryToday: boolean;
+  skills: GuildSkill[];
+}
+
+export interface ChatMessage {
+  id: string;
+  senderName: string;
+  senderTitle?: string;
+  content: string;
+  timestamp: string;
+  channel: 'WORLD' | 'SYSTEM' | 'SCENE';
+  isMarquee?: boolean;
+}
+
+export interface LeaderboardItem {
+  rank: number;
+  playerId: string;
+  playerName: string;
+  playerTitle: string;
+  score: number;
+  level: number;
+  avatarPetSpeciesId: string;
+  vipLevel?: number;
+}
+
+export interface CloudAccount {
+  username: string;
+  token?: string;
+  isCloudLoggedIn: boolean;
+  lastSyncedAt?: string;
 }

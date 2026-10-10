@@ -195,9 +195,9 @@ export const SceneView: React.FC<SceneViewProps> = ({
   return (
     <div className="relative w-full max-w-5xl mx-auto flex flex-col items-center select-none">
       {/* 1. Celestial Fantasy Viewport Frame */}
-      <div className="w-full celestial-viewport rounded-2xl overflow-hidden relative flex flex-col shadow-2xl">
+      <div className="w-full rounded-2xl overflow-hidden relative flex flex-col shadow-2xl border-2 border-[#b8860b]/40 bg-[#06111f]">
         {/* Top HUD: Elegant Player Status, Realm Plaque & Wealth */}
-        <div className="h-14 celestial-top-hud px-4 flex items-center justify-between z-30 gap-3">
+        <div className="h-14 bg-gradient-to-r from-[#061426] via-[#091b30] to-[#061426] border-b border-[#b8860b]/30 px-4 flex items-center justify-between z-30 gap-3">
           {/* Left: Player Profile */}
           <div
             onClick={() => {
@@ -548,7 +548,7 @@ export const SceneView: React.FC<SceneViewProps> = ({
         </div>
 
         {/* 3. Modern Celestial Navigation Dock Toolbar */}
-        <div className="celestial-dock py-2.5 px-4 flex items-center justify-around sm:justify-center sm:gap-5 z-30">
+        <div className="bg-gradient-to-t from-[#040e1b] via-[#061426] to-[#081a2e]/95 border-t-2 border-[#b8860b]/40 py-2.5 px-4 flex items-center justify-around sm:justify-center sm:gap-5 z-30 shadow-2xl backdrop-blur-xl">
           {/* 1. Spirit Party */}
           <button
             onClick={() => {

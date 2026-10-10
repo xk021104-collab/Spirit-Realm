@@ -33,21 +33,32 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
   const displayGold = coins ?? currentGold;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-in fade-in duration-200 select-none">
-      <div className="relative w-full max-w-4xl bg-gradient-to-b from-[#0b172a] via-[#091124] to-[#040816] rounded-3xl border-2 border-cyan-500/40 shadow-[0_0_50px_rgba(6,182,212,0.3)] overflow-hidden text-slate-100 flex flex-col max-h-[92vh]">
+      <div className="relative w-full max-w-4xl bg-gradient-to-b from-[#0a1829] via-[#06121f] to-[#040c17] rounded-3xl border-2 border-[#b8860b]/50 shadow-[0_20px_60px_rgba(0,0,0,0.9)] overflow-hidden text-slate-100 flex flex-col max-h-[92vh]">
+        {/* Decorative Gilded Corner Brackets */}
+        <div className="corner-ornament-tl" />
+        <div className="corner-ornament-tr" />
+        <div className="corner-ornament-bl" />
+        <div className="corner-ornament-br" />
+
         {/* Top Header Bar */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-cyan-500/30 bg-indigo-950/40">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#b8860b]/40 bg-gradient-to-b from-[#081a2e]/95 via-[#061426]/90 to-transparent">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-cyan-500/20 border border-cyan-400 flex items-center justify-center">
-              <Compass className="w-4 h-4 text-cyan-300 animate-spin" style={{ animationDuration: '20s' }} />
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-700/30 border-2 border-[#d4af37]/60 flex items-center justify-center text-amber-300 shadow-md">
+              <Compass className="w-5 h-5 text-amber-300 animate-spin" style={{ animationDuration: '20s' }} />
             </div>
             <div>
-              <h2 className="text-lg font-black text-amber-200 game-title-font flex items-center gap-2">
-                <span>天命之人 · 御灵仙师录</span>
-                <span className="text-[10px] bg-cyan-600/60 text-cyan-200 px-2 py-0.5 rounded-full border border-cyan-400/50">
+              <div className="flex items-center gap-2">
+                <h2 className="text-lg font-black roco-gold-text roco-title-font flex items-center gap-2">
+                  <span>天命之人 · 御灵仙师录</span>
+                </h2>
+                <span className="roco-seal text-[10px] px-1.5 py-0.2 font-bold tracking-wider">
+                  仙师
+                </span>
+                <span className="text-[10px] bg-amber-500/10 text-amber-300 px-2 py-0.5 rounded-full border border-amber-400/40">
                   五行天灵根
                 </span>
-              </h2>
-              <p className="text-[11px] text-cyan-300/80">八卦神霄罗盘 · 召唤本命玄天灵宠</p>
+              </div>
+              <p className="text-[11px] text-slate-300 mt-0.5">八卦神霄罗盘 · 召唤本命玄天灵宠</p>
             </div>
           </div>
 
@@ -56,9 +67,10 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
               sound.playClick();
               onClose();
             }}
-            className="w-8 h-8 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 flex items-center justify-center cursor-pointer border border-slate-700 transition-colors"
+            className="roco-medallion-btn text-amber-200 cursor-pointer"
+            title="关闭仙师录"
           >
-            <X className="w-4 h-4" />
+            <X className="w-5 h-5 text-amber-200 filter drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" />
           </button>
         </div>
 

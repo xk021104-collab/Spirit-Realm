@@ -85,19 +85,31 @@ export const DailyEventsModal: React.FC<DailyEventsModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="relative w-full max-w-4xl bg-slate-900 border-2 border-amber-500 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 select-none">
+      <div className="relative w-full max-w-4xl bg-gradient-to-b from-[#0a1829] via-[#06121f] to-[#040c17] border-2 border-[#b8860b]/50 rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.9)] overflow-hidden flex flex-col max-h-[90vh]">
+        {/* Decorative Gilded Corner Brackets */}
+        <div className="corner-ornament-tl" />
+        <div className="corner-ornament-tr" />
+        <div className="corner-ornament-bl" />
+        <div className="corner-ornament-br" />
+
         {/* Top Header */}
-        <div className="h-14 bg-gradient-to-r from-amber-950 via-slate-900 to-amber-950 border-b-2 border-amber-500 px-6 flex items-center justify-between">
+        <div className="h-16 bg-gradient-to-b from-[#081a2e]/95 via-[#061426]/90 to-transparent border-b border-[#b8860b]/40 px-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center text-slate-950 shadow-md">
-              <Gift className="w-4 h-4" />
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-700/30 border-2 border-[#d4af37]/60 flex items-center justify-center text-amber-300 shadow-md">
+              <Gift className="w-6 h-6 text-amber-300" />
             </div>
             <div>
-              <h2 className="text-base font-black text-amber-300 game-title-font">
-                幻灵秘境 · 狂欢盛典活动中心
-              </h2>
-              <p className="text-[11px] text-amber-200/80">
+              <div className="flex items-center gap-2">
+                <h2 className="text-base sm:text-lg font-black roco-gold-text roco-title-font flex items-center gap-2">
+                  幻灵秘境 · 盛典活动中心
+                </h2>
+                <span className="roco-seal text-[10px] px-1.5 py-0.2 font-bold tracking-wider">
+                  盛典
+                </span>
+                <span className="text-xs text-amber-300/60 font-mono font-bold tracking-widest hidden sm:inline">— DAILY EVENTS —</span>
+              </div>
+              <p className="text-[11px] text-slate-300 mt-0.5">
                 仙家福地每日造化机缘与上古神兽试炼降临！
               </p>
             </div>
@@ -108,23 +120,24 @@ export const DailyEventsModal: React.FC<DailyEventsModalProps> = ({
               sound.playClick();
               onClose();
             }}
-            className="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center cursor-pointer border border-slate-700"
+            className="roco-medallion-btn text-amber-200 cursor-pointer"
+            title="关闭活动中心"
           >
-            <X className="w-4 h-4" />
+            <X className="w-5 h-5 text-amber-200 filter drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" />
           </button>
         </div>
 
         {/* Tab Switcher */}
-        <div className="bg-slate-950 px-6 py-2 border-b border-slate-800 flex items-center gap-3">
+        <div className="bg-[#040e1b]/60 px-6 py-2.5 border-b border-[#b8860b]/25 flex items-center gap-3">
           <button
             onClick={() => {
               sound.playClick();
               setActiveTab('SIGNIN');
             }}
-            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+            className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 roco-title-font ${
               activeTab === 'SIGNIN'
-                ? 'bg-amber-500 text-slate-950 shadow-md'
-                : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                ? 'roco-turn-capsule text-slate-950 shadow-md'
+                : 'bg-[#061426] text-amber-200/80 hover:text-white border border-[#b8860b]/30'
             }`}
           >
             <Gift className="w-3.5 h-3.5" />
@@ -136,14 +149,14 @@ export const DailyEventsModal: React.FC<DailyEventsModalProps> = ({
               sound.playClick();
               setActiveTab('WHEEL');
             }}
-            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+            className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 roco-title-font ${
               activeTab === 'WHEEL'
-                ? 'bg-rose-500 text-white shadow-md'
-                : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                ? 'roco-turn-capsule text-slate-950 shadow-md'
+                : 'bg-[#061426] text-amber-200/80 hover:text-white border border-[#b8860b]/30'
             }`}
           >
-            <Compass className="w-3.5 h-3.5" />
-            <span>天运罗盘 (每日幸运转盘)</span>
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>天机转盘 (每日运势)</span>
           </button>
 
           <button
@@ -151,14 +164,14 @@ export const DailyEventsModal: React.FC<DailyEventsModalProps> = ({
               sound.playClick();
               setActiveTab('BOSS');
             }}
-            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+            className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 roco-title-font ${
               activeTab === 'BOSS'
-                ? 'bg-purple-600 text-white shadow-md'
-                : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                ? 'roco-turn-capsule text-slate-950 shadow-md'
+                : 'bg-[#061426] text-amber-200/80 hover:text-white border border-[#b8860b]/30'
             }`}
           >
-            <Zap className="w-3.5 h-3.5" />
-            <span>神兽降临 (终极高阶挑战)</span>
+            <ShieldAlert className="w-3.5 h-3.5" />
+            <span>上古神兽降世</span>
           </button>
         </div>
 

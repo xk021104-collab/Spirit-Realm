@@ -107,7 +107,24 @@ export function createPetInstance(speciesId: string, level: number, customNickna
     statusTurns: 0,
     nature,
     statStages: { atk: 0, def: 0, spAtk: 0, spDef: 0, speed: 0 },
+    talentScore: Math.floor(Math.random() * 12) + 20,
+    isShiny: Math.random() < 0.05, // 5% chance wild shiny!
+    learnedMoveIds: chosenMoves.map((m) => m.moveId),
   };
+}
+
+export function getUnlockedLearnableMoves(speciesId: string, level: number): string[] {
+  const species = PET_SPECIES[speciesId];
+  if (!species) return [];
+  return species.learnableMoves.filter((m) => m.level <= level).map((m) => m.moveId);
+}
+
+export function rerollTalentScore(): number {
+  return Math.min(31, Math.floor(Math.random() * 14) + 18);
+}
+
+export function getRandomNature(): string {
+  return NATURES[Math.floor(Math.random() * NATURES.length)];
 }
 
 export function calculateDamage(

@@ -235,8 +235,13 @@ export const BattleView: React.FC<BattleViewProps> = ({
     const move = MOVES_DATA[moveId];
     if (!move) return;
 
-    const moveSlot = activePet.moves.find((m) => m.id === moveId);
-    if (!moveSlot || moveSlot.pp <= 0) {
+    let moveSlot = activePet.moves.find((m) => m.id === moveId);
+    let petMoves = [...activePet.moves];
+    if (!moveSlot) {
+      moveSlot = { id: moveId, pp: move.maxPp, maxPp: move.maxPp };
+      petMoves.push(moveSlot);
+    }
+    if (moveSlot.pp <= 0) {
       logMessage('此招式灵力 (PP) 已耗尽，请使用其他灵术！');
       return;
     }
@@ -245,7 +250,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
     setBattleMenu('ACTIONS');
 
     // Deduct 1 PP
-    const updatedMoves = activePet.moves.map((m) => (m.id === moveId ? { ...m, pp: m.pp - 1 } : m));
+    const updatedMoves = petMoves.map((m) => (m.id === moveId ? { ...m, pp: m.pp - 1 } : m));
     const petWithPpDeducted = { ...activePet, moves: updatedMoves };
     const updatedPartyWithPp = party.map((p, idx) => (idx === activePetIndex ? petWithPpDeducted : p));
     setParty(updatedPartyWithPp);
@@ -295,7 +300,16 @@ export const BattleView: React.FC<BattleViewProps> = ({
 
     if (move.category === 'STATUS') {
       sound.playClick();
-      logMessage(`状态灵术生效了！`);
+      if (move.effect?.type === 'HEAL') {
+        const healAmt = move.effect.amount || 50;
+        const newHp = Math.min(attacker.stats.hp, attacker.currentHp + healAmt);
+        attacker.currentHp = newHp;
+        setParty((prev) => prev.map((p, idx) => (idx === activePetIndex ? { ...p, currentHp: newHp } : p)));
+        sound.playHeal();
+        logMessage(`【治愈之光】灵气充盈，${attacker.nickname} 回复了 ${healAmt} 点生命！`);
+        return false;
+      }
+      logMessage(`状态灵术【${move.name}】生效了！`);
       return false;
     }
 
@@ -642,9 +656,28 @@ export const BattleView: React.FC<BattleViewProps> = ({
     });
   };
 
+  // Ensure 4 iconic Roco Kingdom skill slots are populated:
+  // Slot 0: 藤蔓缠绕 (Primary Large Orb)
+  // Slot 1: 治愈之光 (Secondary Bottom-Left)
+  // Slot 2: 烈焰之息 (Secondary Top-Left)
+  // Slot 3: 凤凰涅槃 (Secondary Top-Right)
+  const defaultMoveSlots = [
+    { id: 'vine_entangle', pp: 25, maxPp: 25 },
+    { id: 'healing_light', pp: 15, maxPp: 15 },
+    { id: 'blazing_breath', pp: 20, maxPp: 20 },
+    { id: 'phoenix_nirvana', pp: 5, maxPp: 5 },
+  ];
+
+  const movesToDisplay = [
+    activePet.moves[0] || defaultMoveSlots[0],
+    activePet.moves[1] || defaultMoveSlots[1],
+    activePet.moves[2] || defaultMoveSlots[2],
+    activePet.moves[3] || defaultMoveSlots[3],
+  ];
+
   return (
     <div
-      className={`relative w-full max-w-5xl mx-auto flash-viewport-wrapper rounded-2xl overflow-hidden shadow-2xl bg-gradient-to-b ${getArenaGradients()} text-slate-100 flex flex-col min-h-[600px] ${
+      className={`relative w-full max-w-5xl mx-auto rounded-3xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.85)] border-2 border-[#b8860b]/40 bg-[#06111f] text-slate-100 flex flex-col min-h-[640px] ${
         screenShaking ? 'animate-screen-shake' : ''
       }`}
     >
@@ -654,53 +687,55 @@ export const BattleView: React.FC<BattleViewProps> = ({
       <div className="corner-ornament-bl" />
       <div className="corner-ornament-br" />
 
-      {/* Top Arena Header Bar (Image 1 Layout) */}
-      <div className="relative flex items-center justify-between px-4 sm:px-6 py-2.5 bg-gradient-to-b from-[#0a1527]/95 via-[#09101f]/90 to-transparent z-30 shadow-md">
-        {/* Left: 幻灵秘境 SPIRIT REALM Logo with Vermilion Seal (Image 1) */}
+      {/* Top Arena Header Bar (Roco Kingdom Image 1 Layout) */}
+      <div className="relative flex items-center justify-between px-4 sm:px-6 py-2.5 bg-gradient-to-b from-[#040e1b]/95 via-[#061426]/85 to-transparent z-30 select-none border-b border-[#b8860b]/20">
+        {/* Left: 幻灵秘境 SPIRIT REALM Logo with Vermilion Seal */}
         <div className="flex items-center gap-2">
           <div className="flex flex-col">
-            <div className="flex items-center gap-1.5">
-              <span className="game-title-font text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-300 to-yellow-500 drop-shadow-[0_2px_8px_rgba(245,158,11,0.6)]">
+            <div className="flex items-center gap-2">
+              <span className="roco-title-font text-2xl sm:text-3xl roco-gold-text tracking-wide drop-shadow-[0_2px_10px_rgba(245,158,11,0.6)]">
                 幻灵秘境
               </span>
-              <span className="text-[9px] bg-red-700 text-amber-200 px-1 py-0.2 rounded border border-red-500/60 font-serif shadow-xs">
-                幻灵
+              <span className="roco-seal text-[10px] px-1.5 py-0.5 font-bold tracking-wider">
+                幻境
               </span>
             </div>
-            <span className="text-[8px] sm:text-[9px] tracking-[0.25em] text-amber-300/80 font-mono font-bold -mt-0.5">
+            <span className="text-[9px] sm:text-[10px] tracking-[0.28em] text-amber-300/85 font-mono font-bold -mt-0.5">
               — SPIRIT REALM —
             </span>
           </div>
         </div>
 
-        {/* Center: 动作顺序 (Action Order Track) from Image 1 */}
+        {/* Center: 动作顺序 (Action Order Track) */}
         <div className="flex flex-col items-center">
-          <span className="text-[10px] font-bold text-amber-300/90 tracking-widest">
-            动作顺序
-          </span>
-          <div className="flex items-center gap-1.5 mt-0.5 px-3 py-1 rounded-full bg-slate-950/80 border border-amber-500/40 shadow-inner">
-            <span className="text-amber-400 font-bold text-xs">‹</span>
+          <div className="flex items-center gap-1.5 text-[11px] font-bold text-amber-300/90 roco-title-font tracking-widest">
+            <span className="text-amber-400 text-xs">◇</span>
+            <span>动作顺序</span>
+            <span className="text-amber-400 text-xs">◇</span>
+          </div>
+          <div className="roco-action-track flex items-center gap-1.5 mt-0.5 px-3 py-1 shadow-inner">
+            <span className="text-amber-400/80 font-bold text-xs">‹</span>
             {/* Player Spirit Icons */}
-            <div className="w-7 h-7 rounded-full border-2 border-emerald-400 bg-emerald-950 flex items-center justify-center overflow-hidden shadow-sm" title="我方动作">
+            <div className="w-7 h-7 rounded-full border-2 border-emerald-400 bg-emerald-950/80 flex items-center justify-center overflow-hidden shadow-sm ring-1 ring-emerald-300/60" title="我方动作">
               <PetAvatar speciesId={activePet.speciesId} size={28} />
             </div>
-            <div className="w-7 h-7 rounded-full border-2 border-emerald-400 bg-emerald-950 flex items-center justify-center overflow-hidden opacity-85 shadow-sm" title="我方动作">
+            <div className="w-7 h-7 rounded-full border-2 border-emerald-400 bg-emerald-950/80 flex items-center justify-center overflow-hidden opacity-90 shadow-sm" title="我方动作">
               <PetAvatar speciesId={activePet.speciesId} size={28} />
             </div>
             {/* Enemy Spirit Icons */}
-            <div className="w-7 h-7 rounded-full border-2 border-rose-400 bg-rose-950 flex items-center justify-center overflow-hidden opacity-85 shadow-sm" title="敌方动作">
+            <div className="w-7 h-7 rounded-full border-2 border-amber-400 bg-rose-950/80 flex items-center justify-center overflow-hidden opacity-90 shadow-sm ring-1 ring-amber-300/60" title="敌方动作">
               <PetAvatar speciesId={enemy.speciesId} size={28} />
             </div>
-            <div className="w-7 h-7 rounded-full border-2 border-rose-400 bg-rose-950 flex items-center justify-center overflow-hidden opacity-70 shadow-sm" title="敌方动作">
+            <div className="w-7 h-7 rounded-full border-2 border-amber-400 bg-rose-950/80 flex items-center justify-center overflow-hidden opacity-75 shadow-sm" title="敌方动作">
               <PetAvatar speciesId={enemy.speciesId} size={28} />
             </div>
-            <span className="text-amber-400 font-bold text-xs">›</span>
+            <span className="text-amber-400/80 font-bold text-xs">›</span>
           </div>
         </div>
 
-        {/* Right: Weather Pill & Ornate Utility Buttons (Image 1: 拥存 / 逃跑) */}
-        <div className="flex items-center gap-2.5">
-          {/* Weather Dropdown */}
+        {/* Right: Weather & Antique Medallion Action Buttons (拥存 / 逃跑) */}
+        <div className="flex items-center gap-3">
+          {/* Weather Pill */}
           {(() => {
             const cfg = WEATHER_CONFIGS[weatherState.weather];
             return (
@@ -716,7 +751,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
             );
           })()}
 
-          {/* 拥存 (Inventory / Bag Button from Image 1) */}
+          {/* 拥存 (Inventory / Bag Medallion Button) */}
           <button
             onClick={() => {
               sound.playClick();
@@ -725,102 +760,174 @@ export const BattleView: React.FC<BattleViewProps> = ({
             className="flex flex-col items-center group cursor-pointer"
             title="查看储物袋与灵药"
           >
-            <div className="w-8 h-8 rounded-full bg-gradient-to-b from-[#1e3a8a] to-[#0f172a] border-2 border-amber-400 flex items-center justify-center text-amber-200 shadow-md group-hover:scale-105 transition-transform">
-              <Backpack className="w-4 h-4" />
+            <div className="roco-medallion-btn text-amber-200">
+              <Backpack className="w-4 h-4 text-amber-200 filter drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" />
             </div>
-            <span className="text-[9px] font-bold text-amber-200 mt-0.5">拥存</span>
+            <span className="text-[10px] font-bold text-amber-200/90 mt-1 tracking-wider roco-title-font">拥存</span>
           </button>
 
-          {/* 逃跑 (Flee Button from Image 1) */}
+          {/* 逃跑 (Flee Medallion Button) */}
           <button
             onClick={handleFlee}
             disabled={isProcessingTurn}
             className="flex flex-col items-center group cursor-pointer disabled:opacity-40"
             title="脱离本次对决"
           >
-            <div className="w-8 h-8 rounded-full bg-gradient-to-b from-rose-950 to-slate-900 border-2 border-amber-400 flex items-center justify-center text-rose-300 shadow-md group-hover:scale-105 transition-transform">
-              <ArrowRightLeft className="w-4 h-4" />
+            <div className="roco-medallion-btn text-amber-200">
+              <ArrowRightLeft className="w-4 h-4 text-amber-200 filter drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" />
             </div>
-            <span className="text-[9px] font-bold text-amber-200 mt-0.5">逃跑</span>
+            <span className="text-[10px] font-bold text-amber-200/90 mt-1 tracking-wider roco-title-font">逃跑</span>
           </button>
         </div>
       </div>
 
-      {/* Main Battle Stage Arena: Roco Kingdom Style Sunlit Magic Academy & Whispering Wind Meadow */}
-      <div className="relative flex-1 p-4 sm:p-6 md:p-8 flex flex-col justify-between overflow-hidden bg-[#0c2240]">
+      {/* Main Battle Stage Arena: Roco Kingdom Enchanted Secret Realm Forest at Night (Image 1 Style) */}
+      <div className="relative flex-1 p-3 sm:p-5 md:p-6 flex flex-col justify-between overflow-hidden bg-[#05111e]">
         {/* =========================================================================
-            Roco Kingdom Illustrated Magic Meadow & Fairy Sky (Image 1 Style)
+            Roco Kingdom Illustrated Enchanted Night Forest & Waterfall Secret Realm
             ========================================================================= */}
         <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden select-none">
-          {/* Sunny Magic Sky Gradient */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#1e40af] via-[#0284c7] via-50% to-[#0f766e]" />
+          {/* Deep Twilight Night Gradient */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#020713] via-[#051527] 55% via-[#082232] 85% to-[#041a1c]" />
 
-          {/* Distant Floating Islands, Magic Academy Spires & Fluffy Clouds */}
-          <svg viewBox="0 0 1000 600" className="absolute inset-0 w-full h-full object-cover opacity-85">
-            {/* Distant Sunny Mountains */}
-            <path d="M 0 340 Q 220 220 460 280 Q 720 180 1000 300 L 1000 600 L 0 600 Z" fill="#044e54" opacity="0.6" />
-            <path d="M 120 360 Q 340 250 600 310 Q 820 230 1000 330" stroke="#06b6d4" strokeWidth="2" fill="none" opacity="0.5" />
+          {/* Enchanted Forest Night Landscape SVG */}
+          <svg viewBox="0 0 1000 600" className="absolute inset-0 w-full h-full object-cover opacity-95">
+            <defs>
+              {/* Cyan Mushroom Bioluminescence Glow */}
+              <radialGradient id="cyanMushroomGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="#67e8f9" stopOpacity="0.9" />
+                <stop offset="45%" stopColor="#06b6d4" stopOpacity="0.5" />
+                <stop offset="100%" stopColor="#083344" stopOpacity="0" />
+              </radialGradient>
+              {/* Ground Flora Soft Blue Glow */}
+              <radialGradient id="blueFloraGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.85" />
+                <stop offset="60%" stopColor="#0284c7" stopOpacity="0.3" />
+                <stop offset="100%" stopColor="#0c4a6e" stopOpacity="0" />
+              </radialGradient>
+              {/* Waterfall Shimmer Gradient */}
+              <linearGradient id="waterfallStream" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="#bae6fd" stopOpacity="0.8" />
+                <stop offset="50%" stopColor="#38bdf8" stopOpacity="0.95" />
+                <stop offset="85%" stopColor="#0284c7" stopOpacity="0.7" />
+                <stop offset="100%" stopColor="#67e8f9" stopOpacity="0.9" />
+              </linearGradient>
+              {/* Night Sky Cloud Soft Fog */}
+              <linearGradient id="nightMistGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#0e2a47" stopOpacity="0" />
+                <stop offset="50%" stopColor="#164e63" stopOpacity="0.4" />
+                <stop offset="100%" stopColor="#0e2a47" stopOpacity="0" />
+              </linearGradient>
+            </defs>
 
-            {/* Distant Magic Academy Castle Spires on Mountain (Center Right) */}
-            <g transform="translate(680, 160)" opacity="0.75">
-              {/* Central Spire */}
-              <rect x="30" y="40" width="24" height="80" fill="#1e3a8a" />
-              <polygon points="30,40 42,0 54,40" fill="#3b82f6" stroke="#fde047" strokeWidth="1" />
-              <polygon points="42,0 43,2 45,2 43.5,3.5 44,5 42,4 40,5 40.5,3.5 39,2 41,2" fill="#fde047" />
-              {/* Left Spire */}
-              <rect x="10" y="60" width="16" height="60" fill="#1e3a8a" />
-              <polygon points="10,60 18,30 26,60" fill="#3b82f6" stroke="#fde047" strokeWidth="1" />
-              {/* Right Spire */}
-              <rect x="58" y="65" width="16" height="55" fill="#1e3a8a" />
-              <polygon points="58,65 66,35 74,65" fill="#3b82f6" stroke="#fde047" strokeWidth="1" />
+            {/* Distant Midnight Mountains & Starry Sky */}
+            <path d="M 0 320 Q 200 240 450 280 Q 720 210 1000 270 L 1000 600 L 0 600 Z" fill="#041829" opacity="0.7" />
+            <path d="M 300 340 Q 560 260 820 300 Q 940 270 1000 310 L 1000 600 L 300 600 Z" fill="#062238" opacity="0.8" />
+
+            {/* Distant High Waterfall Cliffs (Right Center) */}
+            <g transform="translate(760, 120)" opacity="0.95">
+              {/* Mountain Cliff Outcrop */}
+              <path d="M 40 40 L 70 20 L 120 50 L 140 180 L 30 180 Z" fill="#08283e" />
+              <path d="M 70 50 L 100 35 L 110 180 L 60 180 Z" fill="#0c3552" />
+              {/* Cascading Moonlit Waterfall Ribbons */}
+              <path d="M 82 45 Q 86 110 84 175" stroke="url(#waterfallStream)" strokeWidth="6" strokeLinecap="round" opacity="0.9" filter="drop-shadow(0 0 6px #38bdf8)" />
+              <path d="M 90 48 Q 93 115 91 175" stroke="#bae6fd" strokeWidth="3" strokeLinecap="round" opacity="0.85" />
+              <path d="M 77 55 Q 80 110 79 175" stroke="#7dd3fc" strokeWidth="2.5" strokeLinecap="round" opacity="0.75" />
+              {/* Waterfall Base Mist & Cyan Pool Radiance */}
+              <ellipse cx="85" cy="176" rx="42" ry="14" fill="#06b6d4" opacity="0.45" filter="blur(6px)" />
+              <ellipse cx="85" cy="178" rx="26" ry="7" fill="#e0f2fe" opacity="0.7" filter="blur(2px)" />
             </g>
 
-            {/* Floating Island in Sky (Top Left) */}
-            <g transform="translate(80, 80)" opacity="0.8">
-              <ellipse cx="60" cy="50" rx="55" ry="16" fill="#15803d" />
-              <path d="M 5 50 Q 60 90 115 50 Z" fill="#78350f" stroke="#451a03" strokeWidth="1" />
-              {/* Little tree on floating island */}
-              <rect x="56" y="30" width="6" height="20" fill="#78350f" />
-              <circle cx="59" cy="24" r="16" fill="#22c55e" />
-              <circle cx="50" cy="20" r="12" fill="#4ade80" />
+            {/* Soft Night Mist Drifting Across Distant Mountains */}
+            <ellipse cx="500" cy="290" rx="360" ry="40" fill="url(#nightMistGrad)" />
+
+            {/* Massive Ancient Enchanted Tree (Left Side & Top Canopy Frame) */}
+            <g>
+              {/* Main Twisted Trunk */}
+              <path
+                d="M -40 600 L -20 220 Q -10 120 40 60 Q 90 10 240 0 L 320 0 Q 180 30 100 80 Q 40 130 30 260 Q 20 440 80 600 Z"
+                fill="#071b1d"
+              />
+              <path
+                d="M 10 320 Q 30 240 70 170 Q 130 110 260 70 Q 360 40 520 20 L 530 0 Q 340 30 220 70 Q 100 120 40 220 Q 0 350 30 600 Z"
+                fill="#051416"
+              />
+              {/* Hanging Lichen Moss & Tendrils from Upper Branch */}
+              <path d="M 160 50 Q 165 95 162 130" stroke="#0d3b36" strokeWidth="2.5" fill="none" opacity="0.75" />
+              <path d="M 220 40 Q 223 90 220 125" stroke="#0d3b36" strokeWidth="2" fill="none" opacity="0.7" />
+              <path d="M 280 35 Q 284 80 281 115" stroke="#0d3b36" strokeWidth="2.5" fill="none" opacity="0.65" />
+              <path d="M 360 25 Q 364 70 360 98" stroke="#0d3b36" strokeWidth="1.8" fill="none" opacity="0.6" />
+
+              {/* Tiers of Glowing Cyan Shelf Mushrooms Growing on Tree Trunk */}
+              {/* Tier 1 (Upper Shelf) */}
+              <ellipse cx="280" cy="180" rx="46" ry="14" fill="#083344" />
+              <ellipse cx="280" cy="176" rx="44" ry="11" fill="#06b6d4" filter="drop-shadow(0 0 10px #22d3ee)" />
+              <ellipse cx="276" cy="174" rx="34" ry="7" fill="#67e8f9" />
+              <ellipse cx="270" cy="172" rx="18" ry="3.5" fill="#e0f2fe" />
+
+              {/* Tier 2 (Middle Large Shelf) */}
+              <ellipse cx="220" cy="225" rx="58" ry="16" fill="#083344" />
+              <ellipse cx="220" cy="220" rx="55" ry="13" fill="#0891b2" filter="drop-shadow(0 0 14px #06b6d4)" />
+              <ellipse cx="215" cy="217" rx="42" ry="8" fill="#38bdf8" />
+              <ellipse cx="210" cy="215" rx="22" ry="4" fill="#bae6fd" />
+
+              {/* Tier 3 (Lower Shelf) */}
+              <ellipse cx="295" cy="268" rx="42" ry="12" fill="#083344" />
+              <ellipse cx="295" cy="264" rx="40" ry="10" fill="#06b6d4" filter="drop-shadow(0 0 8px #22d3ee)" />
+              <ellipse cx="292" cy="262" rx="28" ry="6" fill="#67e8f9" />
+
+              {/* Tier 4 (Small lower outgrowth) */}
+              <ellipse cx="170" cy="290" rx="30" ry="9" fill="#0e7490" />
+              <ellipse cx="168" cy="288" rx="24" ry="6" fill="#67e8f9" filter="drop-shadow(0 0 6px #38bdf8)" />
             </g>
 
-            {/* Soft Whimsical Anime Clouds */}
-            <g fill="#ffffff" opacity="0.35">
-              <ellipse cx="280" cy="140" rx="80" ry="24" />
-              <circle cx="250" cy="125" r="30" />
-              <circle cx="310" cy="130" r="25" />
-              <ellipse cx="820" cy="110" rx="90" ry="26" />
-              <circle cx="800" cy="95" r="32" />
-              <circle cx="850" cy="100" r="28" />
+            {/* Lush Rolling Mossy Forest Floor Waves */}
+            <path d="M -20 440 Q 260 370 540 420 Q 780 370 1020 430 L 1020 600 L -20 600 Z" fill="#073225" />
+            <path d="M -20 480 Q 280 420 560 465 Q 820 420 1020 475 L 1020 600 L -20 600 Z" fill="#083d2c" />
+            <path d="M -20 525 Q 300 470 580 510 Q 840 470 1020 525 L 1020 600 L -20 600 Z" fill="#064e3b" />
+
+            {/* Glowing Bioluminescent Flora on Forest Floor (Left Side) */}
+            <g transform="translate(60, 410)">
+              {/* Soft Luminous Blue Flora Aura */}
+              <circle cx="50" cy="40" r="54" fill="url(#blueFloraGlow)" />
+              {/* Luminous Bulb 1 */}
+              <path d="M 20 60 Q 22 28 32 16" stroke="#0284c7" strokeWidth="3" fill="none" strokeLinecap="round" />
+              <circle cx="34" cy="14" r="9" fill="#38bdf8" filter="drop-shadow(0 0 8px #67e8f9)" />
+              <circle cx="34" cy="14" r="4.5" fill="#f0f9ff" />
+              {/* Luminous Bulb 2 */}
+              <path d="M 45 65 Q 52 35 62 25" stroke="#0284c7" strokeWidth="3.5" fill="none" strokeLinecap="round" />
+              <circle cx="64" cy="22" r="11" fill="#06b6d4" filter="drop-shadow(0 0 10px #22d3ee)" />
+              <circle cx="64" cy="22" r="5.5" fill="#f0f9ff" />
+              {/* Luminous Bulb 3 */}
+              <path d="M 75 70 Q 78 48 88 40" stroke="#0284c7" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+              <circle cx="90" cy="38" r="8" fill="#38bdf8" filter="drop-shadow(0 0 6px #67e8f9)" />
+              {/* Purple/Violet Forest Blossom */}
+              <circle cx="108" cy="62" r="6" fill="#c084fc" filter="drop-shadow(0 0 6px #d8b4fe)" />
+              <circle cx="108" cy="62" r="3" fill="#ffffff" />
             </g>
 
-            {/* Lush Foreground Green Meadow Grassland Waves */}
-            <path d="M -20 440 Q 220 380 500 420 Q 780 370 1020 430 L 1020 600 L -20 600 Z" fill="#15803d" opacity="0.85" />
-            <path d="M -20 480 Q 260 430 520 470 Q 780 430 1020 480 L 1020 600 L -20 600 Z" fill="#166534" />
-            
-            {/* Cute Daisies & Clover Flowers on Meadow */}
-            <circle cx="160" cy="470" r="3" fill="#fef08a" />
-            <circle cx="156" cy="468" r="2" fill="#ffffff" />
-            <circle cx="164" cy="468" r="2" fill="#ffffff" />
-            <circle cx="160" cy="464" r="2" fill="#ffffff" />
-            <circle cx="160" cy="474" r="2" fill="#ffffff" />
-
-            <circle cx="840" cy="460" r="3" fill="#fef08a" />
-            <circle cx="836" cy="458" r="2" fill="#ffffff" />
-            <circle cx="844" cy="458" r="2" fill="#ffffff" />
-            <circle cx="840" cy="454" r="2" fill="#ffffff" />
-            <circle cx="840" cy="464" r="2" fill="#ffffff" />
+            {/* Craggy Slate Rock Outcrop for Phoenix (Center-Right Side) */}
+            <g transform="translate(610, 360)">
+              {/* Warm Volcanic Ember Underglow from Phoenix */}
+              <ellipse cx="140" cy="60" rx="90" ry="28" fill="#ea580c" opacity="0.32" filter="blur(10px)" />
+              {/* Stacked Jagged Slate Boulders */}
+              <polygon points="60,110 110,55 180,68 210,120 140,140" fill="#1c1917" stroke="#292524" strokeWidth="2" />
+              <polygon points="100,75 145,20 205,35 225,95 160,110" fill="#292524" stroke="#44403c" strokeWidth="2" />
+              <polygon points="135,38 175,0 220,10 230,58 180,68" fill="#44403c" stroke="#57534e" strokeWidth="1.5" />
+              <polygon points="40,135 90,85 160,95 180,160 90,170" fill="#171717" stroke="#262626" strokeWidth="1.5" />
+              {/* Highlights on top facets */}
+              <polygon points="140,35 175,2 215,12 185,42" fill="#78716c" opacity="0.65" />
+              <polygon points="105,72 145,22 175,32 135,78" fill="#57534e" opacity="0.6" />
+            </g>
           </svg>
 
-          {/* Floating Starlight Motes & Fairy Dust */}
-          <div className="absolute w-2.5 h-2.5 rounded-full bg-yellow-200 blur-2xs top-1/4 left-1/4 animate-ping" style={{ animationDuration: '3.5s' }} />
-          <div className="absolute w-3 h-3 rounded-full bg-cyan-200 blur-2xs top-1/3 right-1/4 animate-pulse" />
-          <div className="absolute w-2 h-2 rounded-full bg-amber-200 blur-2xs top-2/3 left-1/3 animate-ping" style={{ animationDuration: '4.5s' }} />
-          <div className="absolute w-2.5 h-2.5 rounded-full bg-emerald-200 blur-2xs bottom-1/3 right-1/3 animate-pulse" />
-
-          {/* Soft Sunlight Vignette */}
-          <div className="absolute inset-0 bg-radial from-transparent via-[#065f46]/10 to-[#022c22]/40 pointer-events-none" />
+          {/* Floating Twinkling Golden & Cyan Fireflies / Light Motes */}
+          <div className="absolute w-2 h-2 rounded-full bg-yellow-200 blur-2xs top-1/3 left-1/4 animate-ping" style={{ animationDuration: '3.2s' }} />
+          <div className="absolute w-2.5 h-2.5 rounded-full bg-cyan-200 blur-2xs top-1/4 right-1/3 animate-pulse" />
+          <div className="absolute w-1.5 h-1.5 rounded-full bg-amber-200 blur-2xs top-2/3 left-1/3 animate-ping" style={{ animationDuration: '4.2s' }} />
+          <div className="absolute w-2 h-2 rounded-full bg-emerald-200 blur-2xs bottom-1/3 right-1/4 animate-pulse" />
+          <div className="absolute w-2 h-2 rounded-full bg-cyan-300 blur-2xs bottom-1/2 left-1/5 animate-pulse" />
+          <div className="absolute w-1.5 h-1.5 rounded-full bg-orange-300 blur-2xs top-1/2 right-1/5 animate-ping" style={{ animationDuration: '2.8s' }} />
         </div>
 
         {/* Dynamic Weather Particle & Light Rays Overlay */}
@@ -829,14 +936,14 @@ export const BattleView: React.FC<BattleViewProps> = ({
         {/* Floating Damage Text Popup */}
         {damagePopup && (
           <div
-            className={`absolute z-40 font-black text-3xl tracking-wider select-none animate-bounce game-title-font ${
-              damagePopup.target === 'enemy' ? 'top-20 right-36' : 'bottom-36 left-36'
+            className={`absolute z-40 font-black text-3xl sm:text-4xl tracking-wider select-none animate-bounce roco-title-font ${
+              damagePopup.target === 'enemy' ? 'top-20 right-32' : 'bottom-36 left-32'
             } ${
               damagePopup.isCrit
-                ? 'text-yellow-300 drop-shadow-[0_0_12px_rgba(250,204,21,0.8)] scale-125'
+                ? 'text-yellow-300 drop-shadow-[0_0_16px_rgba(250,204,21,0.9)] scale-125'
                 : damagePopup.isEffective
-                ? 'text-rose-400 drop-shadow-[0_0_12px_rgba(244,63,94,0.8)]'
-                : 'text-amber-200'
+                ? 'text-rose-400 drop-shadow-[0_0_14px_rgba(244,63,94,0.9)]'
+                : 'text-amber-200 drop-shadow-[0_0_10px_rgba(245,158,11,0.8)]'
             }`}
           >
             {damagePopup.isCrit && '★ 暴击! '}
@@ -846,132 +953,172 @@ export const BattleView: React.FC<BattleViewProps> = ({
         )}
 
         {/* =========================================================================
-            DUELISTS ARENA STAGE (Image 1: Left Fawn & Right Phoenix)
+            DUELISTS ARENA STAGE (Image 1: Left Fawn & Right Phoenix with Floating Badges)
             ========================================================================= */}
         <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-4 items-center flex-1 my-auto">
-          {/* 1. LEFT: Player Spirit (主灵唯鹿 / 青木鹿) */}
-          <div className="flex flex-col items-start space-y-3">
-            {/* Player Status Plaque (Image 1 Style) */}
-            <div className="flex items-center gap-3 p-3 rounded-2xl bg-gradient-to-r from-[#0d2238]/90 via-[#0a1b2d]/85 to-transparent border-2 border-emerald-500/40 shadow-xl backdrop-blur-md min-w-[260px] max-w-xs">
-              {/* Left Wood Element Badge (WOOD 🌿 in Image 1) */}
-              <div className="w-10 h-10 rounded-full border-2 border-emerald-400 bg-gradient-to-br from-emerald-600 to-teal-800 flex flex-col items-center justify-center text-white shadow-md shrink-0">
-                <Trees className="w-4 h-4 text-emerald-200" />
-                <span className="text-[7px] font-black uppercase tracking-wider -mt-0.5">WOOD</span>
+          {/* 1. LEFT: Player Spirit (主灵唯鹿 / qingmulu) */}
+          <div className="flex flex-col items-start space-y-2">
+            {/* Player Status Plaque (Frosted Glass with Antique Gold Borders) */}
+            <div className="roco-panel p-2.5 sm:p-3 min-w-[270px] max-w-[320px] select-none flex items-center gap-2.5 shadow-2xl">
+              {/* Left Leaf Badge */}
+              <div className="w-10 h-10 rounded-full border-2 border-[#d4af37] bg-gradient-to-br from-emerald-600 to-teal-800 flex items-center justify-center text-white shadow-md shrink-0">
+                <Trees className="w-5 h-5 text-emerald-200" />
               </div>
 
-              <div className="flex-1 space-y-1">
+              {/* Center Name & Gauges */}
+              <div className="flex-1 min-w-0 space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <span className="font-black text-sm text-white tracking-wide">
+                  <span className="roco-title-font font-bold text-sm text-slate-100 tracking-wide truncate">
                     {activePet.nickname || '主灵唯鹿'}
                   </span>
-                  <span className="text-[10px] font-mono text-emerald-300 font-bold">
+                  <span className="text-[10px] font-mono text-emerald-300 font-bold shrink-0">
                     Lv.{activePet.level}
                   </span>
                 </div>
 
-                {/* HP Gauge (Red-Orange with Gold Border in Image 1) */}
-                <div className="flex items-center gap-1.5 text-[10px] font-mono">
-                  <span className="text-rose-400 font-bold shrink-0">HP</span>
-                  <div className="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-amber-500/50 p-0.2 shadow-inner">
+                {/* HP Gauge */}
+                <div className="flex items-center gap-2 text-[10px] font-mono">
+                  <span className="text-rose-400 font-black tracking-wider shrink-0">HP</span>
+                  <div className="roco-gauge-track flex-1 h-3.5">
                     <div
-                      className="h-full bg-gradient-to-r from-red-600 to-rose-400 rounded-full transition-all duration-300"
-                      style={{ width: `${Math.max(0, (activePet.currentHp / activePet.stats.hp) * 100)}%` }}
+                      className="roco-gauge-hp"
+                      style={{ width: `${Math.max(0, Math.min(100, (activePet.currentHp / activePet.stats.hp) * 100))}%` }}
                     />
                   </div>
-                  <span className="text-[9px] text-slate-300 shrink-0">
+                  <span className="text-[9px] text-slate-300 shrink-0 font-bold">
                     {activePet.currentHp}/{activePet.stats.hp}
                   </span>
                 </div>
 
-                {/* MP Gauge (Cyan-Blue with Gold Border in Image 1) */}
-                <div className="flex items-center gap-1.5 text-[10px] font-mono">
-                  <span className="text-cyan-400 font-bold shrink-0">MP</span>
-                  <div className="w-full bg-slate-950 rounded-full h-2 overflow-hidden border border-amber-500/50 p-0.2 shadow-inner">
-                    <div className="w-full h-full bg-gradient-to-r from-cyan-500 to-sky-400 rounded-full" />
+                {/* MP Gauge */}
+                <div className="flex items-center gap-2 text-[10px] font-mono">
+                  <span className="text-cyan-400 font-black tracking-wider shrink-0">MP</span>
+                  <div className="roco-gauge-track flex-1 h-3">
+                    <div className="roco-gauge-mp" style={{ width: '100%' }} />
                   </div>
-                  <span className="text-[8px] text-slate-400 shrink-0">100/100</span>
+                  <span className="text-[9px] text-slate-400 shrink-0 font-bold">
+                    100/100
+                  </span>
                 </div>
+              </div>
+
+              {/* Right Leaf Badge */}
+              <div className="w-9 h-9 rounded-full border-2 border-[#d4af37] bg-gradient-to-br from-emerald-600 to-teal-800 flex items-center justify-center text-white shadow-md shrink-0">
+                <Trees className="w-4 h-4 text-emerald-200" />
               </div>
             </div>
 
-            {/* Player Spirit Sprite on Meadow Grass with Glowing Flora (Image 1 Left) */}
-            <div className="relative flex flex-col items-center ml-2 sm:ml-6 mt-1">
-              <PetAvatar
-                speciesId={activePet.speciesId}
-                size={180}
-                isFlipped={true}
-                isAttacking={playerAttacking}
-                isHit={playerHit}
-                className="transition-transform duration-200 drop-shadow-[0_12px_32px_rgba(16,185,129,0.55)]"
-              />
-              {/* Grand Floating Celestial Meadow Dais with Ancient Runes & Cyan Spores */}
-              <div className="relative w-56 h-12 -mt-5 flex items-center justify-center pointer-events-none">
-                <div className="absolute inset-0 rounded-[50%] bg-gradient-to-r from-emerald-600/30 via-teal-500/40 to-cyan-500/30 border-2 border-emerald-400/60 shadow-[0_0_36px_rgba(52,211,153,0.7)] animate-pulse" />
-                <div className="absolute w-40 h-6 rounded-[50%] border border-cyan-300/80 blur-2xs" />
-                <div className="absolute w-24 h-3 rounded-[50%] bg-white/40 blur-xs" />
+            {/* Player Spirit Sprite on Meadow Grass + Floating WOOD Badge (Image 1 Layout) */}
+            <div className="relative flex items-end ml-2 sm:ml-4 mt-2">
+              <div className="relative flex flex-col items-center">
+                <PetAvatar
+                  speciesId={activePet.speciesId}
+                  size={185}
+                  isFlipped={true}
+                  isAttacking={playerAttacking}
+                  isHit={playerHit}
+                  className="transition-transform duration-200 drop-shadow-[0_12px_32px_rgba(56,189,248,0.65)]"
+                />
+                {/* Bioluminescent Starlight Ground Ring */}
+                <div className="relative w-56 h-10 -mt-4 flex items-center justify-center pointer-events-none">
+                  <div className="absolute inset-0 rounded-[50%] bg-gradient-to-r from-emerald-500/30 via-cyan-400/40 to-teal-500/30 border border-cyan-400/60 shadow-[0_0_32px_rgba(56,189,248,0.7)] animate-pulse" />
+                  <div className="absolute w-36 h-4 rounded-[50%] bg-white/40 blur-xs" />
+                </div>
+              </div>
+
+              {/* Floating WOOD Elemental Badge Beside Fawn (Image 1 Exact Element Badge) */}
+              <div className="flex flex-col items-center mb-6 ml-3 pointer-events-none">
+                <div className="roco-element-badge bg-gradient-to-br from-emerald-600 to-teal-800 text-white shadow-[0_0_16px_rgba(16,185,129,0.7)]">
+                  <Trees className="w-5 h-5 text-emerald-200 filter drop-shadow-[0_0_4px_#34d399]" />
+                </div>
+                <span className="text-[9px] font-black text-amber-200 uppercase tracking-widest mt-1 roco-title-font drop-shadow-md">
+                  WOOD
+                </span>
               </div>
             </div>
           </div>
 
-          {/* 2. RIGHT: Enemy Spirit (凤凰巢 / 烈焰凰) */}
-          <div className="flex flex-col items-end space-y-3">
-            {/* Enemy Status Plaque (Image 1 Style) */}
-            <div className="flex items-center gap-3 p-3 rounded-2xl bg-gradient-to-l from-[#2a0e0e]/95 via-[#1f0a0a]/90 to-transparent border-2 border-rose-500/50 shadow-2xl backdrop-blur-md min-w-[260px] max-w-xs">
-              <div className="flex-1 space-y-1 text-right">
+          {/* 2. RIGHT: Enemy Spirit (凤凰雏 / fentianhuang / chiyanque) */}
+          <div className="flex flex-col items-end space-y-2">
+            {/* Enemy Status Plaque (Frosted Glass with Antique Gold Borders) */}
+            <div className="roco-panel p-2.5 sm:p-3 min-w-[270px] max-w-[320px] select-none flex items-center gap-2.5 shadow-2xl">
+              {/* Left/Center Name & Gauges */}
+              <div className="flex-1 min-w-0 space-y-1.5 text-right">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono text-amber-300 font-bold">
+                  <span className="text-[10px] font-mono text-amber-300 font-bold shrink-0">
                     Lv.{enemy.level}
                   </span>
-                  <span className="font-black text-sm text-white tracking-wide">
-                    {enemySpecies.name || '凤凰巢'}
+                  <span className="roco-title-font font-bold text-sm text-slate-100 tracking-wide truncate">
+                    {enemy.nickname || (enemy.speciesId === 'chiyanque' ? '凤凰雏' : enemySpecies.name)}
                   </span>
                 </div>
 
                 {/* HP Gauge */}
-                <div className="flex items-center gap-1.5 text-[10px] font-mono justify-end">
-                  <span className="text-[9px] text-slate-300 shrink-0">
+                <div className="flex items-center gap-2 text-[10px] font-mono justify-end">
+                  <span className="text-[9px] text-slate-300 shrink-0 font-bold">
                     {enemy.currentHp}/{enemy.stats.hp}
                   </span>
-                  <div className="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-amber-500/50 p-0.2 shadow-inner">
+                  <div className="roco-gauge-track flex-1 h-3.5">
                     <div
-                      className="h-full bg-gradient-to-r from-red-600 to-rose-400 rounded-full transition-all duration-300"
-                      style={{ width: `${Math.max(0, (enemy.currentHp / enemy.stats.hp) * 100)}%` }}
+                      className="roco-gauge-hp"
+                      style={{ width: `${Math.max(0, Math.min(100, (enemy.currentHp / enemy.stats.hp) * 100))}%` }}
                     />
                   </div>
-                  <span className="text-rose-400 font-bold shrink-0">HP</span>
+                  <span className="text-rose-400 font-black tracking-wider shrink-0">HP</span>
                 </div>
 
                 {/* MP Gauge */}
-                <div className="flex items-center gap-1.5 text-[10px] font-mono justify-end">
-                  <span className="text-[8px] text-slate-400 shrink-0">100/100</span>
-                  <div className="w-full bg-slate-950 rounded-full h-2 overflow-hidden border border-amber-500/50 p-0.2 shadow-inner">
-                    <div className="w-full h-full bg-gradient-to-r from-cyan-500 to-sky-400 rounded-full" />
+                <div className="flex items-center gap-2 text-[10px] font-mono justify-end">
+                  <span className="text-[9px] text-slate-400 shrink-0 font-bold">
+                    100/100
+                  </span>
+                  <div className="roco-gauge-track flex-1 h-3">
+                    <div className="roco-gauge-mp" style={{ width: '100%' }} />
                   </div>
-                  <span className="text-cyan-400 font-bold shrink-0">MP</span>
+                  <span className="text-cyan-400 font-black tracking-wider shrink-0">MP</span>
                 </div>
               </div>
 
-              {/* Right Fire Element Badge (FIRE 🔥 in Image 1) */}
-              <div className="w-10 h-10 rounded-full border-2 border-amber-400 bg-gradient-to-br from-rose-600 to-amber-600 flex flex-col items-center justify-center text-white shadow-md shrink-0">
-                <Flame className="w-4 h-4 text-amber-200" />
-                <span className="text-[7px] font-black uppercase tracking-wider -mt-0.5">FIRE</span>
+              {/* Right Fire Badge */}
+              <div className="w-10 h-10 rounded-full border-2 border-[#d4af37] bg-gradient-to-br from-rose-600 to-amber-600 flex items-center justify-center text-white shadow-md shrink-0">
+                <Flame className="w-5 h-5 text-amber-200" />
               </div>
             </div>
 
-            {/* Enemy Spirit Sprite Perched on Craggy Volcanic Rock (Image 1 Right) */}
-            <div className="relative flex flex-col items-center mr-2 sm:mr-6 mt-1">
-              <PetAvatar
-                speciesId={enemy.speciesId}
-                size={175}
-                isAttacking={enemyAttacking}
-                isHit={enemyHit}
-                className="transition-transform duration-200 drop-shadow-[0_12px_32px_rgba(244,63,94,0.55)]"
-              />
-              {/* Fiery Molten Volcanic Rock Dais with Pulsing Magma Glow */}
-              <div className="relative w-56 h-12 -mt-5 flex items-center justify-center pointer-events-none">
-                <div className="absolute inset-0 rounded-[50%] bg-gradient-to-r from-red-600/35 via-orange-500/40 to-amber-500/35 border-2 border-amber-400/60 shadow-[0_0_36px_rgba(245,158,11,0.7)] animate-pulse" />
-                <div className="absolute w-40 h-6 rounded-[50%] border border-orange-400/80 blur-2xs" />
-                <div className="absolute w-24 h-3 rounded-[50%] bg-amber-200/40 blur-xs" />
+            {/* Enemy Spirit Sprite Perched on Rock + Floating FIRE Badges (Image 1 Layout) */}
+            <div className="relative flex items-center mr-2 sm:mr-4 mt-2">
+              {/* Floating FIRE Elemental Badge Beside Phoenix */}
+              <div className="flex flex-col items-center mb-6 mr-3 pointer-events-none">
+                <div className="roco-element-badge bg-gradient-to-br from-rose-600 to-amber-600 text-white shadow-[0_0_16px_rgba(249,115,22,0.7)]">
+                  <Flame className="w-5 h-5 text-amber-200 filter drop-shadow-[0_0_4px_#f59e0b]" />
+                </div>
+                <span className="text-[9px] font-black text-amber-200 uppercase tracking-widest mt-1 roco-title-font drop-shadow-md">
+                  FIRE
+                </span>
+              </div>
+
+              {/* Perched Phoenix on Rock */}
+              <div className="relative flex flex-col items-center">
+                {/* Secondary Upper Floating FIRE Badge (as seen in Image 1 upper right) */}
+                <div className="absolute -top-6 -right-2 flex flex-col items-center pointer-events-none">
+                  <div className="w-8 h-8 rounded-full border-2 border-[#d4af37] bg-gradient-to-br from-rose-600 to-amber-600 flex items-center justify-center text-white shadow-[0_0_12px_rgba(249,115,22,0.6)]">
+                    <Flame className="w-4 h-4 text-amber-200" />
+                  </div>
+                  <span className="text-[7px] font-black text-amber-200 uppercase tracking-widest mt-0.5 roco-title-font">FIRE</span>
+                </div>
+
+                <PetAvatar
+                  speciesId={enemy.speciesId}
+                  size={180}
+                  isAttacking={enemyAttacking}
+                  isHit={enemyHit}
+                  className="transition-transform duration-200 drop-shadow-[0_12px_32px_rgba(249,115,22,0.65)]"
+                />
+                {/* Fiery Lava Ember Ground Ring */}
+                <div className="relative w-56 h-10 -mt-4 flex items-center justify-center pointer-events-none">
+                  <div className="absolute inset-0 rounded-[50%] bg-gradient-to-r from-red-600/35 via-orange-500/40 to-amber-500/35 border border-amber-400/60 shadow-[0_0_32px_rgba(245,158,11,0.7)] animate-pulse" />
+                  <div className="absolute w-36 h-4 rounded-[50%] bg-amber-200/40 blur-xs" />
+                </div>
               </div>
             </div>
           </div>
@@ -981,62 +1128,64 @@ export const BattleView: React.FC<BattleViewProps> = ({
       {/* =========================================================================
           BOTTOM COMMAND CONSOLE: Battle Directory, Turn Pill & Circular Skills (Image 1)
           ========================================================================= */}
-      <div className="relative bg-gradient-to-t from-[#020813] via-[#051120] to-[#081a2e]/90 border-t-2 border-[#b48a52]/40 p-4 md:p-5 flex flex-col md:flex-row items-center justify-between gap-4 z-20 shadow-2xl backdrop-blur-xl">
+      <div className="relative bg-gradient-to-t from-[#020813] via-[#051120] to-[#081a2e]/95 border-t-2 border-[#b8860b]/40 p-3 sm:p-4 md:p-5 flex flex-col md:flex-row items-center justify-between gap-4 z-20 shadow-2xl backdrop-blur-xl">
         {/* Left: 战斗目录 (Battle Directory & Logs from Image 1) */}
-        <div className="w-full md:w-72 rounded-2xl p-3 bg-gradient-to-b from-[#0f243a]/90 to-[#071322]/95 border border-cyan-500/30 text-xs shadow-xl flex flex-col justify-between h-28">
-          <div className="flex items-center justify-between border-b border-cyan-500/20 pb-1 mb-1">
-            <span className="font-black text-amber-300 flex items-center gap-1.5 tracking-wider">
-              <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-              <span>✦ 战斗目录</span>
+        <div className="roco-log-box w-full sm:w-76 p-3 text-xs flex flex-col justify-between h-32 select-none shadow-xl">
+          <div className="flex items-center justify-between border-b border-amber-500/30 pb-1 mb-1">
+            <span className="roco-title-font font-bold text-amber-300 flex items-center gap-1.5 tracking-wider text-xs">
+              <span className="text-amber-400 text-sm">◇</span>
+              <span>战斗目录</span>
             </span>
-            <span className="text-[9px] font-mono text-cyan-300">魔法对决</span>
+            <span className="text-[9px] text-cyan-300/80 font-mono">幻境交锋</span>
           </div>
 
           <div className="flex-1 overflow-y-auto space-y-1 text-[11px] pr-1 leading-relaxed text-slate-300">
             {battleLog.slice(0, 3).map((log, idx) => (
               <p key={idx} className={idx === 0 ? 'text-amber-200 font-bold' : 'text-slate-400'}>
-                {idx === 0 ? '▶ ' : '  '}
                 {log}
               </p>
             ))}
-            {battleLog.length === 0 && (
-              <p className="text-slate-400 italic">双方幻灵蓄势待发，五行道韵与乾坤灵气在战台上流转！</p>
+            {battleLog.length < 2 && (
+              <>
+                <p className="text-slate-400">战回另火中的战，藤蔓缠绕。</p>
+                <p className="text-slate-400">从家霆魑的菖愍，治愈之光效士。</p>
+              </>
             )}
           </div>
         </div>
 
         {/* Center: 当前回合: 玩家 (Current Turn Indicator from Image 1) */}
         <div className="flex flex-col items-center">
-          <div className="px-5 py-1.5 rounded-full bg-gradient-to-r from-amber-950/80 via-slate-900/90 to-amber-950/80 border-2 border-amber-400 text-amber-200 text-xs font-black shadow-[0_0_16px_rgba(245,158,11,0.4)] animate-pulse">
-            当前回合: {isProcessingTurn ? '仙术对决中...' : '仙师出招'}
+          <div className="roco-turn-capsule px-6 py-1.5 text-amber-200 text-xs sm:text-sm font-bold roco-title-font shadow-lg animate-pulse tracking-wide">
+            当前回合: {isProcessingTurn ? (playerAttacking ? '玩家施法' : '敌方攻击') : '玩家'}
           </div>
 
           {/* Quick Utility Switchers below Turn Indicator */}
-          <div className="flex items-center gap-2 mt-2">
+          <div className="flex items-center gap-2.5 mt-2">
             <button
               onClick={() => {
                 sound.playClick();
                 setBattleMenu('BALLS');
               }}
-              className="text-[10px] text-cyan-300 hover:text-white bg-slate-900/80 px-2.5 py-1 rounded-lg border border-cyan-500/40 cursor-pointer transition-colors"
+              className="text-[10px] text-cyan-300 hover:text-white bg-[#061426]/90 px-3 py-1 rounded-full border border-cyan-500/50 cursor-pointer transition-all hover:border-cyan-400 shadow-sm"
             >
-              灵契晶石
+              灵契晶石 (捕捉)
             </button>
             <button
               onClick={() => {
                 sound.playClick();
                 setBattleMenu('SWITCH');
               }}
-              className="text-[10px] text-slate-300 hover:text-white bg-slate-900/80 px-2.5 py-1 rounded-lg border border-slate-700 cursor-pointer transition-colors"
+              className="text-[10px] text-amber-200/90 hover:text-white bg-[#061426]/90 px-3 py-1 rounded-full border border-amber-500/50 cursor-pointer transition-all hover:border-amber-400 shadow-sm"
             >
-              唤回轮换
+              唤回换宠
             </button>
           </div>
         </div>
 
         {/* Right: Circular Golden Skill Buttons (Image 1 Exact Layout) */}
-        <div className="flex items-center gap-3">
-          {/* Sub-menu overlays (BALLS, POTIONS, SWITCH) */}
+        <div className="flex items-center">
+          {/* Sub-menu overlay active fallback button */}
           {battleMenu !== 'ACTIONS' && battleMenu !== 'MOVES' ? (
             <div className="flex items-center gap-3">
               <button
@@ -1047,73 +1196,80 @@ export const BattleView: React.FC<BattleViewProps> = ({
               </button>
             </div>
           ) : (
-            <div className="flex items-center gap-2.5">
-              {/* Skill 1 (Secondary): 治愈之光 */}
-              {activePet.moves[1] && (
-                <button
-                  disabled={isProcessingTurn || activePet.moves[1].pp <= 0}
-                  onClick={() => handleSelectMove(activePet.moves[1].id)}
-                  className="flex flex-col items-center group cursor-pointer disabled:opacity-40"
-                  title={`${MOVES_DATA[activePet.moves[1].id]?.name || '治愈之光'} (PP: ${activePet.moves[1].pp})`}
-                >
-                  <div className="w-12 h-12 rounded-full border-2 border-amber-400 bg-gradient-to-b from-emerald-600 to-teal-900 flex items-center justify-center text-emerald-200 shadow-lg group-hover:scale-110 group-active:scale-95 transition-transform ring-2 ring-emerald-500/40">
-                    <Sparkles className="w-6 h-6 text-emerald-200 filter drop-shadow-[0_0_6px_#34d399]" />
-                  </div>
-                  <span className="text-[10px] font-bold text-amber-200 mt-1">
-                    {MOVES_DATA[activePet.moves[1].id]?.name || '治愈之光'}
+            <div className="relative w-64 h-32 flex items-end justify-end select-none pr-1">
+              {/* 1. Skill 2 (Top Left): 烈焰之息 */}
+              {movesToDisplay[2] && (
+                <div className="absolute right-[82px] bottom-[68px] flex flex-col items-center">
+                  <button
+                    disabled={isProcessingTurn || movesToDisplay[2].pp <= 0}
+                    onClick={() => handleSelectMove(movesToDisplay[2].id)}
+                    className="roco-skill-secondary bg-gradient-to-br from-rose-600 via-orange-600 to-amber-700 text-amber-200 group disabled:opacity-40"
+                    title={`${MOVES_DATA[movesToDisplay[2].id]?.name || '烈焰之息'} (PP: ${movesToDisplay[2].pp}/${movesToDisplay[2].maxPp})`}
+                  >
+                    <Flame className="w-6 h-6 text-amber-300 filter drop-shadow-[0_0_8px_#f97316]" />
+                  </button>
+                  <span className="roco-title-font text-[10px] font-bold text-amber-200 mt-0.5 tracking-wider drop-shadow-md">
+                    {MOVES_DATA[movesToDisplay[2].id]?.name || '烈焰之息'}
                   </span>
-                </button>
+                </div>
               )}
 
-              {/* Skill 2 (Secondary): 烈焰之息 */}
-              {activePet.moves[2] && (
-                <button
-                  disabled={isProcessingTurn || activePet.moves[2].pp <= 0}
-                  onClick={() => handleSelectMove(activePet.moves[2].id)}
-                  className="flex flex-col items-center group cursor-pointer disabled:opacity-40"
-                  title={`${MOVES_DATA[activePet.moves[2].id]?.name || '烈焰之息'} (PP: ${activePet.moves[2].pp})`}
-                >
-                  <div className="w-12 h-12 rounded-full border-2 border-amber-400 bg-gradient-to-b from-rose-600 to-amber-900 flex items-center justify-center text-amber-200 shadow-lg group-hover:scale-110 group-active:scale-95 transition-transform ring-2 ring-orange-500/40">
-                    <Flame className="w-6 h-6 text-amber-300 filter drop-shadow-[0_0_6px_#f59e0b]" />
-                  </div>
-                  <span className="text-[10px] font-bold text-amber-200 mt-1">
-                    {MOVES_DATA[activePet.moves[2].id]?.name || '烈焰之息'}
+              {/* 2. Skill 3 (Top Right): 凤凰涅槃 */}
+              {movesToDisplay[3] && (
+                <div className="absolute right-[6px] bottom-[88px] flex flex-col items-center">
+                  <button
+                    disabled={isProcessingTurn || movesToDisplay[3].pp <= 0}
+                    onClick={() => handleSelectMove(movesToDisplay[3].id)}
+                    className="roco-skill-secondary bg-gradient-to-br from-amber-500 via-orange-600 to-red-900 text-yellow-200 group disabled:opacity-40"
+                    title={`${MOVES_DATA[movesToDisplay[3].id]?.name || '凤凰涅槃'} (PP: ${movesToDisplay[3].pp}/${movesToDisplay[3].maxPp})`}
+                  >
+                    <Zap className="w-6 h-6 text-amber-200 filter drop-shadow-[0_0_8px_#fde047]" />
+                  </button>
+                  <span className="roco-title-font text-[10px] font-bold text-amber-200 mt-0.5 tracking-wider drop-shadow-md">
+                    {MOVES_DATA[movesToDisplay[3].id]?.name || '凤凰涅槃'}
                   </span>
-                </button>
+                </div>
               )}
 
-              {/* Skill 3 (Secondary): 凤凰涅槃 */}
-              {activePet.moves[3] && (
-                <button
-                  disabled={isProcessingTurn || activePet.moves[3].pp <= 0}
-                  onClick={() => handleSelectMove(activePet.moves[3].id)}
-                  className="flex flex-col items-center group cursor-pointer disabled:opacity-40"
-                  title={`${MOVES_DATA[activePet.moves[3].id]?.name || '凤凰涅槃'} (PP: ${activePet.moves[3].pp})`}
-                >
-                  <div className="w-12 h-12 rounded-full border-2 border-amber-400 bg-gradient-to-b from-amber-600 to-red-950 flex items-center justify-center text-yellow-200 shadow-lg group-hover:scale-110 group-active:scale-95 transition-transform ring-2 ring-yellow-500/40">
-                    <Zap className="w-6 h-6 text-amber-200 filter drop-shadow-[0_0_6px_#fde047]" />
-                  </div>
-                  <span className="text-[10px] font-bold text-amber-200 mt-1">
-                    {MOVES_DATA[activePet.moves[3].id]?.name || '凤凰涅槃'}
+              {/* 3. Skill 1 (Bottom Left): 治愈之光 */}
+              {movesToDisplay[1] && (
+                <div className="absolute right-[96px] bottom-[4px] flex flex-col items-center">
+                  <button
+                    disabled={isProcessingTurn || movesToDisplay[1].pp <= 0}
+                    onClick={() => handleSelectMove(movesToDisplay[1].id)}
+                    className="roco-skill-secondary bg-gradient-to-br from-emerald-600 via-teal-700 to-green-950 text-emerald-200 group disabled:opacity-40"
+                    title={`${MOVES_DATA[movesToDisplay[1].id]?.name || '治愈之光'} (PP: ${movesToDisplay[1].pp}/${movesToDisplay[1].maxPp})`}
+                  >
+                    <Sparkles className="w-6 h-6 text-emerald-300 filter drop-shadow-[0_0_8px_#34d399]" />
+                  </button>
+                  <span className="roco-title-font text-[10px] font-bold text-amber-200 mt-0.5 tracking-wider drop-shadow-md">
+                    {MOVES_DATA[movesToDisplay[1].id]?.name || '治愈之光'}
                   </span>
-                </button>
+                </div>
               )}
 
-              {/* PRIMARY HIGHLIGHTED SKILL BUTTON (Large Double-Rimmed Button from Image 1: 藤蔓缠绕) */}
-              {activePet.moves[0] && (
-                <button
-                  disabled={isProcessingTurn || activePet.moves[0].pp <= 0}
-                  onClick={() => handleSelectMove(activePet.moves[0].id)}
-                  className="flex flex-col items-center group cursor-pointer disabled:opacity-40 ml-1"
-                  title={`释放主技能【${MOVES_DATA[activePet.moves[0].id]?.name || '藤蔓缠绕'}】`}
-                >
-                  <div className="w-16 h-16 rounded-full border-4 border-[#ca8a04] bg-gradient-to-b from-[#065f46] via-[#047857] to-[#022c22] flex items-center justify-center text-white shadow-[0_0_24px_rgba(74,222,128,0.6)] group-hover:scale-108 group-active:scale-95 transition-all ring-2 ring-[#fde047]">
-                    <Trees className="w-8 h-8 text-emerald-300 filter drop-shadow-[0_0_8px_#4ade80]" />
-                  </div>
-                  <span className="text-xs font-black text-amber-300 mt-1 tracking-wider drop-shadow-sm">
-                    {MOVES_DATA[activePet.moves[0].id]?.name || '藤蔓缠绕'}
+              {/* 4. Skill 0 (Bottom Right): 藤蔓缠绕 (Large Primary Double-Rimmed Orb!) */}
+              {movesToDisplay[0] && (
+                <div className="absolute right-0 bottom-0 flex flex-col items-center">
+                  <button
+                    disabled={isProcessingTurn || movesToDisplay[0].pp <= 0}
+                    onClick={() => handleSelectMove(movesToDisplay[0].id)}
+                    className="roco-skill-primary group disabled:opacity-40"
+                    title={`释放主技能【${MOVES_DATA[movesToDisplay[0].id]?.name || '藤蔓缠绕'}】(PP: ${movesToDisplay[0].pp}/${movesToDisplay[0].maxPp})`}
+                  >
+                    <div className="flex flex-col items-center justify-center leading-none select-none">
+                      <span className="roco-title-font text-[13px] font-black text-emerald-100 tracking-widest drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+                        藤蔓
+                      </span>
+                      <span className="roco-title-font text-[13px] font-black text-emerald-100 tracking-widest drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)] mt-0.5">
+                        缠绕
+                      </span>
+                    </div>
+                  </button>
+                  <span className="roco-title-font text-[11px] font-bold text-amber-200 mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+                    {MOVES_DATA[movesToDisplay[0].id]?.name || '藤蔓缠绕'}
                   </span>
-                </button>
+                </div>
               )}
             </div>
           )}

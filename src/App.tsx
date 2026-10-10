@@ -17,10 +17,12 @@ import { DailyEventsModal } from './components/DailyEventsModal';
 import { PetTrainModal } from './components/PetTrainModal';
 import { QuestTracker } from './components/QuestTracker';
 import { FriendsModal } from './components/FriendsModal';
+import { GmToolModal } from './components/GmToolModal';
+import { AdminDashboard } from './components/admin/AdminDashboard';
 import { INITIAL_FRIENDS } from './data/friends';
 import { Friend } from './types/game';
 
-import { Sparkles, Compass, BookOpen, Backpack, ShoppingBag, ScrollText, Volume2, VolumeX, Gift, Zap, Users } from 'lucide-react';
+import { Sparkles, Compass, BookOpen, Backpack, ShoppingBag, ScrollText, Volume2, VolumeX, Gift, Zap, Users, Wrench, Shield } from 'lucide-react';
 
 const STORAGE_KEY = 'huanling_mijing_save_v1';
 
@@ -68,6 +70,29 @@ export default function App() {
   const [isPetTrainOpen, setIsPetTrainOpen] = useState<boolean>(false);
   const [isQuestLogOpen, setIsQuestLogOpen] = useState<boolean>(false);
   const [isFriendsOpen, setIsFriendsOpen] = useState<boolean>(false);
+  const [isGmOpen, setIsGmOpen] = useState<boolean>(false);
+  const [isAdminDashboardOpen, setIsAdminDashboardOpen] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('admin') === 'true' || params.get('mode') === 'admin';
+    }
+    return false;
+  });
+
+  // Global Keyboard Listener for GM console (Backquote ~ or F8)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement)?.tagName)) {
+        return;
+      }
+      if (e.code === 'Backquote' || e.key === '`' || e.key === '~' || e.key === 'F8') {
+        e.preventDefault();
+        setIsGmOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   // Social Friends & Spirit Shards State
   const [friends, setFriends] = useState<Friend[]>(INITIAL_FRIENDS);
@@ -174,6 +199,32 @@ export default function App() {
   const handleToggleSound = () => {
     sound.enabled = !soundEnabled;
     setSoundEnabled(!soundEnabled);
+  };
+
+  // GM Savefile Handlers
+  const handleImportSave = (jsonStr: string): boolean => {
+    try {
+      const parsed = JSON.parse(jsonStr);
+      if (parsed.playerName) setPlayerName(parsed.playerName);
+      if (typeof parsed.playerCoins === 'number') setPlayerCoins(parsed.playerCoins);
+      if (Array.isArray(parsed.party)) setParty(parsed.party);
+      if (Array.isArray(parsed.inventory)) setInventory(parsed.inventory);
+      if (parsed.currentSceneId) setCurrentSceneId(parsed.currentSceneId);
+      if (Array.isArray(parsed.unlockedSpeciesIds)) setUnlockedSpeciesIds(parsed.unlockedSpeciesIds);
+      if (Array.isArray(parsed.quests)) setQuests(parsed.quests);
+      localStorage.setItem(STORAGE_KEY, jsonStr);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const handleResetSave = () => {
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem('huanling_friends_data');
+    localStorage.removeItem('huanling_spirit_shards');
+    localStorage.removeItem('huanling_last_gift_date');
+    window.location.reload();
   };
 
   // Helper to progress Quest
@@ -507,54 +558,89 @@ export default function App() {
 
   const currentScene = SCENES_DATA[currentSceneId] || SCENES_DATA.ACADEMY;
 
+  if (isAdminDashboardOpen) {
+    return (
+      <AdminDashboard
+        onReturnToGame={() => setIsAdminDashboardOpen(false)}
+        localPlayerState={{
+          playerName,
+          playerCoins,
+          party,
+          inventory,
+          currentSceneId,
+        }}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#020617] text-slate-100 flex flex-col items-center justify-start sm:justify-center p-1 sm:p-2 select-none overflow-x-hidden">
-      {/* 1. Celestial Fantasy RPG Game Header Bar */}
-      <header className="w-full max-w-5xl bg-slate-900/80 border border-cyan-500/20 rounded-t-2xl px-4 py-2 flex items-center justify-between text-xs text-slate-300 shadow-xl backdrop-blur-md gap-2">
-        {/* Left: Game Title & Subtitle */}
+      {/* 1. Roco Kingdom Classic Fantasy Game Header Bar */}
+      <header className="w-full max-w-5xl bg-gradient-to-r from-[#061426] via-[#091b30] to-[#061426] border-2 border-[#b8860b]/40 rounded-t-2xl px-4 py-2 flex items-center justify-between text-xs text-slate-300 shadow-2xl backdrop-blur-md gap-2">
+        {/* Left: Game Title with Vermilion Seal */}
         <div className="flex items-center gap-2.5">
-          <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-cyan-400 via-sky-500 to-indigo-600 flex items-center justify-center font-bold text-white text-xs shadow-md shadow-cyan-500/30">
-            ✦
-          </div>
-          <div>
-            <h1 className="font-extrabold text-sm sm:text-base text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-200 to-sky-400 tracking-wide">
+          <div className="flex items-center gap-2">
+            <h1 className="roco-title-font text-base sm:text-xl roco-gold-text font-black tracking-wide drop-shadow-[0_2px_8px_rgba(245,158,11,0.6)]">
               幻灵秘境
             </h1>
-            <span className="text-[10px] text-slate-400 block -mt-0.5 tracking-wider font-light">
-              SPIRIT REALM · CHRONICLES
+            <span className="roco-seal text-[9px] px-1.5 py-0.2 font-bold tracking-wider">
+              幻境
             </span>
           </div>
+          <span className="text-[9px] text-amber-300/80 hidden sm:inline tracking-[0.25em] font-mono font-bold -mb-0.5">
+            · SPIRIT REALM
+          </span>
         </div>
 
         {/* Center: Current Zone Indicator */}
-        <div className="hidden md:flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800/60 border border-cyan-500/20 text-[11px] text-cyan-200">
-          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-          <span>秘境探索中：{currentScene.name}</span>
+        <div className="hidden md:flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#030d1a]/90 border border-[#b8860b]/40 text-[11px] text-amber-200">
+          <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+          <span className="roco-title-font">秘境探索中：{currentScene.name}</span>
         </div>
 
         {/* Right: Clean Navigation Shortcuts */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          {/* GM Tools Button */}
+          <button
+            onClick={() => setIsGmOpen(true)}
+            className="px-2 py-1 rounded-lg text-xs text-purple-200 hover:text-white bg-purple-950/80 hover:bg-purple-900 border border-purple-500/50 transition-all cursor-pointer font-medium flex items-center gap-1 roco-title-font shadow"
+            title="呼出天道 GM 调试控制台 (快捷键 ~)"
+          >
+            <Wrench className="w-3.5 h-3.5 text-purple-400" />
+            <span>GM 秘宝</span>
+          </button>
+
+          {/* Admin Operations Portal Button */}
+          <button
+            onClick={() => setIsAdminDashboardOpen(true)}
+            className="px-2 py-1 rounded-lg text-xs text-cyan-200 hover:text-white bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/50 transition-all cursor-pointer font-medium flex items-center gap-1 roco-title-font shadow"
+            title="进入服务端运营后台管理系统"
+          >
+            <Shield className="w-3.5 h-3.5 text-cyan-400" />
+            <span>运营后台</span>
+          </button>
+
           <button
             onClick={() => setIsFriendsOpen(true)}
-            className="px-2.5 py-1 rounded-lg text-xs text-teal-300 hover:text-white bg-teal-950/40 hover:bg-teal-900/50 border border-teal-500/30 transition-all cursor-pointer font-medium flex items-center gap-1"
+            className="px-2 py-1 rounded-lg text-xs text-amber-200 hover:text-white bg-[#0a1f36]/70 hover:bg-[#0e2a4a] border border-[#b8860b]/40 transition-all cursor-pointer font-medium flex items-center gap-1 roco-title-font"
             title="查看同修仙友录与互赠灵力碎片"
           >
-            <Users className="w-3.5 h-3.5 text-teal-400" />
-            <span>仙友录</span>
+            <Users className="w-3.5 h-3.5 text-amber-300" />
+            <span className="hidden sm:inline">仙友录</span>
             {friends.some((f) => f.canClaimFromFriend) && (
               <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse" />
             )}
           </button>
           <button
             onClick={() => setIsPrologueOpen(true)}
-            className="px-2.5 py-1 rounded-lg text-xs text-cyan-300 hover:text-white bg-cyan-950/40 hover:bg-cyan-900/50 border border-cyan-500/30 transition-all cursor-pointer font-medium"
+            className="px-2 py-1 rounded-lg text-xs text-amber-200 hover:text-white bg-[#0a1f36]/70 hover:bg-[#0e2a4a] border border-[#b8860b]/40 transition-all cursor-pointer font-medium roco-title-font hidden sm:inline"
             title="回顾世界序章与创世神兽起源"
           >
             天命序章
           </button>
           <button
             onClick={() => setIsQuestLogOpen(true)}
-            className="px-2.5 py-1 rounded-lg text-xs text-slate-300 hover:text-white bg-slate-800/60 hover:bg-slate-750 border border-slate-700/60 transition-all cursor-pointer font-medium hidden sm:inline"
+            className="px-2 py-1 rounded-lg text-xs text-slate-300 hover:text-white bg-slate-800/60 hover:bg-slate-750 border border-slate-700/60 transition-all cursor-pointer font-medium hidden md:inline"
             title="查看主线修道任务"
           >
             历练日志
@@ -564,7 +650,7 @@ export default function App() {
             className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-750 text-slate-300 hover:text-white transition-colors cursor-pointer border border-slate-700/60"
             title={soundEnabled ? '音效开启' : '音效静音'}
           >
-            {soundEnabled ? <Volume2 className="w-3.5 h-3.5 text-cyan-400" /> : <VolumeX className="w-3.5 h-3.5" />}
+            {soundEnabled ? <Volume2 className="w-3.5 h-3.5 text-amber-300" /> : <VolumeX className="w-3.5 h-3.5" />}
           </button>
         </div>
       </header>
@@ -613,15 +699,15 @@ export default function App() {
 
 
       {/* 3. Subtle RPG Footer */}
-      <footer className="w-full max-w-5xl bg-slate-900/60 border border-slate-800/80 rounded-b-2xl px-4 py-2 flex flex-wrap items-center justify-between text-[11px] text-slate-400 mt-1">
+      <footer className="w-full max-w-5xl bg-[#040e1b]/90 border-x-2 border-b-2 border-[#b8860b]/40 rounded-b-2xl px-4 py-2 flex flex-wrap items-center justify-between text-[11px] text-slate-400 mt-1">
         <div className="flex items-center gap-2">
-          <span className="text-cyan-400 font-medium">✦ 幻灵大陆</span>
-          <span className="text-slate-500">·</span>
-          <span>纯正回合制幻灵契约与形态蜕变 RPG · 点击地面探索移动</span>
+          <span className="text-amber-400 font-bold roco-title-font">◇ 幻灵大陆</span>
+          <span className="text-slate-600">·</span>
+          <span>纯正经典回合制幻灵契约与技能对决 · 参考洛克王国网页游戏</span>
         </div>
-        <div className="hidden sm:flex items-center gap-3 text-slate-400 font-mono text-[10px]">
+        <div className="hidden sm:flex items-center gap-3 text-amber-200/80 font-mono text-[10px]">
           <span>全图鉴收录 16 种天地神兽</span>
-          <span className="text-slate-600">|</span>
+          <span className="text-amber-600">|</span>
           <span>五行相生相克法则</span>
         </div>
       </footer>
@@ -709,6 +795,39 @@ export default function App() {
           onAddFriend={handleAddFriend}
           onRemoveFriend={handleRemoveFriend}
           onExchangeReward={handleExchangeReward}
+        />
+      )}
+
+      {/* In-Game Developer & GM Tool Console Modal */}
+      {isGmOpen && (
+        <GmToolModal
+          party={party}
+          playerCoins={playerCoins}
+          inventory={inventory}
+          currentSceneId={currentSceneId}
+          unlockedSpeciesIds={unlockedSpeciesIds}
+          quests={quests}
+          spiritShards={spiritShards}
+          playerName={playerName}
+          onSetCoins={(coins) => setPlayerCoins(coins)}
+          onSetSpiritShards={(shards) => setSpiritShards(shards)}
+          onAddItem={(itemId, count) => handleAddItem(itemId, count)}
+          onSetParty={(newParty) => setParty(newParty)}
+          onTeleport={(sceneId) => {
+            setCurrentSceneId(sceneId);
+            setActiveBattle({ inBattle: false, enemyPet: null, isWild: true });
+          }}
+          onUnlockAllSpecies={() => setUnlockedSpeciesIds(Object.keys(PET_SPECIES))}
+          onCompleteAllQuests={() => {
+            setQuests((prev) =>
+              prev.map((q) => ({ ...q, currentCount: q.targetCount, status: 'COMPLETED' }))
+            );
+          }}
+          onHealAll={handleHealParty}
+          onOpenPrologue={() => setIsPrologueOpen(true)}
+          onResetSave={handleResetSave}
+          onImportSave={handleImportSave}
+          onClose={() => setIsGmOpen(false)}
         />
       )}
     </div>

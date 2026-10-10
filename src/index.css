@@ -261,3 +261,217 @@
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(56, 189, 248, 0.7);
 }
+
+/* =========================================================================
+   Roco Kingdom (洛克王国) Classic Fantasy Web Game Theme Tokens
+   ========================================================================= */
+
+/* Typography & Titles */
+.roco-title-font {
+  font-family: "Noto Serif SC", "Source Han Serif CN", "Songti SC", "SimSun", "STSong", "KaiTi", serif;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.roco-gold-text {
+  background: linear-gradient(180deg, #fffbeb 0%, #fde68a 35%, #f59e0b 70%, #d97706 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 6px rgba(217, 119, 6, 0.5));
+}
+
+.roco-seal {
+  background: linear-gradient(135deg, #b91c1c 0%, #991b1b 60%, #7f1d1d 100%);
+  border: 1px solid rgba(254, 240, 138, 0.7);
+  color: #fef08a;
+  font-family: "Songti SC", "SimSun", serif;
+  border-radius: 3px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+}
+
+/* Frosted Glass Plaque with Antique Gold Borders */
+.roco-panel {
+  background: linear-gradient(135deg, rgba(10, 25, 42, 0.82) 0%, rgba(6, 17, 28, 0.88) 100%);
+  border: 1.5px solid rgba(217, 170, 75, 0.5);
+  box-shadow: 
+    inset 0 1px 1px rgba(254, 240, 138, 0.3),
+    0 12px 32px rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 18px;
+  position: relative;
+}
+
+/* Gauge Tracks with Beveled Metallic Gold Frame */
+.roco-gauge-track {
+  background: rgba(3, 9, 16, 0.95);
+  border: 1.5px solid rgba(217, 170, 75, 0.7);
+  border-radius: 9999px;
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.85),
+    0 1px 2px rgba(254, 240, 138, 0.3);
+  padding: 1.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* HP Coral-Red Gauge Fill */
+.roco-gauge-hp {
+  background: linear-gradient(180deg, #f87171 0%, #ef4444 45%, #dc2626 75%, #991b1b 100%);
+  border-radius: 9999px;
+  box-shadow: 
+    inset 0 1px 2px rgba(255, 255, 255, 0.7),
+    0 0 10px rgba(239, 68, 68, 0.6);
+  height: 100%;
+  transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* MP Cyan-Blue Gauge Fill */
+.roco-gauge-mp {
+  background: linear-gradient(180deg, #67e8f9 0%, #38bdf8 45%, #0284c7 75%, #0369a1 100%);
+  border-radius: 9999px;
+  box-shadow: 
+    inset 0 1px 2px rgba(255, 255, 255, 0.7),
+    0 0 10px rgba(56, 189, 248, 0.6);
+  height: 100%;
+  transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Action Order Track */
+.roco-action-track {
+  background: rgba(5, 14, 24, 0.9);
+  border: 1.5px solid rgba(217, 170, 75, 0.6);
+  border-radius: 9999px;
+  box-shadow: 
+    inset 0 2px 5px rgba(0, 0, 0, 0.8),
+    0 0 14px rgba(217, 119, 6, 0.25);
+}
+
+/* Circular Medallion Utility Buttons (Top Right: 拥存, 逃跑) */
+.roco-medallion-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #2a3749 0%, #111a26 65%, #070d14 100%);
+  border: 2px solid #d4af37;
+  box-shadow: 
+    inset 0 1px 2px rgba(255, 240, 180, 0.6),
+    0 4px 10px rgba(0, 0, 0, 0.7),
+    0 0 8px rgba(212, 175, 55, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+.roco-medallion-btn:hover {
+  transform: translateY(-2px) scale(1.06);
+  border-color: #fde047;
+  box-shadow: 
+    inset 0 1px 3px rgba(255, 255, 255, 0.8),
+    0 6px 14px rgba(0, 0, 0, 0.8),
+    0 0 14px rgba(250, 204, 21, 0.65);
+}
+.roco-medallion-btn:active {
+  transform: translateY(1px) scale(0.96);
+}
+
+/* In-Scene Elemental Badges (WOOD, FIRE) */
+.roco-element-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2.5px solid #d4af37;
+  box-shadow: 
+    inset 0 1px 2px rgba(255, 255, 255, 0.6),
+    0 4px 12px rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+/* Primary Large Skill Orb (e.g. 藤蔓缠绕) */
+.roco-skill-primary {
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  border: 3.5px solid #facc15;
+  outline: 2px solid #854d0e;
+  outline-offset: 1px;
+  background: radial-gradient(circle at 40% 35%, #059669 0%, #047857 35%, #064e3b 75%, #022c22 100%);
+  box-shadow: 
+    inset 0 2px 5px rgba(255, 255, 255, 0.6),
+    0 0 22px rgba(74, 222, 128, 0.6),
+    0 8px 18px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+.roco-skill-primary:hover {
+  transform: scale(1.08);
+  border-color: #fef08a;
+  box-shadow: 
+    inset 0 2px 7px rgba(255, 255, 255, 0.8),
+    0 0 32px rgba(74, 222, 128, 0.9),
+    0 10px 24px rgba(0, 0, 0, 0.9);
+}
+.roco-skill-primary:active {
+  transform: scale(0.96);
+}
+
+/* Secondary Skill Orbs (e.g. 治愈之光, 烈焰之息, 凤凰涅槃) */
+.roco-skill-secondary {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2.5px solid #d4af37;
+  box-shadow: 
+    inset 0 1px 3px rgba(255, 255, 255, 0.5),
+    0 4px 12px rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+.roco-skill-secondary:hover {
+  transform: scale(1.12);
+  border-color: #fef08a;
+  box-shadow: 
+    inset 0 1px 4px rgba(255, 255, 255, 0.8),
+    0 0 20px currentColor,
+    0 6px 16px rgba(0, 0, 0, 0.85);
+}
+.roco-skill-secondary:active {
+  transform: scale(0.95);
+}
+
+/* Battle Directory Log Slate */
+.roco-log-box {
+  background: linear-gradient(180deg, rgba(8, 20, 34, 0.88) 0%, rgba(4, 12, 22, 0.95) 100%);
+  border: 1.5px solid rgba(217, 170, 75, 0.4);
+  border-radius: 14px;
+  box-shadow: 
+    inset 0 1px 1px rgba(254, 240, 138, 0.2),
+    0 6px 18px rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Turn Indicator Capsule */
+.roco-turn-capsule {
+  background: linear-gradient(90deg, rgba(120, 53, 15, 0.25) 0%, rgba(5, 14, 24, 0.92) 25%, rgba(5, 14, 24, 0.92) 75%, rgba(120, 53, 15, 0.25) 100%);
+  border: 1.5px solid rgba(245, 158, 11, 0.65);
+  border-radius: 9999px;
+  box-shadow: 
+    0 0 16px rgba(245, 158, 11, 0.3),
+    0 4px 10px rgba(0, 0, 0, 0.6);
+}
+

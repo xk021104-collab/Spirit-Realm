@@ -6,6 +6,7 @@ import { PetAvatar, ELEMENT_COLORS } from './PetAvatar';
 import { ArtGalleryModal } from './ArtGalleryModal';
 import { PokedexBackground, CelestialAtmosphereMode } from './PokedexBackground';
 import { sound } from '../utils/audio';
+import { IconSpellbook, IconGuluBall } from './GameIcons';
 import {
   BookOpen,
   Search,
@@ -58,7 +59,7 @@ const ELEMENT_TABS: ElementTabConfig[] = [
   {
     key: 'ALL',
     label: '全部',
-    subLabel: '诸天全灵',
+    subLabel: '全部收录',
     icon: Sparkles,
     colorClass: {
       active: 'bg-amber-500 text-slate-950 border-amber-300 shadow-amber-500/30',
@@ -257,41 +258,41 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
         <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 bg-gradient-to-b from-[#081a2e]/95 via-[#061426]/90 to-transparent border-b border-[#b8860b]/40 z-10 shadow-md">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-700/30 border-2 border-[#d4af37]/60 flex items-center justify-center text-amber-300 shadow-md">
-              <BookOpen className="w-5 h-5 text-amber-300" />
+              <IconSpellbook size={28} />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-lg sm:text-xl font-bold roco-gold-text tracking-wide roco-title-font flex items-center gap-2">
-                  诸天幻灵图鉴 · 乾坤灵物志
+                  洛克王国 · 皇家魔兽图鉴
                 </h2>
                 <span className="roco-seal text-[10px] px-1.5 py-0.2 font-bold tracking-wider">
                   图鉴
                 </span>
                 <span className="text-[10px] bg-amber-500/10 text-amber-300 border border-amber-400/30 px-2 py-0.5 rounded font-mono font-medium hidden sm:inline">
-                  CELESTIAL CODEX
+                  ROYAL POKEDEX
                 </span>
               </div>
               <p className="text-[11px] text-slate-300 flex items-center gap-2 mt-0.5">
-                <span>契约诸天万物灵兽，勘破太古演变真形</span>
+                <span>收录王国全体宠物精灵，掌握属性克制与进化秘籍</span>
                 <span className="text-amber-400">·</span>
                 <span className="text-cyan-300 font-mono font-medium">
-                  已收录 {unlockedCount} / {totalCount} 尊 ({completionPercentage}%)
+                  已收录 {unlockedCount} / {totalCount} 只 ({completionPercentage}%)
                 </span>
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-3 sm:gap-5">
-            {/* Xianxia Atmosphere Mood Switcher (古风仙境天象切换) */}
+            {/* Atmosphere Mood Switcher */}
             <div className="hidden md:flex items-center gap-1 bg-[#060a1e]/80 border border-indigo-500/30 rounded-xl p-1 shadow-inner">
               <span className="text-[10px] text-indigo-300 font-bold px-1.5 flex items-center gap-1">
                 <Cloud className="w-3 h-3 text-cyan-300" />
                 <span>天象:</span>
               </span>
               {[
-                { key: 'PURPLE_MIST' as const, label: '紫霄云海' },
-                { key: 'STARRY_NIGHT' as const, label: '幽夜星河' },
-                { key: 'CYAN_AURORA' as const, label: '青冥仙光' },
+                { key: 'PURPLE_MIST' as const, label: '魔法紫霄' },
+                { key: 'STARRY_NIGHT' as const, label: '幽夜星空' },
+                { key: 'CYAN_AURORA' as const, label: '秘境极光' },
               ].map((m) => (
                 <button
                   key={m.key}
@@ -345,7 +346,7 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
                           ? 'bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold border-amber-300 animate-pulse cursor-pointer shadow-md'
                           : 'bg-slate-900 border-slate-800 text-slate-400 opacity-60'
                       }`}
-                      title={canClaim ? `领取奖励: ${m.coins} 灵石 + 灵晶` : `需收服 ${m.target} 尊幻灵`}
+                      title={canClaim ? `领取奖励: ${m.coins} 洛克贝 + 咕噜球` : `需收服 ${m.target} 只宠物`}
                     >
                       <Gift className="w-3 h-3" />
                       <span>{m.label}</span>
@@ -362,10 +363,10 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
                 sound.playClick();
                 onClose();
               }}
-              className="roco-medallion-btn text-amber-200 cursor-pointer"
+              className="roco-close-btn shrink-0"
               title="关闭图鉴"
             >
-              <X className="w-5 h-5 text-amber-200 filter drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" />
+              <X className="w-5 h-5" />
             </button>
           </div>
         </div>
@@ -376,7 +377,7 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-thin">
             <span className="text-indigo-300 text-xs font-medium mr-1 shrink-0 flex items-center gap-1">
               <Filter className="w-3.5 h-3.5 text-indigo-400" />
-              <span>属性灵脉:</span>
+              <span>属性系别:</span>
             </span>
 
             {ELEMENT_TABS.map((tab) => {
@@ -461,7 +462,7 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
             {filteredList.length === 0 ? (
               <div className="h-64 flex flex-col items-center justify-center text-slate-500 gap-2">
                 <BookOpen className="w-10 h-10 text-indigo-400" />
-                <p className="text-sm text-indigo-200">该属性灵脉下暂无匹配的幻灵伙伴</p>
+                <p className="text-sm text-indigo-200">该系别下暂无匹配的宠物伙伴</p>
                 <button
                   onClick={() => {
                     setActiveElementTab('ALL');
@@ -535,13 +536,13 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
                             isSelected ? 'text-amber-300' : isUnlocked ? 'text-white' : 'text-slate-500'
                           }`}
                         >
-                          {isUnlocked ? sp.name : '神秘灵兽'}
+                          {isUnlocked ? sp.name : '神秘宠物'}
                         </div>
                         <div className="text-[10px] text-slate-400 mt-0.5 flex items-center justify-center gap-1">
                           {isUnlocked ? (
                             <span className={rarityBadge.text}>{rarityBadge.stars} {rarityBadge.label}</span>
                           ) : (
-                            <span>探索秘境收服</span>
+                            <span>探索场景咕噜球捕获</span>
                           )}
                         </div>
                       </div>
@@ -570,7 +571,7 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
                           ELEMENT_COLORS[selectedSpecies.type].border
                         }`}
                       >
-                        {ELEMENT_COLORS[selectedSpecies.type].label}系幻灵
+                        {ELEMENT_COLORS[selectedSpecies.type].label}系宠物
                       </span>
                       <span
                         className={`text-[10px] px-2 py-0.5 rounded font-bold border ${
@@ -620,7 +621,7 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
                       <div className="w-20 h-20 rounded-full bg-slate-900 border-2 border-dashed border-slate-700 flex items-center justify-center text-slate-600 mb-2">
                         <Lock className="w-8 h-8" />
                       </div>
-                      <span className="text-xs text-slate-400">灵晶封印中 · 前往场景探索捕捉</span>
+                      <span className="text-xs text-slate-400">尚未收服 · 前往场景探索用咕噜球捕获</span>
                     </div>
                   )}
 
@@ -635,7 +636,7 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
                   <div className="flex items-center justify-between text-xs font-bold text-slate-300 border-b border-slate-800 pb-1.5">
                     <span className="flex items-center gap-1.5 text-amber-400">
                       <Zap className="w-3.5 h-3.5" />
-                      <span>天地种族值资质</span>
+                      <span>六维种族值数据</span>
                     </span>
                     <span className="font-mono text-amber-300">
                       种族总和: <strong className="text-sm font-black">{statTotal}</strong>
@@ -644,11 +645,11 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
 
                   <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
                     {[
-                      { label: '生命 HP', val: selectedSpecies.baseStats.hp, max: 130, color: 'from-rose-500 to-rose-400' },
+                      { label: '精力 HP', val: selectedSpecies.baseStats.hp, max: 130, color: 'from-rose-500 to-rose-400' },
                       { label: '物攻 ATK', val: selectedSpecies.baseStats.atk, max: 140, color: 'from-amber-500 to-orange-400' },
                       { label: '物防 DEF', val: selectedSpecies.baseStats.def, max: 130, color: 'from-blue-500 to-cyan-400' },
-                      { label: '特攻 SP.ATK', val: selectedSpecies.baseStats.spAtk, max: 150, color: 'from-purple-500 to-indigo-400' },
-                      { label: '特防 SP.DEF', val: selectedSpecies.baseStats.spDef, max: 130, color: 'from-teal-500 to-emerald-400' },
+                      { label: '魔攻 SP.ATK', val: selectedSpecies.baseStats.spAtk, max: 150, color: 'from-purple-500 to-indigo-400' },
+                      { label: '魔抗 SP.DEF', val: selectedSpecies.baseStats.spDef, max: 130, color: 'from-teal-500 to-emerald-400' },
                       { label: '速度 SPEED', val: selectedSpecies.baseStats.speed, max: 130, color: 'from-yellow-400 to-amber-300' },
                     ].map((stat) => (
                       <div key={stat.label} className="space-y-0.5">
@@ -671,7 +672,7 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
                 <div className="bg-slate-900/90 rounded-xl p-3.5 border border-slate-800 space-y-2">
                   <span className="text-xs font-bold text-amber-400 flex items-center gap-1.5">
                     <Sword className="w-3.5 h-3.5" />
-                    <span>本命传承招式</span>
+                    <span>宠物招式技能</span>
                   </span>
 
                   <div className="grid grid-cols-2 gap-2">
@@ -703,7 +704,7 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
                 <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-2.5 text-xs text-amber-200">
                   <Compass className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
                   <div>
-                    <strong className="text-amber-300 block mb-0.5">契约机缘与栖息地：</strong>
+                    <strong className="text-amber-300 block mb-0.5">获取途径与栖息地：</strong>
                     <span>{selectedSpecies.acquisitionMethod}</span>
                   </div>
                 </div>

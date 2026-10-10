@@ -31,6 +31,17 @@ import {
   Gift,
   User,
 } from 'lucide-react';
+import {
+  IconGuluBall,
+  IconRocoCoin,
+  IconMagicBag,
+  IconSpellbook,
+  IconMagicShop,
+  IconKingdomMap,
+  IconColiseum,
+  IconMagicPotion,
+  IconMagicMail,
+} from './GameIcons';
 
 interface SceneViewProps {
   currentScene: SceneConfig;
@@ -196,53 +207,20 @@ export const SceneView: React.FC<SceneViewProps> = ({
     <div className="relative w-full max-w-5xl mx-auto flex flex-col items-center select-none">
       {/* 1. Celestial Fantasy Viewport Frame */}
       <div className="w-full rounded-2xl overflow-hidden relative flex flex-col shadow-2xl border-2 border-[#b8860b]/40 bg-[#06111f]">
-        {/* Top HUD: Elegant Player Status, Realm Plaque & Wealth */}
-        <div className="h-14 bg-gradient-to-r from-[#061426] via-[#091b30] to-[#061426] border-b border-[#b8860b]/30 px-4 flex items-center justify-between z-30 gap-3">
-          {/* Left: Player Profile */}
-          <div
-            onClick={() => {
-              sound.playClick();
-              setIsCharacterModalOpen(true);
-            }}
-            className="flex items-center gap-3 shrink-0 cursor-pointer group p-1 -m-1 rounded-xl hover:bg-slate-800/40 transition-colors"
-            title="点击查看灵契神师命途资质与全屏立绘"
-          >
-            <div className="relative">
-              <div className="w-10 h-10 rounded-full border border-cyan-400/50 bg-gradient-to-b from-slate-900 to-indigo-950 p-0.5 shadow-md flex items-center justify-center overflow-hidden ring-2 ring-cyan-500/20 group-hover:ring-cyan-300 transition-all">
-                <PlayerAvatar size={34} />
-              </div>
-              <span className="absolute -bottom-1 -right-1 bg-cyan-500 text-slate-950 text-[9px] font-bold px-1.5 py-0.2 rounded-full border border-cyan-300">
-                Lv.25
-              </span>
-            </div>
-
-            <div className="flex flex-col">
+        {/* Top Scene Ribbon Bar (洛克王国经典场景金卷轴与快捷操作) */}
+        <div className="h-13 bg-gradient-to-r from-[#061426] via-[#091b30] to-[#061426] border-b border-[#b8860b]/40 px-3 sm:px-4 flex items-center justify-between z-30 gap-2">
+          {/* Left: Classic Scene Ribbon Banner */}
+          <div className="flex items-center gap-2">
+            <div className="roco-scene-ribbon">
+              <MapPin className="w-4 h-4 text-amber-300 animate-pulse shrink-0" />
               <div className="flex items-center gap-1.5">
-                <span className="font-bold text-xs sm:text-sm text-slate-100 tracking-wide group-hover:text-cyan-300 transition-colors">
-                  {playerName}
+                <span className="roco-title-font font-black text-xs sm:text-sm text-amber-200 tracking-wider">
+                  {currentScene.name}
                 </span>
-                <span className="text-[10px] text-cyan-300/90 font-light hidden xs:inline">
-                  灵契神师 ✦
+                <span className="text-[10px] text-amber-300/70 hidden sm:inline font-mono">
+                  · {currentScene.region}
                 </span>
               </div>
-              {/* Spirit Energy Bar */}
-              <div className="flex items-center gap-2 text-[10px] text-slate-400 font-mono">
-                <div className="w-20 sm:w-28 h-1.5 bg-slate-800 rounded-full overflow-hidden border border-slate-700/60">
-                  <div className="h-full bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full w-4/5" />
-                </div>
-                <span className="text-cyan-400 text-[9px]">灵力 1,840/2,000</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Center: Realm Compass Plaque */}
-          <div className="flex items-center gap-2 shrink truncate">
-            <div className="px-3 py-1 rounded-xl bg-slate-900/80 border border-cyan-500/30 flex items-center gap-2 shadow-inner">
-              <MapPin className="w-3.5 h-3.5 text-cyan-400 animate-pulse shrink-0" />
-              <span className="font-bold text-xs sm:text-sm text-cyan-100 tracking-wide truncate">
-                {currentScene.name}
-              </span>
-              <span className="text-[10px] text-slate-400 hidden md:inline">· {currentScene.region}</span>
             </div>
 
             <button
@@ -250,30 +228,47 @@ export const SceneView: React.FC<SceneViewProps> = ({
                 sound.playClick();
                 setIsMapModalOpen(true);
               }}
-              className="px-2.5 py-1 rounded-xl text-xs text-cyan-200 hover:text-white bg-cyan-950/50 hover:bg-cyan-900/60 border border-cyan-500/30 transition-all cursor-pointer flex items-center gap-1 shrink-0 font-medium"
-              title="查看世界秘境地图并瞬间传送"
+              className="roco-action-pill text-[11px] py-1 px-3 shadow-md"
+              title="查看诸天秘境全景地图并快速传送"
             >
-              <Compass className="w-3.5 h-3.5 text-cyan-400" />
-              <span className="hidden sm:inline">秘境罗盘</span>
+              <Compass className="w-3.5 h-3.5 text-amber-300" />
+              <span className="hidden xs:inline">大地图</span>
             </button>
           </div>
 
-          {/* Right: Currencies & Utilities */}
-          <div className="flex items-center gap-2 shrink-0">
-            {/* Spirit Stones */}
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-900/80 border border-cyan-500/25 text-xs font-mono font-bold text-cyan-300 shadow-inner">
-              <Coins className="w-3.5 h-3.5 text-cyan-400" />
-              <span>{playerCoins}</span>
-              <span className="text-[10px] text-slate-400 font-normal hidden sm:inline">灵石</span>
+          {/* Right: Quick Full Heal, Wealth & Sound Utilities */}
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            {/* Quick Heal Party Button */}
+            <button
+              onClick={() => {
+                sound.playHeal();
+                onHealParty();
+                setHealNotice('✨ 圣域甘露！全队幻灵气血与招式已回复至圆满状态！');
+                setTimeout(() => setHealNotice(null), 3000);
+              }}
+              className="roco-action-pill bg-gradient-to-b from-rose-950/80 to-rose-900/60 text-rose-200 hover:text-white border-rose-500/50"
+              title="圣泉调息 · 秒回全队幻灵满气血满灵力"
+            >
+              <Heart className="w-3.5 h-3.5 text-rose-400 fill-rose-500/30" />
+              <span className="hidden sm:inline">圣泉回血</span>
+            </button>
+
+            {/* Roco Coins Display */}
+            <div className="roco-currency-badge" title="王国流通货币：洛克贝">
+              <IconRocoCoin size={20} />
+              <span className="font-mono text-xs font-bold text-amber-300">
+                {playerCoins.toLocaleString()}
+              </span>
+              <span className="text-[10px] text-amber-400 font-bold hidden sm:inline">洛克贝</span>
             </div>
 
             {/* Audio Toggle */}
             <button
               onClick={onToggleSound}
-              className="p-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-750 text-slate-300 hover:text-white transition-colors cursor-pointer border border-slate-700/60"
+              className="p-1.5 rounded-full bg-slate-800/80 hover:bg-slate-750 text-slate-300 hover:text-white transition-colors cursor-pointer border border-slate-700/60"
               title={soundEnabled ? '音效开启' : '音效静音'}
             >
-              {soundEnabled ? <Volume2 className="w-3.5 h-3.5 text-cyan-400" /> : <VolumeX className="w-3.5 h-3.5" />}
+              {soundEnabled ? <Volume2 className="w-3.5 h-3.5 text-amber-300" /> : <VolumeX className="w-3.5 h-3.5" />}
             </button>
           </div>
         </div>
@@ -375,7 +370,7 @@ export const SceneView: React.FC<SceneViewProps> = ({
             );
           })}
 
-          {/* Scene NPCs with Clean Beacon & High-End Nameplate */}
+          {/* Scene NPCs with Roco Kingdom Quest Beacon & Nameplate */}
           {currentScene.npcs.map((npc) => (
             <div
               key={npc.id}
@@ -386,14 +381,14 @@ export const SceneView: React.FC<SceneViewProps> = ({
               style={{ left: `${npc.x}%`, top: `${npc.y}%` }}
               className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group flex flex-col items-center z-20"
             >
-              {/* NPC Quest Beacon */}
+              {/* NPC Quest Beacon (洛克王国经典金感叹号/任务标记) */}
               <div className="flex flex-col items-center mb-1 group-hover:scale-105 transition-transform">
-                <span className="text-cyan-400 text-xs font-bold animate-bounce filter drop-shadow-[0_0_6px_#38bdf8]">
-                  ✦
-                </span>
-                <div className="bg-slate-900/90 text-slate-100 text-[10px] font-medium px-2 py-0.5 rounded-full shadow-lg border border-cyan-500/30 flex items-center gap-1.5 whitespace-nowrap backdrop-blur-md">
-                  <span className="font-bold text-cyan-200">{npc.name}</span>
-                  <span className="text-[9px] text-slate-400 border-l border-slate-700 pl-1 font-light">
+                <div className="roco-npc-marker w-6 h-6 rounded-full bg-gradient-to-br from-yellow-300 via-amber-400 to-amber-600 border-2 border-yellow-100 flex items-center justify-center text-slate-950 font-black text-xs shadow-lg mb-0.5">
+                  !
+                </div>
+                <div className="roco-roamer-tag">
+                  <span className="roco-title-font font-bold text-amber-200 text-[10px]">{npc.name}</span>
+                  <span className="text-[9px] text-slate-400 border-l border-amber-500/40 pl-1 font-normal">
                     {npc.role}
                   </span>
                 </div>
@@ -406,12 +401,13 @@ export const SceneView: React.FC<SceneViewProps> = ({
             </div>
           ))}
 
-          {/* Roaming Wild Spirits Spaced Out Naturally with Elemental Ring & Level Plate */}
+          {/* Roaming Wild Spirits Spaced Out with Roco Kingdom Overhead Capsule (野生精灵洛克血条标牌) */}
           {currentScene.wildPets.map((wp, index) => {
             const sp = PET_SPECIES[wp.speciesId];
             if (!sp) return null;
             const xPos = index === 0 ? 25 : 72;
             const yPos = index === 0 ? 52 : 68;
+            const elColor = ELEMENT_COLORS[sp.type];
 
             const auraColor =
               sp.type === 'FIRE'
@@ -434,18 +430,33 @@ export const SceneView: React.FC<SceneViewProps> = ({
                   handleWildPetClick(wp.speciesId, wp.minLevel, wp.maxLevel);
                 }}
                 style={{ left: `${xPos}%`, top: `${yPos}%` }}
-                className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group flex flex-col items-center z-20 animate-bounce"
+                className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group flex flex-col items-center z-20 roco-pet-float"
               >
-                {/* Level Tag & Swords Trigger Badge */}
-                <div className="flex items-center gap-1.5 bg-slate-900/90 px-2 py-0.5 rounded-full border border-cyan-500/30 text-[9px] text-cyan-200 font-medium mb-1 shadow-md group-hover:scale-105 transition-transform whitespace-nowrap backdrop-blur-md">
-                  <Swords className="w-2.5 h-2.5 text-cyan-400" />
-                  <span>
-                    {sp.name} · Lv.{wp.minLevel}
+                {/* Roco Kingdom Classic Wild Pet Overhead Pill */}
+                <div className="roco-roamer-tag mb-1 group-hover:scale-110 transition-all">
+                  {/* Element Badge */}
+                  <span className={`w-3.5 h-3.5 rounded-full flex items-center justify-center text-[9px] font-black ${elColor.bg} ${elColor.text} border border-amber-400/60`}>
+                    {elColor.label}
+                  </span>
+                  {/* Pet Name & Level */}
+                  <span className="roco-title-font font-bold text-[10px] text-slate-100">
+                    {sp.name}
+                  </span>
+                  <span className="font-mono text-[9px] text-amber-300 font-bold">
+                    Lv.{wp.minLevel}
+                  </span>
+                  {/* Mini HP Track */}
+                  <div className="w-8 roco-gauge-track h-1.5 hidden sm:block">
+                    <div className="roco-gauge-hp" style={{ width: '100%' }} />
+                  </div>
+                  {/* Hover prompt */}
+                  <span className="hidden group-hover:inline text-[8px] text-amber-400 font-bold pl-0.5 animate-pulse">
+                    ⚔ 对决
                   </span>
                 </div>
 
                 <div className="relative">
-                  <PetAvatar speciesId={wp.speciesId} size={56} />
+                  <PetAvatar speciesId={wp.speciesId} size={58} />
                   <div className={`w-14 h-3.5 rounded-full border shadow-md blur-2xs mx-auto -mt-1.5 animate-pulse ${auraColor}`} />
                 </div>
               </div>
@@ -547,159 +558,197 @@ export const SceneView: React.FC<SceneViewProps> = ({
             })}
         </div>
 
-        {/* 3. Modern Celestial Navigation Dock Toolbar */}
-        <div className="bg-gradient-to-t from-[#040e1b] via-[#061426] to-[#081a2e]/95 border-t-2 border-[#b8860b]/40 py-2.5 px-4 flex items-center justify-around sm:justify-center sm:gap-5 z-30 shadow-2xl backdrop-blur-xl">
-          {/* 1. Spirit Party */}
-          <button
+        {/* 3. Authentic Roco Kingdom Magic Navigation Dock (洛克王国标志性底部魔法操作台) */}
+        <div className="roco-dock-bar py-2 px-3 sm:px-6 flex items-center justify-around sm:justify-center sm:gap-4 md:gap-5 z-30 shadow-2xl backdrop-blur-xl">
+          {/* 1. Spirit Party with 6 Mini Slots Preview (魔法行囊) */}
+          <div
             onClick={() => {
               sound.playClick();
               onOpenPetBag();
             }}
-            className="celestial-dock-btn group px-2.5 py-1.5 hover:bg-slate-800/60 rounded-xl"
+            className="roco-dock-btn group"
+            title="点击打开魔法行囊 · 随行魔灵与道具"
           >
             <div className="relative">
-              <Backpack className="w-5 h-5 text-cyan-400 group-hover:scale-110 transition-transform" />
-              <span className="absolute -top-1.5 -right-2.5 bg-cyan-500 text-slate-950 text-[9px] font-bold px-1 rounded-full border border-cyan-200">
+              <div className="roco-dock-icon-circle border-[#facc15] shadow-[0_0_12px_rgba(250,204,21,0.5)]">
+                <IconMagicBag size={30} />
+              </div>
+              <span className="absolute -top-1 -right-2 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 text-[10px] font-black px-1.5 py-0.2 rounded-full border border-yellow-200 shadow font-mono">
                 {playerParty.length}/6
               </span>
             </div>
-            <span className="text-[11px] font-medium text-slate-300 group-hover:text-cyan-300 mt-1">随行幻灵</span>
+            {/* 6 Mini Party Orbs Preview Indicator (洛克王国特色6宠血量状态点) */}
+            <div className="flex items-center gap-0.5 mt-1 pointer-events-none">
+              {Array.from({ length: 6 }).map((_, i) => {
+                const pet = playerParty[i];
+                return (
+                  <div
+                    key={i}
+                    className={`w-2.5 h-2.5 rounded-full border transition-all ${
+                      pet
+                        ? pet.currentHp > 0
+                          ? 'bg-emerald-400 border-yellow-300 shadow-[0_0_4px_#34d399]'
+                          : 'bg-rose-500 border-rose-300'
+                        : 'bg-slate-800/80 border-slate-700'
+                    }`}
+                  />
+                );
+              })}
+            </div>
+            <span className="text-[11px] font-bold text-amber-200 group-hover:text-amber-100 roco-title-font tracking-wider mt-0.5">
+              魔法行囊
+            </span>
+          </div>
+
+          {/* 2. World Map (王国大地图) */}
+          <button
+            onClick={() => {
+              sound.playClick();
+              setIsMapModalOpen(true);
+            }}
+            className="roco-dock-btn group"
+            title="打开洛克王国全域地图"
+          >
+            <div className="roco-dock-icon-circle">
+              <IconKingdomMap size={26} />
+            </div>
+            <span className="text-[11px] font-bold text-slate-200 group-hover:text-amber-200 roco-title-font tracking-wider mt-1">
+              王国地图
+            </span>
           </button>
 
-          {/* 2. Friends & Social System */}
-          {onOpenFriends && (
-            <button
-              onClick={() => {
-                sound.playClick();
-                onOpenFriends();
-              }}
-              className="celestial-dock-btn group px-2.5 py-1.5 hover:bg-slate-800/60 rounded-xl relative"
-            >
-              <div className="relative">
-                <Users className="w-5 h-5 text-teal-400 group-hover:scale-110 transition-transform" />
-                {claimableShardsCount > 0 && (
-                  <span className="absolute -top-1.5 -right-2 bg-rose-500 text-white text-[9px] font-bold px-1 rounded-full animate-bounce shadow-md">
-                    {claimableShardsCount}
-                  </span>
-                )}
-              </div>
-              <span className="text-[11px] font-medium text-slate-300 group-hover:text-teal-300 mt-1">仙友结社</span>
-            </button>
-          )}
-
-          {/* 3. Spirit Codex */}
+          {/* 3. Illustrated Pet Codex (魔兽图鉴) */}
           <button
             onClick={() => {
               sound.playClick();
               onOpenPokedex();
             }}
-            className="celestial-dock-btn group px-2.5 py-1.5 hover:bg-slate-800/60 rounded-xl"
+            className="roco-dock-btn group"
+            title="查看洛克王国魔兽图鉴"
           >
-            <BookOpen className="w-5 h-5 text-indigo-400 group-hover:scale-110 transition-transform" />
-            <span className="text-[11px] font-medium text-slate-300 group-hover:text-indigo-300 mt-1">诸天图鉴</span>
+            <div className="roco-dock-icon-circle">
+              <IconSpellbook size={26} />
+            </div>
+            <span className="text-[11px] font-bold text-slate-200 group-hover:text-indigo-200 roco-title-font tracking-wider mt-1">
+              魔兽图鉴
+            </span>
           </button>
 
-          {/* 4. Pet Cultivation / Evolution */}
+          {/* 4. Cultivation & Evolution (宠物训练室) */}
           {onOpenPetTrain && (
             <button
               onClick={() => {
                 sound.playClick();
                 onOpenPetTrain();
               }}
-              className="celestial-dock-btn group px-2.5 py-1.5 hover:bg-slate-800/60 rounded-xl"
+              className="roco-dock-btn group"
+              title="宠物训练室 · 学习招式与等级进阶"
             >
-              <Zap className="w-5 h-5 text-amber-400 group-hover:scale-110 transition-transform" />
-              <span className="text-[11px] font-medium text-slate-300 group-hover:text-amber-300 mt-1">幻灵修炼</span>
+              <div className="roco-dock-icon-circle">
+                <IconGuluBall size={26} />
+              </div>
+              <span className="text-[11px] font-bold text-slate-200 group-hover:text-amber-300 roco-title-font tracking-wider mt-1">
+                宠物训练
+              </span>
             </button>
           )}
 
-          {/* 5. Treasure Shop */}
+          {/* 5. Magic Bazaar Shop (跳跳集市) */}
           <button
             onClick={() => {
               sound.playClick();
               onOpenShop();
             }}
-            className="celestial-dock-btn group px-2.5 py-1.5 hover:bg-slate-800/60 rounded-xl"
+            className="roco-dock-btn group"
+            title="前往跳跳集市购买道具与咕噜球"
           >
-            <ShoppingBag className="w-5 h-5 text-emerald-400 group-hover:scale-110 transition-transform" />
-            <span className="text-[11px] font-medium text-slate-300 group-hover:text-emerald-300 mt-1">万象宝阁</span>
+            <div className="roco-dock-icon-circle">
+              <IconMagicShop size={26} />
+            </div>
+            <span className="text-[11px] font-bold text-slate-200 group-hover:text-emerald-200 roco-title-font tracking-wider mt-1">
+              跳跳集市
+            </span>
           </button>
 
-          {/* 6. Character Profile (Image 2) */}
-          <button
-            onClick={() => {
-              sound.playClick();
-              setIsCharacterModalOpen(true);
-            }}
-            className="celestial-dock-btn group px-2.5 py-1.5 hover:bg-slate-800/60 rounded-xl"
-          >
-            <User className="w-5 h-5 text-sky-400 group-hover:scale-110 transition-transform" />
-            <span className="text-[11px] font-medium text-slate-300 group-hover:text-sky-300 mt-1">天命角色</span>
-          </button>
+          {/* 6. Friends & Social (魔法好友) */}
+          {onOpenFriends && (
+            <button
+              onClick={() => {
+                sound.playClick();
+                onOpenFriends();
+              }}
+              className="roco-dock-btn group relative"
+              title="魔法好友录与星光碎片互赠"
+            >
+              <div className="relative">
+                <div className="roco-dock-icon-circle">
+                  <PlayerAvatar size={26} />
+                </div>
+                {claimableShardsCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-rose-500 text-white text-[9px] font-bold px-1.5 py-0.2 rounded-full animate-bounce shadow-md">
+                    {claimableShardsCount}
+                  </span>
+                )}
+              </div>
+              <span className="text-[11px] font-bold text-slate-200 group-hover:text-teal-200 roco-title-font tracking-wider mt-1">
+                魔法好友
+              </span>
+            </button>
+          )}
 
-          {/* 7. World Realm Map (Image 3) */}
-          <button
-            onClick={() => {
-              sound.playClick();
-              setIsMapModalOpen(true);
-            }}
-            className="celestial-dock-btn group px-2.5 py-1.5 hover:bg-slate-800/60 rounded-xl"
-          >
-            <Compass className="w-5 h-5 text-amber-300 group-hover:scale-110 transition-transform" />
-            <span className="text-[11px] font-medium text-slate-300 group-hover:text-amber-300 mt-1">诸天全图</span>
-          </button>
-
-          {/* 8. Full Heal */}
-          <button
-            onClick={() => {
-              sound.playHeal();
-              onHealParty();
-              setHealNotice('✨ 圣域甘露！全队幻灵气血与招式灵力已全部回复满状态！');
-              setTimeout(() => setHealNotice(null), 3000);
-            }}
-            className="celestial-dock-btn group px-2.5 py-1.5 hover:bg-slate-800/60 rounded-xl"
-          >
-            <Heart className="w-5 h-5 text-rose-400 group-hover:scale-110 transition-transform fill-rose-500/20" />
-            <span className="text-[11px] font-medium text-slate-300 group-hover:text-rose-300 mt-1">清修调息</span>
-          </button>
-
-          {/* 7. Quest Log */}
+          {/* 7. Quest Journal (学院手札) */}
           {onOpenQuestLog && (
             <button
               onClick={() => {
                 sound.playClick();
                 onOpenQuestLog();
               }}
-              className="celestial-dock-btn group px-2.5 py-1.5 hover:bg-slate-800/60 rounded-xl"
+              className="roco-dock-btn group"
+              title="王国学院主线任务手札"
             >
-              <Award className="w-5 h-5 text-sky-400 group-hover:scale-110 transition-transform" />
-              <span className="text-[11px] font-medium text-slate-300 group-hover:text-sky-300 mt-1">历练日志</span>
+              <div className="roco-dock-icon-circle">
+                <IconMagicMail size={26} />
+              </div>
+              <span className="text-[11px] font-bold text-slate-200 group-hover:text-sky-200 roco-title-font tracking-wider mt-1">
+                学院手札
+              </span>
             </button>
           )}
 
-          {/* 8. World Map */}
+          {/* 8. Full Heal (爱心治疗) */}
           <button
             onClick={() => {
-              sound.playClick();
-              setIsMapModalOpen(true);
+              sound.playHeal();
+              onHealParty();
+              setHealNotice('✨ 萌萌护士爱心治疗！全队宠物体力与招式灵力（PP）已全部恢复满状态！');
+              setTimeout(() => setHealNotice(null), 3000);
             }}
-            className="celestial-dock-btn group px-2.5 py-1.5 hover:bg-slate-800/60 rounded-xl"
+            className="roco-dock-btn group"
+            title="宠物爱心治疗 · 全队恢复满生命与PP"
           >
-            <Compass className="w-5 h-5 text-teal-400 group-hover:scale-110 transition-transform" />
-            <span className="text-[11px] font-medium text-slate-300 group-hover:text-teal-300 mt-1">秘境罗盘</span>
+            <div className="roco-dock-icon-circle">
+              <IconMagicPotion size={26} />
+            </div>
+            <span className="text-[11px] font-bold text-slate-200 group-hover:text-rose-200 roco-title-font tracking-wider mt-1">
+              爱心治疗
+            </span>
           </button>
 
-          {/* 9. High-Def Illustration Art Gallery */}
+          {/* 9. Player Character Detail (小魔法师档案) */}
           <button
             onClick={() => {
               sound.playClick();
-              setIsGalleryOpen(true);
+              setIsCharacterModalOpen(true);
             }}
-            className="celestial-dock-btn group px-2.5 py-1.5 hover:bg-slate-800/60 rounded-xl"
-            title="查看御三家幻灵及其进化形态的高精东方奇幻立绘画卷"
+            className="roco-dock-btn group"
+            title="查看小魔法师个人档案与装备"
           >
-            <Sparkles className="w-5 h-5 text-amber-400 group-hover:scale-110 transition-transform animate-pulse" />
-            <span className="text-[11px] font-medium text-amber-300 group-hover:text-amber-200 mt-1">立绘画卷</span>
+            <div className="roco-dock-icon-circle overflow-hidden">
+              <PlayerAvatar size={28} />
+            </div>
+            <span className="text-[11px] font-bold text-slate-200 group-hover:text-sky-300 roco-title-font tracking-wider mt-1">
+              法师档案
+            </span>
           </button>
         </div>
       </div>
@@ -965,7 +1014,7 @@ export const SceneView: React.FC<SceneViewProps> = ({
         <CharacterDetailModal
           playerName={playerName}
           playerLevel={25}
-          playerTitle="诸天巡游 · 灵契神师"
+          playerTitle="见习魔法使 · 皇家学者"
           coins={playerCoins}
           spiritGems={480}
           partyCount={playerParty.length}

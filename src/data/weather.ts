@@ -49,10 +49,10 @@ export const WEATHER_CONFIGS: Record<BattleWeather, WeatherConfig> = {
     buffs: [
       '🔥 火系技能威力提升 50%',
       '💧 水系技能受高温压制，威力降低 30%',
-      '🌿 草木系幻灵每回合吸收阳光，回复 5% 气血',
-      '❄️ 极冰系幻灵在骄阳下每回合承受 4% 融解伤害',
+      '🌿 草木系宠物每回合吸收阳光，回复 5% 精力',
+      '❄️ 冰系宠物在骄阳下每回合承受 4% 融解伤害',
     ],
-    description: '炽烈金阳当空，炎道气运大昌！火系神威暴涨，极冰与流水皆遭压制。',
+    description: '炽烈阳光当空，火系魔力大增！流水与冰霜皆受压制。',
   },
 
   RAIN: {
@@ -71,14 +71,14 @@ export const WEATHER_CONFIGS: Record<BattleWeather, WeatherConfig> = {
       '💧 水系技能受汪洋加持，威力提升 50%',
       '🔥 火系技能受水幕冲刷，威力降低 30%',
       '⚡ 暴雨导电！雷电系技能命中必中要害 (100% 暴击)',
-      '🔥 火系幻灵每回合受到 4% 湿寒雨水侵蚀',
+      '🔥 火系宠物每回合受到 4% 湿寒雨水侵蚀',
     ],
-    description: '玄冥大雨连绵，水元充塞天地！水系招式翻江倒海，火系受制，天雷随水势更显迅猛。',
+    description: '倾盆大雨连绵，水元魔力充盈天地！水系招式威力翻倍，电击技能暴击提升。',
   },
 
   SANDSTORM: {
     id: 'SANDSTORM',
-    name: '遮天沙暴',
+    name: '狂暴沙尘',
     subName: '狂沙飞卷',
     icon: 'Wind',
     color: {
@@ -86,20 +86,20 @@ export const WEATHER_CONFIGS: Record<BattleWeather, WeatherConfig> = {
       badgeBorder: 'border-yellow-500',
       textColor: 'text-yellow-300',
       glow: 'shadow-[0_0_20px_rgba(234,179,8,0.6)]',
-      bgGradient: 'from-yellow-950/50 via-amber-950/40 to-slate-950',
+      bgGradient: 'from-amber-950/50 via-yellow-950/40 to-slate-950',
     },
     buffs: [
-      '🪨 岩石/土系技能受风暴狂澜加持，威力提升 30%',
-      '🛡️ 岩石/土系幻灵特防提升，受到伤害减免 20%',
-      '🌪️ 非岩石系的幻灵每回合受到 6% 最大生命值的刮擦风沙伤害',
+      '🪨 石系/土系技能受风暴狂澜加持，威力提升 30%',
+      '🛡️ 石系/土系宠物魔抗提升，受到伤害减免 20%',
+      '🌪️ 非石系的宠物每回合受到 6% 最大生命值的刮擦风沙伤害',
     ],
-    description: '大漠狂沙呼啸席卷，日月无光！岩土幻灵受大地庇护，其余生灵皆遭风沙刮骨。',
+    description: '狂沙呼啸席卷！石系宠物受大地庇护，其余生灵皆遭风沙刮擦。',
   },
 
   THUNDER: {
     id: 'THUNDER',
-    name: '九天雷暴',
-    subName: '神霄劫雷',
+    name: '惊雷风暴',
+    subName: '雷云风暴',
     icon: 'Zap',
     color: {
       badgeBg: 'bg-purple-950/90',
@@ -109,11 +109,11 @@ export const WEATHER_CONFIGS: Record<BattleWeather, WeatherConfig> = {
       bgGradient: 'from-purple-950/50 via-indigo-950/40 to-slate-950',
     },
     buffs: [
-      '⚡ 雷电系技能受天劫引动，威力提升 40%',
+      '⚡ 电系技能受雷暴引动，威力提升 40%',
       '💥 战场狂暴电磁！全员招式暴击率额外提升 25%',
-      '⚡ 非雷系幻灵每回合有 25% 几率遭受天雷轰击，损失 5% 气血',
+      '⚡ 非电系宠物每回合有 25% 几率遭受雷击，损失 5% 精力',
     ],
-    description: '九天劫云翻滚，紫青神雷穿梭！全场电闪雷鸣，极易引动致命会心一击。',
+    description: '雷云翻滚，狂雷穿梭！全场电闪雷鸣，极易引动致命会心一击。',
   },
 };
 
@@ -200,7 +200,7 @@ export function calculateWeatherTurnEnd(
       const healAmount = Math.max(1, Math.floor(maxHp * 0.05));
       return {
         hpChange: healAmount,
-        message: `☀️【烈阳普照】${pet.nickname} 进行光合调息，吸收日光回复了 ${healAmount} 点气血！`,
+        message: `☀️【烈阳普照】${pet.nickname} 进行光合作用，吸收阳光回复了 ${healAmount} 点精力！`,
       };
     }
     // Ice pets lose 4% HP
@@ -208,7 +208,7 @@ export function calculateWeatherTurnEnd(
       const chipDmg = Math.max(1, Math.floor(maxHp * 0.04));
       return {
         hpChange: -chipDmg,
-        message: `☀️【烈阳普照】烈日炎炎，冰魄幻灵 ${pet.nickname} 融解损失了 ${chipDmg} 点气血！`,
+        message: `☀️【烈阳普照】烈日炎炎，冰系宠物 ${pet.nickname} 融解损失了 ${chipDmg} 点精力！`,
       };
     }
   } else if (weather === 'RAIN') {
@@ -217,7 +217,7 @@ export function calculateWeatherTurnEnd(
       const chipDmg = Math.max(1, Math.floor(maxHp * 0.04));
       return {
         hpChange: -chipDmg,
-        message: `🌧️【倾盆暴雨】大雨冰冷，火灵 ${pet.nickname} 受雨水侵蚀损失了 ${chipDmg} 点气血！`,
+        message: `🌧️【倾盆暴雨】大雨冰冷，火系宠物 ${pet.nickname} 受雨水侵蚀损失了 ${chipDmg} 点精力！`,
       };
     }
   } else if (weather === 'SANDSTORM') {
@@ -226,7 +226,7 @@ export function calculateWeatherTurnEnd(
       const chipDmg = Math.max(1, Math.floor(maxHp * 0.06));
       return {
         hpChange: -chipDmg,
-        message: `🌪️【遮天沙暴】沙石如刃！${pet.nickname} 受到狂沙割裂 ${chipDmg} 点伤害！`,
+        message: `🌪️【狂暴沙尘】沙石如刃！${pet.nickname} 受到狂沙割裂 ${chipDmg} 点伤害！`,
       };
     }
   } else if (weather === 'THUNDER') {
@@ -235,7 +235,7 @@ export function calculateWeatherTurnEnd(
       const chipDmg = Math.max(1, Math.floor(maxHp * 0.05));
       return {
         hpChange: -chipDmg,
-        message: `⚡【九天雷暴】余雷轰鸣！${pet.nickname} 不慎遭天雷波及，损失了 ${chipDmg} 点气血！`,
+        message: `⚡【惊雷风暴】余雷轰鸣！${pet.nickname} 不慎遭雷电波及，损失了 ${chipDmg} 点精力！`,
       };
     }
   }

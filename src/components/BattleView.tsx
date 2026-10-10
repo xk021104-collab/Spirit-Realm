@@ -27,7 +27,9 @@ import {
   Wind,
   SunDim,
   Info,
+  X,
 } from 'lucide-react';
+import { IconGuluBall, IconRocoCoin, IconMagicPotion } from './GameIcons';
 
 interface BattleViewProps {
   playerParty: PetInstance[];
@@ -829,23 +831,32 @@ export const BattleView: React.FC<BattleViewProps> = ({
         )}
 
         {/* =========================================================================
-            DUELISTS ARENA STAGE (Image 1: Left Fawn & Right Phoenix with Floating Badges)
+            DUELISTS ARENA STAGE (Roco Kingdom Classic Duel Layout)
             ========================================================================= */}
         <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-4 items-center flex-1 my-auto">
-          {/* 1. LEFT: Player Spirit (主灵唯鹿 / qingmulu) */}
+          {/* 1. LEFT: Player Spirit Status & Avatar */}
           <div className="flex flex-col items-start space-y-2">
-            {/* Player Status Plaque (Frosted Glass with Antique Gold Borders) */}
-            <div className="roco-panel p-2.5 sm:p-3 min-w-[270px] max-w-[320px] select-none flex items-center gap-2.5 shadow-2xl">
-              {/* Left Leaf Badge */}
-              <div className="w-10 h-10 rounded-full border-2 border-[#d4af37] bg-gradient-to-br from-emerald-600 to-teal-800 flex items-center justify-center text-white shadow-md shrink-0">
-                <Trees className="w-5 h-5 text-emerald-200" />
+            {/* Player Status Plaque (Frosted Glass with Antique Gold Borders & 6 Party Dots) */}
+            <div className="roco-panel p-2.5 sm:p-3 min-w-[280px] max-w-[340px] select-none flex items-center gap-2.5 shadow-2xl">
+              {/* Left Elemental Badge */}
+              <div className={`w-10 h-10 rounded-full border-2 border-[#d4af37] bg-gradient-to-br ${
+                activeSpecies.type === 'FIRE' ? 'from-rose-600 to-amber-600' :
+                activeSpecies.type === 'WATER' ? 'from-blue-600 to-cyan-600' :
+                activeSpecies.type === 'GRASS' ? 'from-emerald-600 to-teal-800' :
+                activeSpecies.type === 'ELECTRIC' ? 'from-amber-500 to-yellow-600' :
+                activeSpecies.type === 'ICE' ? 'from-sky-500 to-cyan-700' :
+                activeSpecies.type === 'ROCK' ? 'from-stone-600 to-amber-800' : 'from-slate-600 to-slate-800'
+              } flex items-center justify-center text-white shadow-md shrink-0`}>
+                <span className="roco-title-font font-black text-sm text-yellow-100 drop-shadow">
+                  {ELEMENT_COLORS[activeSpecies.type]?.label || '凡'}
+                </span>
               </div>
 
-              {/* Center Name & Gauges */}
-              <div className="flex-1 min-w-0 space-y-1.5">
+              {/* Center Name, Gauges & 6 Party Indicators */}
+              <div className="flex-1 min-w-0 space-y-1">
                 <div className="flex items-center justify-between">
                   <span className="roco-title-font font-bold text-sm text-slate-100 tracking-wide truncate">
-                    {activePet.nickname || '主灵唯鹿'}
+                    {activePet.nickname || activeSpecies.name}
                   </span>
                   <span className="text-[10px] font-mono text-emerald-300 font-bold shrink-0">
                     Lv.{activePet.level}
@@ -858,7 +869,15 @@ export const BattleView: React.FC<BattleViewProps> = ({
                   <div className="roco-gauge-track flex-1 h-3.5">
                     <div
                       className="roco-gauge-hp"
-                      style={{ width: `${Math.max(0, Math.min(100, (activePet.currentHp / activePet.stats.hp) * 100))}%` }}
+                      style={{
+                        width: `${Math.max(0, Math.min(100, (activePet.currentHp / activePet.stats.hp) * 100))}%`,
+                        background:
+                          activePet.currentHp / activePet.stats.hp > 0.5
+                            ? 'linear-gradient(180deg, #4ade80 0%, #22c55e 45%, #16a34a 75%, #14532d 100%)'
+                            : activePet.currentHp / activePet.stats.hp > 0.2
+                            ? 'linear-gradient(180deg, #fde047 0%, #f59e0b 45%, #d97706 75%, #78350f 100%)'
+                            : 'linear-gradient(180deg, #f87171 0%, #ef4444 45%, #dc2626 75%, #991b1b 100%)',
+                      }}
                     />
                   </div>
                   <span className="text-[9px] text-slate-300 shrink-0 font-bold">
@@ -869,22 +888,34 @@ export const BattleView: React.FC<BattleViewProps> = ({
                 {/* MP Gauge */}
                 <div className="flex items-center gap-2 text-[10px] font-mono">
                   <span className="text-cyan-400 font-black tracking-wider shrink-0">MP</span>
-                  <div className="roco-gauge-track flex-1 h-3">
+                  <div className="roco-gauge-track flex-1 h-2.5">
                     <div className="roco-gauge-mp" style={{ width: '100%' }} />
                   </div>
                   <span className="text-[9px] text-slate-400 shrink-0 font-bold">
                     100/100
                   </span>
                 </div>
-              </div>
 
-              {/* Right Leaf Badge */}
-              <div className="w-9 h-9 rounded-full border-2 border-[#d4af37] bg-gradient-to-br from-emerald-600 to-teal-800 flex items-center justify-center text-white shadow-md shrink-0">
-                <Trees className="w-4 h-4 text-emerald-200" />
+                {/* 6 Party Companion Orbs (洛克王国标志性6宠指示灯) */}
+                <div className="flex items-center gap-1 pt-0.5 pointer-events-none">
+                  {party.map((p, idx) => (
+                    <div
+                      key={p.uid}
+                      className={`w-2.5 h-2.5 rounded-full border transition-all ${
+                        idx === activePetIndex
+                          ? 'bg-yellow-300 border-amber-400 shadow-[0_0_6px_#facc15] scale-110'
+                          : p.currentHp > 0
+                          ? 'bg-emerald-400 border-emerald-600 shadow-[0_0_3px_#34d399]'
+                          : 'bg-rose-900 border-slate-700 opacity-50'
+                      }`}
+                      title={`${p.nickname} (Lv.${p.level})`}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
 
-            {/* Player Spirit Sprite on Meadow Grass + Floating WOOD Badge (Image 1 Layout) */}
+            {/* Player Spirit Sprite & Magic Ground Ring */}
             <div className="relative flex items-end ml-2 sm:ml-4 mt-2">
               <div className="relative flex flex-col items-center">
                 <PetAvatar
@@ -902,30 +933,37 @@ export const BattleView: React.FC<BattleViewProps> = ({
                 </div>
               </div>
 
-              {/* Floating WOOD Elemental Badge Beside Fawn (Image 1 Exact Element Badge) */}
+              {/* Floating Elemental Badge Beside Player Pet */}
               <div className="flex flex-col items-center mb-6 ml-3 pointer-events-none">
-                <div className="roco-element-badge bg-gradient-to-br from-emerald-600 to-teal-800 text-white shadow-[0_0_16px_rgba(16,185,129,0.7)]">
-                  <Trees className="w-5 h-5 text-emerald-200 filter drop-shadow-[0_0_4px_#34d399]" />
+                <div className={`roco-element-badge bg-gradient-to-br ${
+                  activeSpecies.type === 'FIRE' ? 'from-rose-600 to-amber-600' :
+                  activeSpecies.type === 'WATER' ? 'from-blue-600 to-cyan-600' :
+                  activeSpecies.type === 'GRASS' ? 'from-emerald-600 to-teal-800' :
+                  activeSpecies.type === 'ELECTRIC' ? 'from-amber-500 to-yellow-600' : 'from-slate-600 to-slate-800'
+                } text-white shadow-[0_0_16px_rgba(56,189,248,0.7)]`}>
+                  <span className="roco-title-font font-black text-sm text-yellow-100">
+                    {ELEMENT_COLORS[activeSpecies.type]?.label || '凡'}
+                  </span>
                 </div>
                 <span className="text-[9px] font-black text-amber-200 uppercase tracking-widest mt-1 roco-title-font drop-shadow-md">
-                  WOOD
+                  {activeSpecies.type}
                 </span>
               </div>
             </div>
           </div>
 
-          {/* 2. RIGHT: Enemy Spirit (凤凰雏 / fentianhuang / chiyanque) */}
+          {/* 2. RIGHT: Enemy Spirit Status & Avatar */}
           <div className="flex flex-col items-end space-y-2">
-            {/* Enemy Status Plaque (Frosted Glass with Antique Gold Borders) */}
-            <div className="roco-panel p-2.5 sm:p-3 min-w-[270px] max-w-[320px] select-none flex items-center gap-2.5 shadow-2xl">
+            {/* Enemy Status Plaque (Frosted Glass with Antique Gold Borders & Party Dots) */}
+            <div className="roco-panel p-2.5 sm:p-3 min-w-[280px] max-w-[340px] select-none flex items-center gap-2.5 shadow-2xl">
               {/* Left/Center Name & Gauges */}
-              <div className="flex-1 min-w-0 space-y-1.5 text-right">
+              <div className="flex-1 min-w-0 space-y-1 text-right">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-mono text-amber-300 font-bold shrink-0">
                     Lv.{enemy.level}
                   </span>
                   <span className="roco-title-font font-bold text-sm text-slate-100 tracking-wide truncate">
-                    {enemy.nickname || (enemy.speciesId === 'chiyanque' ? '凤凰雏' : enemySpecies.name)}
+                    {enemy.nickname || enemySpecies.name}
                   </span>
                 </div>
 
@@ -937,7 +975,15 @@ export const BattleView: React.FC<BattleViewProps> = ({
                   <div className="roco-gauge-track flex-1 h-3.5">
                     <div
                       className="roco-gauge-hp"
-                      style={{ width: `${Math.max(0, Math.min(100, (enemy.currentHp / enemy.stats.hp) * 100))}%` }}
+                      style={{
+                        width: `${Math.max(0, Math.min(100, (enemy.currentHp / enemy.stats.hp) * 100))}%`,
+                        background:
+                          enemy.currentHp / enemy.stats.hp > 0.5
+                            ? 'linear-gradient(180deg, #4ade80 0%, #22c55e 45%, #16a34a 75%, #14532d 100%)'
+                            : enemy.currentHp / enemy.stats.hp > 0.2
+                            ? 'linear-gradient(180deg, #fde047 0%, #f59e0b 45%, #d97706 75%, #78350f 100%)'
+                            : 'linear-gradient(180deg, #f87171 0%, #ef4444 45%, #dc2626 75%, #991b1b 100%)',
+                      }}
                     />
                   </div>
                   <span className="text-rose-400 font-black tracking-wider shrink-0">HP</span>
@@ -948,41 +994,63 @@ export const BattleView: React.FC<BattleViewProps> = ({
                   <span className="text-[9px] text-slate-400 shrink-0 font-bold">
                     100/100
                   </span>
-                  <div className="roco-gauge-track flex-1 h-3">
+                  <div className="roco-gauge-track flex-1 h-2.5">
                     <div className="roco-gauge-mp" style={{ width: '100%' }} />
                   </div>
                   <span className="text-cyan-400 font-black tracking-wider shrink-0">MP</span>
                 </div>
+
+                {/* Enemy Party Indicators */}
+                <div className="flex items-center justify-end gap-1 pt-0.5 pointer-events-none">
+                  <div
+                    className={`w-2.5 h-2.5 rounded-full border transition-all ${
+                      enemy.currentHp > 0
+                        ? 'bg-rose-500 border-amber-400 shadow-[0_0_6px_#f43f5e]'
+                        : 'bg-slate-800 border-slate-700 opacity-50'
+                    }`}
+                  />
+                  {!isWild && (
+                    <>
+                      <div className="w-2.5 h-2.5 rounded-full border bg-emerald-400 border-emerald-600" />
+                      <div className="w-2.5 h-2.5 rounded-full border bg-emerald-400 border-emerald-600" />
+                    </>
+                  )}
+                </div>
               </div>
 
-              {/* Right Fire Badge */}
-              <div className="w-10 h-10 rounded-full border-2 border-[#d4af37] bg-gradient-to-br from-rose-600 to-amber-600 flex items-center justify-center text-white shadow-md shrink-0">
-                <Flame className="w-5 h-5 text-amber-200" />
+              {/* Right Elemental Badge */}
+              <div className={`w-10 h-10 rounded-full border-2 border-[#d4af37] bg-gradient-to-br ${
+                enemySpecies.type === 'FIRE' ? 'from-rose-600 to-amber-600' :
+                enemySpecies.type === 'WATER' ? 'from-blue-600 to-cyan-600' :
+                enemySpecies.type === 'GRASS' ? 'from-emerald-600 to-teal-800' :
+                enemySpecies.type === 'ELECTRIC' ? 'from-amber-500 to-yellow-600' : 'from-slate-600 to-slate-800'
+              } flex items-center justify-center text-white shadow-md shrink-0`}>
+                <span className="roco-title-font font-black text-sm text-yellow-100 drop-shadow">
+                  {ELEMENT_COLORS[enemySpecies.type]?.label || '凡'}
+                </span>
               </div>
             </div>
 
-            {/* Enemy Spirit Sprite Perched on Rock + Floating FIRE Badges (Image 1 Layout) */}
+            {/* Enemy Spirit Sprite & Fiery Ring */}
             <div className="relative flex items-center mr-2 sm:mr-4 mt-2">
-              {/* Floating FIRE Elemental Badge Beside Phoenix */}
+              {/* Floating FIRE Elemental Badge Beside Enemy */}
               <div className="flex flex-col items-center mb-6 mr-3 pointer-events-none">
-                <div className="roco-element-badge bg-gradient-to-br from-rose-600 to-amber-600 text-white shadow-[0_0_16px_rgba(249,115,22,0.7)]">
-                  <Flame className="w-5 h-5 text-amber-200 filter drop-shadow-[0_0_4px_#f59e0b]" />
+                <div className={`roco-element-badge bg-gradient-to-br ${
+                  enemySpecies.type === 'FIRE' ? 'from-rose-600 to-amber-600' :
+                  enemySpecies.type === 'WATER' ? 'from-blue-600 to-cyan-600' :
+                  enemySpecies.type === 'GRASS' ? 'from-emerald-600 to-teal-800' : 'from-slate-600 to-slate-800'
+                } text-white shadow-[0_0_16px_rgba(249,115,22,0.7)]`}>
+                  <span className="roco-title-font font-black text-sm text-yellow-100">
+                    {ELEMENT_COLORS[enemySpecies.type]?.label || '凡'}
+                  </span>
                 </div>
                 <span className="text-[9px] font-black text-amber-200 uppercase tracking-widest mt-1 roco-title-font drop-shadow-md">
-                  FIRE
+                  {enemySpecies.type}
                 </span>
               </div>
 
-              {/* Perched Phoenix on Rock */}
+              {/* Enemy Pet Sprite */}
               <div className="relative flex flex-col items-center">
-                {/* Secondary Upper Floating FIRE Badge (as seen in Image 1 upper right) */}
-                <div className="absolute -top-6 -right-2 flex flex-col items-center pointer-events-none">
-                  <div className="w-8 h-8 rounded-full border-2 border-[#d4af37] bg-gradient-to-br from-rose-600 to-amber-600 flex items-center justify-center text-white shadow-[0_0_12px_rgba(249,115,22,0.6)]">
-                    <Flame className="w-4 h-4 text-amber-200" />
-                  </div>
-                  <span className="text-[7px] font-black text-amber-200 uppercase tracking-widest mt-0.5 roco-title-font">FIRE</span>
-                </div>
-
                 <PetAvatar
                   speciesId={enemy.speciesId}
                   size={180}
@@ -990,7 +1058,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
                   isHit={enemyHit}
                   className="transition-transform duration-200 drop-shadow-[0_12px_32px_rgba(249,115,22,0.65)]"
                 />
-                {/* Fiery Lava Ember Ground Ring */}
+                {/* Ember Ground Ring */}
                 <div className="relative w-56 h-10 -mt-4 flex items-center justify-center pointer-events-none">
                   <div className="absolute inset-0 rounded-[50%] bg-gradient-to-r from-red-600/35 via-orange-500/40 to-amber-500/35 border border-amber-400/60 shadow-[0_0_32px_rgba(245,158,11,0.7)] animate-pulse" />
                   <div className="absolute w-36 h-4 rounded-[50%] bg-amber-200/40 blur-xs" />
@@ -1002,17 +1070,19 @@ export const BattleView: React.FC<BattleViewProps> = ({
       </div>
 
       {/* =========================================================================
-          BOTTOM COMMAND CONSOLE: Battle Directory, Turn Pill & Circular Skills (Image 1)
+          BOTTOM COMMAND CONSOLE: Battle Directory, 5 Commands & 4 Skill Plates (Roco Kingdom Classic)
           ========================================================================= */}
-      <div className="relative bg-gradient-to-t from-[#020813] via-[#051120] to-[#081a2e]/95 border-t-2 border-[#b8860b]/40 p-3 sm:p-4 md:p-5 flex flex-col md:flex-row items-center justify-between gap-4 z-20 shadow-2xl backdrop-blur-xl">
-        {/* Left: 战斗目录 (Battle Directory & Logs from Image 1) */}
-        <div className="roco-log-box w-full sm:w-76 p-3 text-xs flex flex-col justify-between h-32 select-none shadow-xl">
+      <div className="relative bg-gradient-to-t from-[#020813] via-[#051120] to-[#081a2e]/95 border-t-2 border-[#b8860b]/40 p-3 sm:p-4 flex flex-col lg:flex-row items-center justify-between gap-3 z-20 shadow-2xl backdrop-blur-xl">
+        {/* Left: 战斗目录 (Battle Directory & Logs) */}
+        <div className="roco-log-box w-full lg:w-72 p-2.5 text-xs flex flex-col justify-between h-28 select-none shadow-xl shrink-0">
           <div className="flex items-center justify-between border-b border-amber-500/30 pb-1 mb-1">
             <span className="roco-title-font font-bold text-amber-300 flex items-center gap-1.5 tracking-wider text-xs">
               <span className="text-amber-400 text-sm">◇</span>
-              <span>战斗目录</span>
+              <span>对决战报</span>
             </span>
-            <span className="text-[9px] text-cyan-300/80 font-mono">幻境交锋</span>
+            <span className="text-[9px] text-cyan-300/80 font-mono">
+              回合 {isProcessingTurn ? (playerAttacking ? '施法中' : '交锋中') : '待命'}
+            </span>
           </div>
 
           <div className="flex-1 overflow-y-auto space-y-1 text-[11px] pr-1 leading-relaxed text-slate-300">
@@ -1021,160 +1091,191 @@ export const BattleView: React.FC<BattleViewProps> = ({
                 {log}
               </p>
             ))}
-            {battleLog.length < 2 && (
-              <>
-                <p className="text-slate-400">战回另火中的战，藤蔓缠绕。</p>
-                <p className="text-slate-400">从家霆魑的菖愍，治愈之光效士。</p>
-              </>
-            )}
           </div>
         </div>
 
-        {/* Center: 当前回合: 玩家 (Current Turn Indicator from Image 1) */}
-        <div className="flex flex-col items-center">
-          <div className="roco-turn-capsule px-6 py-1.5 text-amber-200 text-xs sm:text-sm font-bold roco-title-font shadow-lg animate-pulse tracking-wide">
-            当前回合: {isProcessingTurn ? (playerAttacking ? '玩家施法' : '敌方攻击') : '玩家'}
-          </div>
+        {/* Center: 5 Classic Action Command Buttons (洛克王国对战5大指令) */}
+        <div className="flex flex-wrap items-center justify-center gap-2 shrink-0">
+          {/* 1. 灵术招式 */}
+          <button
+            onClick={() => {
+              sound.playClick();
+              setBattleMenu('ACTIONS');
+            }}
+            className={`px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 roco-title-font shadow-md ${
+              battleMenu === 'ACTIONS'
+                ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 border border-yellow-200 scale-105'
+                : 'bg-[#0a1f36]/80 hover:bg-[#0e2a4a] text-amber-200 border border-[#b8860b]/40'
+            }`}
+          >
+            <Swords className="w-3.5 h-3.5" />
+            <span>灵术技能</span>
+          </button>
 
-          {/* Quick Utility Switchers below Turn Indicator */}
-          <div className="flex items-center gap-2.5 mt-2">
-            <button
-              onClick={() => {
-                sound.playClick();
-                setBattleMenu('BALLS');
-              }}
-              className="text-[10px] text-cyan-300 hover:text-white bg-[#061426]/90 px-3 py-1 rounded-full border border-cyan-500/50 cursor-pointer transition-all hover:border-cyan-400 shadow-sm"
-            >
-              灵契晶石 (捕捉)
-            </button>
-            <button
-              onClick={() => {
-                sound.playClick();
-                setBattleMenu('SWITCH');
-              }}
-              className="text-[10px] text-amber-200/90 hover:text-white bg-[#061426]/90 px-3 py-1 rounded-full border border-amber-500/50 cursor-pointer transition-all hover:border-amber-400 shadow-sm"
-            >
-              唤回换宠
-            </button>
-          </div>
+          {/* 2. 咕噜球 (Capture) */}
+          <button
+            onClick={() => {
+              sound.playClick();
+              setBattleMenu(battleMenu === 'BALLS' ? 'ACTIONS' : 'BALLS');
+            }}
+            className={`px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 roco-title-font shadow-md ${
+              battleMenu === 'BALLS'
+                ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white border border-cyan-300 scale-105'
+                : 'bg-[#0a1f36]/80 hover:bg-[#0e2a4a] text-cyan-300 border border-cyan-500/40'
+            }`}
+          >
+            <IconGuluBall size={18} />
+            <span>咕噜球</span>
+          </button>
+
+          {/* 3. 恢复药剂 (Potions) */}
+          <button
+            onClick={() => {
+              sound.playClick();
+              setBattleMenu(battleMenu === 'POTIONS' ? 'ACTIONS' : 'POTIONS');
+            }}
+            className={`px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 roco-title-font shadow-md ${
+              battleMenu === 'POTIONS'
+                ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white border border-emerald-300 scale-105'
+                : 'bg-[#0a1f36]/80 hover:bg-[#0e2a4a] text-emerald-300 border border-emerald-500/40'
+            }`}
+          >
+            <IconMagicPotion size={18} />
+            <span>魔法药剂</span>
+          </button>
+
+          {/* 4. 召唤换宠 (Switch Pet) */}
+          <button
+            onClick={() => {
+              sound.playClick();
+              setBattleMenu(battleMenu === 'SWITCH' ? 'ACTIONS' : 'SWITCH');
+            }}
+            className={`px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 roco-title-font shadow-md ${
+              battleMenu === 'SWITCH'
+                ? 'bg-gradient-to-r from-purple-500 to-indigo-600 text-white border border-purple-300 scale-105'
+                : 'bg-[#0a1f36]/80 hover:bg-[#0e2a4a] text-purple-300 border border-purple-500/40'
+            }`}
+          >
+            <ArrowRightLeft className="w-3.5 h-3.5" />
+            <span>唤回换宠</span>
+          </button>
+
+          {/* 5. 遁走逃跑 (Flee) */}
+          <button
+            disabled={isProcessingTurn}
+            onClick={handleFlee}
+            className="px-3 py-2 rounded-xl text-xs font-bold bg-rose-950/70 hover:bg-rose-900 border border-rose-500/40 text-rose-300 transition-all cursor-pointer flex items-center gap-1.5 roco-title-font disabled:opacity-40"
+          >
+            <span>逃跑</span>
+          </button>
         </div>
 
-        {/* Right: Circular Golden Skill Buttons (Image 1 Exact Layout) */}
-        <div className="flex items-center">
-          {/* Sub-menu overlay active fallback button */}
-          {battleMenu !== 'ACTIONS' && battleMenu !== 'MOVES' ? (
-            <div className="flex items-center gap-3">
+        {/* Right: 4 Dynamic Skill Cards (4大灵术招式面板) */}
+        <div className="w-full lg:w-auto grid grid-cols-2 gap-2 select-none">
+          {movesToDisplay.map((move, slotIdx) => {
+            const moveDef = MOVES_DATA[move.id] || {
+              id: move.id,
+              name: move.id,
+              type: 'NORMAL' as const,
+              power: 50,
+              accuracy: 100,
+              category: 'PHYSICAL' as const,
+              maxPp: 20,
+              description: '基础神通攻击',
+            };
+            const elColor = ELEMENT_COLORS[moveDef.type as keyof typeof ELEMENT_COLORS] || ELEMENT_COLORS.NORMAL;
+            const isPpDepleted = move.pp <= 0;
+            const isDisabled = isProcessingTurn || isPpDepleted;
+
+            return (
               <button
-                onClick={() => setBattleMenu('ACTIONS')}
-                className="px-4 py-2 rounded-xl bg-slate-800 text-amber-300 text-xs font-bold border border-amber-500/40 cursor-pointer"
+                key={`${move.id}_${slotIdx}`}
+                disabled={isDisabled}
+                onClick={() => handleSelectMove(move.id)}
+                title={`${moveDef.name} (${moveDef.category === 'PHYSICAL' ? '物理' : moveDef.category === 'SPECIAL' ? '魔法' : '变化'}) - 威力:${moveDef.power || '-'} | PP:${move.pp}/${move.maxPp}\n${moveDef.description || ''}`}
+                className={`roco-skill-card w-full sm:w-44 p-2 text-left bg-gradient-to-br transition-all flex flex-col justify-between ${
+                  moveDef.type === 'FIRE'
+                    ? 'from-rose-950/90 via-orange-950/80 to-amber-950/90 border-rose-500/70 hover:border-amber-300'
+                    : moveDef.type === 'WATER'
+                    ? 'from-blue-950/90 via-cyan-950/80 to-teal-950/90 border-cyan-500/70 hover:border-cyan-300'
+                    : moveDef.type === 'GRASS'
+                    ? 'from-emerald-950/90 via-teal-950/80 to-green-950/90 border-emerald-500/70 hover:border-emerald-300'
+                    : moveDef.type === 'ELECTRIC'
+                    ? 'from-amber-950/90 via-yellow-950/80 to-amber-950/90 border-amber-500/70 hover:border-yellow-300'
+                    : 'from-slate-900/90 via-slate-800/80 to-slate-900/90 border-slate-500/70 hover:border-slate-300'
+                }`}
               >
-                返回灵术
+                {/* Header: Skill Name & Element Badge */}
+                <div className="flex items-center justify-between gap-1">
+                  <span className="roco-title-font font-black text-xs text-white tracking-wide truncate">
+                    {moveDef.name}
+                  </span>
+                  <span className={`text-[9px] px-1 py-0.2 rounded font-black shrink-0 ${elColor.bg} ${elColor.text} border border-amber-400/40`}>
+                    {elColor.label}
+                  </span>
+                </div>
+
+                {/* Footer: Power & PP Counter with Progress Bar */}
+                <div className="mt-1.5 space-y-1">
+                  <div className="flex items-center justify-between text-[9px] font-mono text-slate-300">
+                    <span className="text-amber-300 font-bold">
+                      {moveDef.power ? `威力 ${moveDef.power}` : '变化技'}
+                    </span>
+                    <span className={isPpDepleted ? 'text-rose-400 font-bold' : 'text-slate-300'}>
+                      PP {move.pp}/{move.maxPp}
+                    </span>
+                  </div>
+
+                  {/* PP Mini Bar */}
+                  <div className="w-full roco-gauge-track h-1.5 overflow-hidden">
+                    <div
+                      className="h-full rounded-full transition-all"
+                      style={{
+                        width: `${Math.max(0, Math.min(100, (move.pp / move.maxPp) * 100))}%`,
+                        background:
+                          move.pp / move.maxPp > 0.4
+                            ? 'linear-gradient(90deg, #38bdf8, #818cf8)'
+                            : 'linear-gradient(90deg, #f87171, #ef4444)',
+                      }}
+                    />
+                  </div>
+                </div>
               </button>
-            </div>
-          ) : (
-            <div className="relative w-64 h-32 flex items-end justify-end select-none pr-1">
-              {/* 1. Skill 2 (Top Left): 烈焰之息 */}
-              {movesToDisplay[2] && (
-                <div className="absolute right-[82px] bottom-[68px] flex flex-col items-center">
-                  <button
-                    disabled={isProcessingTurn || movesToDisplay[2].pp <= 0}
-                    onClick={() => handleSelectMove(movesToDisplay[2].id)}
-                    className="roco-skill-secondary bg-gradient-to-br from-rose-600 via-orange-600 to-amber-700 text-amber-200 group disabled:opacity-40"
-                    title={`${MOVES_DATA[movesToDisplay[2].id]?.name || '烈焰之息'} (PP: ${movesToDisplay[2].pp}/${movesToDisplay[2].maxPp})`}
-                  >
-                    <Flame className="w-6 h-6 text-amber-300 filter drop-shadow-[0_0_8px_#f97316]" />
-                  </button>
-                  <span className="roco-title-font text-[10px] font-bold text-amber-200 mt-0.5 tracking-wider drop-shadow-md">
-                    {MOVES_DATA[movesToDisplay[2].id]?.name || '烈焰之息'}
-                  </span>
-                </div>
-              )}
-
-              {/* 2. Skill 3 (Top Right): 凤凰涅槃 */}
-              {movesToDisplay[3] && (
-                <div className="absolute right-[6px] bottom-[88px] flex flex-col items-center">
-                  <button
-                    disabled={isProcessingTurn || movesToDisplay[3].pp <= 0}
-                    onClick={() => handleSelectMove(movesToDisplay[3].id)}
-                    className="roco-skill-secondary bg-gradient-to-br from-amber-500 via-orange-600 to-red-900 text-yellow-200 group disabled:opacity-40"
-                    title={`${MOVES_DATA[movesToDisplay[3].id]?.name || '凤凰涅槃'} (PP: ${movesToDisplay[3].pp}/${movesToDisplay[3].maxPp})`}
-                  >
-                    <Zap className="w-6 h-6 text-amber-200 filter drop-shadow-[0_0_8px_#fde047]" />
-                  </button>
-                  <span className="roco-title-font text-[10px] font-bold text-amber-200 mt-0.5 tracking-wider drop-shadow-md">
-                    {MOVES_DATA[movesToDisplay[3].id]?.name || '凤凰涅槃'}
-                  </span>
-                </div>
-              )}
-
-              {/* 3. Skill 1 (Bottom Left): 治愈之光 */}
-              {movesToDisplay[1] && (
-                <div className="absolute right-[96px] bottom-[4px] flex flex-col items-center">
-                  <button
-                    disabled={isProcessingTurn || movesToDisplay[1].pp <= 0}
-                    onClick={() => handleSelectMove(movesToDisplay[1].id)}
-                    className="roco-skill-secondary bg-gradient-to-br from-emerald-600 via-teal-700 to-green-950 text-emerald-200 group disabled:opacity-40"
-                    title={`${MOVES_DATA[movesToDisplay[1].id]?.name || '治愈之光'} (PP: ${movesToDisplay[1].pp}/${movesToDisplay[1].maxPp})`}
-                  >
-                    <Sparkles className="w-6 h-6 text-emerald-300 filter drop-shadow-[0_0_8px_#34d399]" />
-                  </button>
-                  <span className="roco-title-font text-[10px] font-bold text-amber-200 mt-0.5 tracking-wider drop-shadow-md">
-                    {MOVES_DATA[movesToDisplay[1].id]?.name || '治愈之光'}
-                  </span>
-                </div>
-              )}
-
-              {/* 4. Skill 0 (Bottom Right): 藤蔓缠绕 (Large Primary Double-Rimmed Orb!) */}
-              {movesToDisplay[0] && (
-                <div className="absolute right-0 bottom-0 flex flex-col items-center">
-                  <button
-                    disabled={isProcessingTurn || movesToDisplay[0].pp <= 0}
-                    onClick={() => handleSelectMove(movesToDisplay[0].id)}
-                    className="roco-skill-primary group disabled:opacity-40"
-                    title={`释放主技能【${MOVES_DATA[movesToDisplay[0].id]?.name || '藤蔓缠绕'}】(PP: ${movesToDisplay[0].pp}/${movesToDisplay[0].maxPp})`}
-                  >
-                    <div className="flex flex-col items-center justify-center leading-none select-none">
-                      <span className="roco-title-font text-[13px] font-black text-emerald-100 tracking-widest drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
-                        藤蔓
-                      </span>
-                      <span className="roco-title-font text-[13px] font-black text-emerald-100 tracking-widest drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)] mt-0.5">
-                        缠绕
-                      </span>
-                    </div>
-                  </button>
-                  <span className="roco-title-font text-[11px] font-bold text-amber-200 mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                    {MOVES_DATA[movesToDisplay[0].id]?.name || '藤蔓缠绕'}
-                  </span>
-                </div>
-              )}
-            </div>
-          )}
+            );
+          })}
         </div>
       </div>
 
       {/* Drawer Overlay for BALLS, POTIONS, SWITCH, or MOVES */}
       {battleMenu !== 'ACTIONS' && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-200">
-          <div className="relative w-full max-w-xl bg-gradient-to-b from-[#0f243a] to-[#071322] rounded-3xl border-2 border-cyan-500/40 p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-cyan-500/30 pb-3">
-              <span className="text-base font-black text-amber-300 game-title-font flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-cyan-400" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-in fade-in duration-200 select-none">
+          <div className="relative w-full max-w-xl bg-gradient-to-b from-[#0f243a] via-[#091829] to-[#040e1b] rounded-3xl border-2 border-[#b8860b]/60 p-5 sm:p-6 shadow-[0_20px_60px_rgba(0,0,0,0.9)] space-y-4 text-slate-100">
+            {/* Corner Gilded Ornaments */}
+            <div className="corner-ornament-tl" />
+            <div className="corner-ornament-tr" />
+            <div className="corner-ornament-bl" />
+            <div className="corner-ornament-br" />
+
+            <div className="flex items-center justify-between border-b border-[#b8860b]/40 pb-3">
+              <span className="text-base font-black text-amber-300 roco-title-font flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-amber-400" />
                 <span>
                   {battleMenu === 'MOVES'
                     ? '灵术秘典 · 选择施展神通'
                     : battleMenu === 'BALLS'
-                    ? '灵契法器 · 祭出封神晶石'
+                    ? '咕噜球 · 投掷收服野生宠物'
                     : battleMenu === 'POTIONS'
-                    ? '储物宝囊 · 服用回春丹药'
-                    : '本命随行 · 唤回轮换幻灵'}
+                    ? '魔法药剂 · 回复精力与招式PP'
+                    : '随行战队 · 唤回轮换出战宠物'}
                 </span>
               </span>
 
               <button
                 onClick={() => setBattleMenu('ACTIONS')}
-                className="px-3 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 cursor-pointer"
+                className="roco-close-btn shrink-0"
+                title="返回战斗"
               >
-                返回对决
+                <X className="w-5 h-5" />
               </button>
             </div>
 
@@ -1194,13 +1295,18 @@ export const BattleView: React.FC<BattleViewProps> = ({
                             setBattleMenu('ACTIONS');
                             handleThrowBall(slot.itemId);
                           }}
-                          className="text-left p-3.5 rounded-2xl bg-slate-900/90 border-2 border-amber-500/40 hover:border-amber-400 hover:bg-slate-850 transition-all cursor-pointer flex items-center justify-between shadow-md"
+                          className="text-left p-3.5 rounded-2xl roco-panel border border-[#b8860b]/40 hover:border-amber-400 hover:bg-[#061426] transition-all cursor-pointer flex items-center justify-between shadow-md group"
                         >
-                          <div>
-                            <div className="font-bold text-sm text-amber-200 game-title-font">{item.name}</div>
-                            <div className="text-[11px] text-slate-400 mt-0.5">{item.description}</div>
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-xl bg-slate-950/80 border border-amber-500/40 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                              <IconGuluBall size={34} />
+                            </div>
+                            <div className="min-w-0">
+                              <div className="font-bold text-sm text-white roco-title-font truncate">{item.name}</div>
+                              <div className="text-[11px] text-slate-400 mt-0.5 line-clamp-1">{item.description}</div>
+                            </div>
                           </div>
-                          <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-black/70 text-amber-300 border border-amber-400/50">
+                          <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-black/70 text-amber-300 border border-amber-400/50 shrink-0 ml-2">
                             x{slot.count}
                           </span>
                         </button>
@@ -1209,7 +1315,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
                 </div>
                 {inventory.filter((i) => ITEMS_DATA[i.itemId]?.category === 'BALL').length === 0 && (
                   <div className="text-xs text-slate-400 text-center py-6">
-                    储物袋中已无灵契晶石，请前往万宝商阁购买！
+                    背包中已无咕噜球，请前往跳跳集市罗伦斯道具店购买！
                   </div>
                 )}
               </div>
@@ -1231,13 +1337,18 @@ export const BattleView: React.FC<BattleViewProps> = ({
                             setBattleMenu('ACTIONS');
                             handleUsePotion(slot.itemId);
                           }}
-                          className="text-left p-3.5 rounded-2xl bg-slate-900/90 border-2 border-emerald-500/40 hover:border-emerald-400 hover:bg-slate-850 transition-all cursor-pointer flex items-center justify-between shadow-md"
+                          className="text-left p-3.5 rounded-2xl roco-panel border border-emerald-500/40 hover:border-emerald-400 hover:bg-[#061426] transition-all cursor-pointer flex items-center justify-between shadow-md group"
                         >
-                          <div>
-                            <div className="font-bold text-sm text-emerald-200 game-title-font">{item.name}</div>
-                            <div className="text-[11px] text-slate-400 mt-0.5">{item.description}</div>
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-xl bg-slate-950/80 border border-emerald-500/40 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                              <IconMagicPotion size={34} />
+                            </div>
+                            <div className="min-w-0">
+                              <div className="font-bold text-sm text-white roco-title-font truncate">{item.name}</div>
+                              <div className="text-[11px] text-slate-400 mt-0.5 line-clamp-1">{item.description}</div>
+                            </div>
                           </div>
-                          <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-black/70 text-emerald-300 border border-emerald-400/50">
+                          <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-black/70 text-emerald-300 border border-emerald-400/50 shrink-0 ml-2">
                             x{slot.count}
                           </span>
                         </button>
@@ -1262,20 +1373,20 @@ export const BattleView: React.FC<BattleViewProps> = ({
                       }}
                       className={`p-3 rounded-2xl text-left border-2 transition-all cursor-pointer ${
                         isCurrent
-                          ? 'bg-cyan-950/80 border-cyan-400 text-cyan-300 shadow-lg'
+                          ? 'bg-amber-950/40 border-amber-400 text-amber-200 shadow-lg'
                           : isDead
                           ? 'bg-slate-900/40 border-slate-800 opacity-40 cursor-not-allowed'
-                          : 'bg-slate-900 border-slate-700 hover:border-cyan-400 hover:bg-slate-850'
+                          : 'roco-panel border-[#b8860b]/30 hover:border-amber-400 hover:bg-[#061426]'
                       }`}
                     >
                       <div className="flex items-center gap-2.5">
                         <PetAvatar speciesId={p.speciesId} size={42} />
                         <div className="truncate">
-                          <div className="font-bold text-xs text-white truncate game-title-font">{p.nickname}</div>
-                          <div className="text-[10px] text-slate-400 font-mono">Lv.{p.level}</div>
+                          <div className="font-bold text-xs text-white truncate roco-title-font">{p.nickname}</div>
+                          <div className="text-[10px] text-amber-300 font-mono">Lv.{p.level}</div>
                         </div>
                       </div>
-                      <div className="text-[10px] text-slate-400 mt-1.5 font-mono">
+                      <div className="text-[10px] text-slate-300 mt-1.5 font-mono">
                         HP: {p.currentHp}/{p.stats.hp}
                       </div>
                     </button>
@@ -1298,20 +1409,23 @@ export const BattleView: React.FC<BattleViewProps> = ({
             </div>
 
             <div>
-              <h2 className="text-3xl font-black text-amber-300 game-title-font">对决大获全胜！</h2>
+              <h2 className="text-3xl font-black text-amber-300 roco-title-font">对决大获全胜！</h2>
               <p className="text-slate-300 text-xs mt-1">
-                恭喜灵契师！你与本命幻灵的心念默契更上一层楼！
+                恭喜小魔法师！你与出战宠物的亲密羁绊更进一步！
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 bg-slate-950/80 rounded-2xl p-4 border border-slate-800">
+            <div className="grid grid-cols-2 gap-3 bg-slate-950/80 rounded-2xl p-4 border border-[#b8860b]/40">
               <div className="text-left">
-                <span className="text-xs text-slate-400">获得修为经验</span>
+                <span className="text-xs text-slate-400">获得升级经验</span>
                 <p className="text-xl font-bold text-cyan-300 font-mono">+{victoryData.expEarned} EXP</p>
               </div>
               <div className="text-right">
-                <span className="text-xs text-slate-400">获得天地灵石</span>
-                <p className="text-xl font-bold text-amber-300 font-mono">+{victoryData.coinsEarned} 灵石</p>
+                <span className="text-xs text-slate-400">获得洛克贝</span>
+                <p className="text-xl font-bold text-amber-300 font-mono flex items-center justify-end gap-1">
+                  <IconRocoCoin size={20} />
+                  <span>+{victoryData.coinsEarned}</span>
+                </p>
               </div>
             </div>
 

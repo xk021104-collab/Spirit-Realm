@@ -30,6 +30,8 @@ import { AuthModal } from './components/AuthModal';
 import { WorldChatPanel } from './components/WorldChatPanel';
 import { INITIAL_FRIENDS } from './data/friends';
 
+import { PlayerAvatar } from './components/PlayerAvatar';
+
 import {
   Sparkles,
   Compass,
@@ -49,6 +51,11 @@ import {
   Mail,
   Cloud,
   Music,
+  Coins,
+  Gem,
+  Crown,
+  Plus,
+  Heart,
 } from 'lucide-react';
 
 const STORAGE_KEY = 'huanling_mijing_save_v1';
@@ -1192,74 +1199,106 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#020617] text-slate-100 flex flex-col items-center justify-start sm:justify-center p-1 sm:p-2 select-none overflow-x-hidden">
-      {/* 1. Roco Kingdom Classic Fantasy Game Header Bar */}
-      <header className="w-full max-w-5xl bg-gradient-to-r from-[#061426] via-[#091b30] to-[#061426] border-2 border-[#b8860b]/40 rounded-t-2xl px-3 py-2 flex items-center justify-between text-xs text-slate-300 shadow-2xl backdrop-blur-md gap-2">
-        {/* Left: Game Title with Vermilion Seal */}
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5">
-            <h1 className="roco-title-font text-base sm:text-xl roco-gold-text font-black tracking-wide drop-shadow-[0_2px_8px_rgba(245,158,11,0.6)]">
-              幻灵秘境
-            </h1>
-            <span className="roco-seal text-[9px] px-1.5 py-0.2 font-bold tracking-wider">
-              幻境
+      {/* 1. Roco Kingdom Classic Fantasy Game Top Navigation Bar */}
+      <header className="w-full max-w-5xl roco-top-bar rounded-t-2xl px-3 py-2 flex flex-wrap items-center justify-between text-xs text-slate-300 gap-2">
+        {/* Left: Player Profile & Realm Crest (洛克小魔法师头像与修仙铭牌) */}
+        <div className="flex items-center gap-2.5">
+          <div className="relative group cursor-pointer" onClick={() => setIsPetTrainOpen(true)} title="点击查看灵宠修炼与详细资料">
+            <div className="w-10 h-10 rounded-full border-2 border-[#fde047] bg-gradient-to-br from-[#1e3a8a] to-[#0f172a] flex items-center justify-center overflow-hidden shadow-[0_0_12px_rgba(250,204,21,0.5)]">
+              <PlayerAvatar size={36} />
+            </div>
+            <div className="absolute -bottom-1 -right-1 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-[9px] px-1 rounded-full border border-yellow-200 shadow font-mono">
+              Lv.{myTopLevel}
+            </div>
+          </div>
+
+          <div className="flex flex-col">
+            <div className="flex items-center gap-1.5">
+              <span className="roco-title-font font-bold text-sm text-slate-100 tracking-wide">
+                {playerName}
+              </span>
+              <span className="roco-seal text-[9px] px-1.5 py-0.2 font-bold tracking-wider">
+                小魔法师
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5 text-[10px] text-amber-200/90 font-mono mt-0.5">
+              <span className="text-amber-400 font-bold">总战力:</span>
+              <span className="text-white font-bold">{myCombatPower}</span>
+              <span className="text-slate-600">|</span>
+              <span className="text-cyan-300">图鉴: {unlockedSpeciesIds.length}/16</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Center: Roco Kingdom Iconic Currencies & Vitality Gauges (洛克贝/洛克钻/活力值) */}
+        <div className="hidden sm:flex items-center gap-2">
+          {/* 1. 洛克贝 */}
+          <div
+            onClick={() => setIsShopOpen(true)}
+            className="roco-currency-badge cursor-pointer group"
+            title="查看洛克贝储备 · 点击前往跳跳集市"
+          >
+            <div className="w-4 h-4 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-xs">
+              <Coins className="w-2.5 h-2.5 text-slate-950" />
+            </div>
+            <span className="font-mono text-[11px] font-bold text-amber-300">
+              {playerCoins.toLocaleString()}
+            </span>
+            <span className="text-[9px] text-slate-400 font-mono">贝</span>
+            <div className="w-3.5 h-3.5 rounded-full bg-amber-500/30 group-hover:bg-amber-400 text-amber-200 group-hover:text-slate-950 flex items-center justify-center text-[10px] font-bold ml-0.5 transition-colors">
+              +
+            </div>
+          </div>
+
+          {/* 2. 洛克钻 */}
+          <div
+            onClick={() => setIsShopOpen(true)}
+            className="roco-currency-badge cursor-pointer group"
+            title="洛克魔法钻 · 用于兑换珍贵魔法道具与稀有咕噜球"
+          >
+            <div className="w-4 h-4 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center shadow-xs">
+              <Gem className="w-2.5 h-2.5 text-white" />
+            </div>
+            <span className="font-mono text-[11px] font-bold text-cyan-300">
+              680
+            </span>
+            <span className="text-[9px] text-slate-400 font-mono">钻</span>
+            <div className="w-3.5 h-3.5 rounded-full bg-cyan-500/30 group-hover:bg-cyan-400 text-cyan-200 group-hover:text-slate-950 flex items-center justify-center text-[10px] font-bold ml-0.5 transition-colors">
+              +
+            </div>
+          </div>
+
+          {/* 3. 活力值 */}
+          <div className="roco-currency-badge" title="小洛克每日探索活力值">
+            <div className="w-4 h-4 rounded-full bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center shadow-xs">
+              <Zap className="w-2.5 h-2.5 text-slate-950" />
+            </div>
+            <span className="font-mono text-[11px] font-bold text-emerald-300">
+              100/100
             </span>
           </div>
-          <span className="text-[9px] text-amber-300/80 hidden lg:inline tracking-[0.25em] font-mono font-bold -mb-0.5">
-            · SPIRIT REALM
-          </span>
         </div>
 
-        {/* Center: Current Zone Indicator */}
-        <div className="hidden md:flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#030d1a]/90 border border-[#b8860b]/40 text-[11px] text-amber-200">
-          <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-          <span className="roco-title-font">秘境探索中：{currentScene.name}</span>
-        </div>
-
-        {/* Right: Comprehensive Navigation Shortcuts */}
+        {/* Right: Quick Action Candy Buttons & Utilities (活动/信箱/公会/天梯/GM) */}
         <div className="flex items-center gap-1 sm:gap-1.5 flex-wrap justify-end">
-          {/* GM Tools Button */}
+          {/* Daily Events Activity Center */}
           <button
-            onClick={() => setIsGmOpen(true)}
-            className="px-2 py-1 rounded-lg text-xs text-purple-200 hover:text-white bg-purple-950/80 hover:bg-purple-900 border border-purple-500/50 transition-all cursor-pointer font-medium flex items-center gap-1 roco-title-font shadow"
-            title="呼出天道 GM 调试控制台 (快捷键 ~)"
+            onClick={() => setIsDailyEventsOpen(true)}
+            className="roco-action-pill bg-gradient-to-b from-amber-600/40 to-amber-950/60"
+            title="活动中心 · 每日签到与学院试炼"
           >
-            <Wrench className="w-3.5 h-3.5 text-purple-400" />
-            <span className="hidden sm:inline">GM</span>
-          </button>
-
-          {/* Admin Operations Portal Button */}
-          <button
-            onClick={() => setIsAdminDashboardOpen(true)}
-            className="px-2 py-1 rounded-lg text-xs text-cyan-200 hover:text-white bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/50 transition-all cursor-pointer font-medium flex items-center gap-1 roco-title-font shadow"
-            title="进入服务端运营后台管理系统"
-          >
-            <Shield className="w-3.5 h-3.5 text-cyan-400" />
-            <span className="hidden sm:inline">后台</span>
-          </button>
-
-          {/* Pet Storage / Sanctuary */}
-          <button
-            onClick={() => setIsPetStorageOpen(true)}
-            className="px-2 py-1 rounded-lg text-xs text-emerald-200 hover:text-white bg-emerald-950/70 hover:bg-emerald-900 border border-emerald-500/50 transition-all cursor-pointer font-medium flex items-center gap-1 roco-title-font shadow"
-            title="查看仙府珍兽居与灵宠仓库"
-          >
-            <Archive className="w-3.5 h-3.5 text-emerald-400" />
-            <span className="hidden sm:inline">仙府</span>
-            {petStorage.length > 0 && (
-              <span className="px-1 text-[9px] bg-emerald-600/80 text-white rounded-full">
-                {petStorage.length}
-              </span>
-            )}
+            <Gift className="w-3.5 h-3.5 text-amber-300 animate-bounce" />
+            <span className="hidden md:inline">活动</span>
           </button>
 
           {/* Mailbox Button */}
           <button
             onClick={() => setIsMailboxOpen(true)}
-            className="px-2 py-1 rounded-lg text-xs text-amber-200 hover:text-white bg-[#0a1f36]/70 hover:bg-[#0e2a4a] border border-[#b8860b]/40 transition-all cursor-pointer font-medium flex items-center gap-1 roco-title-font relative"
-            title="查看飞剑传书与补偿礼包"
+            className="roco-action-pill relative"
+            title="皇家猫头鹰信箱 · 领取礼包信件"
           >
             <Mail className="w-3.5 h-3.5 text-amber-300" />
-            <span className="hidden sm:inline">信箱</span>
+            <span className="hidden md:inline">信箱</span>
             {unreadMailsCount > 0 && (
               <span className="absolute -top-1 -right-1 px-1 text-[9px] bg-rose-500 text-white rounded-full font-bold animate-pulse shadow">
                 {unreadMailsCount}
@@ -1270,11 +1309,11 @@ export default function App() {
           {/* Guild / Alliance Button */}
           <button
             onClick={() => setIsGuildOpen(true)}
-            className="px-2 py-1 rounded-lg text-xs text-sky-200 hover:text-white bg-sky-950/70 hover:bg-sky-900 border border-sky-500/50 transition-all cursor-pointer font-medium flex items-center gap-1 roco-title-font"
-            title="查看宗门仙盟与护法心法"
+            className="roco-action-pill"
+            title="皇家魔法公会与学者勋章"
           >
             <Shield className="w-3.5 h-3.5 text-sky-400" />
-            <span className="hidden sm:inline">仙盟</span>
+            <span className="hidden md:inline">公会</span>
             {!guild.hasClaimedSalaryToday && (
               <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
             )}
@@ -1283,49 +1322,75 @@ export default function App() {
           {/* Leaderboard Button */}
           <button
             onClick={() => setIsLeaderboardOpen(true)}
-            className="px-2 py-1 rounded-lg text-xs text-amber-200 hover:text-white bg-amber-950/70 hover:bg-amber-900 border border-amber-500/50 transition-all cursor-pointer font-medium flex items-center gap-1 roco-title-font"
-            title="查看全服战力与图鉴天梯榜"
+            className="roco-action-pill"
+            title="查看王国战力天梯榜"
           >
             <Trophy className="w-3.5 h-3.5 text-amber-400" />
-            <span className="hidden sm:inline">天梯</span>
+            <span className="hidden md:inline">天梯</span>
           </button>
 
           {/* Social Friends Button */}
           <button
             onClick={() => setIsFriendsOpen(true)}
-            className="px-2 py-1 rounded-lg text-xs text-amber-200 hover:text-white bg-[#0a1f36]/70 hover:bg-[#0e2a4a] border border-[#b8860b]/40 transition-all cursor-pointer font-medium flex items-center gap-1 roco-title-font"
-            title="查看同修仙友录与互赠灵力碎片"
+            className="roco-action-pill"
+            title="查看魔法好友录与星光碎片互赠"
           >
-            <Users className="w-3.5 h-3.5 text-amber-300" />
-            <span className="hidden sm:inline">仙友</span>
+            <Users className="w-3.5 h-3.5 text-teal-300" />
+            <span className="hidden md:inline">好友</span>
             {friends.some((f) => f.canClaimFromFriend) && (
               <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse" />
+            )}
+          </button>
+
+          {/* Pet Storage / Sanctuary */}
+          <button
+            onClick={() => setIsPetStorageOpen(true)}
+            className="roco-action-pill"
+            title="皇家宠物仓库 · 存放暂不上阵的魔灵伙伴"
+          >
+            <Archive className="w-3.5 h-3.5 text-emerald-400" />
+            <span className="hidden md:inline">仓库</span>
+            {petStorage.length > 0 && (
+              <span className="px-1 text-[9px] bg-emerald-600 text-white rounded-full font-mono">
+                {petStorage.length}
+              </span>
             )}
           </button>
 
           {/* Cloud Account Button */}
           <button
             onClick={() => setIsAuthOpen(true)}
-            className="px-2 py-1 rounded-lg text-xs text-indigo-200 hover:text-white bg-indigo-950/70 hover:bg-indigo-900 border border-indigo-500/50 transition-all cursor-pointer font-medium flex items-center gap-1 roco-title-font"
+            className="roco-action-pill"
             title="天道云端账号与进度同步"
           >
             <Cloud className="w-3.5 h-3.5 text-indigo-400" />
-            <span className="hidden sm:inline">云端</span>
+            <span className="hidden md:inline">云端</span>
           </button>
 
-          {/* Quest Log Button */}
+          {/* GM Tools Button */}
           <button
-            onClick={() => setIsQuestLogOpen(true)}
-            className="px-2 py-1 rounded-lg text-xs text-slate-300 hover:text-white bg-slate-800/60 hover:bg-slate-750 border border-slate-700/60 transition-all cursor-pointer font-medium hidden md:inline"
-            title="查看主线修道任务"
+            onClick={() => setIsGmOpen(true)}
+            className="px-2 py-1 rounded-full text-xs text-purple-200 hover:text-white bg-purple-950/80 hover:bg-purple-900 border border-purple-500/50 transition-all cursor-pointer font-bold flex items-center gap-1 roco-title-font shadow"
+            title="呼出天道 GM 调试控制台 (快捷键 ~)"
           >
-            任务
+            <Wrench className="w-3.5 h-3.5 text-purple-400" />
+            <span>GM</span>
+          </button>
+
+          {/* Admin Operations Portal Button */}
+          <button
+            onClick={() => setIsAdminDashboardOpen(true)}
+            className="px-2 py-1 rounded-full text-xs text-cyan-200 hover:text-white bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/50 transition-all cursor-pointer font-bold flex items-center gap-1 roco-title-font shadow"
+            title="进入服务端运营后台管理系统"
+          >
+            <Shield className="w-3.5 h-3.5 text-cyan-400" />
+            <span className="hidden sm:inline">后台</span>
           </button>
 
           {/* Pentatonic Xianxia BGM Toggle Button */}
           <button
             onClick={handleToggleBgm}
-            className={`p-1.5 rounded-lg border transition-all cursor-pointer ${
+            className={`p-1.5 rounded-full border transition-all cursor-pointer ${
               bgmPlaying
                 ? 'bg-amber-500/30 border-amber-400 text-amber-300 shadow-[0_0_10px_rgba(245,158,11,0.5)]'
                 : 'bg-slate-800/80 hover:bg-slate-750 border-slate-700/60 text-slate-400'
@@ -1338,7 +1403,7 @@ export default function App() {
           {/* Sound FX Toggle Button */}
           <button
             onClick={handleToggleSound}
-            className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-750 text-slate-300 hover:text-white transition-colors cursor-pointer border border-slate-700/60"
+            className="p-1.5 rounded-full bg-slate-800/80 hover:bg-slate-750 text-slate-300 hover:text-white transition-colors cursor-pointer border border-slate-700/60"
             title={soundEnabled ? '音效开启' : '音效静音'}
           >
             {soundEnabled ? <Volume2 className="w-3.5 h-3.5 text-amber-300" /> : <VolumeX className="w-3.5 h-3.5" />}
@@ -1346,8 +1411,13 @@ export default function App() {
         </div>
       </header>
 
-      {/* 2. Main Game Viewport Stage */}
-      <main className="w-full max-w-5xl flex flex-col items-center justify-center my-0 shadow-2xl relative">
+      {/* 2. Main Game Viewport Stage with Gilded Bezel (洛克王国经典舞台外框与四角鎏金卷草纹) */}
+      <main className="w-full max-w-5xl flex flex-col items-center justify-center my-0 shadow-2xl relative roco-web-stage">
+        {/* 4 Corner Ornaments */}
+        <div className="corner-ornament-tl" />
+        <div className="corner-ornament-tr" />
+        <div className="corner-ornament-bl" />
+        <div className="corner-ornament-br" />
         {activeBattle.inBattle && activeBattle.enemyPet ? (
           <BattleView
             playerParty={party}

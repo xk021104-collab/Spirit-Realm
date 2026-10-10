@@ -33,51 +33,51 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({
     {
       rank: 1,
       playerId: 'p-002',
-      playerName: '青莲剑仙·李白',
-      playerTitle: '太白剑意传人',
+      playerName: '大法师·奥古斯丁',
+      playerTitle: '皇家学院名誉院长',
       score: 18450,
       level: 55,
-      avatarPetSpeciesId: 'cangqiongshenglong',
+      avatarPetSpeciesId: 'shenlong',
       vipLevel: 3,
     },
     {
       rank: 2,
       playerId: 'p-003',
-      playerName: '炽炎炎皇',
-      playerTitle: '苍炎熔渊领主',
+      playerName: '炽火狂骑·卡特',
+      playerTitle: '维苏威火山领主',
       score: 14200,
       level: 48,
-      avatarPetSpeciesId: 'fentianhuang',
+      avatarPetSpeciesId: 'fenghuang',
       vipLevel: 2,
     },
     {
       rank: 3,
       playerId: 'p-005',
-      playerName: '沧海遗珠',
-      playerTitle: '碧波水神使',
+      playerName: '沧海使者·艾琳',
+      playerTitle: '人鱼湾潮汐守护者',
       score: 11900,
       level: 42,
-      avatarPetSpeciesId: 'huanhailingzun',
+      avatarPetSpeciesId: 'bishuiling',
       vipLevel: 2,
     },
     {
       rank: 4,
       playerId: 'p-006',
-      playerName: '九幽玄冥客',
-      playerTitle: '极地冰魄真君',
+      playerName: '霜风魔导师·雷恩',
+      playerTitle: '极光冰原守护者',
       score: 9800,
       level: 38,
-      avatarPetSpeciesId: 'xuanshuangbaohu',
+      avatarPetSpeciesId: 'dianjihu',
       vipLevel: 1,
     },
     {
       rank: 5,
       playerId: 'p-007',
-      playerName: '万象天尊',
-      playerTitle: '昆仑山道宗执事',
+      playerName: '圣殿骑士·兰斯',
+      playerTitle: '皇家骑士团教官',
       score: 8650,
       level: 35,
-      avatarPetSpeciesId: 'canglinlongzun',
+      avatarPetSpeciesId: 'qingmulu',
       vipLevel: 1,
     },
   ];
@@ -86,41 +86,41 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({
     {
       rank: 1,
       playerId: 'p-002',
-      playerName: '青莲剑仙·李白',
-      playerTitle: '太白剑意传人',
+      playerName: '大法师·奥古斯丁',
+      playerTitle: '皇家学院名誉院长',
       score: 16,
       level: 55,
-      avatarPetSpeciesId: 'cangqiongshenglong',
+      avatarPetSpeciesId: 'shenlong',
       vipLevel: 3,
     },
     {
       rank: 2,
       playerId: 'p-005',
-      playerName: '沧海遗珠',
-      playerTitle: '碧波水神使',
+      playerName: '沧海使者·艾琳',
+      playerTitle: '人鱼湾潮汐守护者',
       score: 14,
       level: 42,
-      avatarPetSpeciesId: 'huanhailingzun',
+      avatarPetSpeciesId: 'bishuiling',
       vipLevel: 2,
     },
     {
       rank: 3,
       playerId: 'p-003',
-      playerName: '炽炎炎皇',
-      playerTitle: '苍炎熔渊领主',
+      playerName: '炽火狂骑·卡特',
+      playerTitle: '维苏威火山领主',
       score: 12,
       level: 48,
-      avatarPetSpeciesId: 'fentianhuang',
+      avatarPetSpeciesId: 'fenghuang',
       vipLevel: 2,
     },
     {
       rank: 4,
       playerId: 'p-007',
-      playerName: '万象天尊',
-      playerTitle: '昆仑山道宗执事',
+      playerName: '圣殿骑士·兰斯',
+      playerTitle: '皇家骑士团教官',
       score: 10,
       level: 35,
-      avatarPetSpeciesId: 'canglinlongzun',
+      avatarPetSpeciesId: 'qingmulu',
       vipLevel: 1,
     },
   ];
@@ -158,7 +158,7 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({
     if (hasPraisedToday) return;
     sound.playCatchSuccess();
     onPraiseLeader();
-    setPraiseNotice('膜拜天梯榜首大能成功！获得天道灵石 +200 赏赐！');
+    setPraiseNotice('膜拜天梯榜首成功！获得王国洛克贝 +200 奖励！');
     setTimeout(() => setPraiseNotice(null), 3000);
   };
 
@@ -181,14 +181,14 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-xl font-black roco-gold-text tracking-wide flex items-center gap-2 roco-title-font">
-                  诸天风云榜 · 乾坤天梯
+                  洛克王国 · 皇家天梯排行榜
                 </h2>
                 <span className="roco-seal text-[10px] px-1.5 py-0.2 font-bold tracking-wider">
-                  天梯
+                  天梯榜
                 </span>
                 <span className="text-xs text-amber-300/60 font-mono font-bold tracking-widest hidden sm:inline">— LEADERBOARD —</span>
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">全大陆修仙战力巅峰与图鉴收集宗师天梯榜</p>
+              <p className="text-xs text-slate-400 mt-0.5">王国小魔法师宠物战力巅峰与图鉴收集宗师排行榜</p>
             </div>
           </div>
 
@@ -197,10 +197,10 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({
               sound.playClick();
               onClose();
             }}
-            className="roco-medallion-btn text-amber-200 cursor-pointer"
+            className="roco-close-btn shrink-0"
             title="关闭排行榜"
           >
-            <X className="w-5 h-5 text-amber-200 filter drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 
@@ -219,7 +219,7 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({
               }`}
             >
               <Flame className="w-3.5 h-3.5" />
-              <span>修仙综合战力榜</span>
+              <span>宠物综合战力榜</span>
             </button>
             <button
               onClick={() => {
@@ -233,7 +233,7 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({
               }`}
             >
               <BookOpen className="w-3.5 h-3.5" />
-              <span>诸天图鉴收集榜</span>
+              <span>魔兽图鉴收集榜</span>
             </button>
           </div>
 
@@ -243,7 +243,7 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-600/30 hover:bg-amber-600/50 disabled:opacity-50 border border-amber-500/40 text-amber-300 text-xs font-bold cursor-pointer transition-colors"
           >
             <ThumbsUp className="w-3.5 h-3.5 text-amber-400" />
-            <span>{hasPraisedToday ? '今日已膜拜榜首' : '每日膜拜榜首 (+200灵石)'}</span>
+            <span>{hasPraisedToday ? '今日已膜拜榜首' : '每日膜拜榜首 (+200洛克贝)'}</span>
           </button>
         </div>
 
@@ -336,7 +336,7 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({
             <span className="text-slate-400">
               当前{activeBoard === 'POWER' ? '战力' : '图鉴'}:{' '}
               <strong className="text-cyan-300 font-mono">
-                {activeBoard === 'POWER' ? `${myCombatPower} 点` : `${myDexCount}/16 尊`}
+                {activeBoard === 'POWER' ? `${myCombatPower} 点` : `${myDexCount}/16 只`}
               </strong>
             </span>
           </div>

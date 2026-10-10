@@ -96,15 +96,15 @@ export const PetStorageModal: React.FC<PetStorageModalProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-lg font-black roco-gold-text tracking-wide flex items-center gap-2 roco-title-font">
-                  幻灵仙府 · 灵宠宝阁
+                  皇家宠物医院 · 宠物仓库
                 </h2>
                 <span className="roco-seal text-[9px] px-1.5 py-0.2 font-bold tracking-wider">
-                  仙府
+                  仓库
                 </span>
-                <span className="text-[10px] text-amber-300/60 font-mono hidden sm:inline">— SPIRIT SANCTUARY —</span>
+                <span className="text-[10px] text-amber-300/60 font-mono hidden sm:inline">— PET STORAGE —</span>
               </div>
               <p className="text-[11px] text-slate-400 mt-0.5">
-                随行战队 ({party.length}/6) · 仙府宿灵 ({storage.length} 只) · 捕获超过 6 只自动入阁
+                随行战队 ({party.length}/6) · 仓库存储 ({storage.length} 只) · 捕捉超过 6 只自动存放仓库
               </p>
             </div>
           </div>
@@ -114,10 +114,10 @@ export const PetStorageModal: React.FC<PetStorageModalProps> = ({
               sound.playClick();
               onClose();
             }}
-            className="roco-medallion-btn text-amber-200 cursor-pointer"
-            title="关闭仙府"
+            className="roco-close-btn shrink-0"
+            title="关闭仓库"
           >
-            <X className="w-5 h-5 text-amber-200 filter drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 

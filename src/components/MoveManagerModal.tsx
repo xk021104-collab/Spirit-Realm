@@ -84,8 +84,8 @@ export const MoveManagerModal: React.FC<MoveManagerModalProps> = ({
               </p>
             </div>
           </div>
-          <button onClick={onClose} className="roco-medallion-btn text-amber-200 cursor-pointer">
-            <X className="w-5 h-5 text-amber-200" />
+          <button onClick={onClose} className="roco-close-btn shrink-0" title="关闭技能管理">
+            <X className="w-5 h-5" />
           </button>
         </div>
 

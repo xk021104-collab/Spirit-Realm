@@ -120,10 +120,10 @@ export const DailyEventsModal: React.FC<DailyEventsModalProps> = ({
               sound.playClick();
               onClose();
             }}
-            className="roco-medallion-btn text-amber-200 cursor-pointer"
+            className="roco-close-btn shrink-0"
             title="关闭活动中心"
           >
-            <X className="w-5 h-5 text-amber-200 filter drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 

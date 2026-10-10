@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Quest, SceneId } from '../types/game';
 import { ITEMS_DATA } from '../data/items';
 import { sound } from '../utils/audio';
+import { IconMagicMail } from './GameIcons';
 import {
   ScrollText,
   Compass,
@@ -102,19 +103,19 @@ export const QuestTracker: React.FC<QuestTrackerProps> = ({
             <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-b from-[#081a2e]/95 via-[#061426]/90 to-transparent border-b border-[#b8860b]/40">
               <div className="flex items-center gap-3">
                 <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-700/30 border-2 border-[#d4af37]/60 flex items-center justify-center text-amber-300 shadow-md">
-                  <ScrollText className="w-6 h-6 text-amber-300" />
+                  <IconMagicMail size={28} />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
                     <h2 className="text-xl font-black roco-gold-text tracking-wide flex items-center gap-2 roco-title-font">
-                      仙途历练手札
+                      王国魔法历练手札
                     </h2>
                     <span className="roco-seal text-[10px] px-1.5 py-0.2 font-bold tracking-wider">
                       历练
                     </span>
                     <span className="text-xs text-amber-300/60 font-mono font-bold tracking-widest">— QUEST LOG —</span>
                   </div>
-                  <p className="text-xs text-slate-400 mt-0.5">跟随主线剧情，解开幻灵大陆地脉异变与天地本源奥秘</p>
+                  <p className="text-xs text-slate-400 mt-0.5">跟随主线剧情，探索洛克王国魔法大陆，成为最强魔导师！</p>
                 </div>
               </div>
 
@@ -123,10 +124,10 @@ export const QuestTracker: React.FC<QuestTrackerProps> = ({
                   sound.playClick();
                   setIsModalOpen(false);
                 }}
-                className="roco-medallion-btn text-amber-200 cursor-pointer"
-                title="关闭任务手札"
+                className="roco-close-btn shrink-0"
+                title="关闭任务日记"
               >
-                <X className="w-5 h-5 text-amber-200 filter drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" />
+                <X className="w-5 h-5" />
               </button>
             </div>
 
@@ -260,7 +261,7 @@ export const QuestTracker: React.FC<QuestTrackerProps> = ({
                       </div>
                       <div className="flex flex-wrap items-center gap-3">
                         <div className="px-3 py-1.5 rounded-lg bg-black/40 border border-amber-400/20 text-xs font-mono font-bold text-amber-300">
-                          +{selectedQuest.rewards.coins} 灵石
+                          +{selectedQuest.rewards.coins} 洛克贝
                         </div>
                         {selectedQuest.rewards.items?.map((itemSlot) => {
                           const item = ITEMS_DATA[itemSlot.itemId];

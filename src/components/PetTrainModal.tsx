@@ -124,7 +124,7 @@ export const PetTrainModal: React.FC<PetTrainModalProps> = ({
   const handleWashMarrow = () => {
     if (xiSuiPills <= 0) {
       sound.playClick();
-      setCultivateNotice('缺少【九叶洗髓仙丹】，可在珍宝阁或历练任务中获取！');
+      setCultivateNotice('缺少【天赋洗礼魔药】，可在跳跳集市或历练任务中获取！');
       setTimeout(() => setCultivateNotice(null), 3000);
       return;
     }
@@ -157,8 +157,8 @@ export const PetTrainModal: React.FC<PetTrainModalProps> = ({
 
     onUpdatePartyPet(updatedPet);
     setCultivateNotice(
-      `✨ 洗髓成功！天赋资质由 ${oldTalent} 重塑为 ${newTalent}/31！${
-        newTalent >= 30 ? '（极品神资！）' : ''
+      `✨ 洗礼成功！天资潜能由 ${oldTalent} 突破为 ${newTalent}/31！${
+        newTalent >= 30 ? '（极品天资！）' : ''
       }`
     );
     setTimeout(() => setCultivateNotice(null), 4000);
@@ -168,7 +168,7 @@ export const PetTrainModal: React.FC<PetTrainModalProps> = ({
   const handleReshapeNature = () => {
     if (dingHunPills <= 0) {
       sound.playClick();
-      setCultivateNotice('缺少【太素定魂神玉】，可在珍宝阁或仙友互赠中获取！');
+      setCultivateNotice('缺少【性格洗礼魔药】，可在跳跳集市或好友互赠中获取！');
       setTimeout(() => setCultivateNotice(null), 3000);
       return;
     }
@@ -183,7 +183,7 @@ export const PetTrainModal: React.FC<PetTrainModalProps> = ({
     };
 
     onUpdatePartyPet(updatedPet);
-    setCultivateNotice(`🔮 先天性格重塑完毕！幻灵专精觉醒为：【${newNature}】！`);
+    setCultivateNotice(`🔮 性格重塑完毕！宠物性格变更为：【${newNature}】！`);
     setTimeout(() => setCultivateNotice(null), 4000);
   };
 
@@ -205,15 +205,15 @@ export const PetTrainModal: React.FC<PetTrainModalProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-base sm:text-lg font-black roco-gold-text roco-title-font flex items-center gap-2">
-                  幻灵修炼室 · 突破洗髓与招式
+                  魔法学院 · 宠物锻炼室
                 </h2>
                 <span className="roco-seal text-[10px] px-1.5 py-0.2 font-bold tracking-wider">
-                  修行
+                  锻炼
                 </span>
-                <span className="text-xs text-amber-300/60 font-mono font-bold tracking-widest hidden sm:inline">— SPIRIT TRAINING —</span>
+                <span className="text-xs text-amber-300/60 font-mono font-bold tracking-widest hidden sm:inline">— PET TRAINING —</span>
               </div>
               <p className="text-[11px] text-slate-300 mt-0.5">
-                九天灵源造化阁：炼化经验仙果、洗髓伐脉重塑性格、自由装配神兽出战招式
+                皇家魔法学院培育所：食用可可果极速升级、洗礼天资性格、自由搭配技能招式
               </p>
             </div>
           </div>
@@ -223,10 +223,10 @@ export const PetTrainModal: React.FC<PetTrainModalProps> = ({
               sound.playClick();
               onClose();
             }}
-            className="roco-medallion-btn text-amber-200 cursor-pointer"
+            className="roco-close-btn shrink-0"
             title="关闭修炼室"
           >
-            <X className="w-5 h-5 text-amber-200 filter drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 
@@ -376,7 +376,7 @@ export const PetTrainModal: React.FC<PetTrainModalProps> = ({
                       : 'bg-slate-900 text-slate-400 hover:text-white'
                   }`}
                 >
-                  修为突破 (吞服仙果)
+                  经验升级 (喂食魔力果)
                 </button>
                 <button
                   onClick={() => setActiveTab('CULTIVATION')}
@@ -386,7 +386,7 @@ export const PetTrainModal: React.FC<PetTrainModalProps> = ({
                       : 'bg-slate-900 text-slate-400 hover:text-white'
                   }`}
                 >
-                  洗髓伐脉 (资质与性格)
+                  天资洗礼 (潜能与性格)
                 </button>
               </div>
 
@@ -394,20 +394,20 @@ export const PetTrainModal: React.FC<PetTrainModalProps> = ({
               {activeTab === 'EXP' && (
                 <div className="space-y-3">
                   <p className="text-xs text-slate-400 mb-2">
-                    吞服行囊中的高品经验果实，无需繁琐刷怪，瞬间提升修为并触发形态蜕变！
+                    喂食行囊中的美味经验果实，无需繁琐刷怪，快速提升等级并触发进化！
                   </p>
 
                   {/* Pill 1 */}
                   <div className="bg-slate-900 p-3.5 rounded-xl border border-slate-800 flex items-center justify-between">
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-xs text-emerald-300">玄灵凝魄果</span>
+                        <span className="font-bold text-xs text-emerald-300">可可果</span>
                         <span className="text-[10px] bg-emerald-950 text-emerald-400 px-1.5 py-0.2 rounded border border-emerald-500/40 font-mono">
                           +200 EXP
                         </span>
                       </div>
                       <span className="text-[11px] text-slate-400 block mt-1">
-                        当前拥有：<b className="text-white font-mono">{smallPills}</b> 枚
+                        当前拥有：<b className="text-white font-mono">{smallPills}</b> 颗
                       </span>
                     </div>
 
@@ -416,7 +416,7 @@ export const PetTrainModal: React.FC<PetTrainModalProps> = ({
                       onClick={() => handleFeedExp('small')}
                       className="flash-gold-btn px-4 py-1.5 rounded-lg text-xs font-bold cursor-pointer disabled:opacity-40"
                     >
-                      使用 1 枚
+                      使用 1 颗
                     </button>
                   </div>
 
@@ -424,13 +424,13 @@ export const PetTrainModal: React.FC<PetTrainModalProps> = ({
                   <div className="bg-slate-900 p-3.5 rounded-xl border border-slate-800 flex items-center justify-between">
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-xs text-amber-300">九转通天仙果</span>
+                        <span className="font-bold text-xs text-amber-300">严父果</span>
                         <span className="text-[10px] bg-amber-950 text-amber-400 px-1.5 py-0.2 rounded border border-amber-500/40 font-mono">
                           +1000 EXP
                         </span>
                       </div>
                       <span className="text-[11px] text-slate-400 block mt-1">
-                        当前拥有：<b className="text-white font-mono">{largePills}</b> 枚
+                        当前拥有：<b className="text-white font-mono">{largePills}</b> 颗
                       </span>
                     </div>
 
@@ -439,7 +439,7 @@ export const PetTrainModal: React.FC<PetTrainModalProps> = ({
                       onClick={() => handleFeedExp('large')}
                       className="flash-gold-btn px-4 py-1.5 rounded-lg text-xs font-bold cursor-pointer disabled:opacity-40"
                     >
-                      使用 1 枚
+                      使用 1 颗
                     </button>
                   </div>
                 </div>
@@ -449,20 +449,20 @@ export const PetTrainModal: React.FC<PetTrainModalProps> = ({
               {activeTab === 'CULTIVATION' && (
                 <div className="space-y-3">
                   <p className="text-xs text-slate-400 mb-2">
-                    重塑天地幻灵的先天灵根，洗练 31 点资质极限，重塑性格专精倾向！
+                    皇家魔法学院秘制洗礼魔药，重塑宠物各项天资潜能(1~31)，重塑性格属性专精倾向！
                   </p>
 
                   {/* Item 1: 洗髓丹 */}
                   <div className="bg-slate-900 p-3.5 rounded-xl border border-slate-800 flex items-center justify-between">
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-xs text-purple-300">九叶洗髓仙丹</span>
+                        <span className="font-bold text-xs text-purple-300">天赋洗礼魔药</span>
                         <span className="text-[10px] bg-purple-950 text-purple-400 px-1.5 py-0.2 rounded border border-purple-500/40 font-mono">
-                          资质重塑 (1~31)
+                          天资重塑 (1~31)
                         </span>
                       </div>
                       <span className="text-[11px] text-slate-400 block mt-1">
-                        当前拥有：<b className="text-white font-mono">{xiSuiPills}</b> 颗
+                        当前拥有：<b className="text-white font-mono">{xiSuiPills}</b> 瓶
                       </span>
                     </div>
 
@@ -471,7 +471,7 @@ export const PetTrainModal: React.FC<PetTrainModalProps> = ({
                       onClick={handleWashMarrow}
                       className="px-4 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 disabled:opacity-40 text-white text-xs font-bold cursor-pointer transition-colors shadow"
                     >
-                      洗髓 1 次
+                      洗礼 1 次
                     </button>
                   </div>
 
@@ -479,13 +479,13 @@ export const PetTrainModal: React.FC<PetTrainModalProps> = ({
                   <div className="bg-slate-900 p-3.5 rounded-xl border border-slate-800 flex items-center justify-between">
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-xs text-cyan-300">太素定魂神玉</span>
+                        <span className="font-bold text-xs text-cyan-300">性格洗礼魔药</span>
                         <span className="text-[10px] bg-cyan-950 text-cyan-400 px-1.5 py-0.2 rounded border border-cyan-500/40 font-mono">
                           性格重构
                         </span>
                       </div>
                       <span className="text-[11px] text-slate-400 block mt-1">
-                        当前拥有：<b className="text-white font-mono">{dingHunPills}</b> 枚
+                        当前拥有：<b className="text-white font-mono">{dingHunPills}</b> 瓶
                       </span>
                     </div>
 
@@ -494,7 +494,7 @@ export const PetTrainModal: React.FC<PetTrainModalProps> = ({
                       onClick={handleReshapeNature}
                       className="px-4 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 disabled:opacity-40 text-white text-xs font-bold cursor-pointer transition-colors shadow"
                     >
-                      定魂 1 次
+                      重塑 1 次
                     </button>
                   </div>
                 </div>
@@ -502,9 +502,9 @@ export const PetTrainModal: React.FC<PetTrainModalProps> = ({
 
               {/* Tips */}
               <div className="bg-slate-900/60 p-3 rounded-xl border border-slate-800 text-[11px] text-slate-400 mt-4">
-                <span className="text-amber-400 font-bold block mb-1">💡 修仙心得：</span>
-                <p>• 资质达到 30 以上即可跃升为极品天品神兽，基础战力提升 15%</p>
-                <p>• 固执性格大幅强化物理攻击，保守性格大幅强化法术特攻</p>
+                <span className="text-amber-400 font-bold block mb-1">💡 魔法培养指南：</span>
+                <p>• 天资达到 30 以上即可拥有极品属性加成，基础战力提升 15%</p>
+                <p>• 孤僻/勇敢性格偏向物理攻击，保守/冷静性格偏向魔法特攻</p>
               </div>
             </div>
 
@@ -516,7 +516,7 @@ export const PetTrainModal: React.FC<PetTrainModalProps> = ({
                 }}
                 className="flash-gold-btn px-6 py-1.5 rounded-xl text-xs cursor-pointer"
               >
-                修炼完毕
+                完成锻炼
               </button>
             </div>
           </div>

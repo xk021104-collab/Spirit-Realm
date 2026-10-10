@@ -5,7 +5,8 @@ import { MOVES_DATA } from '../data/moves';
 import { PetAvatar, ELEMENT_COLORS } from './PetAvatar';
 import { ArtGalleryModal } from './ArtGalleryModal';
 import { sound } from '../utils/audio';
-import { Backpack, Sparkles, Star, Heart, Zap, Sword, Shield, X, Check } from 'lucide-react';
+import { IconMagicBag } from './GameIcons';
+import { Sparkles, Star, Heart, Zap, Sword, Shield, X, Check } from 'lucide-react';
 
 interface PetBagModalProps {
   party: PetInstance[];
@@ -38,19 +39,19 @@ export const PetBagModal: React.FC<PetBagModalProps> = ({
         <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-b from-[#081a2e]/95 via-[#061426]/90 to-transparent border-b border-[#b8860b]/40">
           <div className="flex items-center gap-3">
             <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-700/30 border-2 border-[#d4af37]/60 flex items-center justify-center text-amber-300 shadow-md">
-              <Backpack className="w-6 h-6 text-amber-300" />
+              <IconMagicBag size={30} />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-xl font-black roco-gold-text tracking-wide flex items-center gap-2 roco-title-font">
-                  随行幻灵背包
+                  魔法行囊 · 随行宠物
                 </h2>
                 <span className="roco-seal text-[10px] px-1.5 py-0.2 font-bold tracking-wider">
-                  灵伴
+                  背包
                 </span>
-                <span className="text-xs text-amber-300/60 font-mono font-bold tracking-widest">— SPIRIT PARTY —</span>
+                <span className="text-xs text-amber-300/60 font-mono font-bold tracking-widest">— PET BAG —</span>
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">管理你的随行战队 · 当前随行伙伴 ({party.length} / 6)</p>
+              <p className="text-xs text-slate-400 mt-0.5">管理你的随行宠物战队 · 当前随行伙伴 ({party.length} / 6)</p>
             </div>
           </div>
 
@@ -59,10 +60,10 @@ export const PetBagModal: React.FC<PetBagModalProps> = ({
               sound.playClick();
               onClose();
             }}
-            className="roco-medallion-btn text-amber-200 cursor-pointer"
+            className="roco-close-btn shrink-0"
             title="关闭背包"
           >
-            <X className="w-5 h-5 text-amber-200 filter drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 
@@ -152,9 +153,14 @@ export const PetBagModal: React.FC<PetBagModalProps> = ({
                           Lv.{selectedPet.level}
                         </span>
                       </div>
-                      <p className="text-xs text-slate-300 mt-1">
-                        {species.title} · 性格: {selectedPet.nature}
-                      </p>
+                      <div className="flex flex-wrap items-center gap-2 mt-1">
+                        <span className="text-xs text-slate-300">
+                          {species.title} · 性格: <span className="text-amber-200 font-bold">{selectedPet.nature}</span>
+                        </span>
+                        <span className="text-[10px] text-amber-300 bg-amber-950/60 border border-amber-500/40 px-1.5 py-0.2 rounded font-mono font-bold">
+                          ★ 资质天资: {selectedPet.talentScore || 85}/100
+                        </span>
+                      </div>
                     </div>
                   </div>
 
@@ -181,7 +187,7 @@ export const PetBagModal: React.FC<PetBagModalProps> = ({
                 <div className="p-4 rounded-xl roco-panel border border-[#b8860b]/40 space-y-3">
                   <div className="space-y-1">
                     <div className="flex justify-between text-xs text-slate-200 font-mono">
-                      <span className="text-rose-400 font-bold font-mono">气血生命 (HP)</span>
+                      <span className="text-rose-400 font-bold font-mono">精力生命 (HP)</span>
                       <span className="font-bold">
                         {selectedPet.currentHp} / {selectedPet.stats.hp}
                       </span>
@@ -196,7 +202,7 @@ export const PetBagModal: React.FC<PetBagModalProps> = ({
 
                   <div className="space-y-1">
                     <div className="flex justify-between text-xs text-slate-200 font-mono">
-                      <span className="text-cyan-400 font-bold font-mono">修行经验 (EXP)</span>
+                      <span className="text-cyan-400 font-bold font-mono">升级经验 (EXP)</span>
                       <span className="font-bold">
                         {selectedPet.exp} / {selectedPet.maxExp}
                       </span>
@@ -238,7 +244,7 @@ export const PetBagModal: React.FC<PetBagModalProps> = ({
                       <div className="text-white font-bold mt-0.5">{selectedPet.stats.spDef}</div>
                     </div>
                     <div className="p-2 rounded-xl bg-[#061426]/80 border border-[#b8860b]/30 shadow-inner">
-                      <div className="text-slate-400 text-[10px]">形态</div>
+                      <div className="text-slate-400 text-[10px]">形态阶段</div>
                       <div className="text-amber-300 font-bold mt-0.5">
                         {species.evolutionLevel ? `进阶Lv.${species.evolutionLevel}` : '终极形态'}
                       </div>
@@ -250,7 +256,7 @@ export const PetBagModal: React.FC<PetBagModalProps> = ({
                 <div className="p-4 rounded-xl roco-panel border border-[#b8860b]/40 space-y-2">
                   <div className="text-xs font-bold text-amber-300 flex items-center gap-1.5 roco-title-font">
                     <Sword className="w-3.5 h-3.5 text-amber-300" />
-                    <span>已装备灵技招式 (4/4)</span>
+                    <span>已装备技能招式 (4/4)</span>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     {selectedPet.moves.map((m) => {

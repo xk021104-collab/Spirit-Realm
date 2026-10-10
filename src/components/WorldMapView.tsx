@@ -27,6 +27,7 @@ import {
   MapPin,
   CheckCircle,
 } from 'lucide-react';
+import { IconRocoCoin } from './GameIcons';
 
 interface WorldMapViewProps {
   currentSceneId: string;
@@ -69,91 +70,91 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
   const [isDayTime, setIsDayTime] = useState<boolean>(true);
   const [zoomLevel, setZoomLevel] = useState<number>(1);
 
-  // 7 Map Nodes corresponding to authentic Xianxia Huan Ling Mi Jing fantasy continent
+  // 7 Map Nodes corresponding to authentic Roco Kingdom Western Fantasy scenes
   const realmNodes: MapRealmNode[] = [
     {
       id: 'ancient_forest',
-      name: '青翠灵谷',
+      name: '轻风山',
       sceneId: 'PRAIRIE',
       x: 23,
       y: 45,
-      description: '仙风拂照的万木灵谷，万古灵木繁茂，青木鹿与木系天地灵宠长居吐纳于此。',
-      spiritTypes: ['木系', '灵木'],
-      climate: '灵风和煦 · 繁花生机',
+      description: '绿草如茵、微风和煦的轻风山，大风车与七彩蘑菇林立，青木鹿常在草丛中嬉戏。',
+      spiritTypes: ['草系', '萌宠'],
+      climate: '微风和煦 · 繁花盛开',
       levelRange: 'Lv.5 - 15',
-      tag: '初阶道场',
+      tag: '新手启航',
     },
     {
       id: 'crystal_lake',
-      name: '碧海灵汐湾',
+      name: '人鱼湾',
       sceneId: 'BAY',
       x: 48,
       y: 53,
-      description: '浩瀚万顷的沧溟仙海湾，碧波荡漾泛鲛珠华光，碧水灵跃动于归墟潮汐浪花间。',
-      spiritTypes: ['水系', '沧海'],
-      climate: '碧水温澜 · 鲛珠潮汐',
+      description: '波光粼粼的蔚蓝海湾，拥有绝美珊瑚礁与珍珠贝壳，碧水灵在此逐浪畅游。',
+      spiritTypes: ['水系', '冰系'],
+      climate: '海风轻拂 · 碧波微澜',
       levelRange: 'Lv.10 - 20',
-      tag: '沧溟圣所',
+      tag: '蔚蓝圣所',
     },
     {
       id: 'celestial_island',
-      name: '万古仙门',
+      name: '魔法学院',
       sceneId: 'ACADEMY',
       x: 62,
       y: 26,
-      description: '悬浮九天的九霄仙门圣殿，大长老玄冥与引道执事在此指引御灵仙师登堂入室。',
-      spiritTypes: ['仙道', '九霄'],
-      climate: '浮岛紫霞 · 仙鹤凌空',
+      description: '漂浮在云端之上的宏伟魔法城堡，德高望重的格里芬院长与沃尔克导师在此指导小魔法师。',
+      spiritTypes: ['魔法', '全系'],
+      climate: '云端城堡 · 繁星璀璨',
       levelRange: 'Lv.1 - 100',
-      tag: '宗门圣殿',
+      tag: '王国学府',
     },
     {
       id: 'ancient_city',
-      name: '太虚万宝阁',
+      name: '跳跳集市',
       sceneId: 'SHOP',
       x: 32,
       y: 70,
-      description: '太虚仙墟最为繁华浩大的仙家坊市，万宝掌柜葛乾坐镇，通玄灵契晶石一应俱全。',
-      spiritTypes: ['仙市', '奇珍'],
-      climate: '宝光冲霄 · 万商云集',
-      levelRange: '安全仙坊',
-      tag: '仙墟都会',
+      description: '洛克王国最热闹的交易集市，神秘商人罗伦斯在此摆摊，各种咕噜球与魔药应有尽有。',
+      spiritTypes: ['集市', '魔药'],
+      climate: '游商如织 · 货物琳琅',
+      levelRange: '安全城镇',
+      tag: '商业中心',
     },
     {
       id: 'volcano',
-      name: '熔渊烈峰',
+      name: '维苏威火山',
       sceneId: 'VOLCANO',
       x: 74,
       y: 52,
-      description: '九幽地心熔火炽烈翻涌的烈焰仙山，赤焰雀与火系灵兽在此淬炼真火神芒。',
+      description: '地心熔浆翻滚的炎热火山，赤火神凰在此展翅翱翔，火系宠物在此修炼魔焰。',
       spiritTypes: ['火系', '地心'],
-      climate: '烈火熔金 · 离火天罡',
+      climate: '烈火熔岩 · 炽热升腾',
       levelRange: 'Lv.15 - 30',
-      tag: '离火熔穴',
+      tag: '火之秘境',
     },
     {
       id: 'snow_mountain',
-      name: '瑶池杏林阁',
+      name: '宠物医院',
       sceneId: 'HOSPITAL',
       x: 82,
       y: 78,
-      description: '云雾氤氲的瑶池药香仙境，医仙云夕引长生灵泉，涤荡伤疲、尽复灵宠生机。',
-      spiritTypes: ['仙医', '疗愈'],
-      climate: '灵雾仙香 · 圣泉涤心',
-      levelRange: 'Lv.20 - 35',
-      tag: '疗愈仙泉',
+      description: '温馨静谧的宠物疗愈中心，温柔的萌萌护士为每一只受伤疲惫的宠物恢复满状态。',
+      spiritTypes: ['恢复', '庇护'],
+      climate: '温暖宁静 · 治愈之光',
+      levelRange: 'Lv.1 - 100',
+      tag: '爱心诊所',
     },
     {
       id: 'desert_ruins',
-      name: '九霄战仙擂',
+      name: '皇家竞技场',
       sceneId: 'ARENA',
       x: 58,
       y: 74,
-      description: '九天神霄劫雷轰鸣的悬空通天战台，试炼神将陆天衡设下封神天梯决斗擂台。',
-      spiritTypes: ['雷系', '战仙'],
-      climate: '紫电奔涌 · 万劫战意',
-      levelRange: 'Lv.25 - 45',
-      tag: '天梯决仙台',
+      description: '金碧辉煌的皇家决斗大殿，骑士团长兰斯洛在此镇守擂台，见证最强魔法师的诞生。',
+      spiritTypes: ['竞技', '荣誉'],
+      climate: '战鼓擂动 · 荣耀之地',
+      levelRange: 'Lv.25 - 50',
+      tag: '荣耀擂台',
     },
   ];
 
@@ -193,10 +194,10 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
             <div className="flex flex-col">
               <div className="flex items-center gap-1.5">
                 <span className="font-black text-sm text-[#45260f] tracking-wide">
-                  天命之人 · {playerName}
+                  小魔法师 · {playerName}
                 </span>
                 <span className="text-[10px] text-[#855325] font-serif border border-[#855325]/40 px-1 py-0.2 rounded">
-                  御灵仙师
+                  见习法师
                 </span>
               </div>
               {/* HP & MP Dual Bars */}
@@ -219,13 +220,13 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
             </div>
           </div>
 
-          {/* Top-Center: Game Logo with Radiant Celestial Halo + Clock (Image 3) */}
+          {/* Top-Center: Game Logo with Radiant Celestial Halo + Clock */}
           <div className="flex flex-col items-center">
-            {/* Celestial Halo & Calligraphy */}
+            {/* Logo */}
             <div className="relative flex items-center justify-center">
               <div className="absolute w-44 h-10 rounded-full bg-amber-400/35 blur-md -top-1 pointer-events-none" />
               <h1 className="relative font-black text-2xl md:text-3xl tracking-wider text-transparent bg-clip-text bg-gradient-to-b from-[#2563eb] via-[#1d4ed8] to-[#1e3a8a] drop-shadow-[0_2px_4px_rgba(245,158,11,0.8)] font-serif">
-                幻灵秘境
+                洛克王国
               </h1>
             </div>
 
@@ -245,22 +246,20 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
 
           {/* Top-Right: Currencies & Close Window */}
           <div className="flex items-center gap-3">
-            {/* Gold */}
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#2a1a0d]/80 text-amber-300 border border-[#b48a52]/60 shadow-sm text-xs font-mono font-bold">
-              <div className="w-4 h-4 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center text-[10px]">
-                金
-              </div>
-              <span>{gold.toLocaleString()}</span>
-              <button className="text-amber-400 hover:text-white font-bold ml-0.5">+</button>
+            {/* Roco Gold Coins */}
+            <div className="roco-currency-badge" title="当前拥有的洛克贝">
+              <IconRocoCoin size={20} />
+              <span className="font-mono text-xs font-bold text-amber-300">{gold.toLocaleString()}</span>
+              <span className="text-[10px] text-amber-400 font-bold hidden sm:inline">洛克贝</span>
             </div>
 
-            {/* Diamonds */}
+            {/* Roco Diamonds */}
             <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#2a1a0d]/80 text-cyan-300 border border-[#b48a52]/60 shadow-sm text-xs font-mono font-bold">
-              <div className="w-4 h-4 rounded-full bg-cyan-400 text-slate-950 flex items-center justify-center text-[10px]">
-                晶
+              <div className="w-4 h-4 rounded-full bg-cyan-400 text-slate-950 flex items-center justify-center text-[10px] font-black">
+                钻
               </div>
               <span>90</span>
-              <button className="text-cyan-400 hover:text-white font-bold ml-0.5">+</button>
+              <span className="text-[10px] text-cyan-400 font-bold hidden sm:inline">洛克钻</span>
             </div>
 
             <button
@@ -268,9 +267,10 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
                 sound.playClick();
                 onClose();
               }}
-              className="w-8 h-8 rounded-xl bg-[#4a2e16] hover:bg-[#6b4220] text-amber-200 border border-[#b48a52] flex items-center justify-center cursor-pointer shadow-md transition-colors"
+              className="roco-close-btn shrink-0"
+              title="返回场景"
             >
-              <X className="w-4 h-4" />
+              <X className="w-5 h-5" />
             </button>
           </div>
         </div>
@@ -522,7 +522,7 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
                 <Compass className="w-3.5 h-3.5 text-cyan-400" />
                 <span>Quest Tracker</span>
               </span>
-              <span className="text-[10px] text-slate-400 font-mono">游历诸天</span>
+              <span className="text-[10px] text-slate-400 font-mono">王国历练</span>
             </div>
 
             <div className="space-y-2 text-xs">
@@ -531,32 +531,32 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
                   <span className="text-[10px] bg-amber-500 text-slate-950 px-1 py-0.2 rounded font-black">
                     主线
                   </span>
-                  <span>寻找上古遗迹</span>
+                  <span>探访魔法学院</span>
                 </div>
-                <p className="text-[10px] text-slate-400 mt-0.5">前往【水晶石湖】探查天极蓝晶异象</p>
+                <p className="text-[10px] text-slate-400 mt-0.5">拜见格里芬院长，挑选初始宠物</p>
               </div>
 
               <div className="p-2 rounded-xl bg-slate-900/60 border border-emerald-500/30">
                 <div className="flex items-center justify-between text-emerald-300 font-bold">
                   <div className="flex items-center gap-1">
                     <span className="text-[10px] bg-emerald-600 text-white px-1 py-0.2 rounded font-black">
-                      支线
+                      日常
                     </span>
-                    <span>收集青灵果</span>
+                    <span>采集可可果</span>
                   </div>
                   <span className="text-[10px] font-mono text-emerald-400">3/10</span>
                 </div>
-                <p className="text-[10px] text-slate-400 mt-0.5">古古森林野外采撷仙果</p>
+                <p className="text-[10px] text-slate-400 mt-0.5">轻风山野外采摘美味果实</p>
               </div>
 
               <div className="p-2 rounded-xl bg-slate-900/60 border border-cyan-500/30">
                 <div className="flex items-center gap-1 text-cyan-300 font-bold">
                   <span className="text-[10px] bg-cyan-600 text-white px-1 py-0.2 rounded font-black">
-                    支线
+                    挑战
                   </span>
-                  <span>打败风狼首领</span>
+                  <span>探访维苏威火山</span>
                 </div>
-                <p className="text-[10px] text-slate-400 mt-0.5">降伏雪山峡躁动的风啸灵兽</p>
+                <p className="text-[10px] text-slate-400 mt-0.5">探索火山洞窟，捕捉火系宠物</p>
               </div>
             </div>
           </div>
@@ -602,7 +602,7 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
               <Search className="w-3.5 h-3.5 text-amber-300" />
               <input
                 type="text"
-                placeholder="搜索秘境、遗迹或灵兽..."
+                placeholder="搜索王国区域、城镇或宠物..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="bg-transparent text-xs text-white placeholder-slate-400 focus:outline-none w-36"
@@ -639,7 +639,7 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
                   className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs shadow-lg transition-all cursor-pointer flex items-center gap-1.5 shrink-0 hover:scale-105 active:scale-95"
                 >
                   <Sparkles className="w-4 h-4 text-slate-950" />
-                  <span>御剑前往</span>
+                  <span>魔法传送</span>
                 </button>
               </div>
             </div>
@@ -674,7 +674,7 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
               <div className="w-10 h-10 rounded-full bg-gradient-to-b from-[#1e3a8a] to-[#0f172a] border-2 border-amber-400 flex items-center justify-center text-cyan-300 shadow-md group-hover:scale-110 transition-transform">
                 <Sparkles className="w-5 h-5" />
               </div>
-              <span className="text-[10px] font-bold text-amber-200 mt-0.5">世界</span>
+              <span className="text-[10px] font-bold text-amber-200 mt-0.5">王国世界</span>
             </button>
 
             {/* 3. 团队 (Team / Friends) */}
@@ -688,7 +688,7 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
               <div className="w-10 h-10 rounded-full bg-gradient-to-b from-[#1e3a8a] to-[#0f172a] border-2 border-amber-400 flex items-center justify-center text-emerald-300 shadow-md group-hover:scale-110 transition-transform">
                 <Award className="w-5 h-5" />
               </div>
-              <span className="text-[10px] font-bold text-amber-200 mt-0.5">仙友团队</span>
+              <span className="text-[10px] font-bold text-amber-200 mt-0.5">好友列表</span>
             </button>
 
             {/* 4. 地图 (Map active) */}
@@ -699,7 +699,7 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
               <div className="w-11 h-11 rounded-full bg-gradient-to-b from-amber-500 to-amber-700 border-2 border-white flex items-center justify-center text-slate-950 shadow-lg scale-105 font-black">
                 <MapPin className="w-6 h-6" />
               </div>
-              <span className="text-[10px] font-black text-amber-300 mt-0.5">大千舆图</span>
+              <span className="text-[10px] font-black text-amber-300 mt-0.5">王国地图</span>
             </button>
 
             {/* 5. 背包 (Bag) */}
@@ -713,10 +713,10 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
               <div className="w-10 h-10 rounded-full bg-gradient-to-b from-[#1e3a8a] to-[#0f172a] border-2 border-amber-400 flex items-center justify-center text-amber-300 shadow-md group-hover:scale-110 transition-transform">
                 <Backpack className="w-5 h-5" />
               </div>
-              <span className="text-[10px] font-bold text-amber-200 mt-0.5">储物袋</span>
+              <span className="text-[10px] font-bold text-amber-200 mt-0.5">魔法行囊</span>
             </button>
 
-            {/* 6. 角色 (Character - Opens Image 2 Cultivator Showcase) */}
+            {/* 6. 角色 (Character) */}
             <button
               onClick={() => {
                 sound.playClick();
@@ -727,7 +727,7 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
               <div className="w-10 h-10 rounded-full bg-gradient-to-b from-[#1e3a8a] to-[#0f172a] border-2 border-amber-400 flex items-center justify-center text-amber-300 shadow-md group-hover:scale-110 transition-transform">
                 <User className="w-5 h-5" />
               </div>
-              <span className="text-[10px] font-bold text-amber-200 mt-0.5">仙师法相</span>
+              <span className="text-[10px] font-bold text-amber-200 mt-0.5">小魔法师</span>
             </button>
 
             {/* 7. 商店 (Shop) */}
@@ -741,7 +741,7 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
               <div className="w-10 h-10 rounded-full bg-gradient-to-b from-[#1e3a8a] to-[#0f172a] border-2 border-amber-400 flex items-center justify-center text-rose-300 shadow-md group-hover:scale-110 transition-transform">
                 <ShoppingBag className="w-5 h-5" />
               </div>
-              <span className="text-[10px] font-bold text-amber-200 mt-0.5">万宝商阁</span>
+              <span className="text-[10px] font-bold text-amber-200 mt-0.5">跳跳集市</span>
             </button>
           </div>
         </div>

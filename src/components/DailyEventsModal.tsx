@@ -32,13 +32,13 @@ export const DailyEventsModal: React.FC<DailyEventsModalProps> = ({
   const [wheelReward, setWheelReward] = useState<string | null>(null);
 
   const SIGNIN_REWARDS = [
-    { day: 1, name: '洛克贝 500 + 普通咕噜球x5', coins: 500, itemId: 'gulu_normal', itemCount: 5 },
-    { day: 2, name: '经验可可果x3', coins: 300, itemId: 'exp_pill_small', itemCount: 3 },
-    { day: 3, name: '中级咕噜球x3', coins: 600, itemId: 'gulu_mid', itemCount: 3 },
+    { day: 1, name: '星辉金币 500 + 初级星灵球x5', coins: 500, itemId: 'gulu_normal', itemCount: 5 },
+    { day: 2, name: '星露果x3', coins: 300, itemId: 'exp_pill_small', itemCount: 3 },
+    { day: 3, name: '中级星灵球x3', coins: 600, itemId: 'gulu_mid', itemCount: 3 },
     { day: 4, name: '中级精力药剂x5', coins: 800, itemId: 'potion_mid', itemCount: 5 },
-    { day: 5, name: '高级咕噜球x2', coins: 1000, itemId: 'gulu_high', itemCount: 2 },
-    { day: 6, name: '大袋可可果x2', coins: 1500, itemId: 'exp_pill_large', itemCount: 2 },
-    { day: 7, name: '国王咕噜球 (100%必中神器!)', coins: 3000, itemId: 'gulu_king', itemCount: 1 },
+    { day: 5, name: '高级星灵球x2', coins: 1000, itemId: 'gulu_high', itemCount: 2 },
+    { day: 6, name: '智慧圣果x2', coins: 1500, itemId: 'exp_pill_large', itemCount: 2 },
+    { day: 7, name: '至尊星辰球 (100%必中神器!)', coins: 3000, itemId: 'gulu_king', itemCount: 1 },
   ];
 
   const handleSignIn = (day: number) => {
@@ -64,10 +64,10 @@ export const DailyEventsModal: React.FC<DailyEventsModalProps> = ({
       sound.playCatchSuccess();
       setIsSpinning(false);
       const rewards = [
-        { text: '恭喜抽中【洛克贝 x888】！', coins: 888 },
-        { text: '恭喜抽中【中级咕噜球 x3】！', itemId: 'gulu_mid', count: 3 },
-        { text: '恭喜抽中【经验可可果 x2】！', itemId: 'exp_pill_small', count: 2 },
-        { text: '运气爆棚！抽中【高级咕噜球 x1】！', itemId: 'gulu_high', count: 1 },
+        { text: '恭喜抽中【星辉金币 x888】！', coins: 888 },
+        { text: '恭喜抽中【中级星灵球 x3】！', itemId: 'gulu_mid', count: 3 },
+        { text: '恭喜抽中【星露果 x2】！', itemId: 'exp_pill_small', count: 2 },
+        { text: '运气爆棚！抽中【高级星灵球 x1】！', itemId: 'gulu_high', count: 1 },
       ];
       const pick = rewards[Math.floor(Math.random() * rewards.length)];
       setWheelReward(pick.text);
@@ -102,7 +102,7 @@ export const DailyEventsModal: React.FC<DailyEventsModalProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-base sm:text-lg font-black roco-gold-text roco-title-font flex items-center gap-2">
-                  洛克王国 · 盛典活动中心
+                  星灵王国 · 盛典活动中心
                 </h2>
                 <span className="roco-seal text-[10px] px-1.5 py-0.2 font-bold tracking-wider">
                   盛典
@@ -141,7 +141,7 @@ export const DailyEventsModal: React.FC<DailyEventsModalProps> = ({
             }`}
           >
             <Gift className="w-3.5 h-3.5" />
-            <span>七日神签 (领必抓圣皇晶)</span>
+            <span>七日神签 (领至尊星辰球)</span>
           </button>
 
           <button
@@ -183,7 +183,7 @@ export const DailyEventsModal: React.FC<DailyEventsModalProps> = ({
                 <div>
                   <h3 className="text-amber-300 font-black text-sm game-title-font">七日签到大礼包</h3>
                   <p className="text-xs text-slate-300">
-                    每日登录王国即可领取丰厚洛克贝、经验可可果与珍贵咕噜球！第7天必得百分百必中神物【国王咕噜球】！
+                    每日登录王国即可领取丰厚星辉金币、星露果与珍贵星灵球！第7天必得百分百必中神物【至尊星辰球】！
                   </p>
                 </div>
                 <span className="text-xs font-mono text-amber-400 font-bold">
@@ -256,7 +256,7 @@ export const DailyEventsModal: React.FC<DailyEventsModalProps> = ({
                 皇家魔法星盘 · 每日转盘抽取
               </h3>
               <p className="text-xs text-slate-400 max-w-md mb-6">
-                拨动神秘魔法星盘，获取魔法道具、高级咕噜球与美味可可果！
+                拨动神秘魔法星盘，获取魔法道具、高级星灵球与美味星露果！
               </p>
 
               <div className="relative w-56 h-56 rounded-full border-4 border-amber-400 bg-gradient-to-br from-indigo-950 via-slate-900 to-rose-950 shadow-2xl flex items-center justify-center mb-6 overflow-hidden">
@@ -301,7 +301,7 @@ export const DailyEventsModal: React.FC<DailyEventsModalProps> = ({
                   皇家试炼场 · 稀有宠物挑战
                 </h3>
                 <p className="text-xs text-slate-300">
-                  战胜强大的高阶宠物，证明你的魔法实力，不仅能获得巨量经验，还可使用【国王咕噜球】将其直接捕获！
+                  战胜强大的高阶宠物，证明你的魔法实力，不仅能获得巨量经验，还可使用【至尊星辰球】将其直接捕获！
                 </p>
               </div>
 

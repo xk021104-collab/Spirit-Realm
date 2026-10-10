@@ -121,14 +121,14 @@ export const PrologueIntroModal: React.FC<PrologueIntroModalProps> = ({ onComple
                   </div>
                 </motion.div>
                 <div className="absolute -bottom-2 -right-2 bg-gradient-to-r from-amber-400 to-amber-600 text-slate-950 text-[10px] font-black px-2.5 py-0.5 rounded-full border border-yellow-200 shadow-lg roco-title-font">
-                  学院院长 · 格里芬
+                  学院院长 · 阿尔弗雷德
                 </div>
               </div>
 
               <div className="space-y-1">
                 <div className="flex items-center justify-center gap-2">
                   <span className="text-xs font-mono font-bold tracking-widest text-amber-300 uppercase">
-                    《洛克王国》· 魔法学徒启程
+                    《星灵王国》· 魔法学徒启程
                   </span>
                   <span className="roco-seal text-[10px] px-1.5 py-0.2 font-bold tracking-wider">
                     序幕
@@ -141,10 +141,10 @@ export const PrologueIntroModal: React.FC<PrologueIntroModalProps> = ({ onComple
 
               <div className="p-6 rounded-2xl roco-panel text-xs md:text-sm text-slate-200 leading-relaxed text-left space-y-3 max-w-xl border border-[#b8860b]/50 shadow-inner">
                 <p className="indent-6">
-                  “你好，年轻的小魔法师！欢迎来到充满奇迹与冒险的<strong>《洛克王国》</strong>！”
+                  “你好，年轻的小魔法师！欢迎来到充满奇迹与冒险的<strong>《星灵王国》</strong>！”
                 </p>
                 <p className="indent-6">
-                  “在广袤的魔法大陆上，生活着众多不可思议的魔法宠物。从蔚蓝的人鱼湾到炽热的维苏威火山，每一个角落都等待着勇敢的小洛克去探索！”
+                  “在广袤的魔法大陆上，生活着众多不可思议的魔法宠物。从蔚蓝海湾到炽热的烈焰峡谷，每一个角落都等待着勇敢的见习魔法师去探索！”
                 </p>
                 <p className="indent-6 text-amber-300 font-semibold">
                   “作为初入魔法学院的见习魔法师，你需要挑选一只忠诚的宠物作为你的第一位冒险伙伴。来吧，挑选属于你的初始伙伴，握紧魔杖，开启属于你的魔法传奇吧！”
@@ -327,8 +327,8 @@ export const PrologueIntroModal: React.FC<PrologueIntroModalProps> = ({ onComple
                 </div>
 
                 <div className="text-right text-xs text-slate-300">
-                  学院赠礼: <span className="text-amber-300 font-bold font-mono">1000 洛克贝</span> ·{' '}
-                  <span className="text-cyan-300 font-bold font-mono">普通咕噜球 x5</span>
+                  学院赠礼: <span className="text-amber-300 font-bold font-mono">1000 星辉金币</span> ·{' '}
+                  <span className="text-cyan-300 font-bold font-mono">初级星灵球 x5</span>
                 </div>
               </div>
 

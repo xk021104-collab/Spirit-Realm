@@ -129,14 +129,14 @@ export const WardrobeModal: React.FC<WardrobeModalProps> = ({
 
     if (costCoins > 0 && playerCoins < costCoins) {
       sound.playClick();
-      setFeedbackNotice('洛克贝不足，无法解锁该装扮！');
+      setFeedbackNotice('星辉金币不足，无法解锁该装扮！');
       setTimeout(() => setFeedbackNotice(null), 2500);
       return;
     }
 
     if (costDiamonds > 0 && playerDiamonds < costDiamonds) {
       sound.playClick();
-      setFeedbackNotice('洛克钻不足，无法解锁该传世装扮！');
+      setFeedbackNotice('璀璨星钻不足，无法解锁该传世装扮！');
       setTimeout(() => setFeedbackNotice(null), 2500);
       return;
     }
@@ -219,9 +219,9 @@ export const WardrobeModal: React.FC<WardrobeModalProps> = ({
 
           <div className="flex items-center gap-3 sm:gap-4">
             {/* Wealth Pills */}
-            <div className="roco-currency-badge" title="当前拥有的洛克贝">
+            <div className="roco-currency-badge" title="当前拥有的星辉金币">
               <IconRocoCoin size={20} />
-              <span className="text-xs text-slate-400">洛克贝:</span>
+              <span className="text-xs text-slate-400">星辉金币:</span>
               <span className="text-sm font-bold font-mono text-amber-300">{playerCoins.toLocaleString()}</span>
             </div>
 
@@ -230,7 +230,7 @@ export const WardrobeModal: React.FC<WardrobeModalProps> = ({
                 钻
               </div>
               <span>{playerDiamonds}</span>
-              <span className="text-[10px] text-cyan-400 font-bold hidden sm:inline">洛克钻</span>
+              <span className="text-[10px] text-cyan-400 font-bold hidden sm:inline">璀璨星钻</span>
             </div>
 
             <button
@@ -514,12 +514,12 @@ export const WardrobeModal: React.FC<WardrobeModalProps> = ({
                               {item.priceCoins ? (
                                 <>
                                   <IconRocoCoin size={15} />
-                                  <span>{item.priceCoins} 洛克贝</span>
+                                  <span>{item.priceCoins} 星辉金币</span>
                                 </>
                               ) : (
                                 <>
                                   <span className="text-cyan-400 font-bold">
-                                    {item.priceDiamonds} 洛克钻
+                                    {item.priceDiamonds} 璀璨星钻
                                   </span>
                                 </>
                               )}

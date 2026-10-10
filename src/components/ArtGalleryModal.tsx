@@ -30,7 +30,7 @@ interface ArtGalleryModalProps {
 const STARTER_LINEAGES = [
   {
     id: 'FIRE_LINE',
-    name: '维苏威烈焰系',
+    name: '烈焰峡谷火羽系',
     element: 'FIRE' as ElementType,
     speciesIds: ['chiyanque', 'zhuoyuying', 'fentianhuang'],
     sealName: '炽火魔导师徽章',
@@ -42,7 +42,7 @@ const STARTER_LINEAGES = [
   },
   {
     id: 'WATER_LINE',
-    name: '人鱼湾圣泉系',
+    name: '蔚蓝海湾圣泉系',
     element: 'WATER' as ElementType,
     speciesIds: ['bishuiling', 'yuanchaoshou', 'huanhailingzun'],
     sealName: '碧水魔导师徽章',
@@ -50,11 +50,11 @@ const STARTER_LINEAGES = [
     borderColor: 'border-cyan-500/40',
     accentText: 'text-cyan-400',
     icon: Droplets,
-    quote: '浩瀚澄波凝水魄，深蓝狂澜守护人鱼湾。',
+    quote: '浩瀚澄波凝水魄，深蓝狂澜守护蔚蓝海湾。',
   },
   {
     id: 'GRASS_LINE',
-    name: '轻风山萌萌系',
+    name: '翡翠平原灵鹿系',
     element: 'GRASS' as ElementType,
     speciesIds: ['qingmulu', 'feicuijiaolu', 'canglinshenzun'],
     sealName: '草木魔导师徽章',
@@ -62,7 +62,7 @@ const STARTER_LINEAGES = [
     borderColor: 'border-emerald-500/40',
     accentText: 'text-emerald-400',
     icon: Trees,
-    quote: '轻风山林翠叶生，自然祝福润万物。',
+    quote: '翡翠平原翠叶生，自然祝福润万物。',
   },
 ];
 
@@ -119,13 +119,13 @@ export const ArtGalleryModal: React.FC<ArtGalleryModalProps> = ({
             </div>
             <div>
               <h2 className="text-base sm:text-lg font-black text-amber-300 tracking-wider game-title-font flex items-center gap-2">
-                <span>御三家 · 洛克王国高精立绘鉴赏</span>
+                <span>御三家 · 星灵王国高精立绘鉴赏</span>
                 <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300/80 border border-amber-500/30 font-normal">
                   皇家画卷
                 </span>
               </h2>
               <p className="text-[11px] text-slate-400 font-sans">
-                洛克王国经典档案 · 奇迹进化之魔法伙伴
+                星灵王国经典档案 · 奇迹进化之魔法伙伴
               </p>
             </div>
           </div>

@@ -427,7 +427,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
 
     const slot = inventory.find((i) => i.itemId === ballId);
     if (!slot || slot.count <= 0) {
-      logMessage('咕噜球数量不足！');
+      logMessage('星灵球数量不足！');
       return;
     }
 
@@ -446,7 +446,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
       active: true,
       ballId,
       shakeCount: 0,
-      message: '咕噜球抛出，魔法光芒笼罩目标...',
+      message: '星灵球抛出，魔法光芒笼罩目标...',
     });
 
     const { success, shakes } = calculateCatchRate(enemy, item.catchMultiplier || 1, item.isGuaranteed);
@@ -454,7 +454,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
     for (let s = 1; s <= shakes; s++) {
       await new Promise((r) => setTimeout(r, 700));
       sound.playBallShake();
-      setCatchingState((prev) => (prev ? { ...prev, shakeCount: s, message: `咕噜球晃动中... (${s}/3)` } : null));
+      setCatchingState((prev) => (prev ? { ...prev, shakeCount: s, message: `星灵球晃动中... (${s}/3)` } : null));
     }
 
     await new Promise((r) => setTimeout(r, 600));
@@ -462,7 +462,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
     if (success) {
       sound.playCatchSuccess();
       setCatchingState((prev) => (prev ? { ...prev, message: `★ 捕捉成功！成功收服【${enemySpecies.name}】！` } : null));
-      logMessage(`太棒了！成功使用咕噜球捕获了野生 ${enemySpecies.name}！`);
+      logMessage(`太棒了！成功使用星灵球捕获了野生 ${enemySpecies.name}！`);
 
       await new Promise((r) => setTimeout(r, 1200));
       setCatchingState(null);
@@ -482,7 +482,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
       });
     } else {
       sound.playClick();
-      setCatchingState((prev) => (prev ? { ...prev, message: `哎呀！野生 ${enemySpecies.name} 挣脱了咕噜球！` } : null));
+      setCatchingState((prev) => (prev ? { ...prev, message: `哎呀！野生 ${enemySpecies.name} 挣脱了星灵球！` } : null));
       logMessage(`捕捉失败！野生 ${enemySpecies.name} 挣脱了束缚！`);
 
       await new Promise((r) => setTimeout(r, 900));
@@ -691,7 +691,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
 
       {/* Top Arena Header Bar (Roco Kingdom Image 1 Layout) */}
       <div className="relative flex items-center justify-between px-4 sm:px-6 py-2.5 bg-gradient-to-b from-[#040e1b]/95 via-[#061426]/85 to-transparent z-30 select-none border-b border-[#b8860b]/20">
-        {/* Left: 洛克王国 ROCO KINGDOM Logo with Vermilion Seal */}
+        {/* Left: 星灵王国 KINGDOM OF ASTRAEA Logo with Star Seal */}
         <div className="flex items-center gap-2">
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
@@ -896,7 +896,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
                   </span>
                 </div>
 
-                {/* 6 Party Companion Orbs (洛克王国标志性6宠指示灯) */}
+                {/* 6 Party Companion Orbs (星灵王国标志性6宠指示灯) */}
                 <div className="flex items-center gap-1 pt-0.5 pointer-events-none">
                   {party.map((p, idx) => (
                     <div
@@ -1094,7 +1094,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
           </div>
         </div>
 
-        {/* Center: 5 Classic Action Command Buttons (洛克王国对战5大指令) */}
+        {/* Center: 5 Classic Action Command Buttons (星灵王国对战5大指令) */}
         <div className="flex flex-wrap items-center justify-center gap-2 shrink-0">
           {/* 1. 灵术招式 */}
           <button
@@ -1112,7 +1112,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
             <span>魔法技能</span>
           </button>
 
-          {/* 2. 咕噜球 (Capture) */}
+          {/* 2. 星灵球 (Capture) */}
           <button
             onClick={() => {
               sound.playClick();
@@ -1125,7 +1125,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
             }`}
           >
             <IconGuluBall size={18} />
-            <span>咕噜球</span>
+            <span>星灵球</span>
           </button>
 
           {/* 3. 恢复药剂 (Potions) */}
@@ -1263,7 +1263,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
                   {battleMenu === 'MOVES'
                     ? '魔法技能 · 选择施展技能'
                     : battleMenu === 'BALLS'
-                    ? '咕噜球 · 投掷收服野生宠物'
+                    ? '星灵球 · 投掷收服野生宠物'
                     : battleMenu === 'POTIONS'
                     ? '魔法药剂 · 回复精力与招式PP'
                     : '随行战队 · 唤回轮换出战宠物'}
@@ -1315,7 +1315,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
                 </div>
                 {inventory.filter((i) => ITEMS_DATA[i.itemId]?.category === 'BALL').length === 0 && (
                   <div className="text-xs text-slate-400 text-center py-6">
-                    背包中已无咕噜球，请前往跳跳集市罗伦斯道具店购买！
+                    背包中已无星灵球，请前往星辉集市巴纳比道具店购买！
                   </div>
                 )}
               </div>
@@ -1421,7 +1421,7 @@ export const BattleView: React.FC<BattleViewProps> = ({
                 <p className="text-xl font-bold text-cyan-300 font-mono">+{victoryData.expEarned} EXP</p>
               </div>
               <div className="text-right">
-                <span className="text-xs text-slate-400">获得洛克贝</span>
+                <span className="text-xs text-slate-400">获得星辉金币</span>
                 <p className="text-xl font-bold text-amber-300 font-mono flex items-center justify-end gap-1">
                   <IconRocoCoin size={20} />
                   <span>+{victoryData.coinsEarned}</span>

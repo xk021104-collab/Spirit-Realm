@@ -362,7 +362,7 @@ export const PetStorageModal: React.FC<PetStorageModalProps> = ({
                   {confirmRelease ? (
                     <div className="p-2 rounded-xl bg-red-950/60 border border-red-500/40 text-center space-y-1.5">
                       <p className="text-[10px] text-red-300">
-                        确认放生【{selectedPet.nickname}】？将返还 500 洛克贝与 2 友谊魔法碎片！
+                        确认放生【{selectedPet.nickname}】？将返还 500 星辉金币与 2 友谊魔法碎片！
                       </p>
                       <div className="flex items-center justify-center gap-2">
                         <button

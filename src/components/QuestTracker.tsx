@@ -115,7 +115,7 @@ export const QuestTracker: React.FC<QuestTrackerProps> = ({
                     </span>
                     <span className="text-xs text-amber-300/60 font-mono font-bold tracking-widest">— QUEST LOG —</span>
                   </div>
-                  <p className="text-xs text-slate-400 mt-0.5">跟随主线剧情，探索洛克王国魔法大陆，成为最强魔导师！</p>
+                  <p className="text-xs text-slate-400 mt-0.5">跟随主线剧情，探索星灵王国魔法大陆，成为最强魔导师！</p>
                 </div>
               </div>
 
@@ -261,7 +261,7 @@ export const QuestTracker: React.FC<QuestTrackerProps> = ({
                       </div>
                       <div className="flex flex-wrap items-center gap-3">
                         <div className="px-3 py-1.5 rounded-lg bg-black/40 border border-amber-400/20 text-xs font-mono font-bold text-amber-300">
-                          +{selectedQuest.rewards.coins} 洛克贝
+                          +{selectedQuest.rewards.coins} 星辉金币
                         </div>
                         {selectedQuest.rewards.items?.map((itemSlot) => {
                           const item = ITEMS_DATA[itemSlot.itemId];

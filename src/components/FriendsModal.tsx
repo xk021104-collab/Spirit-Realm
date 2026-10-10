@@ -90,7 +90,7 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
       locationId: 'ACADEMY',
       locationName: '魔法学院',
       signature: '探索王国奇迹，与好友共同培养魔法宠物！',
-      greeting: `你好呀！今天在轻风山探险收获颇丰，特赠你一枚友谊魔法碎片。`,
+      greeting: `你好呀！今天在翡翠平原探险收获颇丰，特赠你一枚友谊魔法碎片。`,
       companionPet: {
         speciesId: customPetSpecies,
         nickname: PET_SPECIES[customPetSpecies]?.name || '小宠物',
@@ -151,7 +151,7 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
                 </span>
               </div>
               <p className="text-[11px] text-slate-300 hidden sm:block mt-0.5">
-                结识洛克王国的魔法伙伴，携手同行冒险，每日互赠友谊魔法碎片兑换珍稀宝物
+                结识星灵王国的魔法伙伴，携手同行冒险，每日互赠友谊魔法碎片兑换珍稀宝物
               </p>
             </div>
           </div>
@@ -444,7 +444,7 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
                   type="text"
                   value={customName}
                   onChange={(e) => setCustomName(e.target.value)}
-                  placeholder="输入好友昵称（如：菲尔特、可丽希亚、小明...）"
+                  placeholder="输入好友昵称（如：诺亚、艾丽西亚、凯恩...）"
                   className="bg-slate-950/90 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 flex-1 min-w-[200px] focus:outline-none focus:border-cyan-400"
                   maxLength={10}
                 />
@@ -492,7 +492,7 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-cyan-400" />
-                  <h3 className="font-bold text-sm text-slate-200">洛克王国 · 推荐好友</h3>
+                  <h3 className="font-bold text-sm text-slate-200">星灵王国 · 推荐好友</h3>
                 </div>
                 <span className="text-[11px] text-slate-400">各路见习魔法师，相聚王国即是缘分</span>
               </div>
@@ -567,7 +567,7 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
                     皇家魔法友谊工坊
                   </h3>
                   <p className="text-xs text-slate-300 mt-0.5">
-                    好友每日赠送的友谊魔法碎片，可在此兑换珍稀国王球、高级咕噜球与可可果！
+                    好友每日赠送的友谊魔法碎片，可在此兑换至尊星辰球、高级星灵球与星露果！
                   </p>
                 </div>
               </div>
@@ -582,17 +582,17 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
 
             {/* Exchange Offer Cards Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {/* 1. 国王球 */}
+              {/* 1. 至尊星辰球 */}
               <div className="p-3.5 rounded-2xl bg-slate-900/60 border border-amber-500/30 hover:border-amber-400/60 transition-all flex flex-col justify-between shadow-md">
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-bold text-amber-300">国王球 ×1</span>
+                    <span className="text-xs font-bold text-amber-300">至尊星辰球 ×1</span>
                     <span className="text-[10px] text-amber-400 font-bold px-1.5 rounded bg-amber-950/80 border border-amber-500/40">
                       100% 必定捕获
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-400 leading-relaxed mb-3">
-                    洛克王国至高无上的圣物！必定百分之百成功收服任何野外宠物，珍稀必中！
+                    星灵王国至高无上的圣物！必定百分之百成功收服任何野外宠物，珍稀必中！
                   </p>
                 </div>
                 <div className="flex items-center justify-between pt-2 border-t border-slate-800">
@@ -601,7 +601,7 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
                     需要 10 碎片
                   </span>
                   <button
-                    onClick={() => handleExchange('gulu_king', 10, '国王球')}
+                    onClick={() => handleExchange('gulu_king', 10, '至尊星辰球')}
                     className="px-3 py-1 rounded-xl bg-amber-600/40 hover:bg-amber-600/60 text-amber-200 border border-amber-500/50 text-xs font-bold transition-all cursor-pointer"
                   >
                     兑换
@@ -609,17 +609,17 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
                 </div>
               </div>
 
-              {/* 2. 高级咕噜球 */}
+              {/* 2. 高级星灵球 */}
               <div className="p-3.5 rounded-2xl bg-slate-900/60 border border-indigo-500/30 hover:border-indigo-400/60 transition-all flex flex-col justify-between shadow-md">
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-bold text-indigo-300">高级咕噜球 ×2</span>
+                    <span className="text-xs font-bold text-indigo-300">高级星灵球 ×2</span>
                     <span className="text-[10px] text-indigo-400 font-bold px-1.5 rounded bg-indigo-950/80 border border-indigo-500/40">
                       超高捕获率
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-400 leading-relaxed mb-3">
-                    皇家工坊精密炼制的高级咕噜球，大幅提高野外宠物捕获成功概率。
+                    皇家工坊精密炼制的高级星灵球，大幅提高野外宠物捕获成功概率。
                   </p>
                 </div>
                 <div className="flex items-center justify-between pt-2 border-t border-slate-800">
@@ -628,7 +628,7 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
                     需要 5 碎片
                   </span>
                   <button
-                    onClick={() => handleExchange('gulu_high', 5, '高级咕噜球 ×2')}
+                    onClick={() => handleExchange('gulu_high', 5, '高级星灵球 ×2')}
                     className="px-3 py-1 rounded-xl bg-indigo-600/40 hover:bg-indigo-600/60 text-indigo-200 border border-indigo-500/50 text-xs font-bold transition-all cursor-pointer"
                   >
                     兑换
@@ -636,11 +636,11 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
                 </div>
               </div>
 
-              {/* 3. 严父果 */}
+              {/* 3. 智慧圣果 */}
               <div className="p-3.5 rounded-2xl bg-slate-900/60 border border-emerald-500/30 hover:border-emerald-400/60 transition-all flex flex-col justify-between shadow-md">
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-bold text-emerald-300">严父果 ×2</span>
+                    <span className="text-xs font-bold text-emerald-300">智慧圣果 ×2</span>
                     <span className="text-[10px] text-emerald-400 font-bold px-1.5 rounded bg-emerald-950/80 border border-emerald-500/40">
                       +2,000 升级经验
                     </span>
@@ -655,7 +655,7 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
                     需要 4 碎片
                   </span>
                   <button
-                    onClick={() => handleExchange('exp_pill_large', 4, '严父果 ×2')}
+                    onClick={() => handleExchange('exp_pill_large', 4, '智慧圣果 ×2')}
                     className="px-3 py-1 rounded-xl bg-emerald-600/40 hover:bg-emerald-600/60 text-emerald-200 border border-emerald-500/50 text-xs font-bold transition-all cursor-pointer"
                   >
                     兑换
@@ -663,17 +663,17 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
                 </div>
               </div>
 
-              {/* 4. 洛克贝钱袋 */}
+              {/* 4. 星辉金币袋 */}
               <div className="p-3.5 rounded-2xl bg-slate-900/60 border border-cyan-500/30 hover:border-cyan-400/60 transition-all flex flex-col justify-between shadow-md">
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-bold text-cyan-300">洛克贝钱袋</span>
+                    <span className="text-xs font-bold text-cyan-300">星辉金币袋</span>
                     <span className="text-[10px] text-cyan-400 font-bold px-1.5 rounded bg-cyan-950/80 border border-cyan-500/40">
-                      +1,500 洛克贝
+                      +1,500 星辉金币
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-400 leading-relaxed mb-3">
-                    皇家魔导商会金币袋，打开即可瞬间获取 1,500 洛克贝，可在跳跳集市购买各种道具！
+                    皇家魔导商会金币袋，打开即可瞬间获取 1,500 星辉金币，可在星辉集市购买各种道具！
                   </p>
                 </div>
                 <div className="flex items-center justify-between pt-2 border-t border-slate-800">
@@ -682,7 +682,7 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
                     需要 3 碎片
                   </span>
                   <button
-                    onClick={() => handleExchange('coins_1500', 3, '1,500 洛克贝')}
+                    onClick={() => handleExchange('coins_1500', 3, '1,500 星辉金币')}
                     className="px-3 py-1 rounded-xl bg-cyan-600/40 hover:bg-cyan-600/60 text-cyan-200 border border-cyan-500/50 text-xs font-bold transition-all cursor-pointer"
                   >
                     兑换

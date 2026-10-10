@@ -119,13 +119,13 @@ export const ArtGalleryModal: React.FC<ArtGalleryModalProps> = ({
             </div>
             <div>
               <h2 className="text-base sm:text-lg font-black text-amber-300 tracking-wider game-title-font flex items-center gap-2">
-                <span>御三家 · 星灵王国高精立绘鉴赏</span>
+                <span>御三家 · 幻灵世界高精立绘鉴赏</span>
                 <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300/80 border border-amber-500/30 font-normal">
                   皇家画卷
                 </span>
               </h2>
               <p className="text-[11px] text-slate-400 font-sans">
-                星灵王国经典档案 · 奇迹进化之魔法伙伴
+                幻灵世界经典档案 · 奇迹进化之魔法伙伴
               </p>
             </div>
           </div>

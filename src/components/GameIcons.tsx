@@ -6,7 +6,7 @@ interface IconProps {
 }
 
 /**
- * 洛克王国经典 咕噜球 (Gulu Magic Capture Sphere)
+ * 幻灵世界 幻灵球 (Phantom Magic Capture Sphere)
  */
 export const IconGuluBall: React.FC<IconProps> = ({ size = 28, className = '' }) => (
   <svg
@@ -61,7 +61,7 @@ export const IconGuluBall: React.FC<IconProps> = ({ size = 28, className = '' })
 );
 
 /**
- * 洛克王国 洛克贝金币 (Roco Coin - Embossed Crown Gold Coin)
+ * 幻灵世界 幻灵金币 (Phantom Gold Coin - Embossed Crown Gold Coin)
  */
 export const IconRocoCoin: React.FC<IconProps> = ({ size = 26, className = '' }) => (
   <svg

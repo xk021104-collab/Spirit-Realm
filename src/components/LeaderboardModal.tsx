@@ -158,7 +158,7 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({
     if (hasPraisedToday) return;
     sound.playCatchSuccess();
     onPraiseLeader();
-    setPraiseNotice('膜拜天梯榜首成功！获得王国洛克贝 +200 奖励！');
+    setPraiseNotice('膜拜天梯榜首成功！获得幻灵金币 +200 奖励！');
     setTimeout(() => setPraiseNotice(null), 3000);
   };
 
@@ -181,14 +181,14 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-xl font-black roco-gold-text tracking-wide flex items-center gap-2 roco-title-font">
-                  洛克王国 · 皇家天梯排行榜
+                  幻灵世界 · 荣耀天梯排行榜
                 </h2>
                 <span className="roco-seal text-[10px] px-1.5 py-0.2 font-bold tracking-wider">
                   天梯榜
                 </span>
                 <span className="text-xs text-amber-300/60 font-mono font-bold tracking-widest hidden sm:inline">— LEADERBOARD —</span>
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">王国小魔法师宠物战力巅峰与图鉴收集宗师排行榜</p>
+              <p className="text-xs text-slate-400 mt-0.5">全域小魔法师幻灵战力巅峰与图鉴收集宗师排行榜</p>
             </div>
           </div>
 
@@ -243,7 +243,7 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-600/30 hover:bg-amber-600/50 disabled:opacity-50 border border-amber-500/40 text-amber-300 text-xs font-bold cursor-pointer transition-colors"
           >
             <ThumbsUp className="w-3.5 h-3.5 text-amber-400" />
-            <span>{hasPraisedToday ? '今日已膜拜榜首' : '每日膜拜榜首 (+200洛克贝)'}</span>
+            <span>{hasPraisedToday ? '今日已膜拜榜首' : '每日膜拜榜首 (+200 幻灵金币)'}</span>
           </button>
         </div>
 

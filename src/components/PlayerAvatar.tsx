@@ -11,8 +11,8 @@ export interface PlayerAvatarProps {
 }
 
 /**
- * 洛克小魔法师 (Young Wizard Apprentice - Authentic Roco Kingdom Chibi Character)
- * 纯正 2010s 洛克王国 Flash 页游灵动萌系美术风格
+ * 幻灵世界小魔法师 (Young Wizard Apprentice - Authentic Fantasy Spirit World Chibi Character)
+ * 纯正 2010s Flash 页游灵动萌系美术风格
  * 支持 6 大部位动态装扮系统 (Hat, Hair, Robe, Handheld, Wings, Aura)
  */
 export const PlayerAvatar: React.FC<PlayerAvatarProps> = ({
@@ -143,11 +143,12 @@ export const PlayerAvatar: React.FC<PlayerAvatarProps> = ({
             <stop offset="100%" stopColor="#ca8a04" />
           </linearGradient>
 
-          {/* Skin Soft Shading */}
+          {/* Authentic Little Roco Fairy Sky-Blue Skin */}
           <linearGradient id="skinGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#fff7ed" />
-            <stop offset="85%" stopColor="#ffedd5" />
-            <stop offset="100%" stopColor="#fed7aa" />
+            <stop offset="0%" stopColor="#e0f2fe" />
+            <stop offset="35%" stopColor="#bae6fd" />
+            <stop offset="85%" stopColor="#7dd3fc" />
+            <stop offset="100%" stopColor="#38bdf8" />
           </linearGradient>
         </defs>
 
@@ -322,10 +323,10 @@ export const PlayerAvatar: React.FC<PlayerAvatarProps> = ({
         <g>
           {/* Right Sleeve & Hand */}
           <path d="M 64 56 C 70 60 74 68 70 74 C 66 76 62 70 60 64 Z" fill="url(#wizHatNavy)" stroke="#1e3a8a" strokeWidth="1" />
-          <circle cx="70" cy="73" r="3" fill="#ffedd5" stroke="#fed7aa" strokeWidth="0.8" />
+          <circle cx="70" cy="73" r="3" fill="url(#skinGrad)" stroke="#0284c7" strokeWidth="0.8" />
           {/* Left Sleeve & Hand (holding wand) */}
           <path d="M 36 56 C 30 60 26 68 30 74 C 34 76 38 70 40 64 Z" fill="url(#wizHatNavy)" stroke="#1e3a8a" strokeWidth="1" />
-          <circle cx="30" cy="73" r="3" fill="#ffedd5" stroke="#fed7aa" strokeWidth="0.8" />
+          <circle cx="30" cy="73" r="3" fill="url(#skinGrad)" stroke="#0284c7" strokeWidth="0.8" />
         </g>
 
         {/* ========================================================
@@ -365,24 +366,35 @@ export const PlayerAvatar: React.FC<PlayerAvatarProps> = ({
         {/* ========================================================
             5. CHIBI FACE & SPARKLING ANIME EYES
             ======================================================== */}
-        {/* Soft Chibi Head Shape with Ears */}
+        {/* Iconic Roco Fairy Long Pointed Elf Ears & Head */}
         <g>
-          {/* Left Ear */}
-          <ellipse cx="30" cy="48" rx="3.5" ry="4.5" fill="#fff7ed" stroke="#fdba74" strokeWidth="0.8" />
-          <ellipse cx="30" cy="48" rx="2" ry="2.5" fill="#fca5a5" opacity="0.6" />
-          {/* Right Ear */}
-          <ellipse cx="70" cy="48" rx="3.5" ry="4.5" fill="#fff7ed" stroke="#fdba74" strokeWidth="0.8" />
-          <ellipse cx="70" cy="48" rx="2" ry="2.5" fill="#fca5a5" opacity="0.6" />
+          {/* Left Pointy Elf Ear */}
+          <path
+            d="M 32 45 C 20 40 10 38 4 41 C 8 47 20 51 31 53 Z"
+            fill="url(#skinGrad)"
+            stroke="#0284c7"
+            strokeWidth="1"
+          />
+          <path d="M 28 47 C 20 43 14 42 9 43 C 14 46 22 48 28 50 Z" fill="#e0f2fe" opacity="0.8" />
 
-          {/* Main Face Contour */}
-          <ellipse cx="50" cy="47" rx="20" ry="17.5" fill="url(#skinGrad)" stroke="#fdba74" strokeWidth="1" />
+          {/* Right Pointy Elf Ear */}
+          <path
+            d="M 68 45 C 80 40 90 38 96 41 C 92 47 80 51 69 53 Z"
+            fill="url(#skinGrad)"
+            stroke="#0284c7"
+            strokeWidth="1"
+          />
+          <path d="M 72 47 C 80 43 86 42 91 43 C 86 46 78 48 72 50 Z" fill="#e0f2fe" opacity="0.8" />
+
+          {/* Main Face Contour (Chubby Blue Face) */}
+          <ellipse cx="50" cy="47" rx="20.5" ry="17.5" fill="url(#skinGrad)" stroke="#0284c7" strokeWidth="1" />
         </g>
 
-        {/* Rosy Anime Cheeks */}
+        {/* Rosy Anime Cheeks on Blue Skin */}
         <g>
-          <ellipse cx="35" cy="51" rx="3.5" ry="2" fill="#f43f5e" opacity="0.38" />
+          <ellipse cx="35" cy="51" rx="4" ry="2.2" fill="#f43f5e" opacity="0.32" />
           <line x1="33" y1="50" x2="37" y2="52" stroke="#e11d48" strokeWidth="0.6" opacity="0.4" />
-          <ellipse cx="65" cy="51" rx="3.5" ry="2" fill="#f43f5e" opacity="0.38" />
+          <ellipse cx="65" cy="51" rx="4" ry="2.2" fill="#f43f5e" opacity="0.32" />
           <line x1="63" y1="50" x2="67" y2="52" stroke="#e11d48" strokeWidth="0.6" opacity="0.4" />
         </g>
 
@@ -506,7 +518,7 @@ export const PlayerAvatar: React.FC<PlayerAvatarProps> = ({
 };
 
 /**
- * 洛克王国经典全手绘 NPC 立绘 (Authentic Roco Kingdom World NPCs)
+ * 幻灵世界经典全手绘 NPC 立绘 (Authentic Fantasy Spirit World NPCs)
  * 告别死板几何体，全面采用灵动唯美的 Flash 西幻页游画风！
  */
 export const NpcAvatar: React.FC<{ type?: string; size?: number; className?: string }> = ({
@@ -520,6 +532,12 @@ export const NpcAvatar: React.FC<{ type?: string; size?: number; className?: str
       <div style={{ width: `${size}px`, height: `${size}px` }} className={`relative inline-flex items-center justify-center ${className}`}>
         <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_6px_18px_rgba(168,85,247,0.65)] overflow-visible">
           <defs>
+            <linearGradient id="grfSkin" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#e0f2fe" />
+              <stop offset="45%" stopColor="#bae6fd" />
+              <stop offset="80%" stopColor="#7dd3fc" />
+              <stop offset="100%" stopColor="#38bdf8" />
+            </linearGradient>
             <linearGradient id="grfCape" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#7e22ce" />
               <stop offset="50%" stopColor="#4c1d95" />
@@ -553,8 +571,10 @@ export const NpcAvatar: React.FC<{ type?: string; size?: number; className?: str
           <circle cx="48" cy="13" r="3" fill="#facc15" filter="drop-shadow(0 0 3px #fde047)" />
           <polygon points="56,18 57.5,21 60.5,21 58,23 59,26 56,24.5 53,26 54,23 51.5,21 54.5,21" fill="#fde047" />
 
-          {/* Archmage Face with Monocle */}
-          <ellipse cx="50" cy="38" rx="16" ry="14" fill="#fff7ed" stroke="#fdba74" strokeWidth="1" />
+          {/* Archmage Pointy Roco Elf Ears & Face */}
+          <path d="M 34 36 C 22 32 12 30 6 33 C 10 39 22 43 33 45 Z" fill="url(#grfSkin)" stroke="#0284c7" strokeWidth="1" />
+          <path d="M 66 36 C 78 32 88 30 94 33 C 90 39 78 43 67 45 Z" fill="url(#grfSkin)" stroke="#0284c7" strokeWidth="1" />
+          <ellipse cx="50" cy="38" rx="16" ry="14" fill="url(#grfSkin)" stroke="#0284c7" strokeWidth="1" />
           {/* Eyebrows & Eyes */}
           <path d="M 38 32 Q 44 30 48 33" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" />
           <path d="M 54 33 Q 58 30 64 32" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" />
@@ -587,6 +607,12 @@ export const NpcAvatar: React.FC<{ type?: string; size?: number; className?: str
       <div style={{ width: `${size}px`, height: `${size}px` }} className={`relative inline-flex items-center justify-center ${className}`}>
         <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_4px_16px_rgba(244,63,94,0.55)] overflow-visible">
           <defs>
+            <linearGradient id="nurseSkin" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#e0f2fe" />
+              <stop offset="45%" stopColor="#bae6fd" />
+              <stop offset="80%" stopColor="#7dd3fc" />
+              <stop offset="100%" stopColor="#38bdf8" />
+            </linearGradient>
             <linearGradient id="nurseHair" x1="0%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" stopColor="#fbcfe8" />
               <stop offset="50%" stopColor="#f472b6" />
@@ -618,13 +644,15 @@ export const NpcAvatar: React.FC<{ type?: string; size?: number; className?: str
           <ellipse cx="58" cy="91" rx="5" ry="3" fill="#ffffff" stroke="#fda4af" strokeWidth="1" />
 
           {/* Cute Sleeves & Hands */}
-          <circle cx="28" cy="72" r="3.5" fill="#ffedd5" stroke="#fbcfe8" strokeWidth="0.8" />
-          <circle cx="72" cy="72" r="3.5" fill="#ffedd5" stroke="#fbcfe8" strokeWidth="0.8" />
+          <circle cx="28" cy="72" r="3.5" fill="url(#nurseSkin)" stroke="#0284c7" strokeWidth="0.8" />
+          <circle cx="72" cy="72" r="3.5" fill="url(#nurseSkin)" stroke="#0284c7" strokeWidth="0.8" />
 
-          {/* Face */}
-          <ellipse cx="50" cy="45" rx="19" ry="16.5" fill="#fff7ed" stroke="#fed7aa" strokeWidth="1" />
-          <ellipse cx="36" cy="49" rx="3.5" ry="2" fill="#f43f5e" opacity="0.4" />
-          <ellipse cx="64" cy="49" rx="3.5" ry="2" fill="#f43f5e" opacity="0.4" />
+          {/* Pointy Roco Elf Ears & Face */}
+          <path d="M 32 44 C 20 40 10 38 4 41 C 8 47 20 51 31 53 Z" fill="url(#nurseSkin)" stroke="#0284c7" strokeWidth="1" />
+          <path d="M 68 44 C 80 40 90 38 96 41 C 92 47 80 51 69 53 Z" fill="url(#nurseSkin)" stroke="#0284c7" strokeWidth="1" />
+          <ellipse cx="50" cy="45" rx="19" ry="16.5" fill="url(#nurseSkin)" stroke="#0284c7" strokeWidth="1" />
+          <ellipse cx="36" cy="49" rx="3.5" ry="2" fill="#f43f5e" opacity="0.32" />
+          <ellipse cx="64" cy="49" rx="3.5" ry="2" fill="#f43f5e" opacity="0.32" />
 
           {/* Sparkling Emerald Eyes */}
           <ellipse cx="41" cy="44" rx="4" ry="5.5" fill="#065f46" />
@@ -656,6 +684,12 @@ export const NpcAvatar: React.FC<{ type?: string; size?: number; className?: str
       <div style={{ width: `${size}px`, height: `${size}px` }} className={`relative inline-flex items-center justify-center ${className}`}>
         <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_4px_16px_rgba(59,130,246,0.6)] overflow-visible">
           <defs>
+            <linearGradient id="paladinSkin" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#e0f2fe" />
+              <stop offset="45%" stopColor="#bae6fd" />
+              <stop offset="80%" stopColor="#7dd3fc" />
+              <stop offset="100%" stopColor="#38bdf8" />
+            </linearGradient>
             <linearGradient id="paladinCape" x1="0%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" stopColor="#2563eb" />
               <stop offset="100%" stopColor="#1e3a8a" />
@@ -692,14 +726,21 @@ export const NpcAvatar: React.FC<{ type?: string; size?: number; className?: str
             <circle cx="0" cy="-6" r="2.5" fill="#facc15" />
           </g>
 
+          {/* Pointy Roco Elf Ears sticking out under helmet */}
+          <path d="M 32 44 C 20 40 10 38 4 41 C 8 47 20 51 31 53 Z" fill="url(#paladinSkin)" stroke="#0284c7" strokeWidth="1" />
+          <path d="M 68 44 C 80 40 90 38 96 41 C 92 47 80 51 69 53 Z" fill="url(#paladinSkin)" stroke="#0284c7" strokeWidth="1" />
+
           {/* Heroic Knight Head */}
-          <ellipse cx="50" cy="44" rx="18" ry="16" fill="#fff7ed" stroke="#fed7aa" strokeWidth="1" />
+          <ellipse cx="50" cy="45" rx="19" ry="16.5" fill="url(#paladinSkin)" stroke="#0284c7" strokeWidth="1" />
+          <ellipse cx="36" cy="49" rx="3.5" ry="2" fill="#f43f5e" opacity="0.32" />
+          <ellipse cx="64" cy="49" rx="3.5" ry="2" fill="#f43f5e" opacity="0.32" />
+
           {/* Confident Eyes */}
           <ellipse cx="42" cy="43" rx="3.5" ry="4.5" fill="#1e3a8a" />
           <circle cx="41" cy="41" r="1.5" fill="#ffffff" />
           <ellipse cx="58" cy="43" rx="3.5" ry="4.5" fill="#1e3a8a" />
           <circle cx="57" cy="41" r="1.5" fill="#ffffff" />
-          <path d="M 46 50 Q 50 53 54 50" stroke="#b45309" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+          <path d="M 46 51 Q 50 54 54 51" stroke="#0284c7" strokeWidth="1.2" fill="none" strokeLinecap="round" />
 
           {/* Paladin Winged Helmet with White Plume */}
           <path d="M 28 36 C 28 16 40 6 60 6 C 72 12 72 26 72 36 Z" fill="url(#kArmor)" stroke="#d4af37" strokeWidth="1.5" />
@@ -715,6 +756,15 @@ export const NpcAvatar: React.FC<{ type?: string; size?: number; className?: str
     return (
       <div style={{ width: `${size}px`, height: `${size}px` }} className={`relative inline-flex items-center justify-center ${className}`}>
         <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_4px_16px_rgba(22,163,74,0.55)] overflow-visible">
+          <defs>
+            <linearGradient id="rangerSkin" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#e0f2fe" />
+              <stop offset="45%" stopColor="#bae6fd" />
+              <stop offset="80%" stopColor="#7dd3fc" />
+              <stop offset="100%" stopColor="#38bdf8" />
+            </linearGradient>
+          </defs>
+
           {/* Ranger Green Hooded Cape */}
           <path d="M 28 52 C 16 66 16 88 22 92 C 34 89 66 89 78 92 C 84 88 84 66 72 52 Z" fill="#15803d" stroke="#14532d" strokeWidth="1.2" />
           <ellipse cx="42" cy="91" rx="5" ry="3" fill="#78350f" stroke="#451a03" strokeWidth="1" />
@@ -729,13 +779,20 @@ export const NpcAvatar: React.FC<{ type?: string; size?: number; className?: str
           <path d="M 22 26 Q 16 54 26 84" stroke="#a16207" strokeWidth="3" fill="none" strokeLinecap="round" />
           <line x1="22" y1="26" x2="26" y2="84" stroke="#fef08a" strokeWidth="0.8" opacity="0.8" />
 
+          {/* Pointy Roco Elf Ears */}
+          <path d="M 32 44 C 20 40 10 38 4 41 C 8 47 20 51 31 53 Z" fill="url(#rangerSkin)" stroke="#0284c7" strokeWidth="1" />
+          <path d="M 68 44 C 80 40 90 38 96 41 C 92 47 80 51 69 53 Z" fill="url(#rangerSkin)" stroke="#0284c7" strokeWidth="1" />
+
           {/* Face */}
-          <ellipse cx="50" cy="44" rx="18" ry="16" fill="#fff7ed" stroke="#fed7aa" strokeWidth="1" />
-          <ellipse cx="42" cy="43" rx="3.5" ry="4.5" fill="#713f12" />
+          <ellipse cx="50" cy="45" rx="19" ry="16.5" fill="url(#rangerSkin)" stroke="#0284c7" strokeWidth="1" />
+          <ellipse cx="36" cy="49" rx="3.5" ry="2" fill="#f43f5e" opacity="0.32" />
+          <ellipse cx="64" cy="49" rx="3.5" ry="2" fill="#f43f5e" opacity="0.32" />
+
+          <ellipse cx="42" cy="43" rx="3.5" ry="4.5" fill="#15803d" />
           <circle cx="41" cy="41" r="1.5" fill="#ffffff" />
-          <ellipse cx="58" cy="43" rx="3.5" ry="4.5" fill="#713f12" />
+          <ellipse cx="58" cy="43" rx="3.5" ry="4.5" fill="#15803d" />
           <circle cx="57" cy="41" r="1.5" fill="#ffffff" />
-          <path d="M 46 50 Q 50 53 54 50" stroke="#b45309" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+          <path d="M 46 51 Q 50 54 54 51" stroke="#0284c7" strokeWidth="1.2" fill="none" strokeLinecap="round" />
 
           {/* Chestnut Hair */}
           <path d="M 32 38 C 38 46 44 46 48 40 C 52 46 58 46 68 38 C 62 30 38 30 32 38 Z" fill="#a16207" stroke="#713f12" strokeWidth="1" />
@@ -753,6 +810,15 @@ export const NpcAvatar: React.FC<{ type?: string; size?: number; className?: str
     return (
       <div style={{ width: `${size}px`, height: `${size}px` }} className={`relative inline-flex items-center justify-center ${className}`}>
         <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_4px_16px_rgba(234,88,12,0.6)] overflow-visible">
+          <defs>
+            <linearGradient id="smithSkin" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#e0f2fe" />
+              <stop offset="45%" stopColor="#bae6fd" />
+              <stop offset="80%" stopColor="#7dd3fc" />
+              <stop offset="100%" stopColor="#38bdf8" />
+            </linearGradient>
+          </defs>
+
           {/* Heavy Apron */}
           <path d="M 32 54 L 32 86 L 68 86 L 68 54 Z" fill="#78350f" stroke="#451a03" strokeWidth="1.5" />
           <ellipse cx="42" cy="91" rx="6" ry="3.5" fill="#1c1917" stroke="#0c0a09" strokeWidth="1" />
@@ -765,8 +831,12 @@ export const NpcAvatar: React.FC<{ type?: string; size?: number; className?: str
             <circle cx="-6" cy="2" r="2" fill="#facc15" filter="drop-shadow(0 0 3px #f59e0b)" />
           </g>
 
+          {/* Pointy Roco Elf Ears */}
+          <path d="M 32 40 C 20 36 10 34 4 37 C 8 43 20 47 31 49 Z" fill="url(#smithSkin)" stroke="#0284c7" strokeWidth="1" />
+          <path d="M 68 40 C 80 36 90 34 96 37 C 92 43 80 47 69 49 Z" fill="url(#smithSkin)" stroke="#0284c7" strokeWidth="1" />
+
           {/* Face */}
-          <ellipse cx="50" cy="40" rx="18" ry="16" fill="#fed7aa" stroke="#ea580c" strokeWidth="1" />
+          <ellipse cx="50" cy="41" rx="19" ry="16.5" fill="url(#smithSkin)" stroke="#0284c7" strokeWidth="1" />
           <ellipse cx="42" cy="38" rx="3" ry="4" fill="#1c1917" />
           <ellipse cx="58" cy="38" rx="3" ry="4" fill="#1c1917" />
 
@@ -790,6 +860,15 @@ export const NpcAvatar: React.FC<{ type?: string; size?: number; className?: str
     return (
       <div style={{ width: `${size}px`, height: `${size}px` }} className={`relative inline-flex items-center justify-center ${className}`}>
         <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_4px_16px_rgba(2,132,199,0.55)] overflow-visible">
+          <defs>
+            <linearGradient id="sailorSkin" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#e0f2fe" />
+              <stop offset="45%" stopColor="#bae6fd" />
+              <stop offset="80%" stopColor="#7dd3fc" />
+              <stop offset="100%" stopColor="#38bdf8" />
+            </linearGradient>
+          </defs>
+
           {/* Captain Navy Coat & Striped Shirt */}
           <path d="M 28 52 C 16 66 16 88 22 92 C 34 89 66 89 78 92 C 84 88 84 66 72 52 Z" fill="#0369a1" stroke="#075985" strokeWidth="1.2" />
           <path d="M 36 56 L 64 56 L 62 82 L 38 82 Z" fill="#ffffff" />
@@ -799,8 +878,13 @@ export const NpcAvatar: React.FC<{ type?: string; size?: number; className?: str
           <ellipse cx="42" cy="91" rx="5" ry="3" fill="#1e293b" stroke="#0f172a" strokeWidth="1" />
           <ellipse cx="58" cy="91" rx="5" ry="3" fill="#1e293b" stroke="#0f172a" strokeWidth="1" />
 
+          {/* Pointy Roco Elf Ears */}
+          <path d="M 32 44 C 20 40 10 38 4 41 C 8 47 20 51 31 53 Z" fill="url(#sailorSkin)" stroke="#0284c7" strokeWidth="1" />
+          <path d="M 68 44 C 80 40 90 38 96 41 C 92 47 80 51 69 53 Z" fill="url(#sailorSkin)" stroke="#0284c7" strokeWidth="1" />
+
           {/* Face */}
-          <ellipse cx="50" cy="44" rx="18" ry="16" fill="#ffedd5" stroke="#fed7aa" strokeWidth="1" />
+          <ellipse cx="50" cy="45" rx="19" ry="16.5" fill="url(#sailorSkin)" stroke="#0284c7" strokeWidth="1" />
+
           {/* Left Eye with Eyepatch */}
           <circle cx="42" cy="42" r="5" fill="#0f172a" />
           <path d="M 34 38 L 52 46" stroke="#0f172a" strokeWidth="1.5" />
@@ -826,6 +910,15 @@ export const NpcAvatar: React.FC<{ type?: string; size?: number; className?: str
     return (
       <div style={{ width: `${size}px`, height: `${size}px` }} className={`relative inline-flex items-center justify-center ${className}`}>
         <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_4px_16px_rgba(234,179,8,0.6)] overflow-visible">
+          <defs>
+            <linearGradient id="merchantSkin" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#e0f2fe" />
+              <stop offset="45%" stopColor="#bae6fd" />
+              <stop offset="80%" stopColor="#7dd3fc" />
+              <stop offset="100%" stopColor="#38bdf8" />
+            </linearGradient>
+          </defs>
+
           {/* Giant Traveler Pack */}
           <path d="M 18 42 C 14 56 16 84 26 90 L 74 90 C 84 84 86 56 82 42 Z" fill="#78350f" stroke="#451a03" strokeWidth="1.5" />
           <circle cx="26" cy="46" r="5" fill="#38bdf8" filter="drop-shadow(0 0 4px #38bdf8)" />
@@ -844,8 +937,15 @@ export const NpcAvatar: React.FC<{ type?: string; size?: number; className?: str
             <polygon points="0,-3 1,0 4,0 2,2 3,5 0,3 -3,5 -2,2 -4,0 -1,0" fill="#fffbeb" />
           </g>
 
+          {/* Pointy Roco Elf Ears */}
+          <path d="M 32 44 C 20 40 10 38 4 41 C 8 47 20 51 31 53 Z" fill="url(#merchantSkin)" stroke="#0284c7" strokeWidth="1" />
+          <path d="M 68 44 C 80 40 90 38 96 41 C 92 47 80 51 69 53 Z" fill="url(#merchantSkin)" stroke="#0284c7" strokeWidth="1" />
+
           {/* Face */}
-          <ellipse cx="50" cy="44" rx="18" ry="16" fill="#fff7ed" stroke="#fed7aa" strokeWidth="1" />
+          <ellipse cx="50" cy="45" rx="19" ry="16.5" fill="url(#merchantSkin)" stroke="#0284c7" strokeWidth="1" />
+          <ellipse cx="36" cy="49" rx="3.5" ry="2" fill="#f43f5e" opacity="0.32" />
+          <ellipse cx="64" cy="49" rx="3.5" ry="2" fill="#f43f5e" opacity="0.32" />
+
           {/* Winking Friendly Face */}
           <ellipse cx="42" cy="42" rx="3.5" ry="4.5" fill="#713f12" />
           <circle cx="41" cy="40" r="1.5" fill="#ffffff" />
@@ -870,6 +970,12 @@ export const NpcAvatar: React.FC<{ type?: string; size?: number; className?: str
     <div style={{ width: `${size}px`, height: `${size}px` }} className={`relative inline-flex items-center justify-center ${className}`}>
       <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_6px_18px_rgba(239,68,68,0.55)] overflow-visible">
         <defs>
+          <linearGradient id="vkSkin" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#e0f2fe" />
+            <stop offset="45%" stopColor="#bae6fd" />
+            <stop offset="80%" stopColor="#7dd3fc" />
+            <stop offset="100%" stopColor="#38bdf8" />
+          </linearGradient>
           <linearGradient id="vkCape" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#f87171" />
             <stop offset="45%" stopColor="#dc2626" />
@@ -937,10 +1043,18 @@ export const NpcAvatar: React.FC<{ type?: string; size?: number; className?: str
           <polygon points="12,-20 13,-18 15,-18 13.5,-17 14,-15 12,-16 10,-15 10.5,-17 9,-18 11,-18" fill="#fde047" />
         </g>
 
-        {/* Charming Face */}
-        <ellipse cx="50" cy="42" rx="19" ry="16.5" fill="#fff7ed" stroke="#fed7aa" strokeWidth="1" />
-        <ellipse cx="36" cy="46" rx="3.5" ry="2" fill="#f43f5e" opacity="0.35" />
-        <ellipse cx="64" cy="46" rx="3.5" ry="2" fill="#f43f5e" opacity="0.35" />
+        {/* Charming Roco Elf Face & Pointed Ears */}
+        {/* Left Pointy Elf Ear */}
+        <path d="M 32 41 C 20 37 10 35 4 38 C 8 44 20 48 31 50 Z" fill="url(#vkSkin)" stroke="#0284c7" strokeWidth="1" />
+        <path d="M 28 43 C 20 40 14 39 9 40 C 14 43 22 45 28 47 Z" fill="#e0f2fe" opacity="0.8" />
+        {/* Right Pointy Elf Ear */}
+        <path d="M 68 41 C 80 37 90 35 96 38 C 92 44 80 48 69 50 Z" fill="url(#vkSkin)" stroke="#0284c7" strokeWidth="1" />
+        <path d="M 72 43 C 80 40 86 39 91 40 C 86 43 78 45 72 47 Z" fill="#e0f2fe" opacity="0.8" />
+
+        {/* Head Contour */}
+        <ellipse cx="50" cy="42" rx="19" ry="16.5" fill="url(#vkSkin)" stroke="#0284c7" strokeWidth="1" />
+        <ellipse cx="36" cy="46" rx="3.5" ry="2" fill="#f43f5e" opacity="0.32" />
+        <ellipse cx="64" cy="46" rx="3.5" ry="2" fill="#f43f5e" opacity="0.32" />
 
         {/* Handsome Anime Eyes */}
         <ellipse cx="41" cy="41" rx="4" ry="5.5" fill="#172554" />
@@ -1006,11 +1120,47 @@ export const FriendAvatar: React.FC<{
 }> = ({
   size = 48,
   className = '',
+  style,
   outfit,
 }) => {
+  const getOutfitForStyle = (s?: string): CharacterOutfit => {
+    switch (s) {
+      case 'fairy':
+        return {
+          hatId: 'hat_bunny_hood',
+          hairId: 'hair_sakura_twintails',
+          robeId: 'robe_ocean_mermaid',
+          handheldId: 'wand_carrot_wand',
+          wingsId: 'wings_astral_rings',
+          auraId: 'aura_starlight',
+        };
+      case 'knight':
+        return {
+          hatId: 'hat_knight_helm',
+          hairId: 'hair_crimson_wild',
+          robeId: 'robe_paladin_armor',
+          handheldId: 'wand_phoenix_fan',
+          wingsId: 'wings_steampunk_jet',
+          auraId: 'aura_blazing_fire',
+        };
+      case 'scholar':
+        return {
+          hatId: 'hat_astrologer_hood',
+          hairId: 'hair_silver_frost',
+          robeId: 'robe_starlight_tuxedo',
+          handheldId: 'wand_aurora_staff',
+          wingsId: 'wings_astral_rings',
+          auraId: 'aura_starlight',
+        };
+      case 'wizard':
+      default:
+        return DEFAULT_CHARACTER_OUTFIT;
+    }
+  };
+
   return (
     <div style={{ width: `${size}px`, height: `${size}px` }} className={`relative inline-flex items-center justify-center ${className}`}>
-      <PlayerAvatar size={size} outfit={outfit} />
+      <PlayerAvatar size={size} outfit={outfit || getOutfitForStyle(style)} />
     </div>
   );
 };

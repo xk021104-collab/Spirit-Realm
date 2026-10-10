@@ -81,7 +81,7 @@ export const WorldChatPanel: React.FC<WorldChatPanelProps> = ({
                   <span className="text-slate-200">{messages[messages.length - 1].content}</span>
                 </>
               ) : (
-                <span className="text-slate-400">洛克王国静谧祥和，暂无最新发言...</span>
+                <span className="text-slate-400">幻灵世界静谧祥和，暂无最新发言...</span>
               )}
             </div>
           </div>
@@ -152,7 +152,7 @@ export const WorldChatPanel: React.FC<WorldChatPanelProps> = ({
             <form onSubmit={handleSend} className="flex items-center gap-2">
               <input
                 type="text"
-                placeholder={cooldownSeconds > 0 ? `广播冷却中 (${cooldownSeconds}s)...` : "输入洛克喇叭广播，和小伙伴们畅快交流..."}
+                placeholder={cooldownSeconds > 0 ? `广播冷却中 (${cooldownSeconds}s)...` : "输入传音喇叭广播，和小伙伴们畅快交流..."}
                 disabled={cooldownSeconds > 0}
                 value={inputContent}
                 onChange={(e) => setInputContent(e.target.value)}

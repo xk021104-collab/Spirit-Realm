@@ -111,7 +111,7 @@ export const GmToolModal: React.FC<GmToolModalProps> = ({
   const handleAddCoins = (amount: number) => {
     onSetCoins(Math.max(0, playerCoins + amount));
     sound.playCatchSuccess();
-    notify(`洛克贝 ${amount > 0 ? `+${amount.toLocaleString()}` : amount.toLocaleString()}`);
+    notify(`幻灵金币 ${amount > 0 ? `+${amount.toLocaleString()}` : amount.toLocaleString()}`);
   };
 
   // 2. One-click Set Coins
@@ -120,7 +120,7 @@ export const GmToolModal: React.FC<GmToolModalProps> = ({
     if (!isNaN(val) && val >= 0) {
       onSetCoins(val);
       sound.playCatchSuccess();
-      notify(`洛克贝已设定为 ${val.toLocaleString()}`);
+      notify(`幻灵金币已设定为 ${val.toLocaleString()}`);
     }
   };
 
@@ -311,7 +311,7 @@ export const GmToolModal: React.FC<GmToolModalProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="p-4 rounded-xl bg-slate-800/50 border border-amber-500/30 flex items-center justify-between">
                   <div>
-                    <span className="text-xs text-slate-400">当前洛克贝 (金币)</span>
+                    <span className="text-xs text-slate-400">当前幻灵金币</span>
                     <div className="text-xl font-bold text-amber-400 font-mono">
                       {playerCoins.toLocaleString()}
                     </div>
@@ -337,32 +337,32 @@ export const GmToolModal: React.FC<GmToolModalProps> = ({
               {/* Coins Manipulation */}
               <div className="p-5 rounded-xl bg-slate-800/40 border border-slate-700/60 space-y-4">
                 <h3 className="text-sm font-semibold text-amber-300 flex items-center gap-2">
-                  <Coins className="w-4 h-4" /> 洛克贝财富调配
+                  <Coins className="w-4 h-4" /> 幻灵金币财富调配
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   <button
                     onClick={() => handleAddCoins(10000)}
                     className="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-medium cursor-pointer transition-colors"
                   >
-                    +10,000 洛克贝
+                    +10,000 幻灵金币
                   </button>
                   <button
                     onClick={() => handleAddCoins(50000)}
                     className="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-medium cursor-pointer transition-colors"
                   >
-                    +50,000 洛克贝
+                    +50,000 幻灵金币
                   </button>
                   <button
                     onClick={() => handleAddCoins(200000)}
                     className="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-medium cursor-pointer transition-colors"
                   >
-                    +200,000 洛克贝
+                    +200,000 幻灵金币
                   </button>
                   <button
                     onClick={() => handleAddCoins(-5000)}
                     className="px-3 py-1.5 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/40 text-xs font-medium cursor-pointer transition-colors"
                   >
-                    -5,000 洛克贝
+                    -5,000 幻灵金币
                   </button>
                 </div>
                 <div className="flex items-center gap-3 pt-2">
@@ -735,7 +735,7 @@ export const GmToolModal: React.FC<GmToolModalProps> = ({
                   </button>
                 </div>
                 <p className="text-xs text-slate-400">
-                  当前本地存储的完整数据快照，包含主角、洛克贝、图鉴、背包及全部宠物资质。
+                  当前本地存储的完整数据快照，包含主角、幻灵金币、图鉴、背包及全部幻灵资质。
                 </p>
               </div>
 

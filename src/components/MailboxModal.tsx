@@ -173,7 +173,7 @@ export const MailboxModal: React.FC<MailboxModalProps> = ({
                   <div className="border-b border-slate-800 pb-3 space-y-1">
                     <h3 className="text-base font-bold text-amber-200">{selectedMail.title}</h3>
                     <div className="flex items-center gap-3 text-[11px] text-slate-400">
-                      <span>发件人: <strong className="text-slate-300">星灵王国皇家事务司</strong></span>
+                      <span>发件人: <strong className="text-slate-300">幻灵世界奥术议会</strong></span>
                       <span>·</span>
                       <span className="font-mono">{new Date(selectedMail.sentAt).toLocaleString()}</span>
                     </div>
@@ -195,7 +195,7 @@ export const MailboxModal: React.FC<MailboxModalProps> = ({
                         <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex items-center gap-2">
                           <Coins className="w-5 h-5 text-amber-400" />
                           <div>
-                            <div className="text-[10px] text-slate-400">星辉金币</div>
+                            <div className="text-[10px] text-slate-400">幻灵金币</div>
                             <div className="text-xs font-bold font-mono text-amber-300">
                               +{selectedMail.rewards.coins.toLocaleString()}
                             </div>
@@ -207,7 +207,7 @@ export const MailboxModal: React.FC<MailboxModalProps> = ({
                         <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex items-center gap-2">
                           <Sparkles className="w-5 h-5 text-cyan-400" />
                           <div>
-                            <div className="text-[10px] text-slate-400">璀璨星钻</div>
+                            <div className="text-[10px] text-slate-400">璀璨幻钻</div>
                             <div className="text-xs font-bold font-mono text-cyan-300">
                               +{selectedMail.rewards.gems}
                             </div>

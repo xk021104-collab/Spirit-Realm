@@ -235,7 +235,7 @@ class SoundEngine {
     });
   }
 
-  // 洛克王国奇幻魔法背景音乐发生器
+  // 幻灵世界奇幻魔法背景音乐发生器
   private bgmIntervalId: any = null;
   public isBgmPlaying: boolean = false;
 

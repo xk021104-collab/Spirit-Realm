@@ -32,7 +32,7 @@ export const ShopModal: React.FC<ShopModalProps> = ({
     const totalCost = item.price * buyCount;
     if (playerCoins < totalCost) {
       sound.playClick();
-      setFeedbackMessage('洛克贝不足，无法完成购买！');
+      setFeedbackMessage('幻灵金币不足，无法完成购买！');
       setTimeout(() => setFeedbackMessage(null), 2500);
       return;
     }
@@ -53,7 +53,7 @@ export const ShopModal: React.FC<ShopModalProps> = ({
 
     sound.playCatchSuccess();
     onSellItem(item.id, countToSell, totalEarned);
-    setFeedbackMessage(`成功典当 【${item.name}】 x${countToSell}，获得 ${totalEarned} 洛克贝！`);
+    setFeedbackMessage(`成功典当 【${item.name}】 x${countToSell}，获得 ${totalEarned} 幻灵金币！`);
     setTimeout(() => setFeedbackMessage(null), 2000);
   };
 
@@ -75,21 +75,21 @@ export const ShopModal: React.FC<ShopModalProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-xl font-black roco-gold-text tracking-wide flex items-center gap-2 roco-title-font">
-                  跳跳集市 · 罗伦斯道具店
+                  幻灵集市 · 魔法商人道具屋
                 </h2>
                 <span className="roco-seal text-[10px] px-1.5 py-0.2 font-bold tracking-wider">
                   集市
                 </span>
-                <span className="text-xs text-amber-300/60 font-mono font-bold tracking-widest hidden sm:inline">— ROCO SHOP —</span>
+                <span className="text-xs text-amber-300/60 font-mono font-bold tracking-widest hidden sm:inline">— MAGIC SHOP —</span>
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">跳跳集市大掌柜 罗伦斯 · 选购咕噜球与恢复魔药，开启大魔法师之旅</p>
+              <p className="text-xs text-slate-400 mt-0.5">幻灵集市大商人 巴纳比 · 选购幻灵球与恢复魔药，开启大魔法师之旅</p>
             </div>
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="roco-currency-badge" title="当前拥有的洛克贝">
+            <div className="roco-currency-badge" title="当前拥有的幻灵金币">
               <IconRocoCoin size={20} />
-              <span className="text-xs text-slate-400">洛克贝:</span>
+              <span className="text-xs text-slate-400">幻灵金币:</span>
               <span className="text-sm font-bold font-mono text-amber-300">{playerCoins.toLocaleString()}</span>
             </div>
 
@@ -99,7 +99,7 @@ export const ShopModal: React.FC<ShopModalProps> = ({
                 onClose();
               }}
               className="roco-close-btn shrink-0"
-              title="离开道具店"
+              title="离开集市"
             >
               <X className="w-5 h-5" />
             </button>
@@ -110,7 +110,7 @@ export const ShopModal: React.FC<ShopModalProps> = ({
         <div className="bg-slate-950/80 px-6 py-2.5 border-b border-slate-800 flex items-center justify-between gap-4 flex-wrap">
           <div className="flex items-center gap-2">
             {[
-              { id: 'BALLS', label: '咕噜球', icon: IconGuluBall, isCustomIcon: true },
+              { id: 'BALLS', label: '幻灵球', icon: IconGuluBall, isCustomIcon: true },
               { id: 'POTIONS', label: '恢复魔药', icon: IconMagicPotion, isCustomIcon: true },
               { id: 'CULTIVATION', label: '洗礼造化', icon: Sparkles, isCustomIcon: false },
               { id: 'SELL', label: '行囊典当', icon: ArrowRightLeft, isCustomIcon: false },
@@ -174,7 +174,7 @@ export const ShopModal: React.FC<ShopModalProps> = ({
             /* Sell/Pawn Tab */
             <div className="space-y-4">
               <p className="text-xs text-slate-400">
-                可将储物行囊内多余的道具折价 50% 典当给跳跳集市罗伦斯掌柜，换取充沛洛克贝资金。
+                可将储物行囊内多余的道具折价 50% 典当给幻灵集市商人巴纳比，换取充沛幻灵金币资金。
               </p>
               {inventory.length === 0 ? (
                 <div className="text-center text-slate-500 text-xs py-12">
@@ -212,7 +212,7 @@ export const ShopModal: React.FC<ShopModalProps> = ({
                             <p className="text-[11px] text-slate-400 line-clamp-1">{item.description}</p>
                             <div className="text-[11px] text-amber-300 font-mono flex items-center gap-1 font-bold">
                               <IconRocoCoin size={14} />
-                              <span>典当单价: {sellPrice} 洛克贝</span>
+                              <span>典当单价: {sellPrice} 幻灵金币</span>
                             </div>
                           </div>
                         </div>
@@ -267,7 +267,7 @@ export const ShopModal: React.FC<ShopModalProps> = ({
                       <div className="flex items-center justify-between pt-2.5 border-t border-slate-800/80">
                         <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-amber-300">
                           <IconRocoCoin size={16} />
-                          <span>{totalCost.toLocaleString()} 洛克贝</span>
+                          <span>{totalCost.toLocaleString()} 幻灵金币</span>
                           {buyCount > 1 && <span className="text-[10px] text-slate-400 font-normal">({item.price}/个)</span>}
                         </div>
 

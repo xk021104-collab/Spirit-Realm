@@ -11,7 +11,7 @@ interface WizardPortraitProps {
 }
 
 /**
- * 洛克小魔法师 · 西幻手绘级角色立绘 (Young Wizard Apprentice Character Portrait)
+ * 幻灵世界小魔法师 · 西幻手绘级角色立绘 (Young Wizard Apprentice Character Portrait)
  * 支持 6 大部位动态换装立绘展示 (Hat, Hair, Robe, Handheld, Wings, Aura)
  */
 export const CultivatorPortrait: React.FC<WizardPortraitProps> = ({
@@ -129,6 +129,14 @@ export const CultivatorPortrait: React.FC<WizardPortraitProps> = ({
             <stop offset="0%" stopColor="#fffbeb" />
             <stop offset="50%" stopColor="#fde047" />
             <stop offset="100%" stopColor="#d97706" />
+          </linearGradient>
+
+          {/* Authentic Roco Clan Light-Blue Fairy Skin */}
+          <linearGradient id="wizFullRocoSkin" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#e0f2fe" />
+            <stop offset="35%" stopColor="#bae6fd" />
+            <stop offset="85%" stopColor="#7dd3fc" />
+            <stop offset="100%" stopColor="#38bdf8" />
           </linearGradient>
         </defs>
 
@@ -248,18 +256,18 @@ export const CultivatorPortrait: React.FC<WizardPortraitProps> = ({
               <line x1="190" y1="260" x2="225" y2="70" stroke="#facc15" strokeWidth="6" strokeLinecap="round" />
               <polygon points="225,70 232,55 218,55" fill="#ffffff" stroke="#ca8a04" strokeWidth="1.5" />
               <line x1="175" y1="210" x2="205" y2="195" stroke="#ca8a04" strokeWidth="5" strokeLinecap="round" />
-              <circle cx="195" cy="235" r="9" fill="#fef08a" stroke="#ca8a04" strokeWidth="1.5" />
+              <circle cx="195" cy="235" r="9" fill="url(#wizFullRocoSkin)" stroke="#0284c7" strokeWidth="1.5" />
             </g>
           ) : handheldId === 'wand_aurora_staff' ? (
             <g>
               <line x1="190" y1="260" x2="225" y2="70" stroke="#0284c7" strokeWidth="5.5" strokeLinecap="round" />
               <polygon points="225,70 235,55 225,40 215,55" fill="#a5f3fc" stroke="#0891b2" strokeWidth="2" filter="drop-shadow(0 0 10px #67e8f9)" />
-              <circle cx="195" cy="235" r="9" fill="#fef08a" stroke="#ca8a04" strokeWidth="1.5" />
+              <circle cx="195" cy="235" r="9" fill="url(#wizFullRocoSkin)" stroke="#0284c7" strokeWidth="1.5" />
             </g>
           ) : handheldId === 'wand_phoenix_fan' ? (
             <g transform="translate(195, 235)">
               <path d="M 0 0 L 25 -90 Q 50 -105 70 -85 Z" fill="#ea580c" stroke="#facc15" strokeWidth="2" filter="drop-shadow(0 0 8px #f59e0b)" />
-              <circle cx="0" cy="0" r="9" fill="#fef08a" stroke="#ca8a04" strokeWidth="1.5" />
+              <circle cx="0" cy="0" r="9" fill="url(#wizFullRocoSkin)" stroke="#0284c7" strokeWidth="1.5" />
             </g>
           ) : (
             <g>
@@ -272,24 +280,35 @@ export const CultivatorPortrait: React.FC<WizardPortraitProps> = ({
                 <circle cx="-12" cy="-14" r="2.5" fill="#fde047" className="animate-ping" />
                 <circle cx="16" cy="12" r="2" fill="#38bdf8" />
               </g>
-              <circle cx="195" cy="235" r="9" fill="#fef08a" stroke="#ca8a04" strokeWidth="1.5" />
+              <circle cx="195" cy="235" r="9" fill="url(#wizFullRocoSkin)" stroke="#0284c7" strokeWidth="1.5" />
             </g>
           )}
         </g>
 
-        {/* 7. Cute Chibi Face with Ears */}
-        {/* Left Ear */}
-        <ellipse cx="96" cy="166" rx="8" ry="11" fill="#fff7ed" stroke="#fed7aa" strokeWidth="1.5" />
-        <ellipse cx="96" cy="166" rx="4.5" ry="6" fill="#fca5a5" opacity="0.5" />
-        {/* Right Ear */}
-        <ellipse cx="184" cy="166" rx="8" ry="11" fill="#fff7ed" stroke="#fed7aa" strokeWidth="1.5" />
-        <ellipse cx="184" cy="166" rx="4.5" ry="6" fill="#fca5a5" opacity="0.5" />
+        {/* 7. Authentic Roco Fairy Chibi Face with Long Pointy Elf Ears */}
+        {/* Left Long Pointy Elf Ear */}
+        <path
+          d="M 102 162 C 65 148 38 140 16 148 C 28 166 65 178 100 180 Z"
+          fill="url(#wizFullRocoSkin)"
+          stroke="#0284c7"
+          strokeWidth="2"
+        />
+        <path d="M 90 166 C 60 155 42 150 28 154 C 38 166 65 173 90 175 Z" fill="#e0f2fe" opacity="0.75" />
 
-        {/* Head Contour */}
-        <ellipse cx="140" cy="165" rx="44" ry="38" fill="#fff7ed" stroke="#fed7aa" strokeWidth="2" />
-        <ellipse cx="110" cy="175" rx="8" ry="4.5" fill="#f43f5e" opacity="0.35" />
+        {/* Right Long Pointy Elf Ear */}
+        <path
+          d="M 178 162 C 215 148 242 140 264 148 C 252 166 215 178 180 180 Z"
+          fill="url(#wizFullRocoSkin)"
+          stroke="#0284c7"
+          strokeWidth="2"
+        />
+        <path d="M 190 166 C 220 155 238 150 252 154 C 242 166 215 173 190 175 Z" fill="#e0f2fe" opacity="0.75" />
+
+        {/* Head Contour (Chubby Blue Face) */}
+        <ellipse cx="140" cy="165" rx="44" ry="38" fill="url(#wizFullRocoSkin)" stroke="#0284c7" strokeWidth="2" />
+        <ellipse cx="110" cy="175" rx="9" ry="5" fill="#f43f5e" opacity="0.32" />
         <line x1="105" y1="174" x2="115" y2="176" stroke="#e11d48" strokeWidth="1" opacity="0.4" />
-        <ellipse cx="170" cy="175" rx="8" ry="4.5" fill="#f43f5e" opacity="0.35" />
+        <ellipse cx="170" cy="175" rx="9" ry="5" fill="#f43f5e" opacity="0.32" />
         <line x1="165" y1="174" x2="175" y2="176" stroke="#e11d48" strokeWidth="1" opacity="0.4" />
 
         {/* Sparkling Anime Eyes */}

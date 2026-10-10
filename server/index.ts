@@ -30,7 +30,7 @@ app.get('/api/health', (req: Request, res: Response) => {
     version: '1.2.0',
     uptimeSeconds: Math.floor(process.uptime()),
     timestamp: new Date().toISOString(),
-    service: 'Huanling-Mijing-Game-Server',
+    service: 'Huanling-World-Game-Server',
     middleware: {
       serverHost: status.serverHost,
       dbUser: status.dbUser,
@@ -191,7 +191,7 @@ app.post('/api/admin/players/:id/rewards', (req: Request, res: Response) => {
     });
   }
 
-  db.addAuditLog('Admin', 'DISPATCH_REWARD', player.id, `下发定制奖励: 灵石+${coins || 0}, 道具=${JSON.stringify(items || [])}`);
+  db.addAuditLog('Admin', 'DISPATCH_REWARD', player.id, `下发定制奖励: 幻灵金币+${coins || 0}, 道具=${JSON.stringify(items || [])}`);
   res.json({ success: true, player });
 });
 

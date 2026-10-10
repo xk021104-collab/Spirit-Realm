@@ -67,7 +67,7 @@ const INITIAL_MAILS: GameMail[] = [
     id: 'mail_001',
     title: '【奥术学院开学礼】新晋小魔法师启航礼包',
     sender: '阿尔弗雷德院长',
-    content: '亲爱的小魔法师，欢迎来到美丽的星灵王国奥术学院！为了助你在翡翠平原与各大王国场景中结识更多心仪的宠物伙伴，学院特为你准备了高级星灵球、精力魔药与天赋洗礼魔药！',
+    content: '亲爱的小魔法师，欢迎来到美丽的幻灵世界奥术学院！为了助你在翡翠平原与各大场景中结识更多心仪的幻灵伙伴，学院特为你准备了高级幻灵球、精力魔药与天赋洗礼魔药！',
     sentAt: '2026-10-10 08:00',
     isClaimed: false,
     rewards: {
@@ -81,9 +81,9 @@ const INITIAL_MAILS: GameMail[] = [
   },
   {
     id: 'mail_002',
-    title: '【皇家魔导物资】星辉集市巴纳比特别回馈',
+    title: '【皇家魔导物资】幻灵集市巴纳比特别回馈',
     sender: '商人巴纳比',
-    content: '来自星辉集市的特供魔法补给！包含智慧圣果与大袋星露果，能帮助你的宠物迅速提升经验，并在群星竞技场大显身手。',
+    content: '来自幻灵集市的特供魔法补给！包含智慧圣果与美味幻灵果，能帮助你的幻灵迅速提升经验，并在幻灵竞技场大显身手。',
     sentAt: '2026-10-10 10:30',
     isClaimed: false,
     rewards: {
@@ -106,7 +106,7 @@ const DEFAULT_GUILD: GuildInfo = {
   maxExp: 5000,
   memberCount: 28,
   maxMembers: 30,
-  notice: '守护星灵王国，探索古老魔导奥秘！每日魔法打卡领取金库津贴，共同研习皇家公会魔导研究！',
+  notice: '守护幻灵世界，探索古老魔导奥秘！每日魔法打卡领取金库津贴，共同研习皇家公会魔导研究！',
   playerRole: 'ELDER',
   playerDevotion: 180,
   hasClaimedSalaryToday: false,
@@ -166,9 +166,9 @@ const INITIAL_CHAT_MESSAGES: ChatMessage[] = [
   {
     id: 'msg_001',
     senderId: 'sys',
-    senderName: '星灵王国广播',
+    senderName: '幻灵世界广播',
     senderTitle: '阿尔弗雷德院长',
-    content: '欢迎来到《星灵王国》！奥术学院钟声敲响，万千神奇宠物等待与你结伴冒险，祝各位小魔法师早日成为皇家大魔导师！',
+    content: '欢迎来到《幻灵世界》！奥术学院钟声敲响，万千神奇幻灵等待与你结伴冒险，祝各位小魔法师早日成为皇家大魔导师！',
     channel: 'WORLD',
     timestamp: Date.now() - 3600000,
     isSystem: true,
@@ -178,7 +178,7 @@ const INITIAL_CHAT_MESSAGES: ChatMessage[] = [
     senderId: 'npc_001',
     senderName: '艾丽西亚小公主',
     senderTitle: '皇家小公主',
-    content: '哼，本公主刚刚在宠物训练室给火羽小公主吃了两颗星露果，实力大增！谁来竞技场挑战本公主？',
+    content: '哼，本公主刚刚在宠物训练室给火羽小公主吃了两颗幻灵果，实力大增！谁来竞技场挑战本公主？',
     channel: 'WORLD',
     timestamp: Date.now() - 1800000,
   },
@@ -187,7 +187,7 @@ const INITIAL_CHAT_MESSAGES: ChatMessage[] = [
     senderId: 'npc_002',
     senderName: '诺亚',
     senderTitle: '学院同桌',
-    content: '翡翠平原的水灵儿好可爱啊，我用了两颗初级星灵球才捕捉到呢！',
+    content: '翡翠平原的水灵儿好可爱啊，我用了两颗初级幻灵球才捕捉到呢！',
     channel: 'WORLD',
     timestamp: Date.now() - 600000,
   },
@@ -258,7 +258,7 @@ export default function App() {
     lastSyncTime: null,
   });
   const [marqueeAnnouncement, setMarqueeAnnouncement] = useState<string | null>(
-    '欢迎各位小魔法师来到星灵王国！奥术学院已开学，快去信箱领取开学好礼吧！'
+    '欢迎各位小魔法师来到幻灵世界！奥术学院已开学，快去信箱领取开学好礼吧！'
   );
   const [hasPraisedToday, setHasPraisedToday] = useState<boolean>(false);
 
@@ -1274,7 +1274,7 @@ export default function App() {
     <div className="min-h-screen bg-[#020617] text-slate-100 flex flex-col items-center justify-start sm:justify-center p-1 sm:p-2 select-none overflow-x-hidden">
       {/* 1. Roco Kingdom Classic Fantasy Game Top Navigation Bar */}
       <header className="w-full max-w-5xl roco-top-bar rounded-t-2xl px-3 py-2 flex flex-wrap items-center justify-between text-xs text-slate-300 gap-2">
-        {/* Left: Player Profile & Level Crest (洛克小魔法师头像与等级铭牌) */}
+        {/* Left: Player Profile & Level Crest (幻灵世界小魔法师头像与等级铭牌) */}
         <div className="flex items-center gap-2.5">
           <div className="relative group cursor-pointer" onClick={() => setIsPetTrainOpen(true)} title="点击查看宠物锻炼与详细资料">
             <div className="w-10 h-10 rounded-full border-2 border-[#fde047] bg-gradient-to-br from-[#1e3a8a] to-[#0f172a] flex items-center justify-center overflow-hidden shadow-[0_0_12px_rgba(250,204,21,0.5)]">
@@ -1303,13 +1303,13 @@ export default function App() {
           </div>
         </div>
 
-        {/* Center: Astra Kingdom Iconic Currencies & Vitality Gauges (星辉金币/璀璨星钻/活力值) */}
+        {/* Center: Spirit World Iconic Currencies & Vitality Gauges (幻灵金币/璀璨幻钻/活力值) */}
         <div className="hidden sm:flex items-center gap-2">
-          {/* 1. 星辉金币 */}
+          {/* 1. 幻灵金币 */}
           <div
             onClick={() => setIsShopOpen(true)}
             className="roco-currency-badge cursor-pointer group"
-            title="查看星辉金币储备 · 点击前往星辉集市"
+            title="查看幻灵金币储备 · 点击前往幻灵集市"
           >
             <div className="w-4 h-4 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-xs">
               <Coins className="w-2.5 h-2.5 text-slate-950" />
@@ -1323,11 +1323,11 @@ export default function App() {
             </div>
           </div>
 
-          {/* 2. 璀璨星钻 */}
+          {/* 2. 璀璨幻钻 */}
           <div
             onClick={() => setIsShopOpen(true)}
             className="roco-currency-badge cursor-pointer group"
-            title="璀璨星钻 · 用于兑换珍贵魔法道具与稀有星灵球"
+            title="璀璨幻钻 · 用于兑换珍贵魔法道具与稀有幻灵球"
           >
             <div className="w-4 h-4 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center shadow-xs">
               <Gem className="w-2.5 h-2.5 text-white" />
@@ -1497,7 +1497,7 @@ export default function App() {
         </div>
       </header>
 
-      {/* 2. Main Game Viewport Stage with Gilded Bezel (洛克王国经典舞台外框与四角鎏金卷草纹) */}
+      {/* 2. Main Game Viewport Stage with Gilded Bezel (幻灵世界经典舞台外框与四角鎏金卷草纹) */}
       <main className="w-full max-w-5xl flex flex-col items-center justify-center my-0 shadow-2xl relative roco-web-stage">
         {/* 4 Corner Ornaments */}
         <div className="corner-ornament-tl" />
@@ -1558,7 +1558,7 @@ export default function App() {
       {/* 3. Subtle RPG Footer */}
       <footer className="w-full max-w-5xl bg-[#040e1b]/90 border-x-2 border-b-2 border-[#b8860b]/40 rounded-b-2xl px-4 py-2 flex flex-wrap items-center justify-between text-[11px] text-slate-400 mt-1">
         <div className="flex items-center gap-2">
-          <span className="text-amber-400 font-bold roco-title-font">◇ 星灵王国</span>
+          <span className="text-amber-400 font-bold roco-title-font">◇ 幻灵世界</span>
           <span className="text-slate-600">·</span>
           <span>经典西幻魔法回合制宠物页游 · 奥术学院与奇迹进化</span>
         </div>

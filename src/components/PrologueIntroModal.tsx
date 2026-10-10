@@ -128,26 +128,26 @@ export const PrologueIntroModal: React.FC<PrologueIntroModalProps> = ({ onComple
               <div className="space-y-1">
                 <div className="flex items-center justify-center gap-2">
                   <span className="text-xs font-mono font-bold tracking-widest text-amber-300 uppercase">
-                    《星灵王国》· 魔法学徒启程
+                    《幻灵世界》· 魔法学徒启程
                   </span>
                   <span className="roco-seal text-[10px] px-1.5 py-0.2 font-bold tracking-wider">
                     序幕
                   </span>
                 </div>
                 <h2 className="text-3xl font-black roco-gold-text tracking-tight roco-title-font">
-                  魔法学院 · 挑选初始宠物
+                  幻灵奥术学院 · 挑选初始幻灵
                 </h2>
               </div>
 
               <div className="p-6 rounded-2xl roco-panel text-xs md:text-sm text-slate-200 leading-relaxed text-left space-y-3 max-w-xl border border-[#b8860b]/50 shadow-inner">
                 <p className="indent-6">
-                  “你好，年轻的小魔法师！欢迎来到充满奇迹与冒险的<strong>《星灵王国》</strong>！”
+                  “你好，年轻的小魔法师！欢迎来到充满奇迹与冒险的<strong>《幻灵世界》</strong>！”
                 </p>
                 <p className="indent-6">
-                  “在广袤的魔法大陆上，生活着众多不可思议的魔法宠物。从蔚蓝海湾到炽热的烈焰峡谷，每一个角落都等待着勇敢的见习魔法师去探索！”
+                  “在广袤的魔法大陆上，生活着众多不可思议的幻灵。从蔚蓝海湾到炽热的烈焰峡谷，每一个角落都等待着勇敢的见习魔法师去探索！”
                 </p>
                 <p className="indent-6 text-amber-300 font-semibold">
-                  “作为初入魔法学院的见习魔法师，你需要挑选一只忠诚的宠物作为你的第一位冒险伙伴。来吧，挑选属于你的初始伙伴，握紧魔杖，开启属于你的魔法传奇吧！”
+                  “作为初入幻灵奥术学院的见习魔法师，你需要挑选一只忠诚的幻灵作为你的第一位冒险伙伴。来吧，挑选属于你的初始伙伴，握紧魔杖，开启属于你的魔法传奇吧！”
                 </p>
               </div>
 
@@ -158,7 +158,7 @@ export const PrologueIntroModal: React.FC<PrologueIntroModalProps> = ({ onComple
                 }}
                 className="roco-turn-capsule py-3 px-8 text-slate-950 text-sm font-black cursor-pointer flex items-center gap-2 shadow-xl hover:scale-105 transition-transform"
               >
-                <span>聆听院长嘱托 · 挑选初始宠物</span>
+                <span>聆听院长嘱托 · 挑选初始幻灵</span>
                 <ChevronRight className="w-5 h-5 text-slate-950" />
               </button>
             </motion.div>
@@ -175,7 +175,7 @@ export const PrologueIntroModal: React.FC<PrologueIntroModalProps> = ({ onComple
               className="p-6 md:p-8 space-y-6"
             >
               <div className="text-center space-y-1">
-                <h3 className="text-2xl font-black text-amber-300 game-title-font">魔法契约 · 挑选御三家初始宠物</h3>
+                <h3 className="text-2xl font-black text-amber-300 game-title-font">魔法契约 · 挑选御三家初始幻灵</h3>
                 <p className="text-xs text-slate-400">选择跟随你的初始伙伴，它将伴随你成长并在 Lv.16 与 Lv.36 完成华丽进化！</p>
               </div>
 
@@ -327,8 +327,8 @@ export const PrologueIntroModal: React.FC<PrologueIntroModalProps> = ({ onComple
                 </div>
 
                 <div className="text-right text-xs text-slate-300">
-                  学院赠礼: <span className="text-amber-300 font-bold font-mono">1000 星辉金币</span> ·{' '}
-                  <span className="text-cyan-300 font-bold font-mono">初级星灵球 x5</span>
+                  学院赠礼: <span className="text-amber-300 font-bold font-mono">1000 幻灵金币</span> ·{' '}
+                  <span className="text-cyan-300 font-bold font-mono">初级幻灵球 x5</span>
                 </div>
               </div>
 

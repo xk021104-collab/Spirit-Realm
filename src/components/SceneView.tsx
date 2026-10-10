@@ -211,7 +211,7 @@ export const SceneView: React.FC<SceneViewProps> = ({
     <div className="relative w-full max-w-5xl mx-auto flex flex-col items-center select-none">
       {/* 1. Celestial Fantasy Viewport Frame */}
       <div className="w-full rounded-2xl overflow-hidden relative flex flex-col shadow-2xl border-2 border-[#b8860b]/40 bg-[#06111f]">
-        {/* Top Scene Ribbon Bar (洛克王国经典场景金卷轴与快捷操作) */}
+        {/* Top Scene Ribbon Bar (幻灵世界经典场景金卷轴与快捷操作) */}
         <div className="h-13 bg-gradient-to-r from-[#061426] via-[#091b30] to-[#061426] border-b border-[#b8860b]/40 px-3 sm:px-4 flex items-center justify-between z-30 gap-2">
           {/* Left: Classic Scene Ribbon Banner */}
           <div className="flex items-center gap-2">
@@ -258,12 +258,12 @@ export const SceneView: React.FC<SceneViewProps> = ({
             </button>
 
             {/* Roco Coins Display */}
-            <div className="roco-currency-badge" title="王国流通货币：洛克贝">
+            <div className="roco-currency-badge" title="流通货币：幻灵金币">
               <IconRocoCoin size={20} />
               <span className="font-mono text-xs font-bold text-amber-300">
                 {playerCoins.toLocaleString()}
               </span>
-              <span className="text-[10px] text-amber-400 font-bold hidden sm:inline">洛克贝</span>
+              <span className="text-[10px] text-amber-400 font-bold hidden sm:inline">幻灵金币</span>
             </div>
 
             {/* Audio Toggle */}
@@ -385,7 +385,7 @@ export const SceneView: React.FC<SceneViewProps> = ({
               style={{ left: `${npc.x}%`, top: `${npc.y}%` }}
               className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group flex flex-col items-center z-20"
             >
-              {/* NPC Quest Beacon (洛克王国经典金感叹号/任务标记) */}
+              {/* NPC Quest Beacon (经典金感叹号/任务标记) */}
               <div className="flex flex-col items-center mb-1 group-hover:scale-105 transition-transform">
                 <div className="roco-npc-marker w-6 h-6 rounded-full bg-gradient-to-br from-yellow-300 via-amber-400 to-amber-600 border-2 border-yellow-100 flex items-center justify-center text-slate-950 font-black text-xs shadow-lg mb-0.5">
                   !
@@ -405,7 +405,7 @@ export const SceneView: React.FC<SceneViewProps> = ({
             </div>
           ))}
 
-          {/* Roaming Wild Spirits Spaced Out with Roco Kingdom Overhead Capsule (野生精灵洛克血条标牌) */}
+          {/* Roaming Wild Spirits Spaced Out with Overhead Capsule (野生幻灵血条标牌) */}
           {currentScene.wildPets.map((wp, index) => {
             const sp = PET_SPECIES[wp.speciesId];
             if (!sp) return null;
@@ -562,7 +562,7 @@ export const SceneView: React.FC<SceneViewProps> = ({
             })}
         </div>
 
-        {/* 3. Authentic Roco Kingdom Magic Navigation Dock (洛克王国标志性底部魔法操作台) */}
+        {/* 3. Authentic Magic Navigation Dock (幻灵世界标志性底部魔法操作台) */}
         <div className="roco-dock-bar py-2 px-3 sm:px-6 flex items-center justify-around sm:justify-center sm:gap-4 md:gap-5 z-30 shadow-2xl backdrop-blur-xl">
           {/* 1. Spirit Party with 6 Mini Slots Preview (魔法行囊) */}
           <div
@@ -581,7 +581,7 @@ export const SceneView: React.FC<SceneViewProps> = ({
                 {playerParty.length}/6
               </span>
             </div>
-            {/* 6 Mini Party Orbs Preview Indicator (洛克王国特色6宠血量状态点) */}
+            {/* 6 Mini Party Orbs Preview Indicator (幻灵世界特色6宠血量状态点) */}
             <div className="flex items-center gap-0.5 mt-1 pointer-events-none">
               {Array.from({ length: 6 }).map((_, i) => {
                 const pet = playerParty[i];
@@ -611,13 +611,13 @@ export const SceneView: React.FC<SceneViewProps> = ({
               setIsMapModalOpen(true);
             }}
             className="roco-dock-btn group"
-            title="打开洛克王国全域地图"
+            title="打开幻灵世界全域地图"
           >
             <div className="roco-dock-icon-circle">
               <IconKingdomMap size={26} />
             </div>
             <span className="text-[11px] font-bold text-slate-200 group-hover:text-amber-200 roco-title-font tracking-wider mt-1">
-              王国地图
+              世界地图
             </span>
           </button>
 
@@ -628,17 +628,17 @@ export const SceneView: React.FC<SceneViewProps> = ({
               onOpenPokedex();
             }}
             className="roco-dock-btn group"
-            title="查看洛克王国魔兽图鉴"
+            title="查看幻灵世界图鉴"
           >
             <div className="roco-dock-icon-circle">
               <IconSpellbook size={26} />
             </div>
             <span className="text-[11px] font-bold text-slate-200 group-hover:text-indigo-200 roco-title-font tracking-wider mt-1">
-              魔兽图鉴
+              幻灵图鉴
             </span>
           </button>
 
-          {/* 4. Cultivation & Evolution (宠物训练室) */}
+          {/* 4. Cultivation & Evolution (幻灵培养室) */}
           {onOpenPetTrain && (
             <button
               onClick={() => {
@@ -646,31 +646,31 @@ export const SceneView: React.FC<SceneViewProps> = ({
                 onOpenPetTrain();
               }}
               className="roco-dock-btn group"
-              title="宠物训练室 · 学习招式与等级进阶"
+              title="幻灵培养室 · 学习招式与等级进阶"
             >
               <div className="roco-dock-icon-circle">
                 <IconGuluBall size={26} />
               </div>
               <span className="text-[11px] font-bold text-slate-200 group-hover:text-amber-300 roco-title-font tracking-wider mt-1">
-                宠物训练
+                幻灵培养
               </span>
             </button>
           )}
 
-          {/* 5. Magic Bazaar Shop (跳跳集市) */}
+          {/* 5. Magic Bazaar Shop (幻灵集市) */}
           <button
             onClick={() => {
               sound.playClick();
               onOpenShop();
             }}
             className="roco-dock-btn group"
-            title="前往跳跳集市购买道具与咕噜球"
+            title="前往幻灵集市购买道具与幻灵球"
           >
             <div className="roco-dock-icon-circle">
               <IconMagicShop size={26} />
             </div>
             <span className="text-[11px] font-bold text-slate-200 group-hover:text-emerald-200 roco-title-font tracking-wider mt-1">
-              跳跳集市
+              幻灵集市
             </span>
           </button>
 

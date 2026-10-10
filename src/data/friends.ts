@@ -4,13 +4,13 @@ export const INITIAL_FRIENDS: Friend[] = [
   {
     id: 'friend_feierte',
     name: '诺亚',
-    title: '星灵学院 · 勤奋学徒',
+    title: '幻灵学院 · 勤奋学徒',
     level: 32,
     avatarStyle: 'wizard',
     locationId: 'ACADEMY',
-    locationName: '星灵奥术学院',
+    locationName: '幻灵奥术学院',
     signature: '虽然我有时候会粗心，但我一定会成为伟大的魔导师！',
-    greeting: '嗨！今天阿尔弗雷德院长的课你去了吗？我采到了晨曦花瓣，特赠你一枚星光友谊碎片！',
+    greeting: '嗨！今天阿尔弗雷德院长的课你去了吗？我采到了晨曦花瓣，特赠你一枚友谊幻灵碎片！',
     companionPet: {
       speciesId: 'qingmulu',
       nickname: '小木鹿',
@@ -132,7 +132,7 @@ export const RECOMMENDED_CANDIDATES: Omit<Friend, 'hasGiftedToday' | 'canClaimFr
     level: 44,
     avatarStyle: 'scholar',
     locationId: 'ACADEMY',
-    locationName: '星灵奥术学院',
+    locationName: '幻灵奥术学院',
     signature: '知识即力量，每一本古老魔法书里都沉睡着奇迹。',
     greeting: '翻开泛黄的书页，魔法历史将为你展现无垠奥秘。很高兴结识你！',
     companionPet: {
@@ -164,9 +164,9 @@ export const RECOMMENDED_CANDIDATES: Omit<Friend, 'hasGiftedToday' | 'canClaimFr
     level: 35,
     avatarStyle: 'scholar',
     locationId: 'SHOP',
-    locationName: '星辉集市',
+    locationName: '幻灵集市',
     signature: '任何蛛丝马迹都逃不过我的放大镜与魔力探测仪！',
-    greeting: '你好新同伴！星辉集市最近有什么新动静吗？随时跟我分享情报！',
+    greeting: '你好新同伴！幻灵集市最近有什么新动静吗？随时跟我分享情报！',
     companionPet: {
       speciesId: 'bishuiling',
       nickname: '泡泡精灵',
@@ -180,8 +180,8 @@ export const RECOMMENDED_CANDIDATES: Omit<Friend, 'hasGiftedToday' | 'canClaimFr
     level: 50,
     avatarStyle: 'fairy',
     locationId: 'ACADEMY',
-    locationName: '星灵奥术学院',
-    signature: '愿圣光永远护佑星灵王国的每一位善良小魔法师。',
+    locationName: '幻灵奥术学院',
+    signature: '愿圣光永远护佑幻灵世界的每一位善良小魔法师。',
     greeting: '温暖的光辉洒落大地，愿你的魔法旅途充满奇迹与阳光。',
     companionPet: {
       speciesId: 'fenghuang',

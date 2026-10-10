@@ -98,7 +98,7 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
     },
     {
       id: 'celestial_island',
-      name: '星灵奥术学院',
+      name: '幻灵奥术学院',
       sceneId: 'ACADEMY',
       x: 62,
       y: 26,
@@ -110,11 +110,11 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
     },
     {
       id: 'ancient_city',
-      name: '星辉集市',
+      name: '幻灵集市',
       sceneId: 'SHOP',
       x: 32,
       y: 70,
-      description: '星灵王国最热闹的交易集市，神秘商人巴纳比在此摆摊，各种星灵球与魔药应有尽有。',
+      description: '幻灵世界最热闹的交易集市，神秘商人巴纳比在此摆摊，各种幻灵球与魔药应有尽有。',
       spiritTypes: ['集市', '魔药'],
       climate: '游商如织 · 货物琳琅',
       levelRange: '安全城镇',
@@ -146,7 +146,7 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
     },
     {
       id: 'desert_ruins',
-      name: '群星竞技场',
+      name: '幻灵竞技场',
       sceneId: 'ARENA',
       x: 58,
       y: 74,
@@ -226,7 +226,7 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
             <div className="relative flex items-center justify-center">
               <div className="absolute w-44 h-10 rounded-full bg-amber-400/35 blur-md -top-1 pointer-events-none" />
               <h1 className="relative font-black text-2xl md:text-3xl tracking-wider text-transparent bg-clip-text bg-gradient-to-b from-[#2563eb] via-[#1d4ed8] to-[#1e3a8a] drop-shadow-[0_2px_4px_rgba(245,158,11,0.8)] font-serif">
-                星灵王国
+                幻灵世界
               </h1>
             </div>
 
@@ -247,10 +247,10 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
           {/* Top-Right: Currencies & Close Window */}
           <div className="flex items-center gap-3">
             {/* Astra Gold Coins */}
-            <div className="roco-currency-badge" title="当前拥有的星辉金币">
+            <div className="roco-currency-badge" title="当前拥有的幻灵金币">
               <IconRocoCoin size={20} />
               <span className="font-mono text-xs font-bold text-amber-300">{gold.toLocaleString()}</span>
-              <span className="text-[10px] text-amber-400 font-bold hidden sm:inline">星辉金币</span>
+              <span className="text-[10px] text-amber-400 font-bold hidden sm:inline">幻灵金币</span>
             </div>
 
             {/* Astra Diamonds */}
@@ -259,7 +259,7 @@ export const WorldMapView: React.FC<WorldMapViewProps> = ({
                 钻
               </div>
               <span>90</span>
-              <span className="text-[10px] text-cyan-400 font-bold hidden sm:inline">璀璨星钻</span>
+              <span className="text-[10px] text-cyan-400 font-bold hidden sm:inline">璀璨幻钻</span>
             </div>
 
             <button

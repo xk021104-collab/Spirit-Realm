@@ -112,7 +112,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   // GM Mail Dispatcher state
   const [mailTitle, setMailTitle] = useState<string>('全服魔法福利大礼包');
-  const [mailContent, setMailContent] = useState<string>('祝愿各位小魔法师学业有成，特奉上星辉集市魔法物资！');
+  const [mailContent, setMailContent] = useState<string>('祝愿各位小魔法师学业有成，特奉上幻灵集市魔法物资！');
   const [mailTarget, setMailTarget] = useState<'ALL' | 'INDIVIDUAL'>('ALL');
   const [mailTargetId, setMailTargetId] = useState<string>('');
   const [mailCoinsReward, setMailCoinsReward] = useState<number>(10000);
@@ -363,7 +363,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     };
     setSelectedPlayer(updated);
     setPlayers((prev) => prev.map((p) => (p.id === selectedPlayer.id ? updated : p)));
-    addAuditLog('Admin', 'UPDATE_PLAYER', selectedPlayer.id, `修改资产: 星辉金币=${editingCoins}, 等级=${editingLevel}`);
+    addAuditLog('Admin', 'UPDATE_PLAYER', selectedPlayer.id, `修改资产: 幻灵金币=${editingCoins}, 等级=${editingLevel}`);
     showNotify('已在本地后台更新玩家资产！');
   };
 
@@ -467,7 +467,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       );
     }
 
-    addAuditLog('Admin', 'DISPATCH_MAIL', mailTarget, `下发邮件【${mailTitle}】，包含星辉金币+${mailCoinsReward}`);
+    addAuditLog('Admin', 'DISPATCH_MAIL', mailTarget, `下发邮件【${mailTitle}】，包含幻灵金币+${mailCoinsReward}`);
     showNotify('邮件及道具已下发至玩家邮箱！');
   };
 
@@ -486,7 +486,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   // Generate SQL Dump
   const handleExportSql = () => {
     let sql = `-- ========================================================\n`;
-    sql += `-- 《星灵王国》 生产数据库导出演算 SQL DUMP\n`;
+    sql += `-- 《幻灵世界》 生产数据库导出演算 SQL DUMP\n`;
     sql += `-- 生成时间: ${new Date().toISOString()}\n`;
     sql += `-- ========================================================\n\n`;
 
@@ -521,7 +521,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             title="返回游戏客户端"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>返回星灵王国</span>
+            <span>返回幻灵世界</span>
           </button>
 
           <div className="h-4 w-px bg-slate-700" />
@@ -533,7 +533,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-indigo-200 to-cyan-300">
-                  《星灵王国》运营中台管理系统
+                  《幻灵世界》运营中台管理系统
                 </h1>
                 <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-purple-950 text-purple-300 border border-purple-800/60">
                   v1.2.0 PRO
@@ -635,7 +635,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
               <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex items-center justify-between shadow">
                 <div>
-                  <span className="text-xs text-slate-400">全服星辉金币流通池</span>
+                  <span className="text-xs text-slate-400">全服幻灵金币流通池</span>
                   <div className="text-2xl font-bold font-mono text-amber-300 mt-1">
                     {players.reduce((sum, p) => sum + p.spiritCoins, 0).toLocaleString()}
                   </div>
@@ -724,7 +724,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <div className="flex items-center justify-between border-b border-slate-800 pb-3">
                   <h3 className="text-xs font-bold text-slate-300 flex items-center gap-2">
                     <Radio className="w-4 h-4 text-cyan-400" />
-                    星灵王国场景分布与活跃热度
+                    幻灵世界场景分布与活跃热度
                   </h3>
                   <span className="text-[11px] text-slate-500 font-mono">AOI 视野心跳同步</span>
                 </div>
@@ -805,7 +805,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   <tr className="bg-slate-950/80 border-b border-slate-800 text-slate-400">
                     <th className="py-3 px-4">魔法师档案</th>
                     <th className="py-3 px-4">等级 / VIP</th>
-                    <th className="py-3 px-4">星辉金币资产</th>
+                    <th className="py-3 px-4">幻灵金币资产</th>
                     <th className="py-3 px-4">综合战力</th>
                     <th className="py-3 px-4">所在场景</th>
                     <th className="py-3 px-4">账号状态</th>
@@ -831,7 +831,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         )}
                       </td>
                       <td className="py-3 px-4 font-mono text-amber-400">
-                        {player.spiritCoins.toLocaleString()} 星辉金币
+                        {player.spiritCoins.toLocaleString()} 幻灵金币
                       </td>
                       <td className="py-3 px-4 font-mono text-purple-300 font-bold">
                         {player.combatPower.toLocaleString()}
@@ -906,7 +906,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     </h4>
                     <div className="grid grid-cols-3 gap-3">
                       <div>
-                        <label className="text-[11px] text-slate-400 block mb-1">洛克贝 (金币)</label>
+                        <label className="text-[11px] text-slate-400 block mb-1">幻灵金币</label>
                         <input
                           type="number"
                           value={editingCoins}
@@ -915,7 +915,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         />
                       </div>
                       <div>
-                        <label className="text-[11px] text-slate-400 block mb-1">洛克钻 (钻石)</label>
+                        <label className="text-[11px] text-slate-400 block mb-1">璀璨幻钻</label>
                         <input
                           type="number"
                           value={editingGems}
@@ -1090,7 +1090,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
-                    <label className="text-[11px] text-slate-400 block mb-1">赠送洛克贝 (金币)</label>
+                    <label className="text-[11px] text-slate-400 block mb-1">赠送幻灵金币</label>
                     <input
                       type="number"
                       value={mailCoinsReward}
@@ -1099,7 +1099,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     />
                   </div>
                   <div>
-                    <label className="text-[11px] text-slate-400 block mb-1">赠送洛克钻 (钻石)</label>
+                    <label className="text-[11px] text-slate-400 block mb-1">赠送璀璨幻钻</label>
                     <input
                       type="number"
                       value={mailGemsReward}

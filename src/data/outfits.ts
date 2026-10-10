@@ -13,7 +13,7 @@ export const DEFAULT_CHARACTER_OUTFIT: CharacterOutfit = {
 };
 
 /**
- * 星灵王国 装扮部位数据字典
+ * 幻灵世界 装扮部位数据字典
  */
 export const OUTFIT_ITEMS: Record<string, OutfitItem> = {
   // ==========================================
@@ -24,7 +24,7 @@ export const OUTFIT_ITEMS: Record<string, OutfitItem> = {
     name: '经典星夜魔法帽',
     slot: 'HAT',
     rarity: 'COMMON',
-    description: '深蓝缎面星芒大巫师帽，顶端微微弯曲，缀以金星胸针，是星灵王国的经典象征。',
+    description: '深蓝缎面星芒大巫师帽，顶端微微弯曲，缀以金星胸针，是幻灵世界的经典象征。',
     bonusText: '魔攻加成 +5',
     unlockedByDefault: true,
     colors: { primary: '#1e3a8a', secondary: '#facc15', accent: '#38bdf8' },
@@ -345,7 +345,7 @@ export const OUTFIT_PRESETS: OutfitPreset[] = [
   {
     id: 'preset_classic_academy',
     name: '经典学园生',
-    description: '星灵王国最经典的学员装扮，星夜巫师帽搭配深蓝斗篷。',
+    description: '幻灵世界最经典的学员装扮，星夜巫师帽搭配深蓝斗篷。',
     themeColor: '#2563eb',
     outfit: {
       hatId: 'hat_classic_wizard',

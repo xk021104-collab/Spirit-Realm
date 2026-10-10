@@ -23,7 +23,7 @@ export const GuildModal: React.FC<GuildModalProps> = ({
     if (guild.hasClaimedSalaryToday) return;
     sound.playCatchSuccess();
     onClaimSalary();
-    setNotice('成功领取今日公会每日津贴：星辉金币 +1,000，公会贡献 +50！');
+    setNotice('成功领取今日公会每日津贴：幻灵金币 +1,000，公会贡献 +50！');
     setTimeout(() => setNotice(null), 3000);
   };
 
@@ -128,7 +128,7 @@ export const GuildModal: React.FC<GuildModalProps> = ({
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-700 hover:from-amber-400 hover:to-amber-600 disabled:opacity-40 text-slate-950 font-bold text-xs cursor-pointer shadow transition-all"
           >
             <Coins className="w-3.5 h-3.5" />
-            <span>{guild.hasClaimedSalaryToday ? '今日津贴已领' : '领取每日公会津贴 (+1000 星辉金币)'}</span>
+            <span>{guild.hasClaimedSalaryToday ? '今日津贴已领' : '领取每日公会津贴 (+1000 幻灵金币)'}</span>
           </button>
         </div>
 
@@ -157,9 +157,9 @@ export const GuildModal: React.FC<GuildModalProps> = ({
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="p-4 rounded-xl bg-slate-950 border border-slate-800">
-                  <div className="text-xs text-slate-400">公会金库星辉金币</div>
+                  <div className="text-xs text-slate-400">公会金库幻灵金币</div>
                   <div className="text-lg font-bold font-mono text-amber-300 mt-1">
-                    {guild.totalFunds.toLocaleString()} 星辉金币
+                    {guild.totalFunds.toLocaleString()} 幻灵金币
                   </div>
                 </div>
                 <div className="p-4 rounded-xl bg-slate-950 border border-slate-800">

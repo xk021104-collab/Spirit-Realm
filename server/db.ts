@@ -208,8 +208,8 @@ const INITIAL_DB: ServerDatabase = {
   mails: [
     {
       id: 'mail-001',
-      title: '《幻灵秘境》全服开服大礼包',
-      content: '诚邀各位契约使踏入幻灵大陆！特奉上初阶修仙大礼，愿诸位修道昌盛！',
+      title: '《幻灵世界》开服入学大礼包',
+      content: '诚邀各位小魔法师踏入幻灵世界！特奉上奥术学院启程大礼，愿诸位魔法研习顺利！',
       targetType: 'ALL',
       rewards: {
         coins: 5000,
@@ -600,7 +600,7 @@ export class DatabaseStore {
 
   public exportSqlDump(): string {
     let sql = `-- ========================================================\n`;
-    sql += `-- 《幻灵秘境》 MySQL 生产数据库导出演算 SQL DUMP\n`;
+    sql += `-- 《幻灵世界》 MySQL 生产数据库导出演算 SQL DUMP\n`;
     sql += `-- 目标主机: ${SERVER_CONFIG.host}:3306 (用户: ${SERVER_CONFIG.user})\n`;
     sql += `-- 数据库: ${SERVER_CONFIG.database}\n`;
     sql += `-- 生成时间: ${new Date().toISOString()}\n`;

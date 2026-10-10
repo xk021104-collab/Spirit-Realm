@@ -263,7 +263,7 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-lg sm:text-xl font-bold roco-gold-text tracking-wide roco-title-font flex items-center gap-2">
-                  洛克王国 · 皇家魔兽图鉴
+                  幻灵世界 · 皇家魔兽图鉴
                 </h2>
                 <span className="roco-seal text-[10px] px-1.5 py-0.2 font-bold tracking-wider">
                   图鉴
@@ -346,7 +346,7 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
                           ? 'bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold border-amber-300 animate-pulse cursor-pointer shadow-md'
                           : 'bg-slate-900 border-slate-800 text-slate-400 opacity-60'
                       }`}
-                      title={canClaim ? `领取奖励: ${m.coins} 洛克贝 + 咕噜球` : `需收服 ${m.target} 只宠物`}
+                      title={canClaim ? `领取奖励: ${m.coins} 幻灵金币 + 幻灵球` : `需收服 ${m.target} 只幻灵`}
                     >
                       <Gift className="w-3 h-3" />
                       <span>{m.label}</span>
@@ -542,7 +542,7 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
                           {isUnlocked ? (
                             <span className={rarityBadge.text}>{rarityBadge.stars} {rarityBadge.label}</span>
                           ) : (
-                            <span>探索场景咕噜球捕获</span>
+                            <span>探索场景幻灵球捕获</span>
                           )}
                         </div>
                       </div>
@@ -621,7 +621,7 @@ export const PokedexModal: React.FC<PokedexModalProps> = ({
                       <div className="w-20 h-20 rounded-full bg-slate-900 border-2 border-dashed border-slate-700 flex items-center justify-center text-slate-600 mb-2">
                         <Lock className="w-8 h-8" />
                       </div>
-                      <span className="text-xs text-slate-400">尚未收服 · 前往场景探索用咕噜球捕获</span>
+                      <span className="text-xs text-slate-400">尚未收服 · 前往场景探索用幻灵球捕获</span>
                     </div>
                   )}
 

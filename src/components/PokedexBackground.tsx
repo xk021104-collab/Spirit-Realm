@@ -9,8 +9,8 @@ interface PokedexBackgroundProps {
 }
 
 /**
- * 星灵王国皇家魔兽图鉴 · 专属魔幻蓝紫色调星空背景 (Astra Kingdom Magic Codex Background)
- * Perfectly adheres to Western Fantasy Magic aesthetics for 《星灵王国》:
+ * 幻灵世界皇家图鉴 · 专属魔幻蓝紫色调星空背景 (Fantasy Spirit World Magic Codex Background)
+ * Perfectly adheres to Western Fantasy Magic aesthetics for 《幻灵世界》:
  * - Deep twilight indigo, sapphire blue, and imperial amethyst/purple palette
  * - Multi-layered swirling magical clouds & nebula with fluid parallax drift
  * - Floating mystical peaks, castle silhouettes, and magic academy towers

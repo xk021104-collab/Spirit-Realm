@@ -63,7 +63,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                   皇家学员
                 </span>
               </div>
-              <p className="text-[11px] text-slate-300 mt-0.5">王国星辰星图 · 记录小洛克的奇幻成长历程</p>
+              <p className="text-[11px] text-slate-300 mt-0.5">世界星辰星图 · 记录小魔法师的奇幻成长历程</p>
             </div>
           </div>
 
@@ -149,14 +149,14 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                   <div className="text-sm font-bold text-cyan-300">320</div>
                 </div>
                 <div className="p-2 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col items-center justify-center">
-                  <div className="text-[10px] text-slate-400">洛克贝</div>
+                  <div className="text-[10px] text-slate-400">幻灵金币</div>
                   <div className="text-sm font-bold text-amber-300 font-mono flex items-center gap-1">
                     <IconRocoCoin size={14} />
                     <span>{displayGold}</span>
                   </div>
                 </div>
                 <div className="p-2 rounded-xl bg-slate-900/80 border border-slate-800">
-                  <div className="text-[10px] text-slate-400">洛克钻</div>
+                  <div className="text-[10px] text-slate-400">璀璨幻钻</div>
                   <div className="text-sm font-bold text-cyan-400 font-mono">{spiritGems}</div>
                 </div>
               </div>
@@ -206,7 +206,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                       球
                     </div>
                     <div>
-                      <div className="font-bold text-slate-200">国王咕噜球徽章</div>
+                      <div className="font-bold text-slate-200">传奇幻灵球徽章</div>
                       <div className="text-[10px] text-slate-400">皇家骑士团荣誉，大幅提升野外捕捉概率</div>
                     </div>
                   </div>
@@ -221,7 +221,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
             <div className="p-3 rounded-2xl bg-gradient-to-r from-amber-950/30 via-slate-950/50 to-blue-950/30 border border-[#b8860b]/30 flex items-center justify-between text-xs">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-amber-400" />
-                <span className="text-slate-300">洛克王国格言：</span>
+                <span className="text-slate-300">幻灵世界格言：</span>
                 <span className="text-amber-200 font-bold italic">“善良、勇敢与智慧是魔法的真谛。”</span>
               </div>
             </div>

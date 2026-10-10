@@ -14,7 +14,7 @@
 }
 
 /* =========================================================================
-   Roco Kingdom Magic Fantasy Design Tokens (洛克王国 / 西幻魔法高定美学)
+   Fantasy Spirit World Design Tokens (《幻灵世界》 / 西幻魔法高定美学)
    ========================================================================= */
 
 /* Main Viewport Container Frame */
@@ -263,7 +263,7 @@
 }
 
 /* =========================================================================
-   Roco Kingdom (洛克王国) Classic Fantasy Web Game Theme Tokens
+   Fantasy Spirit World (幻灵世界) Classic Fantasy Web Game Theme Tokens
    ========================================================================= */
 
 /* Typography & Titles */
@@ -503,10 +503,10 @@
 }
 
 /* =========================================================================
-   Roco Kingdom (洛克王国) Classic Flash Web Game Aesthetic System
+   Fantasy Spirit World (幻灵世界) Classic Flash Web Game Aesthetic System
    ========================================================================= */
 
-/* Web Game Stage Bezel (洛克王国标志性游戏舞台外框) */
+/* Web Game Stage Bezel (幻灵世界标志性游戏舞台外框) */
 .roco-web-stage {
   background: radial-gradient(circle at 50% 25%, #0d1e34 0%, #06111f 65%, #020813 100%);
   border: 3px solid #d4af37;
@@ -562,7 +562,7 @@
   box-shadow: 2px 2px 6px rgba(245, 158, 11, 0.6);
 }
 
-/* Top Navigation Bar (洛克王国顶部皇家蓝金导航栏) */
+/* Top Navigation Bar (幻灵世界顶部皇家蓝金导航栏) */
 .roco-top-bar {
   background: linear-gradient(180deg, #102a45 0%, #0a1c30 45%, #05101d 100%);
   border-bottom: 2.5px solid #d4af37;
@@ -573,7 +573,7 @@
   z-index: 30;
 }
 
-/* Currency & Stat Capsule (洛克王国标志性金币/钻石/精力条) */
+/* Currency & Stat Capsule (幻灵世界标志性金币/钻石/精力条) */
 .roco-currency-badge {
   background: linear-gradient(180deg, #071526 0%, #030b14 100%);
   border: 1.5px solid #d4af37;
@@ -648,7 +648,7 @@
   filter: drop-shadow(0 0 4px #eab308);
 }
 
-/* Bottom Iconic Navigation Dock (洛克王国标志性底部魔法控制台) */
+/* Bottom Iconic Navigation Dock (幻灵世界标志性底部魔法控制台) */
 .roco-dock-bar {
   background: linear-gradient(180deg, #0d233a 0%, #071626 50%, #030a13 100%);
   border-top: 3px solid #d4af37;
@@ -659,7 +659,7 @@
   z-index: 25;
 }
 
-/* Tactile 3D Circular Dock Button (洛克王国经典凸面金属浮雕按钮) */
+/* Tactile 3D Circular Dock Button (幻灵世界经典凸面金属浮雕按钮) */
 .roco-dock-btn {
   display: flex;
   flex-direction: column;
@@ -703,7 +703,7 @@
     0 0 16px rgba(250, 204, 21, 0.65);
 }
 
-/* Wild Roaming Pet Overhead Plaque (场景野生精灵经典洛克王国头顶标牌) */
+/* Wild Roaming Pet Overhead Plaque (场景野生幻灵经典头顶标牌) */
 .roco-roamer-tag {
   background: linear-gradient(180deg, rgba(8, 22, 38, 0.95) 0%, rgba(3, 10, 18, 0.98) 100%);
   border: 1.5px solid rgba(217, 170, 75, 0.8);
@@ -738,7 +738,7 @@
   filter: drop-shadow(0 2px 8px rgba(250, 204, 21, 0.7));
 }
 
-/* High-contrast Battle Skill Plate (洛克王国4大技能经典方阵卡片) */
+/* High-contrast Battle Skill Plate (幻灵4大技能经典方阵卡片) */
 .roco-skill-card {
   position: relative;
   border-radius: 14px;
@@ -769,7 +769,7 @@
   filter: grayscale(0.7);
 }
 
-/* Classic Gulu Ball (咕噜球) 3D Sphere */
+/* Classic Phantom Ball (幻灵球) 3D Sphere */
 .roco-gulu-ball {
   width: 44px;
   height: 44px;
@@ -784,7 +784,7 @@
   justify-content: center;
 }
 
-/* Classic Close Button (洛克王国红金圆形关闭按钮) */
+/* Classic Close Button (幻灵世界红金圆形关闭按钮) */
 .roco-close-btn {
   width: 36px;
   height: 36px;

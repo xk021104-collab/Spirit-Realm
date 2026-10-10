@@ -3,9 +3,9 @@ import { SceneConfig } from '../types/game';
 export const SCENES_DATA: Record<string, SceneConfig> = {
   ACADEMY: {
     id: 'ACADEMY',
-    name: '星灵奥术学院',
+    name: '幻灵奥术学院',
     region: '皇家主城',
-    description: '星灵王国培养杰出魔法使的圣殿，阿尔弗雷德院长与导师们在此指引每一位初入王国的年轻学员。',
+    description: '幻灵世界培养杰出魔法使的圣殿，阿尔弗雷德院长与导师们在此指引每一位初入大陆的年轻学员。',
     themeColor: '#3b82f6',
     wildPets: [
       { speciesId: 'jiguangxuehu', minLevel: 3, maxLevel: 6, chance: 0.4 },
@@ -20,9 +20,9 @@ export const SCENES_DATA: Record<string, SceneConfig> = {
         y: 30,
         avatarSvg: 'griffin',
         dialogue: [
-          '欢迎来到星灵王国，充满智慧与勇气的年轻小魔法师！',
-          '魔法的真谛在于善良与守护。带上你的初始萌宠，去探索广阔的星灵大陆吧！',
-          '在野外遇到喜爱的野生宠物，使用星灵球就能与它们缔结友谊契约！',
+          '欢迎来到幻灵世界，充满智慧与勇气的年轻小魔法师！',
+          '魔法的真谛在于善良与守护。带上你的初始幻灵伙伴，去探索广阔的幻灵大陆吧！',
+          '在野外遇到喜爱的野生幻灵，使用幻灵球就能与它们缔结友谊契约！',
         ],
         actionType: 'STARTER_GIFT',
       },
@@ -63,8 +63,8 @@ export const SCENES_DATA: Record<string, SceneConfig> = {
         y: 40,
         avatarSvg: 'ranger',
         dialogue: [
-          '翡翠平原是草系宠物的乐园，仔细观察晃动的草丛，经常能发现稀有的小萌宠！',
-          '将野外宠物体力削弱后，投掷星灵球能大幅提升捕捉成功率！',
+          '翡翠平原是草系幻灵的乐园，仔细观察晃动的草丛，经常能发现稀有的小萌宠！',
+          '将野外幻灵体力削弱后，投掷幻灵球能大幅提升捕捉成功率！',
         ],
       },
     ],
@@ -147,8 +147,8 @@ export const SCENES_DATA: Record<string, SceneConfig> = {
         y: 40,
         avatarSvg: 'nurse',
         dialogue: [
-          '小魔法师辛苦啦！冒险旅途中宠物一定累坏了吧？',
-          '请把星灵球交给我，魔法圣水会让所有伙伴满精力复活、招式魔力（PP）全部回满哦！',
+          '小魔法师辛苦啦！冒险旅途中幻灵一定累坏了吧？',
+          '请把幻灵球交给我，魔法圣水会让所有伙伴满精力复活、招式魔力（PP）全部回满哦！',
         ],
         actionType: 'HEAL',
       },
@@ -160,22 +160,22 @@ export const SCENES_DATA: Record<string, SceneConfig> = {
 
   SHOP: {
     id: 'SHOP',
-    name: '星辉集市',
+    name: '幻灵集市',
     region: '商业街区',
-    description: '星灵王国最热闹的魔导商品集市，各级星灵球、进阶治疗药剂与珍贵进化药水应有尽有。',
+    description: '幻灵世界最热闹的魔导商品集市，各级幻灵球、进阶治疗药剂与珍贵进化药水应有尽有。',
     themeColor: '#d97706',
     wildPets: [],
     npcs: [
       {
         id: 'npc_merchant_geqian',
         name: '商人 巴纳比',
-        role: '星辉集市大掌柜',
+        role: '幻灵集市大掌柜',
         x: 50,
         y: 42,
         avatarSvg: 'merchant',
         dialogue: [
-          '欢迎光临星辉集市！这里有全王国品质最好的星灵球和魔力药水！',
-          '用冒险赚到的星辉金币选购心仪的道具，开启你的大魔法师之旅吧！',
+          '欢迎光临幻灵集市！这里有全大陆品质最好的幻灵球和魔力药水！',
+          '用冒险赚到的幻灵金币选购心仪的道具，开启你的大魔法师之旅吧！',
         ],
         actionType: 'SHOP',
       },
@@ -185,9 +185,9 @@ export const SCENES_DATA: Record<string, SceneConfig> = {
 
   ARENA: {
     id: 'ARENA',
-    name: '群星竞技场',
+    name: '幻灵竞技场',
     region: '荣耀擂台',
-    description: '星灵王国顶尖魔法师切磋决斗的最高殿堂，战旗飘扬，王者天梯擂台等待真正勇者的挑战！',
+    description: '幻灵世界顶尖魔法师切磋决斗的最高殿堂，战旗飘扬，王者天梯擂台等待真正勇者的挑战！',
     themeColor: '#7c3aed',
     wildPets: [
       { speciesId: 'leiwenhou', minLevel: 14, maxLevel: 20, chance: 0.55 },
@@ -197,13 +197,13 @@ export const SCENES_DATA: Record<string, SceneConfig> = {
       {
         id: 'npc_champion_tianheng',
         name: '骑士团长 兰斯洛',
-        role: '群星竞技场总裁判',
+        role: '幻灵竞技场总裁判',
         x: 50,
         y: 38,
         avatarSvg: 'knight',
         dialogue: [
-          '只有智慧、勇气兼备的魔法师，才能在群星竞技场登顶天梯之巅！',
-          '来吧！证明你与宠物之间的羁绊，击败我的战宠赢取王国皇家骑士勋章！',
+          '只有智慧、勇气兼备的魔法师，才能在幻灵竞技场登顶天梯之巅！',
+          '来吧！证明你与幻灵伙伴之间的羁绊，击败我的战宠赢取幻灵大师勋章！',
         ],
         actionType: 'ARENA_CHALLENGE',
       },
